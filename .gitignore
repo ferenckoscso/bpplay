@@ -1,0 +1,7 @@
+# Build output
+src/bpplay
+*.o
+*.dSYM/
+
+# macOS
+.DS_Store
