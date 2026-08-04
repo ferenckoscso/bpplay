@@ -38,6 +38,9 @@ First public release (release candidate) — macOS Core edition.
 - Recursive folder scanning no longer holds its ~1.25 MB scratch buffers across the descent
 - `-dir` now appends to the queue instead of replacing it, and the 256-file cap is reported
 - All diagnostics are English; `-dop` is documented as accepted-but-inert
+- `main()` unconditionally returned 0 regardless of whether the user quit with `q`/Ctrl+C,
+  so a shell script chaining multiple `bpplay` invocations could never detect an early
+  exit; it now returns 1 on user quit, 0 on normal completion
 
 ### Known limitations
 - The binary is not notarised (Gatekeeper warns on first launch)
