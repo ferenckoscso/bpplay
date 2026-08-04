@@ -42,6 +42,6 @@ First public release (release candidate) — macOS Core edition.
 ### Known limitations
 - The binary is not notarised (Gatekeeper warns on first launch)
 - Higher DoP rates (352.8 / 705.6 kHz) do not pass on every DAC or USB chain
-- Memory use can exceed the file size (by design — see the manual, chapter 7)
+- Memory use can exceed the file size (by design — see README, "Things worth knowing")
 
 [0.9]: https://github.com/ferenckoscso/bpplay/releases/tag/v0.9

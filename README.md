@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo/bpplay_logo_light_512.png">
+    <img src="assets/logo/bpplay_logo_dark_512.png" alt="bpplay logo" width="220">
+  </picture>
+</p>
+
 # bpplay
 
 **A bit-perfect music player for macOS — the shortest deterministic signal path from file to DAC.**
