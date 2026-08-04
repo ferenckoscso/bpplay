@@ -2,6 +2,7 @@
 src/bpplay
 *.o
 *.dSYM/
+dist/
 
 # macOS
 .DS_Store
