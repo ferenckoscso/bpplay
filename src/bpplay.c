@@ -1784,5 +1784,5 @@ int main(int argc, char **argv)
     allow_sleep();                             /* playback over: sleep is fine again */
     release_device();
     printf("%s", L(MSG_DONE));
-    return 0;
+    return userQuit ? 1 : 0;
 }
