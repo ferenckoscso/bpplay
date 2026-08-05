@@ -113,7 +113,8 @@ cases: the bit path is independent of the connection method.
 ## Documentation
 
 - [`docs/about-bpplay.md`](docs/about-bpplay.md) — philosophy and architecture (EN / HU)
-- A full user manual (EN / HU) is in progress and will be added here once finalized.
+- [`docs/bpplay-manual-en.pdf`](docs/bpplay-manual-en.pdf) — full user manual (English)
+- [`docs/bpplay-manual-hu.pdf`](docs/bpplay-manual-hu.pdf) — full user manual (Hungarian)
 - [`tools/bpplay-drop.sh`](tools/bpplay-drop.sh) — drag-and-drop launcher for an Automator
   application, also runnable on its own. Set `BPPLAY` and `DEVICE` at the top before first use,
   and run `chmod +x tools/bpplay-drop.sh` after cloning.
@@ -134,8 +135,8 @@ betöltéskori formátum-illesztés — a valós idejű szálon már csak `memcp
 Fordítás: `cd src && make` (nulla külső függőség, az Xcode parancssori eszközei kellenek).
 Magyar nyelvű üzenetek: `-hu` kapcsoló.
 
-Részletes magyar kézikönyv hamarosan érkezik. Filozófia és architektúra (magyarul is):
-[`docs/about-bpplay.md`](docs/about-bpplay.md)
+Részletes magyar kézikönyv: [`docs/bpplay-manual-hu.pdf`](docs/bpplay-manual-hu.pdf).
+Filozófia és architektúra (magyarul is): [`docs/about-bpplay.md`](docs/about-bpplay.md)
 
 ---
 
