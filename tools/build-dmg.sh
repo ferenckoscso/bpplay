@@ -29,6 +29,7 @@ cp "$ROOT_DIR/src/bpplay" "$STAGE/bpplay"
 cp -R "$DIST_DIR/bpplay drop.app" "$STAGE/bpplay drop.app"
 cp "$ROOT_DIR/LICENSE" "$STAGE/LICENSE"
 cp "$ROOT_DIR/assets/dmg-readme.txt" "$STAGE/OLVASD_EL_ELOSZOR.txt"
+cp "$ROOT_DIR/assets/dmg-readme-en.txt" "$STAGE/READ_ME_FIRST.txt"
 
 DMG_NAME="bpplay-${VERSION}-macos.dmg"
 rm -f "$DIST_DIR/$DMG_NAME"
