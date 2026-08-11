@@ -3,6 +3,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.2] — 2026-08-11
+
+### Fixed
+- `bpplay drop.app`'s no-files-dropped dialog was in Hungarian regardless of the user's language
+  (a leftover from development). It's now in English, matching the project's primary language.
+  (Reported by a v0.9.1 user.)
+
 ## [0.9.1] — 2026-08-11
 
 ### Added

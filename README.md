@@ -9,7 +9,7 @@
 
 **A bit-perfect music player for macOS — the shortest deterministic signal path from file to DAC.**
 
-`v0.9.1` · Core edition · GPL-3.0-or-later
+`v0.9.2` · Core edition · GPL-3.0-or-later
 
 ---
 
