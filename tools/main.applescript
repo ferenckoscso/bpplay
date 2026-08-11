@@ -27,5 +27,5 @@ on open theFiles
 end open
 
 on run
-	display dialog "Húzz rá egy zenefájlt, több fájlt, vagy egy albummappát ennek az ikonnak a lejátszáshoz." with title "bpplay drop" buttons {"OK"} default button "OK"
+	display dialog "Drag a music file, multiple files, or an album folder onto this icon to play them." with title "bpplay drop" buttons {"OK"} default button "OK"
 end run
