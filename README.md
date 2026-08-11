@@ -9,7 +9,7 @@
 
 **A bit-perfect music player for macOS — the shortest deterministic signal path from file to DAC.**
 
-`v0.9` · Core edition · GPL-3.0-or-later
+`v0.9.1` · Core edition · GPL-3.0-or-later
 
 ---
 
@@ -81,6 +81,15 @@ make universal
 
 During playback: `n` next · `b` previous · `space` pause/resume · `q` quit
 
+## Drag-and-drop, without the terminal
+
+The DMG also bundles **`bpplay drop.app`** — drop a file, several files, or a whole album folder
+onto its icon, and playback starts in a Terminal window (transport keys still work there). It's
+fully self-contained (the `bpplay` binary is bundled inside it) and plays on the system's default
+output device with zero configuration. If you want a specific DAC instead of the system default,
+either use `-d <index>` from Terminal, or build your own custom Automator app with a fixed device
+index — see [`tools/bpplay-drop.sh`](tools/bpplay-drop.sh) and the manual's drag-and-drop chapter.
+
 ## Things worth knowing
 
 - **Memory use can exceed the file size** — by design. The whole track lives in RAM, and the
@@ -115,9 +124,13 @@ cases: the bit path is independent of the connection method.
 - [`docs/about-bpplay.md`](docs/about-bpplay.md) — philosophy and architecture (EN / HU)
 - [`docs/bpplay-manual-en.pdf`](docs/bpplay-manual-en.pdf) — full user manual (English)
 - [`docs/bpplay-manual-hu.pdf`](docs/bpplay-manual-hu.pdf) — full user manual (Hungarian)
-- [`tools/bpplay-drop.sh`](tools/bpplay-drop.sh) — drag-and-drop launcher for an Automator
-  application, also runnable on its own. Set `BPPLAY` and `DEVICE` at the top before first use,
-  and run `chmod +x tools/bpplay-drop.sh` after cloning.
+- `bpplay drop.app` (in the DMG) — ready-to-use drag-and-drop launcher, zero configuration,
+  bundles its own `bpplay` binary. See "Drag-and-drop, without the terminal" above.
+- [`tools/bpplay-drop.sh`](tools/bpplay-drop.sh) — the same drag-and-drop logic as a standalone
+  script, for building your **own** custom Automator app with a fixed output device. Set `BPPLAY`
+  and `DEVICE` at the top before first use, and run `chmod +x tools/bpplay-drop.sh` after cloning.
+- [`tools/build-dmg.sh`](tools/build-dmg.sh) / [`tools/build-drop-app.sh`](tools/build-drop-app.sh)
+  — reproducible build scripts for the release DMG and the bundled drop app.
 
 ---
 
