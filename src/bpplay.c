@@ -50,7 +50,7 @@
 /* --------------------------------------------------------------- */
 /* Version — the single source of truth (bump this at release time) */
 /* --------------------------------------------------------------- */
-#define BPPLAY_VERSION "0.9.2"
+#define BPPLAY_VERSION "0.9.3"
 #define BPPLAY_EDITION "macOS Core"
 
 #include <CoreAudio/CoreAudio.h>
