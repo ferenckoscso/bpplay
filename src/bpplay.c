@@ -43,14 +43,14 @@
  *   ./bpplay -d 3 -dir ~/Album   play a whole folder, recursively
  *
  * Supported input: WAV (16/24/32-bit integer and 32-bit float), FLAC
- * (16/24-bit), AIFF/AIFC (uncompressed), DSF (DSD64–DSD256 over DoP).
- * Any channel count and sample rate the DAC accepts.
+ * (16/24-bit), ALAC in M4A (16/24-bit), AIFF/AIFC (uncompressed), DSF
+ * (DSD64–DSD256 over DoP). Any channel count and sample rate the DAC accepts.
  */
 
 /* --------------------------------------------------------------- */
 /* Version — the single source of truth (bump this at release time) */
 /* --------------------------------------------------------------- */
-#define BPPLAY_VERSION "0.9.3"
+#define BPPLAY_VERSION "0.9.4"
 #define BPPLAY_EDITION "macOS Core"
 
 #include <CoreAudio/CoreAudio.h>
@@ -76,9 +76,10 @@
 #define kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
 #endif
 
-/* The FLAC decoder implementation is pulled in ONCE, here. source.h uses the
- * dr_flac API afterwards. */
+/* The FLAC and ALAC decoder implementations are pulled in ONCE, here.
+ * source.h uses the dr_flac / alac.h APIs afterwards. */
 #define DR_FLAC_IMPLEMENTATION
+#define ALAC_IMPLEMENTATION
 #include "lang.h"
 #include "source.h"
 #include "dsd.h"
@@ -1143,6 +1144,71 @@ static int pick_integer_format(AudioStreamID stream, double rate, uint16_t bits,
 
 typedef struct { uint32_t rate; uint16_t bits; uint16_t ch; int dsd; int isFloat; } AudioFmt;
 
+/*
+ * M4A has no linear "header" the way WAV/AIFF/FLAC do — moov (which holds
+ * the ALAC magic cookie) can sit anywhere in the file. So unlike the other
+ * probes below, this one reads the whole file, just to read three fields
+ * out of it; load_alac() will re-read it properly a moment later if this
+ * segment actually gets played. Simple and correct beats fast here: probing
+ * only matters for deciding where to split a mixed-format playlist.
+ */
+static int probe_m4a_alac(const char *path, AudioFmt *out)
+{
+    FILE *f = fopen(path, "rb");
+    if (!f) return -1;
+    if (fseek(f, 0, SEEK_END) != 0) { fclose(f); return -1; }
+    long fsizeL = ftell(f);
+    if (fsizeL < 16) { fclose(f); return -1; }
+    rewind(f);
+    uint64_t fsize = (uint64_t)fsizeL;
+
+    uint8_t *buf = (uint8_t *)malloc((size_t)fsize);
+    if (!buf) { fclose(f); return -1; }
+    if (fread(buf, 1, (size_t)fsize, f) != fsize) { fclose(f); free(buf); return -1; }
+    fclose(f);
+
+    uint64_t moovOff = 0, moovSize = 0;
+    int haveMoov = 0;
+    {
+        uint64_t cur = 0; char t[5]; uint64_t off, sz;
+        while (m4a_next_box(buf, &cur, fsize, t, &off, &sz)) {
+            if (memcmp(t, "moov", 4) == 0) { moovOff = off; moovSize = sz; haveMoov = 1; break; }
+        }
+    }
+    if (!haveMoov) { free(buf); return -1; }
+
+    int found = 0;
+    uint64_t trakCur = moovOff, trakEnd = moovOff + moovSize;
+    char tt[5]; uint64_t trakOff, trakSize;
+    while (!found && m4a_next_box(buf, &trakCur, trakEnd, tt, &trakOff, &trakSize)) {
+        if (memcmp(tt, "trak", 4) != 0) continue;
+        uint64_t mdiaOff, mdiaSize, minfOff, minfSize, stblOff, stblSize, stsdOff, stsdSize;
+        if (!m4a_find_child(buf, trakOff, trakSize, "mdia", &mdiaOff, &mdiaSize)) continue;
+        if (!m4a_find_child(buf, mdiaOff, mdiaSize, "minf", &minfOff, &minfSize)) continue;
+        if (!m4a_find_child(buf, minfOff, minfSize, "stbl", &stblOff, &stblSize)) continue;
+        if (!m4a_find_child(buf, stblOff, stblSize, "stsd", &stsdOff, &stsdSize)) continue;
+        if (stsdSize < 8) continue;
+
+        uint64_t entryCur = stsdOff + 8, entryEnd = stsdOff + stsdSize;
+        char et[5]; uint64_t entryOff, entrySize;
+        while (m4a_next_box(buf, &entryCur, entryEnd, et, &entryOff, &entrySize)) {
+            if (memcmp(et, "alac", 4) != 0 || entrySize < 28) continue;
+            uint64_t cookieOff, cookieSize;
+            if (!m4a_find_child(buf, entryOff + 28, entrySize - 28, "alac", &cookieOff, &cookieSize)) continue;
+            if (cookieSize < 4 + 24) continue;
+            const uint8_t *c = buf + cookieOff + 4;
+            out->bits = c[5];
+            out->ch   = c[9];
+            out->rate = m4a_be32(c + 20);
+            out->dsd = 0; out->isFloat = 0;
+            found = 1;
+            break;
+        }
+    }
+    free(buf);
+    return found ? 0 : -1;
+}
+
 static int fmt_equal(const AudioFmt *a, const AudioFmt *b)
 {
     return a->rate == b->rate && a->bits == b->bits && a->ch == b->ch &&
@@ -1156,6 +1222,9 @@ static int probe_format(const char *path, AudioFmt *out)
     int isFlac = (ext && strcasecmp(ext, ".flac") == 0);
     int isDsf  = (ext && strcasecmp(ext, ".dsf")  == 0);
     int isAiff = (ext && (strcasecmp(ext, ".aif") == 0 || strcasecmp(ext, ".aiff") == 0));
+    int isM4a  = (ext && strcasecmp(ext, ".m4a")  == 0);
+
+    if (isM4a) return probe_m4a_alac(path, out);
 
     FILE *f = fopen(path, "rb");
     if (!f) return -1;
@@ -1282,12 +1351,16 @@ static int play_one_segment(AudioObjectID dev, const char **seg, int segCount,
     int isFlac = (ext && strcasecmp(ext, ".flac") == 0);
     int isDsf  = (ext && strcasecmp(ext, ".dsf")  == 0);
     int isAiff = (ext && (strcasecmp(ext, ".aif") == 0 || strcasecmp(ext, ".aiff") == 0));
+    int isM4a  = (ext && strcasecmp(ext, ".m4a")  == 0);
 
     uint32_t dsdRate = 0;
     if (isDsf) {
         if (load_dsf_as_dop(path, &w, &dsdRate) != 0) goto cleanup;
     } else if (isFlac) {
         if (load_flac(path, &w, &meta) != 0) goto cleanup;
+        trim_to_whole_frames(&w);
+    } else if (isM4a) {
+        if (load_alac(path, &w, &meta) != 0) goto cleanup;
         trim_to_whole_frames(&w);
     } else if (isAiff) {
         if (parse_aiff(path, &w) != 0) goto cleanup;
@@ -1405,10 +1478,12 @@ static int play_one_segment(AudioObjectID dev, const char **seg, int segCount,
         int f2 = (e2 && strcasecmp(e2, ".flac") == 0);
         int d2 = (e2 && strcasecmp(e2, ".dsf")  == 0);
         int a2 = (e2 && (strcasecmp(e2, ".aif") == 0 || strcasecmp(e2, ".aiff") == 0));
+        int m2flag = (e2 && strcasecmp(e2, ".m4a") == 0);
         int lrc = d2 ? load_dsf_as_dop(seg[ti], &s2, NULL)
                      : (f2 ? load_flac(seg[ti], &s2, &m2)
-                          : (a2 ? parse_aiff(seg[ti], &s2) : parse_wav(seg[ti], &s2)));
-        if (lrc == 0 && f2) trim_to_whole_frames(&s2);
+                          : (m2flag ? load_alac(seg[ti], &s2, &m2)
+                                    : (a2 ? parse_aiff(seg[ti], &s2) : parse_wav(seg[ti], &s2))));
+        if (lrc == 0 && (f2 || m2flag)) trim_to_whole_frames(&s2);
         if (lrc != 0 || !audio_source_valid(&s2)) {
             fprintf(stderr, L(MSG_SKIP_UNREADABLE), seg[ti]);
             free_audio_source(&s2);
@@ -1516,7 +1591,7 @@ cleanup:
 
 /* ------------------------------------------------------------------ */
 /* Folder traversal for -dir                                           */
-/* Collects the playable files (.wav/.flac/.aif/.aiff/.dsf), sorted by */
+/* Collects the playable files (.wav/.flac/.m4a/.aif/.aiff/.dsf), sorted by */
 /* name. Full paths are held in a static buffer.                       */
 /* ------------------------------------------------------------------ */
 
@@ -1528,6 +1603,7 @@ static int is_playable_ext(const char *name)
     if (!ext) return 0;
     return (strcasecmp(ext, ".wav")  == 0 ||
             strcasecmp(ext, ".flac") == 0 ||
+            strcasecmp(ext, ".m4a")  == 0 ||
             strcasecmp(ext, ".dsf")  == 0 ||
             strcasecmp(ext, ".aif")  == 0 ||
             strcasecmp(ext, ".aiff") == 0);
@@ -1649,6 +1725,8 @@ static void print_version(void)
     printf("There is NO WARRANTY, to the extent permitted by law.\n");
     printf("FLAC decoding: dr_flac by David Reid "
            "(public domain / MIT-0)\n");
+    printf("ALAC decoding: Apple's ALAC reference decoder "
+           "(Apache License 2.0)\n");
 }
 
 int main(int argc, char **argv)

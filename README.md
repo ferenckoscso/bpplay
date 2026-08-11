@@ -9,7 +9,7 @@
 
 **A bit-perfect music player for macOS — the shortest deterministic signal path from file to DAC.**
 
-`v0.9.3` · Core edition · GPL-3.0-or-later
+`v0.9.4` · Core edition · GPL-3.0-or-later
 
 ---
 
@@ -36,6 +36,7 @@ floating-point mixing and software volume. bpplay bypasses all of it:
 |---|---|
 | WAV | 16 / 24 / 32-bit integer and 32-bit float |
 | FLAC | 16 / 24-bit, with Vorbis metadata and MQA **detection** (not decoding) |
+| ALAC (in M4A) | 16 / 24-bit — what iTunes/Music.app produce |
 | AIFF / AIFC | 16 / 24 / 32-bit, uncompressed only (`NONE` / `sowt`) |
 | DSF (DSD) | DSD64 – DSD256 via DoP (the architecture scales to DSD512) |
 

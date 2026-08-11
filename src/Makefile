@@ -3,7 +3,7 @@ CFLAGS := -O2
 FRAMEWORKS := -framework CoreAudio -framework CoreFoundation -framework IOKit
 TARGET := bpplay
 SRC := bpplay.c
-HEADERS := dsd.h source.h lang.h dr_flac.h
+HEADERS := dsd.h source.h lang.h dr_flac.h alac.h
 
 .PHONY: all universal clean
 
