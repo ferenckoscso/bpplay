@@ -3,6 +3,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.1] — 2026-08-11
+
+### Added
+- `bpplay drop.app`, bundled directly in the DMG — a self-contained drag-and-drop launcher
+  (AppleScript droplet). No Automator setup, no path/device configuration: drop a file, several
+  files, or an album folder onto its icon, and playback starts in a Terminal window on the
+  system's default output device. The `bpplay` binary is bundled inside the app itself.
+- `tools/build-drop-app.sh` and `tools/build-dmg.sh` — reproducible build scripts for the drop
+  app and the full release DMG (previously an untracked, manual process).
+- `tools/main.applescript` / `tools/bpplay-drop-runtime.sh` — source for the bundled drop app.
+
+### Why
+Feedback from the first GitHub downloaders showed that the manual Automator-app setup (open
+Automator, add a Run Shell Script action, paste the script body, hand-edit two variables) was
+too high a bar for non-technical users, who never made it to actual drag-and-drop playback.
+The new bundled app needs zero setup.
+
 ## [0.9] — 2026-06-17
 
 First public release (release candidate) — macOS Core edition.
