@@ -3,6 +3,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.3] — 2026-08-11
+
+### Added
+- **`bpplay play.workflow`**, bundled directly in the DMG — a self-contained Finder Quick Action.
+  Select one or more music files, or a single album folder, anywhere in Finder, right-click, and
+  choose "bpplay play". Same zero-configuration design as `bpplay drop.app` (bundles its own copy
+  of the `bpplay` binary, plays on the system's default output device). Requires a one-time copy
+  into `~/Library/Services/` — documented in the DMG readme.
+- `tools/build-quickaction.sh`, `tools/set-quickaction-command.py` — reproducible build for the
+  Quick Action (the Automator `.workflow` document skeleton, `tools/bpplay-play.workflow-template/`,
+  was authored once by hand in Automator.app and is tracked as a template).
+
+### Why
+Suggested by a user after trying `bpplay drop.app`: a right-click "play with bpplay" option (the
+same UX pattern as macOS's built-in "Quick Actions") complements drag-and-drop for people who'd
+rather select files in place than drag them onto an icon.
+
 ## [0.9.2] — 2026-08-11
 
 ### Fixed
