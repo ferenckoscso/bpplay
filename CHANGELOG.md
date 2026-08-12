@@ -3,6 +3,19 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.5] — 2026-08-12
+
+### Fixed
+- Right-clicking a lossy AAC `.m4a` file (an iTunes/Music.app purchase, most commonly) — which
+  the "bpplay play" Quick Action makes directly reachable — produced a codec-jargon error
+  (`M4A: no ALAC audio track found`) instead of a plain explanation. Now says outright: this is
+  AAC, not Apple Lossless, and bpplay does not decode lossy audio.
+
+### Why
+Caught during a review of the Quick Action's real-world failure modes ahead of wider release:
+an M4A file being lossless is not something a user can tell from the file icon, and the Quick
+Action's whole point is to be reachable without knowing anything about codecs.
+
 ## [0.9.4] — 2026-08-11
 
 ### Added

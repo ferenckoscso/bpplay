@@ -1,4 +1,4 @@
-bpplay 0.9.4 — Read this before you start
+bpplay 0.9.5 — Read this before you start
 ============================================
 
 This disk image contains three things:
