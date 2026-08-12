@@ -236,6 +236,7 @@ static int load_alac(const char *path, AudioSource *s, AudioMeta *m)
     uint64_t stszOff = 0, stszSize = 0, stscOff = 0, stscSize = 0;
     uint64_t stcoOff = 0, stcoSize = 0; int stcoIs64 = 0;
     int haveTrack = 0;
+    int sawAac = 0;   /* seen an 'mp4a' (AAC) track — for a clearer error message */
 
     {
         uint64_t trakCur = moovOff, trakEnd = moovOff + moovSize;
@@ -256,6 +257,7 @@ static int load_alac(const char *path, AudioSource *s, AudioMeta *m)
             char et[5]; uint64_t entryOff, entrySize;
             int foundAlac = 0;
             while (m4a_next_box(buf, &entryCur, entryEnd, et, &entryOff, &entrySize)) {
+                if (memcmp(et, "mp4a", 4) == 0) sawAac = 1;
                 if (memcmp(et, "alac", 4) != 0) continue;
                 /* AudioSampleEntry fixed fields: reserved(6)+data_ref_index(2)
                  * +reserved(8)+channelcount(2)+samplesize(2)+pre_defined(2)
@@ -294,7 +296,17 @@ static int load_alac(const char *path, AudioSource *s, AudioMeta *m)
         }
     }
     if (!haveTrack) {
-        fprintf(stderr, "M4A: no ALAC audio track found: %s\n", path);
+        if (sawAac) {
+            /* The single most likely real-world case: an iTunes/Music.app
+             * purchase or an AAC rip. M4A is just a container — it does not
+             * imply lossless. Say so plainly instead of a codec-jargon error,
+             * since this path is reachable straight from a Finder right-click. */
+            fprintf(stderr,
+                "This M4A file is AAC (a lossy format), not Apple Lossless (ALAC).\n"
+                "bpplay only decodes lossless audio — it does not play AAC: %s\n", path);
+        } else {
+            fprintf(stderr, "M4A: no ALAC audio track found: %s\n", path);
+        }
         free(buf); return -1;
     }
     if (cfg.bitDepth != 16 && cfg.bitDepth != 24) {

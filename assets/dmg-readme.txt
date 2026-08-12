@@ -1,4 +1,4 @@
-bpplay 0.9.4 — Olvasd el, mielőtt elindítod
+bpplay 0.9.5 — Olvasd el, mielőtt elindítod
 ============================================
 
 A lemezképben három dolog van:
