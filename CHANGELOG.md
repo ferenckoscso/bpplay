@@ -3,6 +3,29 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.4] — 2026-08-11
+
+### Added
+- **ALAC (Apple Lossless) playback, in the M4A container** (`.m4a`) — the same bit-perfect,
+  whole-track-in-RAM path as WAV/FLAC/AIFF. Handles 16 and 24-bit ALAC (what iTunes/Music.app
+  actually produce), any channel count, `-dir` folder playback and mixed-format playlists.
+  Verified bit-exact: decoding a set of ALAC-encoded 16-bit/44.1kHz and 24-bit/96kHz test files
+  and comparing byte-for-byte against the original PCM showed zero differing bytes across both.
+- `src/alac.h` — Apple's own open-sourced ALAC reference decoder (Apache License 2.0), vendored
+  as a single header in the same style as `dr_flac.h`. The codec math is Apple's C source
+  essentially verbatim; the one C++ file in that project (a thin orchestration class) was ported
+  to plain C by hand so the build stays a single C translation unit. See the file header for the
+  full account, and `THIRD_PARTY_NOTICES.md` for the license text.
+
+### Fixed
+- The upstream ALAC endianness-detection macro only recognised `__i386__`/`__x86_64__`, silently
+  treating Apple Silicon as big-endian — which would have corrupted every multi-byte field in the
+  magic cookie on an arm64 build. Fixed while vendoring, before it ever shipped.
+
+### Why
+Requested after shipping v0.9.3: iTunes/Music.app rips and purchases are commonly ALAC-in-M4A,
+and until now bpplay had no way to play them bit-perfect without a manual re-encode to FLAC.
+
 ## [0.9.3] — 2026-08-11
 
 ### Added

@@ -98,6 +98,326 @@ static int audio_source_valid(const AudioSource *s)
 /* forward declaration (definition further down) */
 static void read_flac_metadata(const char *path, AudioMeta *m);
 
+/* ------------------------------------------------------------------ */
+/* M4A / ALAC loading                                                   */
+/* ------------------------------------------------------------------ */
+/*
+ * ALAC (Apple Lossless) frames are, like FLAC, a lossless predictive codec —
+ * the decoded PCM is bit-exact to what the encoder was given. Unlike FLAC,
+ * an ALAC bitstream has no self-delimiting frame sync codes, so it can only
+ * be decoded from inside its container (here, M4A/MP4): the container's
+ * sample tables (stsz/stsc/stco) are what tell us where each compressed
+ * frame starts and ends in the file.
+ *
+ * This is therefore two things layered together: a minimal MP4 atom walker
+ * (just enough to find the 'alac' track's magic cookie and sample tables —
+ * no video/chapter track or edit-list support), and the alac.h decoder
+ * vendored above. Gapless edit lists (elst) are not applied: a track may
+ * carry a few dozen milliseconds of encoder padding at its boundaries. The
+ * codec itself remains lossless regardless.
+ */
+
+#include "alac.h"
+
+static uint32_t m4a_be32(const uint8_t *p) {
+    return ((uint32_t)p[0] << 24) | ((uint32_t)p[1] << 16) | ((uint32_t)p[2] << 8) | (uint32_t)p[3];
+}
+static uint64_t m4a_be64(const uint8_t *p) {
+    return ((uint64_t)m4a_be32(p) << 32) | (uint64_t)m4a_be32(p + 4);
+}
+static uint16_t m4a_be16(const uint8_t *p) {
+    return (uint16_t)(((uint32_t)p[0] << 8) | (uint32_t)p[1]);
+}
+
+/* Advances *cursor to the next box in [*cursor, end); returns 1 and fills
+ * outType/outOff/outSize on success, 0 when there is no further box. */
+static int m4a_next_box(const uint8_t *buf, uint64_t *cursor, uint64_t end,
+                         char outType[5], uint64_t *outOff, uint64_t *outSize)
+{
+    uint64_t p = *cursor;
+    if (p + 8 > end) return 0;
+    uint64_t boxSize = m4a_be32(buf + p);
+    uint64_t headerSize = 8;
+    if (boxSize == 1) {
+        if (p + 16 > end) return 0;
+        boxSize = m4a_be64(buf + p + 8);
+        headerSize = 16;
+    } else if (boxSize == 0) {
+        boxSize = end - p;
+    }
+    if (boxSize < headerSize || p + boxSize > end || p + boxSize < p) return 0;
+    memcpy(outType, buf + p + 4, 4); outType[4] = '\0';
+    *outOff  = p + headerSize;
+    *outSize = boxSize - headerSize;
+    *cursor  = p + boxSize;
+    return 1;
+}
+
+/* First child box of `type` directly inside [start, start+size). */
+static int m4a_find_child(const uint8_t *buf, uint64_t start, uint64_t size, const char *type,
+                           uint64_t *outOff, uint64_t *outSize)
+{
+    uint64_t cur = start, end = start + size;
+    char t[5];
+    uint64_t off, sz;
+    while (m4a_next_box(buf, &cur, end, t, &off, &sz)) {
+        if (memcmp(t, type, 4) == 0) { *outOff = off; *outSize = sz; return 1; }
+    }
+    return 0;
+}
+
+/* Reads one ILST-style text tag ("©nam"/"©ART"/"©alb"): a box containing a
+ * nested 'data' box, itself version+flags(4) + reserved(4) + UTF-8 text. */
+static void m4a_read_ilst_tag(const uint8_t *buf, uint64_t off, uint64_t size, char *out, size_t outsz)
+{
+    uint64_t dataOff, dataSize;
+    if (!m4a_find_child(buf, off, size, "data", &dataOff, &dataSize)) return;
+    if (dataSize < 8) return;
+    uint64_t textOff = dataOff + 8, textLen = dataSize - 8;
+    if (textLen >= outsz) textLen = outsz - 1;
+    memcpy(out, buf + textOff, (size_t)textLen);
+    out[textLen] = '\0';
+}
+
+static void m4a_read_metadata(const uint8_t *buf, uint64_t moovOff, uint64_t moovSize, AudioMeta *m)
+{
+    uint64_t udtaOff, udtaSize, metaOff, metaSize, ilstOff, ilstSize;
+    if (!m4a_find_child(buf, moovOff, moovSize, "udta", &udtaOff, &udtaSize)) return;
+    if (!m4a_find_child(buf, udtaOff, udtaSize, "meta", &metaOff, &metaSize)) return;
+    /* 'meta' is a FullBox: 4 bytes of version/flags precede its children. */
+    if (metaSize < 4) return;
+    if (!m4a_find_child(buf, metaOff + 4, metaSize - 4, "ilst", &ilstOff, &ilstSize)) return;
+
+    uint64_t cur = ilstOff, end = ilstOff + ilstSize;
+    char t[5]; uint64_t off, sz;
+    while (m4a_next_box(buf, &cur, end, t, &off, &sz)) {
+        if (memcmp(t, "\xA9" "nam", 4) == 0) m4a_read_ilst_tag(buf, off, sz, m->title, sizeof(m->title));
+        else if (memcmp(t, "\xA9" "ART", 4) == 0) m4a_read_ilst_tag(buf, off, sz, m->artist, sizeof(m->artist));
+        else if (memcmp(t, "\xA9" "alb", 4) == 0) m4a_read_ilst_tag(buf, off, sz, m->album, sizeof(m->album));
+    }
+}
+
+static int load_alac(const char *path, AudioSource *s, AudioMeta *m)
+{
+    memset(s, 0, sizeof(*s));
+
+    FILE *f = fopen(path, "rb");
+    if (!f) { perror(path); return -1; }
+    if (fseek(f, 0, SEEK_END) != 0) { fprintf(stderr, "M4A: seek error.\n"); fclose(f); return -1; }
+    long fsizeL = ftell(f);
+    if (fsizeL < 16) { fprintf(stderr, "M4A: file too short.\n"); fclose(f); return -1; }
+    rewind(f);
+    const uint64_t fsize = (uint64_t)fsizeL;
+
+    uint8_t *buf = (uint8_t *)malloc((size_t)fsize);
+    if (!buf) { fprintf(stderr, "Out of memory (M4A file).\n"); fclose(f); return -1; }
+    if (fread(buf, 1, (size_t)fsize, f) != fsize) {
+        fprintf(stderr, "M4A: read error.\n"); fclose(f); free(buf); return -1;
+    }
+    fclose(f);
+
+    /* top level: find 'moov' and 'mdat' (order varies by encoder) */
+    uint64_t moovOff = 0, moovSize = 0, mdatOff = 0, mdatSize = 0;
+    int haveMoov = 0, haveMdat = 0;
+    {
+        uint64_t cur = 0; char t[5]; uint64_t off, sz;
+        while (m4a_next_box(buf, &cur, fsize, t, &off, &sz)) {
+            if (memcmp(t, "moov", 4) == 0) { moovOff = off; moovSize = sz; haveMoov = 1; }
+            else if (memcmp(t, "mdat", 4) == 0) { mdatOff = off; mdatSize = sz; haveMdat = 1; }
+        }
+    }
+    if (!haveMoov || !haveMdat) {
+        fprintf(stderr, "M4A: not a valid MP4 container (missing moov/mdat): %s\n", path);
+        free(buf); return -1;
+    }
+
+    /* walk each trak until one has an 'alac' sample description */
+    ALACSpecificConfig cfg; memset(&cfg, 0, sizeof(cfg));
+    uint64_t stszOff = 0, stszSize = 0, stscOff = 0, stscSize = 0;
+    uint64_t stcoOff = 0, stcoSize = 0; int stcoIs64 = 0;
+    int haveTrack = 0;
+
+    {
+        uint64_t trakCur = moovOff, trakEnd = moovOff + moovSize;
+        char tt[5]; uint64_t trakOff, trakSize;
+        while (!haveTrack && m4a_next_box(buf, &trakCur, trakEnd, tt, &trakOff, &trakSize)) {
+            if (memcmp(tt, "trak", 4) != 0) continue;
+
+            uint64_t mdiaOff, mdiaSize, minfOff, minfSize, stblOff, stblSize, stsdOff, stsdSize;
+            if (!m4a_find_child(buf, trakOff, trakSize, "mdia", &mdiaOff, &mdiaSize)) continue;
+            if (!m4a_find_child(buf, mdiaOff, mdiaSize, "minf", &minfOff, &minfSize)) continue;
+            if (!m4a_find_child(buf, minfOff, minfSize, "stbl", &stblOff, &stblSize)) continue;
+            if (!m4a_find_child(buf, stblOff, stblSize, "stsd", &stsdOff, &stsdSize)) continue;
+            if (stsdSize < 8) continue;
+
+            /* stsd is a FullBox (4 bytes version/flags + 4 bytes entry_count)
+             * whose entries are themselves box-shaped ('alac' SampleEntry). */
+            uint64_t entryCur = stsdOff + 8, entryEnd = stsdOff + stsdSize;
+            char et[5]; uint64_t entryOff, entrySize;
+            int foundAlac = 0;
+            while (m4a_next_box(buf, &entryCur, entryEnd, et, &entryOff, &entrySize)) {
+                if (memcmp(et, "alac", 4) != 0) continue;
+                /* AudioSampleEntry fixed fields: reserved(6)+data_ref_index(2)
+                 * +reserved(8)+channelcount(2)+samplesize(2)+pre_defined(2)
+                 * +reserved(2)+samplerate(4) = 28 bytes, then child boxes. */
+                if (entrySize < 28) continue;
+                uint64_t cookieOff, cookieSize;
+                if (!m4a_find_child(buf, entryOff + 28, entrySize - 28, "alac", &cookieOff, &cookieSize)) continue;
+                /* the nested 'alac' box is itself a FullBox: 4 bytes of
+                 * version/flags precede the 24-byte ALACSpecificConfig */
+                if (cookieSize < 4 + 24) continue;
+
+                const uint8_t *c = buf + cookieOff + 4;
+                cfg.frameLength         = m4a_be32(c + 0);
+                cfg.compatibleVersion   = c[4];
+                cfg.bitDepth            = c[5];
+                cfg.pb                  = c[6];
+                cfg.mb                  = c[7];
+                cfg.kb                  = c[8];
+                cfg.numChannels         = c[9];
+                cfg.maxRun              = m4a_be16(c + 10);
+                cfg.maxFrameBytes       = m4a_be32(c + 12);
+                cfg.avgBitRate          = m4a_be32(c + 16);
+                cfg.sampleRate          = m4a_be32(c + 20);
+                foundAlac = 1;
+                break;
+            }
+            if (!foundAlac) continue;
+
+            if (!m4a_find_child(buf, stblOff, stblSize, "stsz", &stszOff, &stszSize)) continue;
+            if (!m4a_find_child(buf, stblOff, stblSize, "stsc", &stscOff, &stscSize)) continue;
+            if (m4a_find_child(buf, stblOff, stblSize, "stco", &stcoOff, &stcoSize)) stcoIs64 = 0;
+            else if (m4a_find_child(buf, stblOff, stblSize, "co64", &stcoOff, &stcoSize)) stcoIs64 = 1;
+            else continue;
+
+            haveTrack = 1;
+        }
+    }
+    if (!haveTrack) {
+        fprintf(stderr, "M4A: no ALAC audio track found: %s\n", path);
+        free(buf); return -1;
+    }
+    if (cfg.bitDepth != 16 && cfg.bitDepth != 24) {
+        /* ALAC also allows 20/32-bit; this build handles the two depths that
+         * occur in practice (iTunes/Music.app only ever produce 16 or 24). */
+        fprintf(stderr, "ALAC bit depth %u — this build handles 16 and 24-bit.\n", cfg.bitDepth);
+        free(buf); return -1;
+    }
+    if (cfg.numChannels == 0 || cfg.sampleRate == 0) {
+        fprintf(stderr, "ALAC: implausible stream header (%u ch, %u Hz).\n", cfg.numChannels, cfg.sampleRate);
+        free(buf); return -1;
+    }
+
+    /* stsz: version+flags(4) + sample_size(4) + sample_count(4) [+ per-sample
+     * sizes if sample_size==0, which ALAC always uses]. */
+    if (stszSize < 12) { fprintf(stderr, "M4A: malformed stsz.\n"); free(buf); return -1; }
+    const uint8_t *stsz = buf + stszOff;
+    uint32_t uniformSize = m4a_be32(stsz + 4);
+    uint32_t nSamples    = m4a_be32(stsz + 8);
+    if (uniformSize != 0 || nSamples == 0) {
+        fprintf(stderr, "M4A: unsupported stsz layout.\n"); free(buf); return -1;
+    }
+    if (stszSize < 12 + (uint64_t)nSamples * 4) { fprintf(stderr, "M4A: truncated stsz.\n"); free(buf); return -1; }
+    const uint8_t *sizeTable = stsz + 12;
+
+    /* stco/co64: version+flags(4) + entry_count(4) + offsets */
+    if (stcoSize < 8) { fprintf(stderr, "M4A: malformed stco.\n"); free(buf); return -1; }
+    const uint8_t *stco = buf + stcoOff;
+    uint32_t nChunks = m4a_be32(stco + 4);
+    uint32_t chunkEntryBytes = stcoIs64 ? 8 : 4;
+    if (nChunks == 0 || stcoSize < 8 + (uint64_t)nChunks * chunkEntryBytes) {
+        fprintf(stderr, "M4A: truncated stco.\n"); free(buf); return -1;
+    }
+    const uint8_t *chunkTable = stco + 8;
+
+    /* stsc: version+flags(4) + entry_count(4) + (first_chunk, samples_per_chunk,
+     * sample_description_index) triples, 12 bytes each, run-length encoded. */
+    if (stscSize < 8) { fprintf(stderr, "M4A: malformed stsc.\n"); free(buf); return -1; }
+    const uint8_t *stsc = buf + stscOff;
+    uint32_t nStsc = m4a_be32(stsc + 4);
+    if (nStsc == 0 || stscSize < 8 + (uint64_t)nStsc * 12) {
+        fprintf(stderr, "M4A: truncated stsc.\n"); free(buf); return -1;
+    }
+    const uint8_t *stscTable = stsc + 8;
+
+    /* --- allocate output PCM buffer (upper bound: nSamples full frames) --- */
+    s->sampleRate = cfg.sampleRate;
+    s->channels   = cfg.numChannels;
+    s->bits       = cfg.bitDepth;
+    s->isFloat    = 0;
+
+    const uint32_t bps = s->bits / 8;
+    if ((uint64_t)nSamples > (UINT64_MAX / cfg.frameLength) / s->channels / bps) {
+        fprintf(stderr, "M4A: stream too large.\n"); free(buf); return -1;
+    }
+    uint64_t maxBytes = (uint64_t)nSamples * cfg.frameLength * s->channels * bps;
+    uint8_t *pcm = (uint8_t *)malloc((size_t)maxBytes);
+    if (!pcm) { fprintf(stderr, "Out of memory (ALAC data).\n"); free(buf); return -1; }
+
+    ALACDecoder dec;
+    alac_decoder_init(&dec);
+    if (alac_decoder_configure(&dec, &cfg) != ALAC_noErr) {
+        fprintf(stderr, "ALAC: decoder configure failed: %s\n", path);
+        free(pcm); free(buf); return -1;
+    }
+
+    uint64_t totalPcmBytes = 0;
+    uint32_t sampleIdx = 0;
+    int decodeError = 0;
+
+    for (uint32_t chunk = 0; chunk < nChunks && sampleIdx < nSamples && !decodeError; chunk++) {
+        /* samples_per_chunk for this (1-based) chunk index, from the
+         * run-length stsc table */
+        uint32_t chunkNo = chunk + 1;
+        uint32_t samplesPerChunk = 1;
+        for (uint32_t e = 0; e < nStsc; e++) {
+            uint32_t firstChunk = m4a_be32(stscTable + e * 12);
+            uint32_t nextFirst  = (e + 1 < nStsc) ? m4a_be32(stscTable + (e + 1) * 12) : 0xFFFFFFFFu;
+            if (chunkNo >= firstChunk && chunkNo < nextFirst) {
+                samplesPerChunk = m4a_be32(stscTable + e * 12 + 4);
+                break;
+            }
+        }
+
+        uint64_t chunkOffset = stcoIs64 ? m4a_be64(chunkTable + (uint64_t)chunk * 8)
+                                         : m4a_be32(chunkTable + (uint64_t)chunk * 4);
+
+        for (uint32_t si = 0; si < samplesPerChunk && sampleIdx < nSamples; si++, sampleIdx++) {
+            uint32_t frameSize = m4a_be32(sizeTable + (uint64_t)sampleIdx * 4);
+            if (frameSize == 0 || chunkOffset < mdatOff ||
+                chunkOffset + frameSize > mdatOff + mdatSize) {
+                fprintf(stderr, "M4A: sample %u out of range in %s\n", sampleIdx, path);
+                decodeError = 1; break;
+            }
+
+            BitBuffer bb;
+            BitBufferInit(&bb, buf + chunkOffset, frameSize);
+            uint32_t gotSamples = 0;
+            int32_t rc = alac_decoder_decode(&dec, &bb, pcm + totalPcmBytes,
+                                              cfg.frameLength, s->channels, &gotSamples);
+            if (rc != ALAC_noErr) {
+                fprintf(stderr, "ALAC: decode error in frame %u of %s\n", sampleIdx, path);
+                decodeError = 1; break;
+            }
+            totalPcmBytes += (uint64_t)gotSamples * s->channels * bps;
+            chunkOffset += frameSize;
+        }
+    }
+
+    alac_decoder_free(&dec);
+
+    if (decodeError || totalPcmBytes == 0) {
+        free(pcm); free(buf); return -1;
+    }
+
+    s->data      = pcm;
+    s->dataBytes = totalPcmBytes;
+
+    if (m) m4a_read_metadata(buf, moovOff, moovSize, m);
+    free(buf);
+    return 0;
+}
+
 static int load_flac(const char *path, AudioSource *s, AudioMeta *m)
 {
     memset(s, 0, sizeof(*s));
