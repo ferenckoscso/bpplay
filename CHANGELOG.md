@@ -3,6 +3,24 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.6] — 2026-08-16
+
+### Fixed
+- The DMG's `bpplay` binary and `bpplay drop.app` shipped without the bpplay logo as their
+  Finder icon — both showed a generic icon instead. Root cause: `osacompile` bakes its own
+  compiled asset catalog (`Assets.car`, holding Apple's stock "droplet" template icon) into
+  every AppleScript applet it builds, and on current macOS that compiled catalog wins icon
+  resolution over the classic `CFBundleIconFile` + `.icns` pair, even when the latter correctly
+  points at a bundled custom icon. `tools/build-drop-app.sh` now removes the stock `Assets.car`
+  after compiling, letting the bundled `droplet.icns` (the actual bpplay logo) take effect. The
+  plain `bpplay` CLI binary never had a Finder icon at all (it isn't a bundle, so it has no
+  `Info.plist` to carry one) — a new `tools/set-file-icon.sh` (NSWorkspace via JXA, no external
+  dependency) now stamps a custom Finder icon onto it directly during the DMG build.
+
+### Why
+Reported after downloading the v0.9.5 DMG onto a fresh machine/account: neither the app nor the
+drop script showed the icon set that had been designed for them weeks earlier.
+
 ## [0.9.5] — 2026-08-12
 
 ### Fixed

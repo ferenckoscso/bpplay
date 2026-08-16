@@ -35,6 +35,14 @@ cp "$TOOLS_DIR/bpplay-drop-runtime.sh" "$DIST_DIR/$APP_NAME/Contents/Resources/b
 chmod +x "$DIST_DIR/$APP_NAME/Contents/Resources/bpplay-drop-runtime.sh"
 cp "$ICON" "$DIST_DIR/$APP_NAME/Contents/Resources/droplet.icns"
 
+# osacompile bakes in its own compiled asset catalog (Assets.car) holding
+# Apple's generic stock "droplet" template icon -- on current macOS this
+# compiled catalog wins icon resolution over the legacy
+# CFBundleIconFile+.icns pair below it, so without removing it the app
+# shows Apple's placeholder droplet instead of the bpplay logo, even
+# though droplet.icns above is present and correctly referenced.
+rm -f "$DIST_DIR/$APP_NAME/Contents/Resources/Assets.car"
+
 # Ad-hoc re-sign after modifying the bundle contents (osacompile's own
 # signature only covers what it wrote; we added files afterwards).
 # This does NOT make it Gatekeeper-trusted -- same as the raw bpplay
