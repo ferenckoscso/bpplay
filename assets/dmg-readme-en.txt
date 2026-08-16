@@ -26,6 +26,10 @@ folder, ~/Library/Services/. That folder is hidden by default:
   - Finder → hold Option and click the "Go" menu → "Library" appears →
     open it → open "Services" → drop "bpplay play.workflow" in there.
   - Or, in Finder, press Cmd+Shift+G and type: ~/Library/Services
+  - If the "Services" folder doesn't exist at all (normal on a brand
+    new user account that has never had a Quick Action/Service before):
+    open Terminal and run `mkdir -p ~/Library/Services` — then you can
+    drop "bpplay play.workflow" in there.
 
 Step 2 — First launch (Gatekeeper warning)
 ---------------------------------------------

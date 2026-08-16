@@ -27,6 +27,10 @@ másolni: `~/Library/Services/`. Ez a mappa alapból rejtett:
     (Ugrás) menüre → megjelenik a "Library" (Könyvtár) → nyisd meg →
     nyisd meg a "Services" mappát → húzd bele a "bpplay play.workflow"-t.
   - Vagy Finderben: Cmd+Shift+G, majd írd be: ~/Library/Services
+  - Ha a "Services" mappa nem is létezik (ez normális egy vadonatúj
+    felhasználói fiókban, ahol még sosem volt Quick Action/Service):
+    nyiss egy Terminált, és futtasd: `mkdir -p ~/Library/Services`
+    — utána már behúzhatod bele a "bpplay play.workflow"-t.
 
 2. lépés — Az első indítás (Gatekeeper-figyelmeztetés)
 --------------------------------------------------------
