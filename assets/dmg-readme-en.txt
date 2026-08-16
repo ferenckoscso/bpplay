@@ -30,6 +30,12 @@ folder, ~/Library/Services/. That folder is hidden by default:
     new user account that has never had a Quick Action/Service before):
     open Terminal and run `mkdir -p ~/Library/Services` — then you can
     drop "bpplay play.workflow" in there.
+  - If you copied it in but "bpplay play" doesn't show up in the
+    right-click → Quick Actions menu (or in the "Customize..." list):
+    the background process that serves the Services menu doesn't
+    always notice a new item right away. Force it from Terminal:
+    `/System/Library/CoreServices/pbs -flush`
+    — then open the right-click menu again, it should be there.
 
 Step 2 — First launch (Gatekeeper warning)
 ---------------------------------------------
