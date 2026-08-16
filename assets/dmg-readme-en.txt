@@ -1,10 +1,11 @@
-bpplay 0.9.6 — Read this before you start
+bpplay 0.9.7 — Read this before you start
 ============================================
 
 This disk image contains three things:
-  - "bpplay" — the command-line program
-  - "bpplay drop" — a drag-and-drop app
-  - "bpplay play.workflow" — a Finder right-click ("Quick Action")
+  - "bpplay" — the command-line program (signed and notarised)
+  - "bpplay drop" — a drag-and-drop app (signed and notarised)
+  - "bpplay play.workflow" — a Finder right-click ("Quick Action";
+    signed, but can't be notarised — see Step 2)
 
 If you're upgrading from a previous bpplay version
 ------------------------------------------------------
@@ -13,9 +14,9 @@ If you already had bpplay installed, run this FIRST (double-click) — it
 looks for old copies of "bpplay"/"bpplay drop"/"bpplay play.workflow" in
 the usual places and, after confirming with you, moves them to the
 Trash. Then continue with Step 1 for the new version. If this is your
-first install, you can skip this. (This file isn't notarised either —
-it needs the same right-click → "Open" trick on first run as Step 2
-below; a plain double-click may just warn you.)
+first install, you can skip this. (This file is a plain script, not an
+app — macOS can't notarise that kind of file, so it may still prompt
+for the right-click → "Open" trick described in Step 2.)
 
 Step 1 — Copy everything to a permanent location
 --------------------------------------------------
@@ -37,19 +38,22 @@ folder, ~/Library/Services/. That folder is hidden by default:
     `/System/Library/CoreServices/pbs -flush`
     — then open the right-click menu again, it should be there.
 
-Step 2 — First launch (Gatekeeper warning)
----------------------------------------------
-None of the three are notarised by Apple, so macOS will warn on first
-launch/use that they are from an "unidentified developer". All three
-are safe — they simply haven't gone through Apple's notarisation
-process. Work around this once per item:
+Step 2 — First launch (only needed for the Quick Action and the
+   "Remove old version.command" above)
+--------------------------------------------------------------------
+"bpplay" and "bpplay drop" are signed AND notarised — no warning at
+all, they just launch.
 
-  A) From Terminal (RECOMMENDED — works for all three, and won't
-     break again if Apple reshuffles the warning dialog):
-     xattr -dr com.apple.quarantine ~/Desktop/bpplay
-     xattr -dr com.apple.quarantine "$HOME/Desktop/bpplay drop.app"
+"bpplay play.workflow" is signed, but Apple's notarisation tooling
+specifically doesn't support Quick Action (.workflow) files — so this
+one (and the plain script "Remove old version.command", which can't be
+notarised either) will still warn on first use that it's from an
+"unidentified developer". Both are safe. Work around it once:
+
+  A) From Terminal (RECOMMENDED — won't break again if Apple reshuffles
+     the warning dialog):
      xattr -dr com.apple.quarantine "$HOME/Library/Services/bpplay play.workflow"
-     (If you put them somewhere else, adjust the paths.)
+     (If you put it somewhere else, adjust the path.)
 
   B) From System Settings (if you'd rather not use Terminal):
      Try to open the item (double-click, or pick it from the

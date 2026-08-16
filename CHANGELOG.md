@@ -3,6 +3,34 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.7] — 2026-08-16
+
+### Added
+- **Developer ID signing + Apple notarization** for the `bpplay` binary and `bpplay drop.app` —
+  both now launch with zero Gatekeeper warnings, even on a freshly downloaded copy. `bpplay
+  play.workflow` (the Quick Action) is signed too, but Apple's notarization tooling does not
+  support `.workflow` bundles (`stapler` explicitly refuses them: "Stapler is incapable of
+  working with Workflow files") — it still needs the one-time bypass, now documented as applying
+  only to that one item plus the plain-script "Remove old version.command" (which also can't be
+  notarized, being a script rather than a signed executable/bundle).
+- `tools/build-dmg.sh`, `tools/build-drop-app.sh`, `tools/build-quickaction.sh` all sign with the
+  real "Developer ID Application" identity when it's present in the keychain and a
+  `notarytool` credential profile (`bpplay-notarize`) is set up, submitting the finished DMG for
+  notarization and stapling the ticket — with automatic fallback to the previous ad-hoc/unsigned
+  behavior on a machine without those set up, so the scripts keep working either way.
+
+### Why
+The user obtained an Apple Developer account and Developer ID certificate specifically to close
+the Gatekeeper friction documented across the v0.9.6 patches (PRs #11-#13). Setup hit two real
+obstacles worth recording: a stray user-level Trust Settings override on the leaf certificate
+itself (`kSecTrustSettingsResultTrustAsRoot` across every policy, likely from an accidental
+"Always Trust" click) caused a misleading `errSecInternalComponent` chain-building failure that
+had nothing to do with the certificate chain itself — removed via `security remove-trusted-cert`.
+Signing `bpplay play.workflow` also needed `--deep` specifically (unlike the drop.app), since a
+`.workflow` bundle has no `CFBundleExecutable`/`CFBundlePackageType`, and without `--deep`
+codesign refuses with "code object is not signed at all" on the loose `Contents/document.wflow`
+file.
+
 ## [0.9.6] — 2026-08-16
 
 ### Added
