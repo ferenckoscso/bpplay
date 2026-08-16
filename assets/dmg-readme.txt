@@ -31,6 +31,12 @@ másolni: `~/Library/Services/`. Ez a mappa alapból rejtett:
     felhasználói fiókban, ahol még sosem volt Quick Action/Service):
     nyiss egy Terminált, és futtasd: `mkdir -p ~/Library/Services`
     — utána már behúzhatod bele a "bpplay play.workflow"-t.
+  - Ha bemásoltad, de a jobbklikk → Quick Actions menüben (vagy a
+    "Customize..." listájában) NEM jelenik meg a "bpplay play": a
+    macOS Services-menüt kiszolgáló háttérfolyamat nem mindig veszi
+    észre azonnal az új elemet. Terminálból futtatva ezt kényszeríted:
+    `/System/Library/CoreServices/pbs -flush`
+    — utána nyisd meg újra a jobbklikk-menüt, ott kell legyen.
 
 2. lépés — Az első indítás (Gatekeeper-figyelmeztetés)
 --------------------------------------------------------
