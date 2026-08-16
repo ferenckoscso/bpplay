@@ -43,8 +43,8 @@ elemenként, egyszer:
   A) Terminálból (AJÁNLOTT — mindhárom elemre működik, és nem törik
      el, ha Apple megint átalakítja a figyelmeztető ablakot):
      xattr -dr com.apple.quarantine ~/Desktop/bpplay
-     xattr -dr com.apple.quarantine "~/Desktop/bpplay drop.app"
-     xattr -dr com.apple.quarantine "~/Library/Services/bpplay play.workflow"
+     xattr -dr com.apple.quarantine "$HOME/Desktop/bpplay drop.app"
+     xattr -dr com.apple.quarantine "$HOME/Library/Services/bpplay play.workflow"
      (Ha máshova tetted őket, cseréld az útvonalat a sajátodra.)
 
   B) Rendszerbeállításokból (ha nem szeretnél Terminált használni):
