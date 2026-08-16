@@ -1,10 +1,21 @@
-bpplay 0.9.5 — Olvasd el, mielőtt elindítod
+bpplay 0.9.6 — Olvasd el, mielőtt elindítod
 ============================================
 
 A lemezképben három dolog van:
   - "bpplay" — a parancssori program
   - "bpplay drop" — egy drag-and-drop app
   - "bpplay play.workflow" — egy Finder jobbklikk-menü ("Quick Action")
+
+Ha korábbi bpplay-verziót frissítesz
+---------------------------------------
+Van egy negyedik fájl is a lemezképben: "Régi verzió eltávolítása.command".
+Ha volt már bpplay a gépeden, futtasd ezt ELŐSZÖR (dupla kattintás) — a
+szokásos helyeken megkeresi a régi "bpplay"/"bpplay drop"/"bpplay
+play.workflow" példányokat, és rákérdezve a Kukába helyezi őket. Utána
+következhet az 1. lépés az új verzióval. Ha most telepíted először,
+kihagyhatod ezt a lépést. (Ez a fájl sincs notarizálva, ugyanaz a
+jobbklikk→"Megnyitás" trükk kell hozzá első futtatáskor, mint a 2.
+lépésben — a dupla kattintás önmagában figyelmeztetést adhat.)
 
 1. lépés — Másold mindet egy állandó helyre
 ------------------------------------------------

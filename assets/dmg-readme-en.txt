@@ -1,10 +1,21 @@
-bpplay 0.9.5 — Read this before you start
+bpplay 0.9.6 — Read this before you start
 ============================================
 
 This disk image contains three things:
   - "bpplay" — the command-line program
   - "bpplay drop" — a drag-and-drop app
   - "bpplay play.workflow" — a Finder right-click ("Quick Action")
+
+If you're upgrading from a previous bpplay version
+------------------------------------------------------
+There's a fourth file on this disk image: "Remove old version.command".
+If you already had bpplay installed, run this FIRST (double-click) — it
+looks for old copies of "bpplay"/"bpplay drop"/"bpplay play.workflow" in
+the usual places and, after confirming with you, moves them to the
+Trash. Then continue with Step 1 for the new version. If this is your
+first install, you can skip this. (This file isn't notarised either —
+it needs the same right-click → "Open" trick on first run as Step 2
+below; a plain double-click may just warn you.)
 
 Step 1 — Copy everything to a permanent location
 --------------------------------------------------
