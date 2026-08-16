@@ -1,10 +1,11 @@
-bpplay 0.9.6 — Olvasd el, mielőtt elindítod
+bpplay 0.9.7 — Olvasd el, mielőtt elindítod
 ============================================
 
 A lemezképben három dolog van:
-  - "bpplay" — a parancssori program
-  - "bpplay drop" — egy drag-and-drop app
-  - "bpplay play.workflow" — egy Finder jobbklikk-menü ("Quick Action")
+  - "bpplay" — a parancssori program (aláírva és notarizálva)
+  - "bpplay drop" — egy drag-and-drop app (aláírva és notarizálva)
+  - "bpplay play.workflow" — egy Finder jobbklikk-menü ("Quick Action";
+    aláírva, de NEM notarizálható — lásd a 2. lépést)
 
 Ha korábbi bpplay-verziót frissítesz
 ---------------------------------------
@@ -13,9 +14,9 @@ Ha volt már bpplay a gépeden, futtasd ezt ELŐSZÖR (dupla kattintás) — a
 szokásos helyeken megkeresi a régi "bpplay"/"bpplay drop"/"bpplay
 play.workflow" példányokat, és rákérdezve a Kukába helyezi őket. Utána
 következhet az 1. lépés az új verzióval. Ha most telepíted először,
-kihagyhatod ezt a lépést. (Ez a fájl sincs notarizálva, ugyanaz a
-jobbklikk→"Megnyitás" trükk kell hozzá első futtatáskor, mint a 2.
-lépésben — a dupla kattintás önmagában figyelmeztetést adhat.)
+kihagyhatod ezt a lépést. (Ez a fájl egy sima szkript, nem alkalmazás —
+az ilyet macOS nem tudja notarizálni, így első futtatáskor is kérheti a
+2. lépésben leírt jobbklikk→"Megnyitás" trükköt.)
 
 1. lépés — Másold mindet egy állandó helyre
 ------------------------------------------------
@@ -38,29 +39,31 @@ másolni: `~/Library/Services/`. Ez a mappa alapból rejtett:
     `/System/Library/CoreServices/pbs -flush`
     — utána nyisd meg újra a jobbklikk-menüt, ott kell legyen.
 
-2. lépés — Az első indítás (Gatekeeper-figyelmeztetés)
---------------------------------------------------------
-Egyik sincs Apple által hitelesítve (notarizálva), ezért macOS első
-használatkor mindháromnál figyelmeztetni fog, hogy "ismeretlen
-fejlesztőtől" származik. Mindhárom biztonságos, csak az Apple
-hitelesítési folyamatán nem mentek még keresztül. Kerüld meg
-elemenként, egyszer:
+2. lépés — Az első indítás (csak a Quick Action-nél és a fenti
+   "Régi verzió eltávolítása.command"-nál kell)
+--------------------------------------------------------------------
+A "bpplay" és a "bpplay drop" alá van írva ÉS notarizálva — ezeknél
+NEM lesz semmilyen figyelmeztetés, egyszerűen elindulnak.
 
-  A) Terminálból (AJÁNLOTT — mindhárom elemre működik, és nem törik
-     el, ha Apple megint átalakítja a figyelmeztető ablakot):
-     xattr -dr com.apple.quarantine ~/Desktop/bpplay
-     xattr -dr com.apple.quarantine "$HOME/Desktop/bpplay drop.app"
+A "bpplay play.workflow" alá van írva, de Apple notarizáló eszköze
+kifejezetten nem támogatja a Quick Action (.workflow) fájlokat —
+emiatt ennél (és a sima szkript "Régi verzió eltávolítása.command"-nál,
+ami eleve nem is notarizálható) macOS első használatkor figyelmeztetni
+fog, hogy "ismeretlen fejlesztőtől" származik. Mindkettő biztonságos.
+Kerüld meg egyszer:
+
+  A) Terminálból (AJÁNLOTT — nem törik el, ha Apple megint átalakítja
+     a figyelmeztető ablakot):
      xattr -dr com.apple.quarantine "$HOME/Library/Services/bpplay play.workflow"
-     (Ha máshova tetted őket, cseréld az útvonalat a sajátodra.)
+     (Ha máshova tetted, cseréld az útvonalat a sajátodra.)
 
   B) Rendszerbeállításokból (ha nem szeretnél Terminált használni):
-     Próbáld megnyitni az adott elemet (dupla kattintás, a Quick
-     Actionnél a jobbklikk-menüből kiválasztva) — ez egy "Nem
-     nyitható meg" hibaüzenetet ad, ezt zárd be ("Kész"). Utána:
-     Rendszerbeállítások → Adatvédelem és biztonság → görgess le →
-     ott megjelenik egy "Megnyitás mégis" gomb az adott elem mellett.
-     Próbáld meg utána újra megnyitni — egy második megerősítést
-     kérhet.
+     Próbáld megnyitni az adott elemet (a Quick Actionnél a
+     jobbklikk-menüből kiválasztva) — ez egy "Nem nyitható meg"
+     hibaüzenetet ad, ezt zárd be ("Kész"). Utána: Rendszerbeállítások
+     → Adatvédelem és biztonság → görgess le → ott megjelenik egy
+     "Megnyitás mégis" gomb az adott elem mellett. Próbáld meg utána
+     újra megnyitni — egy második megerősítést kérhet.
      (A régebbi "jobbklikk → Megnyitás → Megnyitás" kétlépéses trükk
      az újabb macOS-verziókon — Sequoia és utána — már NEM működik:
      a felugró ablakban nincs benne "Megnyitás mégis" gomb. Ha ezt

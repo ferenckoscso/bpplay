@@ -59,4 +59,19 @@ cp "$BPPLAY_BIN" "$DIST_DIR/$WORKFLOW_NAME/Contents/Resources/bpplay"
 cp "$TOOLS_DIR/bpplay-quickaction-runtime.sh" "$DIST_DIR/$WORKFLOW_NAME/Contents/Resources/bpplay-quickaction-runtime.sh"
 chmod +x "$DIST_DIR/$WORKFLOW_NAME/Contents/Resources/bpplay-quickaction-runtime.sh"
 
+# Sign the bundle with the real Developer ID identity when available (needed
+# for notarization -- see build-dmg.sh), falling back to an ad-hoc signature
+# otherwise. The bundled bpplay binary is signed separately by build-dmg.sh
+# before this script runs. --deep is required here (unlike the drop.app) --
+# without it codesign refuses with "code object is not signed at all" on
+# Contents/document.wflow, since a .workflow has no CFBundleExecutable/
+# CFBundlePackageType and codesign's bundle-format detection treats that
+# loose top-level file as nested code needing its own signature otherwise.
+SIGN_IDENTITY="Developer ID Application: Ferenc Koscso (M4D4ZUXPH6)"
+if security find-identity -v -p codesigning 2>/dev/null | grep -q "$SIGN_IDENTITY"; then
+    codesign --force --deep --options runtime --timestamp -s "$SIGN_IDENTITY" "$DIST_DIR/$WORKFLOW_NAME"
+else
+    codesign --force --deep -s - "$DIST_DIR/$WORKFLOW_NAME"
+fi
+
 echo "Built: $DIST_DIR/$WORKFLOW_NAME"

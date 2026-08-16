@@ -43,11 +43,20 @@ cp "$ICON" "$DIST_DIR/$APP_NAME/Contents/Resources/droplet.icns"
 # though droplet.icns above is present and correctly referenced.
 rm -f "$DIST_DIR/$APP_NAME/Contents/Resources/Assets.car"
 
-# Ad-hoc re-sign after modifying the bundle contents (osacompile's own
-# signature only covers what it wrote; we added files afterwards).
-# This does NOT make it Gatekeeper-trusted -- same as the raw bpplay
-# binary, the user still needs the one-time right-click-Open bypass
-# documented in the DMG's own first-run readme.
-codesign --force --deep -s - "$DIST_DIR/$APP_NAME"
+# Re-sign after modifying the bundle contents (osacompile's own signature
+# only covers what it wrote; we added files afterwards). Uses the real
+# Developer ID identity + hardened runtime when available (needed for
+# notarization -- see build-dmg.sh), falling back to an ad-hoc signature
+# otherwise. The bundled bpplay binary itself is signed separately by
+# build-dmg.sh before this script runs; --deep is not needed to re-cover
+# it, only to seal this bundle's own top-level executable + Resources.
+SIGN_IDENTITY="Developer ID Application: Ferenc Koscso (M4D4ZUXPH6)"
+if security find-identity -v -p codesigning 2>/dev/null | grep -q "$SIGN_IDENTITY"; then
+    codesign --force --options runtime --timestamp -s "$SIGN_IDENTITY" "$DIST_DIR/$APP_NAME"
+else
+    # Ad-hoc: NOT Gatekeeper-trusted -- the user still needs the one-time
+    # bypass documented in the DMG's own first-run readme.
+    codesign --force --deep -s - "$DIST_DIR/$APP_NAME"
+fi
 
 echo "Built: $DIST_DIR/$APP_NAME"

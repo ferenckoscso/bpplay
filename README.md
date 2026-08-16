@@ -9,7 +9,7 @@
 
 **A bit-perfect music player for macOS — the shortest deterministic signal path from file to DAC.**
 
-`v0.9.6` · Core edition · GPL-3.0-or-later
+`v0.9.7` · Core edition · GPL-3.0-or-later
 
 ---
 
@@ -111,8 +111,10 @@ build your own custom Automator app with a fixed device index — see
   was written, never a music sample, so the audible content stays bit-exact. For DoP/DSD the
   ramp is disabled on purpose, because scaling a DoP word would destroy its marker byte.
 - The queue is limited to 256 files per invocation.
-- bpplay is **not notarised**. Gatekeeper will warn on first launch. Either right-click →
-  "Open" in Finder, or run `xattr -d com.apple.quarantine bpplay` once.
+- The `bpplay` binary and `bpplay drop.app` are **signed and notarised** (since v0.9.7) — no
+  Gatekeeper warning on first launch. `bpplay play.workflow` (the Quick Action) is signed but
+  cannot be notarised: Apple's `stapler` tool does not support `.workflow` bundles, so it still
+  needs the one-time bypass on first use — see the DMG readme.
 
 ## Requirements
 
