@@ -26,6 +26,10 @@ folder, ~/Library/Services/. That folder is hidden by default:
   - Finder → hold Option and click the "Go" menu → "Library" appears →
     open it → open "Services" → drop "bpplay play.workflow" in there.
   - Or, in Finder, press Cmd+Shift+G and type: ~/Library/Services
+  - If the "Services" folder doesn't exist at all (normal on a brand
+    new user account that has never had a Quick Action/Service before):
+    open Terminal and run `mkdir -p ~/Library/Services` — then you can
+    drop "bpplay play.workflow" in there.
 
 Step 2 — First launch (Gatekeeper warning)
 ---------------------------------------------
@@ -34,15 +38,24 @@ launch/use that they are from an "unidentified developer". All three
 are safe — they simply haven't gone through Apple's notarisation
 process. Work around this once per item:
 
-  A) From Terminal (for "bpplay", simplest):
-     xattr -d com.apple.quarantine ~/Desktop/bpplay
+  A) From Terminal (RECOMMENDED — works for all three, and won't
+     break again if Apple reshuffles the warning dialog):
+     xattr -dr com.apple.quarantine ~/Desktop/bpplay
+     xattr -dr com.apple.quarantine "~/Desktop/bpplay drop.app"
+     xattr -dr com.apple.quarantine "~/Library/Services/bpplay play.workflow"
+     (If you put them somewhere else, adjust the paths.)
 
-  B) From Finder (works for all three; the only way for "bpplay drop"
-     and "bpplay play.workflow"):
-     Right-click the file/app → "Open" → click "Open" again in the
-     dialog that appears. For the Quick Action, do this once by
-     right-clicking "bpplay play.workflow" itself inside
-     ~/Library/Services/, BEFORE using it from the context menu.
+  B) From System Settings (if you'd rather not use Terminal):
+     Try to open the item (double-click, or pick it from the
+     right-click menu for the Quick Action) — this shows a "cannot be
+     opened" error, dismiss it ("Done"). Then: System Settings →
+     Privacy & Security → scroll down → an "Open Anyway" button
+     appears next to that item. Try opening it again afterwards — it
+     may ask for one more confirmation.
+     (The older "right-click → Open → Open" two-step trick no longer
+     works on recent macOS — Sequoia and later: the warning dialog
+     has no "Open Anyway" button in it anymore. If that's what you're
+     seeing, use A) or the System Settings route above instead.)
 
 Step 3 — Playback by dragging (no Terminal needed)
 -------------------------------------------------------

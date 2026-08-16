@@ -27,6 +27,10 @@ másolni: `~/Library/Services/`. Ez a mappa alapból rejtett:
     (Ugrás) menüre → megjelenik a "Library" (Könyvtár) → nyisd meg →
     nyisd meg a "Services" mappát → húzd bele a "bpplay play.workflow"-t.
   - Vagy Finderben: Cmd+Shift+G, majd írd be: ~/Library/Services
+  - Ha a "Services" mappa nem is létezik (ez normális egy vadonatúj
+    felhasználói fiókban, ahol még sosem volt Quick Action/Service):
+    nyiss egy Terminált, és futtasd: `mkdir -p ~/Library/Services`
+    — utána már behúzhatod bele a "bpplay play.workflow"-t.
 
 2. lépés — Az első indítás (Gatekeeper-figyelmeztetés)
 --------------------------------------------------------
@@ -36,15 +40,25 @@ fejlesztőtől" származik. Mindhárom biztonságos, csak az Apple
 hitelesítési folyamatán nem mentek még keresztül. Kerüld meg
 elemenként, egyszer:
 
-  A) Terminálból (a "bpplay" fájlra, egyszerűbb):
-     xattr -d com.apple.quarantine ~/Desktop/bpplay
+  A) Terminálból (AJÁNLOTT — mindhárom elemre működik, és nem törik
+     el, ha Apple megint átalakítja a figyelmeztető ablakot):
+     xattr -dr com.apple.quarantine ~/Desktop/bpplay
+     xattr -dr com.apple.quarantine "~/Desktop/bpplay drop.app"
+     xattr -dr com.apple.quarantine "~/Library/Services/bpplay play.workflow"
+     (Ha máshova tetted őket, cseréld az útvonalat a sajátodra.)
 
-  B) Finderből (mindháromra működik, a "bpplay drop"-nál és a
-     "bpplay play.workflow"-nál ez az egyetlen mód):
-     Jobb klikk a fájlon/appon → "Megnyitás" → a felugró ablakban
-     újra "Megnyitás". A Quick Action-nél ezt MÉG A `~/Library/
-     Services/`-en belül, magán a "bpplay play.workflow"-n végezd el,
-     MIELŐTT a jobbklikk-menüből használnád.
+  B) Rendszerbeállításokból (ha nem szeretnél Terminált használni):
+     Próbáld megnyitni az adott elemet (dupla kattintás, a Quick
+     Actionnél a jobbklikk-menüből kiválasztva) — ez egy "Nem
+     nyitható meg" hibaüzenetet ad, ezt zárd be ("Kész"). Utána:
+     Rendszerbeállítások → Adatvédelem és biztonság → görgess le →
+     ott megjelenik egy "Megnyitás mégis" gomb az adott elem mellett.
+     Próbáld meg utána újra megnyitni — egy második megerősítést
+     kérhet.
+     (A régebbi "jobbklikk → Megnyitás → Megnyitás" kétlépéses trükk
+     az újabb macOS-verziókon — Sequoia és utána — már NEM működik:
+     a felugró ablakban nincs benne "Megnyitás mégis" gomb. Ha ezt
+     tapasztalod, az A) vagy a fenti B) módszerre van szükség.)
 
 3. lépés — Lejátszás húzással (nem kell Terminal)
 -----------------------------------------------------
