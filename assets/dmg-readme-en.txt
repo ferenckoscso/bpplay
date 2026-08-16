@@ -41,8 +41,8 @@ process. Work around this once per item:
   A) From Terminal (RECOMMENDED — works for all three, and won't
      break again if Apple reshuffles the warning dialog):
      xattr -dr com.apple.quarantine ~/Desktop/bpplay
-     xattr -dr com.apple.quarantine "~/Desktop/bpplay drop.app"
-     xattr -dr com.apple.quarantine "~/Library/Services/bpplay play.workflow"
+     xattr -dr com.apple.quarantine "$HOME/Desktop/bpplay drop.app"
+     xattr -dr com.apple.quarantine "$HOME/Library/Services/bpplay play.workflow"
      (If you put them somewhere else, adjust the paths.)
 
   B) From System Settings (if you'd rather not use Terminal):
