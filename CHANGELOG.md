@@ -5,6 +5,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [0.9.6] — 2026-08-16
 
+### Added
+- **"Remove old version.command"** (bilingual HU/EN), bundled in the DMG — an optional,
+  double-clickable helper for people upgrading from a previous bpplay version. Finds old
+  `bpplay` / `bpplay drop.app` / `bpplay play.workflow` copies in the usual install locations,
+  shows what it found, and — only after explicit confirmation — moves them to the Trash (never a
+  permanent delete). Only matches the plain `bpplay` binary candidates as regular files, never
+  directories, so an unrelated folder that happens to be named "bpplay" (e.g. a git checkout)
+  can't be swept up by mistake.
+
 ### Fixed
 - The DMG's `bpplay` binary and `bpplay drop.app` shipped without the bpplay logo as their
   Finder icon — both showed a generic icon instead. Root cause: `osacompile` bakes its own
