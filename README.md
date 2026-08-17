@@ -133,6 +133,7 @@ cases: the bit path is independent of the connection method.
 - [`docs/about-bpplay.md`](docs/about-bpplay.md) — philosophy and architecture (EN / HU)
 - [`docs/bpplay-manual-en.pdf`](docs/bpplay-manual-en.pdf) — full user manual (English)
 - [`docs/bpplay-manual-hu.pdf`](docs/bpplay-manual-hu.pdf) — full user manual (Hungarian)
+- [`docs/bpplay-install-demo.mp4`](docs/bpplay-install-demo.mp4) — short screen-recorded walkthrough of installing and using bpplay
 - `bpplay drop.app` / `bpplay play.workflow` (in the DMG) — ready-to-use launchers, zero
   configuration, each bundles its own `bpplay` binary. See "Drag-and-drop, or right-click" above.
 - [`tools/bpplay-drop.sh`](tools/bpplay-drop.sh) — the same drag-and-drop logic as a standalone
