@@ -678,6 +678,7 @@ footer {
       <a class="subtle" href="#formats" data-i18n="nav.formats">Formats</a>
       <a class="subtle" href="#demo" data-i18n="nav.demo">Demo</a>
       <a class="subtle" href="https://github.com/ferenckoscso/bpplay">GitHub</a>
+      <a class="subtle" href="#press" data-i18n="nav.press">Blog &amp; Press</a>
       <a class="btn btn-gold" href="https://github.com/ferenckoscso/bpplay/releases/latest" data-i18n="nav.download">Download</a>
       <button id="langToggle" class="lang-toggle" aria-label="Switch language" type="button">
         <span class="lang-opt" data-lang-opt="en">EN</span>
@@ -921,15 +922,17 @@ footer {
         <a href="https://github.com/ferenckoscso/bpplay/blob/main/LICENSE">GPL-3.0-or-later</a>
         <a href="https://github.com/ferenckoscso/bpplay/blob/main/THIRD_PARTY_NOTICES.md" data-i18n="footer.thirdParty">Third-party notices</a>
       </div>
-      <div class="footer-col">
+      <div class="footer-col" id="press">
         <div class="footer-h" data-i18n="footer.press">Blog &amp; press</div>
-        <a href="https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-software-minimalism-fbcc30753b28">Medium — Architecture &amp; minimalism (EN)</a>
-        <a href="https://medium.com/@mediaengineering/bpplay-kompromisszummentes-sz%C3%A1m%C3%ADt%C3%B3g%C3%A9pes-audi%C3%B3-architekt%C3%BAra-%C3%A9s-szoftveres-minimalizmus-a842919fd73e">Medium — Architektúra és minimalizmus (HU)</a>
-        <a href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-and-when-does-it-actually-matter-9b98efaca480">Medium — Bit-perfect playback (EN)</a>
-        <a href="https://medium.com/@mediaengineering/bithelyess%C3%A9g-mit-jelent-val%C3%B3j%C3%A1ban-%C3%A9s-mikor-sz%C3%A1m%C3%ADt-igaz%C3%A1n-ebdfc40f1f27">Medium — Bithelyesség (HU)</a>
-        <a href="https://pollux.positive-feedback.com/audio-discourse/bplay-bit-perfect-playback-software-solution-part1/">Positive Feedback — Part 1</a>
-        <a href="https://pollux.positive-feedback.com/audio-discourse/bpplay-bit-perfect-playback-software-solution-part2/">Positive Feedback — Part 2</a>
-        <a href="https://positive-feedback.com/reviews/music-reviews/bpplay-bit-perfect-playback-software-solution-part3/">Positive Feedback — Part 3</a>
+        <a data-i18n="footer.medium1" data-i18n-href="footer.medium1Url" href="https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-software-minimalism-fbcc30753b28">Part 1 — Uncompromising architecture</a>
+        <a data-i18n="footer.medium2" data-i18n-href="footer.medium2Url" href="https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-85d5159bb739">Part 2 — What happens under the hood</a>
+        <a data-i18n="footer.medium3" data-i18n-href="footer.medium3Url" href="https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-7199a2921b53">Part 3 — Memory-based playback in 2026</a>
+        <a data-i18n="footer.medium4" data-i18n-href="footer.medium4Url" href="https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-possibilities-for-high-end-audio-playback-c2e6c8c1fee0">Part 4 — Linux/Windows optimization</a>
+        <a data-i18n="footer.medium5" data-i18n-href="footer.medium5Url" href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-and-when-does-it-actually-matter-9b98efaca480">Part 5 — What bit-perfect really means</a>
+        <div class="footer-h" style="margin-top:16px;" data-i18n="footer.pfHeading">Positive Feedback (reprints, EN)</div>
+        <a href="https://pollux.positive-feedback.com/audio-discourse/bplay-bit-perfect-playback-software-solution-part1/">Part 1</a>
+        <a href="https://pollux.positive-feedback.com/audio-discourse/bpplay-bit-perfect-playback-software-solution-part2/">Part 2</a>
+        <a href="https://positive-feedback.com/reviews/music-reviews/bpplay-bit-perfect-playback-software-solution-part3/">Part 3</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1039,6 +1042,7 @@ footer {
       "nav.formats": "Formats",
       "nav.demo": "Demo",
       "nav.download": "Download",
+      "nav.press": "Blog &amp; Press",
       "hero.eyebrow": "macOS · Core edition · v0.9.7 · GPL-3.0",
       "hero.h1": 'The shortest<br>deterministic path<br>from <span class="accent">file</span> to <span class="accent">DAC</span>.',
       "hero.sub": "bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched — no resampling, no software volume, no mixing.",
@@ -1130,6 +1134,17 @@ footer {
       "footer.philosophy": "Philosophy &amp; architecture",
       "footer.license": "License",
       "footer.press": "Blog &amp; press",
+      "footer.medium1": "Part 1 — Uncompromising architecture",
+      "footer.medium1Url": "https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-software-minimalism-fbcc30753b28",
+      "footer.medium2": "Part 2 — What happens under the hood",
+      "footer.medium2Url": "https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-85d5159bb739",
+      "footer.medium3": "Part 3 — Memory-based playback in 2026",
+      "footer.medium3Url": "https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-7199a2921b53",
+      "footer.medium4": "Part 4 — Linux/Windows optimization",
+      "footer.medium4Url": "https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-possibilities-for-high-end-audio-playback-c2e6c8c1fee0",
+      "footer.medium5": "Part 5 — What bit-perfect really means",
+      "footer.medium5Url": "https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-and-when-does-it-actually-matter-9b98efaca480",
+      "footer.pfHeading": "Positive Feedback (reprints, EN)",
       "footer.thirdParty": "Third-party notices",
       "footer.copyright": "© 2026 Koscsó Ferenc. Free software — no warranty, as permitted by the GPL.",
       "footer.myReelClub": "A My Reel Club® practice, translated into software."
@@ -1140,6 +1155,7 @@ footer {
       "nav.formats": "Formátumok",
       "nav.demo": "Demó",
       "nav.download": "Letöltés",
+      "nav.press": "Blog és sajtó",
       "hero.eyebrow": "macOS · Core edition · v0.9.7 · GPL-3.0",
       "hero.h1": 'A legrövidebb<br>determinisztikus út<br><span class="accent">fájltól</span> a <span class="accent">DAC-ig</span>.',
       "hero.sub": "A bpplay egy minimalista, bithelyes zenelejátszó macOS-re. Egyetlen C fájl, kb. kétezer sor, külső függőség nélkül. Egyetlen feladata van: a zenei fájl mintáit érintetlenül eljuttatni a DAC-hoz — nincs újramintavétel, nincs szoftveres hangerő, nincs keverés.",
@@ -1231,6 +1247,17 @@ footer {
       "footer.philosophy": "Filozófia és architektúra",
       "footer.license": "Licenc",
       "footer.press": "Blog és sajtó",
+      "footer.medium1": "1. rész — Kompromisszummentes architektúra",
+      "footer.medium1Url": "https://medium.com/@mediaengineering/bpplay-kompromisszummentes-sz%C3%A1m%C3%ADt%C3%B3g%C3%A9pes-audi%C3%B3-architekt%C3%BAra-%C3%A9s-szoftveres-minimalizmus-a842919fd73e",
+      "footer.medium2": "2. rész — Mi történik a gépházban?",
+      "footer.medium2Url": "https://medium.com/@mediaengineering/bpplay-mi-t%C3%B6rt%C3%A9nik-a-g%C3%A9ph%C3%A1zban-722cf398e7dd",
+      "footer.medium3": "3. rész — Bithelyes, memóriából lejátszás",
+      "footer.medium3Url": "https://medium.com/@mediaengineering/bithelyes-%C3%A9s-mem%C3%B3ri%C3%A1b%C3%B3l-t%C3%B6rt%C3%A9n%C5%91-audio-file-lej%C3%A1tsz%C3%A1s-2026-ban-ee9456c3f505",
+      "footer.medium4": "4. rész — Linux/Windows optimalizálás",
+      "footer.medium4Url": "https://medium.com/@mediaengineering/linux-%C3%A9s-windows-k%C3%B6rnyezet-optimaliz%C3%A1l%C3%A1si-lehet%C5%91s%C3%A9gei-high-end-audio-lej%C3%A1tsz%C3%A1shoz-5a5dfc3ec328",
+      "footer.medium5": "5. rész — Bithelyesség, valójában",
+      "footer.medium5Url": "https://medium.com/@mediaengineering/bithelyess%C3%A9g-mit-jelent-val%C3%B3j%C3%A1ban-%C3%A9s-mikor-sz%C3%A1m%C3%ADt-igaz%C3%A1n-ebdfc40f1f27",
+      "footer.pfHeading": "Positive Feedback (angol nyelvű újraközlés)",
       "footer.thirdParty": "Harmadik féltől származó közlemények",
       "footer.copyright": "© 2026 Koscsó Ferenc. Szabad szoftver — nincs garancia, a GPL által megengedett mértékben.",
       "footer.myReelClub": "Egy My Reel Club® gyakorlat, szoftverré fordítva."
@@ -1255,6 +1282,13 @@ footer {
       var key = el.getAttribute('data-i18n');
       if (dict[key] !== undefined) {
         el.innerHTML = dict[key];
+      }
+    });
+
+    document.querySelectorAll('[data-i18n-href]').forEach(function(el){
+      var key = el.getAttribute('data-i18n-href');
+      if (dict[key] !== undefined) {
+        el.setAttribute('href', dict[key]);
       }
     });
 
