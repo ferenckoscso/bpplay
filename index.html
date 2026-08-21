@@ -833,6 +833,8 @@ footer {
       </table>
     </div>
 
+    <p class="lede" style="margin-top:22px; font-size:15px;" data-i18n="formats.localOnly">bpplay plays files — from local storage, a NAS, or a Google Drive / Dropbox folder, as long as it's mounted on the Mac. It is not a streaming client: no built-in connection to Spotify, Tidal, Qobuz or similar services.</p>
+
     <div class="omitted reveal">
       <h3 data-i18n="formats.omittedH">Deliberately out of scope</h3>
       <p data-i18n="formats.omittedP">Library management, a graphical interface, network streaming, signal processing, volume control. None are oversights — each would be a place where the signal could change, or noise could arise, between the file and the DAC.</p>
@@ -1086,6 +1088,7 @@ footer {
       "formats.alac": "16 / 24-bit — what iTunes / Music.app produce",
       "formats.aiff": "16 / 24 / 32-bit, uncompressed only",
       "formats.dsf": "DSD64–DSD256 via DoP",
+      "formats.localOnly": "bpplay plays files — from local storage, a NAS, or a Google Drive / Dropbox folder, as long as it's mounted on the Mac. It is not a streaming client: no built-in connection to Spotify, Tidal, Qobuz or similar services.",
       "formats.omittedH": "Deliberately out of scope",
       "formats.omittedP": "Library management, a graphical interface, network streaming, signal processing, volume control. None are oversights — each would be a place where the signal could change, or noise could arise, between the file and the DAC.",
       "demo.eyebrow": "See it",
@@ -1138,7 +1141,7 @@ footer {
       "hero.pathLabel5": "MEMCPY → DAC",
       "hero.note": "Ingyenes, nyílt forráskódú, és elég rövid ahhoz, hogy elejétől a végéig el lehessen olvasni.",
       "problem.eyebrow": "A legtöbb lejátszó ezt a kerülőutat választja",
-      "problem.h2": "A szoftver a fájl és<br>a DAC közé ékelődik.",
+      "problem.h2": "Mi a legrövidebb út<br>a fájl és a DAC között?",
       "problem.lede": "Egy átlagos macOS-alkalmazásnál a hang nem közvetlenül jut a DAC-hoz — áthalad a CoreAudio rendszerkeverőjén, ahol az újramintavételezés, a lebegőpontos keverés és a szoftveres hangerő mind csendben megváltoztathatják a jelet.",
       "problem.badLabel": "Tipikus lejátszó",
       "problem.bad1": "Fájl dekódolása",
@@ -1150,7 +1153,7 @@ footer {
       "problem.good2": "Hog mode — kizárólagos DAC-tulajdonlás",
       "path.eyebrow": "Architektúra",
       "path.h2": "Négy lépés, mindegyik egyszer fut le,<br>mind a lejátszás indulása előtt fejeződik be.",
-      "path.lede": "Minden, ami a jelhez érhetne, a DAC elindulása előtt megtörténik. Lejátszás közben pontosan egy művelet marad.",
+      "path.lede": "Minden folyamat, ami a lejátszáshoz szükséges, megtörténik a lejátszás megkezdése előtt. Csupán annyi a feladat, hogy a RAM-ból közvetlenül és a lehető legrövidebb idő alatt a DAC pufferébe kerüljenek a minták.",
       "path.step1.h": "Eszközfoglalás",
       "path.step1.p": '<code>hog mode</code> — a bpplay a DAC kizárólagos tulajdonosává válik. Más alkalmazás nem szólhat bele; a rendszerkeverő le van tiltva.',
       "path.step2.h": "Formátum-egyeztetés",
@@ -1162,7 +1165,7 @@ footer {
       "ram.eyebrow": "A teljes-RAM modell",
       "ram.h2": "A teljes track betölt,<br>mielőtt egyetlen hang is megszólalna.",
       "ram.lede": "Nincs menet közbeni pufferelés, nincs lemezolvasás lejátszás közben. A track a RAM-ban ül, oda rögzítve, és egyetlen memóriamásolással jut a DAC-hoz.",
-      "ram.p1": "Ennek elektromos indoklása is van, nem csak jelúti. Egy hagyományos lejátszó folyamatosan olvas, dekódol és újrapufferel — minden ilyen művelet rövid, tüskeszerű terhelést ró a gép tápegységére. Egy modern NVMe SSD olvasási tüskéje mikroszekundumok alatt 15&nbsp;mA-ről 2&nbsp;A-re ugorhat, közel kétmillió amper/másodperces di/dt-vel — ez valódi nagyfrekvenciás EMI-forrás. Ha a track már teljesen a RAM-ban van, lejátszás közben ebből semmi nem történik — nincs mi tüskézzen.",
+      "ram.p1": "Ennek elektromos indoklása is van, nem csak jelúti. Egy hagyományos lejátszó folyamatosan olvas, dekódol és újrapufferel — minden ilyen művelet rövid, tüskeszerű terhelést ró a gép tápegységére. Egy modern NVMe SSD olvasási tüskéje mikroszekundumok alatt 15&nbsp;mA-ről 2&nbsp;A-re ugorhat, közel kétmillió amper/másodperces di/dt-vel — ez nagyfrekvenciás EMI-zavarokat okozhat. Ha a track már teljesen a RAM-ban van, lejátszás közben ebből semmi nem történik — nincs mi tüskézzen.",
       "ram.stat1": "Lemezolvasás lejátszás közben",
       "ram.stat2": "Tipikus NVMe olvasási tüske",
       "ram.stat3": "A tüske di/dt-je",
@@ -1185,13 +1188,14 @@ footer {
       "formats.alac": "16 / 24 bit — amit az iTunes / Music.app előállít",
       "formats.aiff": "16 / 24 / 32 bit, csak tömörítetlen",
       "formats.dsf": "DSD64–DSD256, DoP-on keresztül",
+      "formats.localOnly": "A bpplay fájlokat játszik le — helyi tárhelyről, NAS-ról, vagy egy Google Drive-/Dropbox-mappából, amennyiben az a Macen csatolva (mountolva) van. Nem streaming-kliens: nincs beépített kapcsolata a Spotify, Tidal, Qobuz vagy hasonló szolgáltatásokhoz.",
       "formats.omittedH": "Tudatosan kimaradt",
       "formats.omittedP": "Könyvtárkezelés, grafikus felület, hálózati streaming, jelfeldolgozás, hangerőszabályzás. Egyik sem mulasztás — mindegyik egy-egy hely lenne, ahol a jel megváltozhatna, vagy zaj keletkezhetne a fájl és a DAC között.",
       "demo.eyebrow": "Nézd meg",
       "demo.h2": "Telepítés és lejátszás,<br>két percen belül.",
       "demo.lede": "Egy rövid, vágatlan képernyőfelvétel a bpplay telepítéséről és egy album lejátszásáról — elejétől a végéig.",
       "validated.eyebrow": "Ellenőrzött, nem feltételezett",
-      "validated.h2": "Ott tesztelve, ahol számít:<br>a csatlakozásnál.",
+      "validated.h2": "A ma széleskörben használatos<br>XMOS és Amanero USB interfészekkel alaposan tesztelve.",
       "validated.lede": "A bithelyes viselkedés minden kipróbált topológiában és kábelezésnél azonos volt — a bitút független a csatlakozás módjától.",
       "validated.l1b": "Interfészek", "validated.l1": "Gustard XMOS, Amanero Combo384/768",
       "validated.l2b": "DAC-ok", "validated.l2": "TT és Gustard",
@@ -1206,7 +1210,7 @@ footer {
       "start.reqs": "Legalább <b>macOS 10.15</b> és <b>8&nbsp;GB RAM</b> szükséges (nagyobb DSD-albumokhoz több — lásd a fenti memória-matekot).",
       "start.downloadBtn": "↓ DMG letöltése",
       "start.sourceBtn": "Forráskód a GitHubon",
-      "quote.text": '„A bpplay lemond a csiszolt felületről és a kényelmi funkciókról, cserébe egy <span class="accent">referenciát</span> ad — egy fix pontot, amelyhez mérni lehet."',
+      "quote.text": '„A bpplay feláldozza a látványos GUI-t és a funkciók tucatjait a determinisztikusság és az alacsony késleltetés oltárán — <span class="accent">referenciaeszközként</span> mindent a minőségi, zajtalan lejátszásra optimalizál."',
       "quote.cite": "A projekt tervezési filozófiájából",
       "footer.project": "Projekt",
       "footer.repo": "GitHub repó",
