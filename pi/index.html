@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bpplay + bptune; Raspberry Pi appliance edition (Linux ARM64)</title>
+<meta name="description" content="Bit-perfect audio playback as a sealed Raspberry Pi 4/5 appliance: boots straight into the music selector, controlled over SSH. Native DSD, integer mode, PREEMPT_RT kernel.">
+<meta property="og:title" content="bpplay + bptune: Raspberry Pi appliance edition (Linux ARM64)">
+<meta property="og:description" content="The appliance that boots straight into your music. Bit-perfect, native DSD, kiosk mode, controlled over SSH from your own device.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a09'/%3E%3Ctext x='14' y='46' font-family='Arial' font-size='38' font-weight='bold' fill='%23eeeeec'%3Eb%3C/text%3E%3Cpath d='M36 22 L54 32 L36 42 Z' fill='%23df8d20'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=PT+Mono:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* == style.css inlined so this page works as a single file == */
+/* ============================================================
+   bpplay + bptune; Raspberry Pi appliance edition (Linux ARM64)
+   Design language: matched to ferenckoscso.github.io/bpplay
+   ============================================================ */
+
+:root {
+  --bg: #0a0a09;
+  --bg-raised: #131311;
+  --bg-raised-2: #1c1c19;
+  --silver: #eeeeec;
+  --silver-dim: #948f83;
+  --silver-dimmer: #59564c;
+  --gold: #df8d20;
+  --gold-bright: #f3a53d;
+  --gold-dim: #7a5420;
+  --green: #58a55c;
+  --green-bright: #7fc584;
+  --red: #e5534b;
+  --hairline: rgba(238,238,236,0.09);
+  --hairline-strong: rgba(238,238,236,0.16);
+  --radius: 2px;
+  --measure: 62ch;
+  --display: "Barlow Condensed", "DIN Cond", "Arial Narrow", sans-serif;
+  --body: "Charter", "Bitstream Charter", "PT Serif", Georgia, serif;
+  --mono: "PT Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --nav-h: 60px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--silver);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--gold); color: #0a0a09; }
+
+a { color: var(--gold-bright); text-decoration: none; }
+a:hover { color: var(--silver); text-decoration: underline; text-underline-offset: 3px; }
+
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 28px; }
+.wrap-wide { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+
+section { position: relative; padding: 96px 0; border-top: 1px solid var(--hairline); }
+[id] { scroll-margin-top: calc(var(--nav-h) + 18px); }
+
+h1, h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  color: var(--silver);
+  text-wrap: balance;
+  margin: 0;
+}
+h2 { font-size: clamp(32px, 4.4vw, 46px); line-height: 1.05; margin-bottom: 18px; }
+h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 20px;
+  color: var(--silver);
+  text-wrap: balance;
+  margin: 0 0 10px;
+}
+
+p { margin: 0 0 16px; max-width: var(--measure); }
+.lede { font-size: 19px; color: var(--silver-dim); max-width: 58ch; }
+
+code {
+  font-family: var(--mono);
+  color: var(--silver);
+  background: var(--bg-raised-2);
+  padding: 1px 5px;
+  border-radius: var(--radius);
+  font-size: 13px;
+}
+kbd {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver);
+  background: var(--bg-raised-2);
+  border: 1px solid var(--hairline-strong);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.overline {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 14px;
+}
+.overline .sep { color: var(--silver-dimmer); margin: 0 6px; }
+
+.sec-head { margin-bottom: 44px; }
+.sec-head .lede { margin-bottom: 0; }
+
+/* ---------- language switching ---------- */
+[data-lang="en"] .hu { display: none !important; }
+[data-lang="hu"] .en { display: none !important; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 9px 16px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.btn:hover { text-decoration: none; }
+.btn-gold { background: var(--gold); color: #0a0a09; }
+.btn-gold:hover { background: var(--gold-bright); color: #0a0a09; }
+.btn-ghost { border-color: var(--hairline-strong); color: var(--silver); }
+.btn-ghost:hover { border-color: var(--silver-dim); color: var(--gold-bright); }
+
+/* ---------- header / nav ---------- */
+header.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10,10,9,0.86);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: var(--nav-h);
+  max-width: 1160px;
+}
+.brand {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--silver);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand:hover { color: var(--gold-bright); text-decoration: none; }
+.brand .plus { color: var(--gold); }
+.brand .ed { color: var(--silver-dimmer); font-weight: 400; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--silver-dim);
+  padding: 7px 9px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--silver); background: var(--bg-raised-2); text-decoration: none; }
+.nav-links a.active { color: var(--gold-bright); }
+
+.nav-tools { display: flex; align-items: center; gap: 10px; }
+
+.lang-switch {
+  display: inline-flex;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.lang-switch button {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: transparent;
+  color: var(--silver-dim);
+  border: 0;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.lang-switch button.on { background: var(--gold); color: #0a0a09; }
+.lang-switch button:not(.on):hover { color: var(--silver); }
+
+.nav-burger {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  color: var(--silver);
+  font-family: var(--mono);
+  font-size: 14px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+/* ---------- hero ---------- */
+.hero { padding-top: 84px; padding-bottom: 72px; border-top: none; }
+.hero .wrap-wide { max-width: 1160px; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+}
+.hero h1 {
+  font-size: clamp(44px, 6.2vw, 82px);
+  line-height: 0.98;
+  margin: 14px 0 24px;
+  max-width: 17ch;
+}
+.hero h1 .gold { color: var(--gold); }
+.hero .sub { font-size: 18px; color: var(--silver-dim); max-width: 46ch; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 14px; }
+.hero-note { font-family: var(--mono); font-size: 12px; color: var(--silver-dimmer); letter-spacing: 0.04em; }
+.hero-note a { color: var(--silver-dim); text-decoration: underline; text-underline-offset: 3px; }
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 64px;
+}
+.stat {
+  background: var(--bg);
+  padding: 18px 20px;
+}
+.stat b {
+  display: block;
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold-bright);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.stat span {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--silver-dim);
+  letter-spacing: 0.05em;
+}
+
+/* ---------- cards ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 26px 26px 20px;
+}
+.card h3 { color: var(--gold-bright); }
+.card p { color: var(--silver-dim); margin-bottom: 0; font-size: 15.5px; }
+.card .c-ico {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold-dim);
+  letter-spacing: 0.14em;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* ---------- quick start steps ---------- */
+.step {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 28px;
+  padding: 48px 0;
+  border-top: 1px solid var(--hairline);
+  align-items: start;
+}
+.step:first-of-type { border-top: 0; padding-top: 8px; }
+.step-num {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 54px;
+  line-height: 0.9;
+  color: var(--gold);
+  opacity: 0.92;
+}
+.step h3 { font-size: 24px; }
+.step .s-body { color: var(--silver-dim); font-size: 16px; }
+.step-media { min-width: 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+.chip {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--silver-dim);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 20px;
+  padding: 4px 12px;
+  letter-spacing: 0.02em;
+}
+.chip b { color: var(--gold-bright); font-weight: 700; }
+
+/* ---------- terminal mockup ---------- */
+.term {
+  background: #0d0d0b;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 100%;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 4px 14px rgba(0,0,0,0.4);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.term + .figure-cap, .term-pair + .figure-cap { margin-top: 10px; }
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #161613;
+  border-bottom: 1px solid var(--hairline);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
+.term-title {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--silver-dim);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.term-body {
+  padding: 14px 16px;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--silver-dim);
+}
+.term-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  background: #2e7d32;
+  color: #eaffe9;
+  padding: 3px 12px;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+/* terminal text colours */
+.tl-dim { color: #948f83; }
+.tl-white { color: #eeeeec; }
+.tl-gold { color: #f3a53d; }
+.tl-green { color: #8fd694; }
+.tl-red { color: #e5534b; }
+.tl-hl { background: rgba(223,141,32,0.16); color: #f3a53d; display: inline-block; width: 100%; }
+.tl-count { color: #8fd694; }
+.tl-count-red { color: #e5534b; }
+.t-bar {
+  display: block;
+  background: #1c1c19;
+  color: #eeeeec;
+  padding: 2px 8px;
+  margin: -4px -8px 10px;
+  border-left: 3px solid var(--gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cursor {
+  display: inline-block;
+  width: 7px;
+  background: #eeeeec;
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.term-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+
+.figure-cap {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--silver-dimmer);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+/* ---------- note boxes ---------- */
+.note {
+  background: rgba(223,141,32,0.07);
+  border: 1px solid rgba(223,141,32,0.25);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin: 18px 0;
+  font-size: 15px;
+  color: var(--silver-dim);
+  max-width: 72ch;
+}
+.note b, .note strong { color: var(--gold-bright); }
+.warn {
+  background: rgba(229,83,75,0.06);
+  border-color: rgba(229,83,75,0.3);
+  border-left-color: var(--red);
+}
+.warn b, .warn strong { color: #f08a84; }
+
+/* ---------- keys table ---------- */
+.keys-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 40px;
+  counter-reset: keyrow;
+}
+.key-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.key-row .k { text-align: left; }
+.key-row .f { font-size: 15px; color: var(--silver-dim); }
+.key-row .f em { color: var(--silver); font-style: normal; }
+
+/* ---------- tables ---------- */
+.table-wrap { overflow-x: auto; margin-top: 28px; border: 1px solid var(--hairline); border-radius: var(--radius); }
+table.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  min-width: 560px;
+}
+table.tbl th {
+  text-align: left;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--bg-raised);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--hairline-strong);
+  white-space: nowrap;
+}
+table.tbl td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--silver-dim);
+  vertical-align: top;
+}
+table.tbl tr:last-child td { border-bottom: 0; }
+table.tbl td:first-child { color: var(--silver); white-space: nowrap; }
+.yes { color: var(--green-bright); font-weight: 700; }
+.no { color: var(--red); font-weight: 700; }
+.small-note { font-size: 12px; line-height: 1.5; }
+
+/* ---------- trial + faq ---------- */
+.trial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 34px 0; }
+.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 34px; }
+.faq { background: var(--bg-raised); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 22px 24px; }
+.faq h3 { font-size: 17px; color: var(--silver); }
+.faq h3::before { content: "Q "; color: var(--gold); font-family: var(--mono); }
+.faq p { color: var(--silver-dim); font-size: 15px; margin: 8px 0 0; }
+.faq p .a { color: var(--gold-bright); font-family: var(--mono); font-size: 12px; margin-right: 6px; }
+
+/* ---------- manual ---------- */
+.manual-top { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 26px 0 8px; }
+.manual-grid {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  gap: 48px;
+  margin-top: 40px;
+}
+.mtoc { position: sticky; top: calc(var(--nav-h) + 24px); align-self: start; }
+.mtoc-mobile { display: none; border: 1px solid var(--hairline-strong); border-radius: var(--radius); background: var(--bg-raised); padding: 0; }
+.mtoc-mobile summary {
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 13px 16px;
+  list-style: none;
+}
+.mtoc-mobile summary::before { content: "▸ "; }
+.mtoc-mobile[open] summary::before { content: "▾ "; }
+.mtoc-mobile ul { list-style: none; margin: 0; padding: 0 8px 10px; }
+.mtoc-mobile li a { display: block; font-family: var(--mono); font-size: 12.5px; color: var(--silver-dim); padding: 9px 10px; border-top: 1px solid var(--hairline); }
+.mtoc-mobile li a:hover { color: var(--gold-bright); text-decoration: none; }
+.mtoc-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--silver-dimmer);
+  margin-bottom: 12px;
+}
+.mtoc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--hairline); }
+.mtoc li a {
+  display: block;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver-dim);
+  padding: 7px 14px;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  line-height: 1.45;
+}
+.mtoc li a:hover { color: var(--silver); text-decoration: none; background: var(--bg-raised); }
+.mtoc li a.active { color: var(--gold-bright); border-left-color: var(--gold); }
+
+.manual-body { font-size: 16px; max-width: 74ch; }
+.manual-body p { max-width: none; color: #d8d5cd; }
+.manual-body ul { color: #d8d5cd; padding-left: 22px; margin: 0 0 18px; }
+.manual-body li { margin-bottom: 8px; }
+.manual-body h3.mh {
+  font-size: 26px;
+  color: var(--silver);
+  margin: 52px 0 6px;
+  padding-top: 34px;
+  border-top: 1px solid var(--hairline);
+}
+.manual-body h3.mh:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+.manual-body h3.mh .mno { color: var(--gold); margin-right: 12px; }
+.manual-body h4 {
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 19px;
+  color: var(--gold-bright);
+  margin: 34px 0 10px;
+}
+.manual-body .figure-cap { margin: 8px 0 22px; }
+.manual-body .note { margin: 22px 0; }
+.manual-body table.tbl td, .manual-body table.tbl th { font-size: 12.5px; }
+.manual-body table.tbl { min-width: 520px; }
+.happy {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  text-align: center;
+  font-size: 22px;
+  margin: 60px 0 10px;
+}
+
+/* ---------- footer ---------- */
+footer.ft {
+  border-top: 1px solid var(--hairline);
+  padding: 64px 0 40px;
+  background: #080807;
+}
+.ft-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; }
+.ft h4 {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--silver-dimmer);
+  margin: 0 0 14px;
+}
+.ft ul { list-style: none; margin: 0; padding: 0; }
+.ft li { margin-bottom: 9px; }
+.ft li a { font-family: var(--mono); font-size: 12.5px; color: var(--silver-dim); }
+.ft li a:hover { color: var(--gold-bright); }
+.ft .brandline { font-family: var(--mono); font-size: 14px; color: var(--silver); margin-bottom: 12px; }
+.ft .dev { font-size: 14px; color: var(--silver-dim); max-width: 42ch; }
+.ft .fineprint {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--silver-dimmer);
+  line-height: 1.7;
+  margin-top: 34px;
+  border-top: 1px solid var(--hairline);
+  padding-top: 22px;
+  max-width: none;
+}
+.happy-foot { font-family: var(--display); font-weight: 700; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-top: 18px; font-size: 13px; }
+
+/* ---------- reveal animation ---------- */
+.rv { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rv { opacity: 1; transform: none; transition: none; }
+  .cursor { animation: none; }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1080px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .hero h1 { max-width: none; }
+  .step { grid-template-columns: 56px minmax(0, 1fr); }
+  .step-media { grid-column: 2; min-width: 0; }
+}
+@media (max-width: 900px) {
+  .cards, .faq-grid, .keys-grid { grid-template-columns: minmax(0, 1fr); }
+  .trial-grid { grid-template-columns: minmax(0, 1fr); }
+  .term-pair { grid-template-columns: minmax(0, 1fr); }
+  .manual-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .mtoc { position: static; }
+  .mtoc-desktop { display: none; }
+  .mtoc-mobile { display: block; margin: 0 0 26px; }
+  .ft-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1220px) {
+  .nav-burger { display: block; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgba(10,10,9,0.97);
+    border-bottom: 1px solid var(--hairline-strong);
+    padding: 10px 20px 16px;
+    gap: 2px;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 11px 10px; font-size: 14px; border-bottom: 1px solid var(--hairline); white-space: normal; }
+  .nav-links li:last-child a { border-bottom: 0; }
+  .nav-cta-desktop { display: none; }
+}
+@media (max-width: 640px) {
+  section { padding: 68px 0; }
+  .wrap, .wrap-wide { padding: 0 20px; }
+  .hero { padding-top: 56px; }
+  .step { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 36px 0; }
+  .step-media { grid-column: 1; }
+  .term-body { font-size: 11px; padding: 12px; }
+  .key-row { grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">bpplay<span class="plus">+</span>bptune<span class="ed"> · pi</span></a>
+
+    <ul class="nav-links">
+      <li><a href="#device"><span class="en">Device</span><span class="hu">Készülék</span></a></li>
+      <li><a href="#quickstart"><span class="en">Quick start</span><span class="hu">Gyorsindítás</span></a></li>
+      <li><a href="#keys"><span class="en">Keys</span><span class="hu">Billentyűk</span></a></li>
+      <li><a href="#hardware"><span class="en">Hardware</span><span class="hu">Hardver</span></a></li>
+      <li><a href="#trial"><span class="en">Trial &amp; FAQ</span><span class="hu">Próba &amp; GYIK</span></a></li>
+      <li><a href="#manual"><span class="en">Manual</span><span class="hu">Kézikönyv</span></a></li>
+      <li><a href="https://github.com/ferenckoscso/bpplay">GitHub ↗</a></li>
+    </ul>
+
+    <div class="nav-tools">
+      <div class="lang-switch" role="group" aria-label="Language / Nyelv">
+        <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-btn="hu" aria-pressed="false">HU</button>
+      </div>
+      <a class="btn btn-gold nav-cta-desktop" href="assets/bpplay_bptune_user_manual_v2.0_EN.pdf"><span class="en">Manual PDF</span><span class="hu">Kézikönyv PDF</span></a>
+      <button class="nav-burger" type="button" aria-expanded="false" aria-controls="navlinks">≡</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="wrap-wide">
+    <div class="hero-grid">
+      <div>
+        <p class="overline"><span class="en">LINUX ARM64<span class="sep">·</span>RASPBERRY PI 4 / 5<span class="sep">·</span>APPLIANCE EDITION v2.0</span><span class="hu">LINUX ARM64<span class="sep">·</span>RASPBERRY PI 4 / 5<span class="sep">·</span>KÉSZÜLÉKI KIADÁS v2.0</span></p>
+        <h1><span class="en">Bit-perfect playback, sealed into an <span class="gold">appliance</span>.</span><span class="hu">Bit-tökéletes lejátszás, lezárt <span class="gold">készülékként</span>.</span></h1>
+        <p class="sub"><span class="en">bpplay + bptune on Raspberry Pi 4 / 5 boots straight into the music selector. No login, no command line, no monitor; you choose and play over SSH from your own computer, tablet or phone, and the file reaches the DAC unchanged.</span><span class="hu">A bpplay + bptune Raspberry Pi 4 / 5 készülék bekapcsolás után egyenesen a zeneválasztóba bootol. Nincs bejelentkezés, parancssor vagy monitor; SSH-n válogatsz és indítasz a saját gépedről, tabletedről vagy telefonodról, és a fájl változatlanul érkezik a DAC-hoz.</span></p>
+        <div class="hero-cta">
+          <a class="btn btn-gold" href="#manual"><span class="en">Read the manual</span><span class="hu">Kézikönyv elolvasása</span></a>
+          <a class="btn btn-ghost" href="assets/bpplay_bptune_user_manual_v2.0_EN.pdf"><span class="en">↓ PDF (v2.0, EN)</span><span class="hu">↓ PDF (v2.0, EN)</span></a>
+          <a class="btn btn-ghost" href="https://github.com/ferenckoscso/bpplay">GitHub</a>
+        </div>
+        <p class="hero-note"><span class="en">Looking for the computer version? <a href="https://ferenckoscso.github.io/bpplay/">bpplay for macOS →</a></span><span class="hu">A számítógépes verziót keresed? <a href="https://ferenckoscso.github.io/bpplay/">bpplay macOS-re →</a></span></p>
+      </div>
+
+      <div class="rv">
+        <div class="term" role="img" aria-label="Illustration of the music selector screen">
+          <div class="term-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="term-title">kiosk@raspberrypi.local; zenevalaszto</span>
+          </div>
+          <div class="term-body"><span class="t-bar">/ | ↑↓ | Enter=belép | Space=kijelöl | a/n | r=ismétlés | s=mentés l=betöltés | /=keresés | Esc=fel | m=…</span>[ ] <span class="tl-dim">[D]</span> <span class="tl-hl">2022_zenek</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">DSD256 Archive</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">French Cafe</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Gojdar_T_LP</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">John Williams live – Deák András felvétele</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Kada Ad Lib 9624</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Lauditeur demo</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">MRC2020</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Pinkfaun</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Roon backup</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Szendrő Gábor DSD</span>
+[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Szendrő Gábor FLAC original</span>
+[ ] <span class="tl-gold">33Bowls_breathe_MQA.mqa.flac</span> <span class="tl-dim">(1630.0 MB, 48kHz)</span>
+<span class="cursor">&nbsp;</span></div>
+          <div class="term-status"><span>zenevalaszto:bash*</span><span>"raspberrypi" 10:28 26-Aug-26</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">The music selector, reached over SSH; illustration redrawn from the actual device screen (the device UI itself is in Hungarian).</span><span class="hu">A zeneválasztó SSH-n keresztül; a valódi készülékképernyő alapján újrarajzolt illusztráció (a készülék felülete magyar nyelvű).</span></p>
+      </div>
+    </div>
+
+    <div class="stat-strip rv">
+      <div class="stat"><b><span class="en">5 steps</span><span class="hu">5 lépés</span></b><span><span class="en">from box to music</span><span class="hu">doboztól a zenéig</span></span></div>
+      <div class="stat"><b>15 + 15</b><span><span class="en">days of trial</span><span class="hu">nap próbaidő</span></span></div>
+      <div class="stat"><b>DSD</b><span><span class="en">native + DoP</span><span class="hu">natív + DoP</span></span></div>
+      <div class="stat"><b>RT</b><span><span class="en">PREEMPT_RT kernel</span><span class="hu">PREEMPT_RT kernel</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEVICE ================= -->
+<section id="device">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">WHAT YOU GET</span><span class="hu">AMIT KAPSZ</span></p>
+      <h2><span class="en">A whole hi-fi, sealed in kiosk mode.</span><span class="hu">Egy komplett hi-fi, lezárva, kiosk módban.</span></h2>
+      <p class="lede"><span class="en">The appliance edition turns the Pi into a dedicated listening machine: it boots straight into the music selector, and everything technical is either automatic or already factory-configured.</span><span class="hu">A készüléki kiadás a Pi-t dedikált zenehallgatási géppé alakítja: egyenesen a zeneválasztóba bootol, és minden technikai részlet vagy automatikus, vagy gyárilag be van állítva.</span></p>
+    </div>
+
+    <div class="cards">
+      <div class="card rv">
+        <span class="c-ico">01 · KIOSK</span>
+        <h3><span class="en">Sealed kiosk mode</span><span class="hu">Zárt kiosk mód</span></h3>
+        <p><span class="en">The device boots straight into the music selector. You never see a login, a terminal or admin rights; deliberately. A handful of keys is enough: arrows, <code>Enter</code>, <code>Space</code>, <code>Esc</code>.</span><span class="hu">A készülék egyenesen a zeneválasztóba bootol. Bejelentkezést, parancssort és admin jogot szándékosan nem látsz. Néhány billentyű elég: nyilak, <code>Enter</code>, <code>Space</code>, <code>Esc</code>.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">02 · INTEGER</span>
+        <h3><span class="en">Bit-perfect, by contract</span><span class="hu">Bit-tökéletes, szerződésszerűen</span></h3>
+        <p><span class="en">Integer mode whenever the DAC allows it: the samples in the file reach the sound card without a single bit shift. If a compromise is ever forced, bpplay says so on screen; it never stays silent about it.</span><span class="hu">Integer mode, amint a DAC engedi: a fájl mintái egyetlen bitsift nélkül érnek a hangkártyához. Ha mégis kompromisszum kényszerül, a bpplay kiírja; sosem hallgat róla.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">03 · DSD</span>
+        <h3><span class="en">Native DSD and DoP</span><span class="hu">Natív DSD és DoP</span></h3>
+        <p><span class="en">DSD data goes to the DAC unpackaged when the chip supports it. Support depends on the DAC, not on the Pi; before planning DSD, check the tested-hardware table below.</span><span class="hu">A DSD adat csomagolatlanul megy a DAC-hoz, ha a chip támogatja. A támogatás a DAC-on múlik, nem a Pi-n; DSD előtt nézd meg az alábbi tesztelt-hardver táblázatot.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">04 · BPTUNE</span>
+        <h3><span class="en">bptune under the hood</span><span class="hu">bptune a motorháztető alatt</span></h3>
+        <p><span class="en">A PREEMPT_RT kernel and system tuning for low-latency, glitch-free playback; installed and configured by the factory installer. As an end user, there is nothing for you to do with it.</span><span class="hu">PREEMPT_RT kernel és rendszerhangolás a késleltetésmentes, kihagyásmentes lejátszásért; a gyári telepítő már beállította. Végfelhasználóként nincs teendőd vele.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUICK START ================= -->
+<section id="quickstart">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">QUICK START</span><span class="hu">GYORSINDÍTÁS</span></p>
+      <h2><span class="en">From box to music in five steps.</span><span class="hu">Öt lépés a doboztól a zenéig.</span></h2>
+      <p class="lede"><span class="en">No technical knowledge is required for any of this; which is exactly why the appliance (kiosk) mode does not offer administrator privileges.</span><span class="hu">Egyik lépéshez sem kell technikai tudás; épp ezért a kiosk mód adminisztrátori jogokat nem is kínál.</span></p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step rv" id="qs1">
+      <div class="step-num">1</div>
+      <div class="s-body">
+        <h3><span class="en">Connect &amp; power on</span><span class="hu">Bekötés és bekapcsolás</span></h3>
+        <p><span class="en">Connect the DAC to a USB 2.0 port of the Pi (usually one of the two outermost connectors), then power. Switch the DAC on first, then the Pi; the device starts by itself. No monitor, no keyboard, no login: wait about half to one minute.</span><span class="hu">A DAC-ot a Pi USB 2.0 portjára kösd (tipikusan a két szélső csatlakozó egyike), majd áramra. Először a DAC-ot kapcsold be, aztán a Pi-t; a készülék magától elindul. Monitor, billentyűzet, bejelentkezés nélkül: várj fél-egy percet.</span></p>
+        <div class="chips">
+          <span class="chip"><span class="en"><b>DAC</b> → USB 2.0 port</span><span class="hu"><b>DAC</b> → USB 2.0 port</span></span>
+          <span class="chip"><span class="en"><b>First</b> the DAC, then the Pi</span><span class="hu"><b>Előbb</b> a DAC, aztán a Pi</span></span>
+          <span class="chip"><span class="en"><b>Wait</b> 30–60 s</span><span class="hu"><b>Várj</b> 30–60 mp-et</span></span>
+        </div>
+      </div>
+      <div class="step-media">
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title"><span class="en">rear panel (typical)</span><span class="hu">hátsó panel (jellemző bekötés)</span></span></div>
+          <div class="term-body"><span class="tl-dim">┌──────────────────────────────────────────┐</span>
+<span class="tl-dim">│</span>  <span class="tl-gold">[USB 2.0]</span>──<span class="tl-white">USB DAC</span>      <span class="tl-dim">[USB 3.0]</span>──○
+<span class="tl-dim">│</span>
+<span class="tl-dim">│</span>  <span class="tl-white">[ETH]</span>──<span class="tl-green">LAN / Wi-Fi</span>   <span class="tl-dim">[HDMI]</span>──○
+<span class="tl-dim">│</span>
+<span class="tl-dim">│</span>  <span class="tl-gold">[POWER]</span>──<span class="tl-white">5V → boots by itself</span>
+<span class="tl-dim">└──────────────────────────────────────────┘</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">Recommendation from the manual: DAC on USB 2.0 rather than USB 3.0.</span><span class="hu">A kézikönyv javaslata: a DAC USB 2.0-ra, ne USB 3.0-ra.</span></p>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step rv" id="qs2">
+      <div class="step-num">2</div>
+      <div class="s-body">
+        <h3><span class="en">Connect over SSH</span><span class="hu">Kapcsolódás SSH-n</span></h3>
+        <p><span class="en">From your own device open an SSH app; the same way as with any other app; and connect to the machine name or IP address you received (typically <code>kiosk@raspberrypi.local</code>). The music selector screen appears; no password or any other command needs to be typed.</span><span class="hu">A saját eszközödről nyiss egy SSH-alkalmazást; ugyanúgy, mint bármely más alkalmazást, és kapcsolódj a kapott gépnévhez vagy IP-címhez (tipikusan <code>kiosk@raspberrypi.local</code>). A zeneválasztó képernyője megjelenik; jelszót vagy parancsot nem kell beírni.</span></p>
+        <div class="chips">
+          <span class="chip"><b>macOS / Linux</b>: <span class="en">Terminal + ssh</span><span class="hu">Terminál + ssh</span></span>
+          <span class="chip"><b>Windows 10/11</b>: OpenSSH · PuTTY</span>
+          <span class="chip"><b>Android</b>: Termux · JuiceSSH · ConnectBot</span>
+          <span class="chip"><b>iOS / iPadOS</b>: Termius · Blink Shell</span>
+        </div>
+        <div class="note"><span class="en"><b>Important.</b> Keep the network (Wi-Fi or Ethernet) up for the entire listening session; the SSH connection keeps the music selector alive through it. If the network drops, the connection drops too: just reconnect.</span><span class="hu"><b>Fontos.</b> A hálózat (Wi-Fi vagy Ethernet) maradjon fenn a teljes hallgatás alatt; az SSH-kapcsolat ezen keresztül tartja életben a zeneválasztót. Ha a hálózat megszakad, a kapcsolat is megszakad: csak csatlakozz újra.</span></div>
+      </div>
+      <div class="step-media">
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">your-computer; Terminal</span></div>
+          <div class="term-body"><span class="tl-white">you@your-mac ~ %</span> <span class="tl-gold">ssh kiosk@raspberrypi.local</span>
+<span class="tl-dim">Linux raspberrypi 6.x … PREEMPT_RT aarch64</span>
+
+<span class="tl-white">Zenei gyökér kiválasztása; Fel/Le, Enter=kiválaszt…</span>
+<span class="tl-green">connected; the music selector takes over</span>
+<span class="cursor">&nbsp;</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">One command from your computer; the selector appears by itself (cf. manual Fig. 1).</span><span class="hu">Egy parancs a saját gépedről; a választó magától megjelenik (ld. kézikönyv 1. ábra).</span></p>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step rv" id="qs3">
+      <div class="step-num">3</div>
+      <div class="s-body">
+        <h3><span class="en">Select storage</span><span class="hu">Tároló kiválasztása</span></h3>
+        <p><span class="en">If more than one drive is present, the storage selector appears (reopen any time with <code>m</code>). Choosing a drive that is not yet mounted? The system mounts it automatically; no password. Your NAS can be reached too: enter its share address (e.g. <code>192.168.1.10:/zene</code> for NFS or <code>//192.168.1.10/zene</code> for SMB) and the selector recognizes the type from its form.</span><span class="hu">Ha több meghajtó van, megjelenik a tárolóválasztó (bármikor újranyitható az <code>m</code> billentyűvel). Olyan meghajtót választasz, ami még nincs csatolva? A rendszer automatikusan csatolja; jelszó nélkül. A NAS is elérhető: add meg a megosztás címét (pl. <code>192.168.1.10:/zene</code> NFS-hez vagy <code>//192.168.1.10/zene</code> SMB-hez), a választó a címből felismeri a típust.</span></p>
+        <div class="chips">
+          <span class="chip"><span class="en"><b>USB drive</b> mounted automatically</span><span class="hu"><b>USB meghajtó</b> automatikusan csatolódik</span></span>
+          <span class="chip"><span class="en"><b>NAS</b> via NFS / SMB</span><span class="hu"><b>NAS</b> NFS / SMB-n</span></span>
+          <span class="chip"><span class="en"><b>Single drive?</b> step is skipped</span><span class="hu"><b>Egy meghajtó?</b> a lépés kimarad</span></span>
+        </div>
+        <div class="note"><span class="en"><b>Patience with NAS.</b> Network storage is slower than local: mounting 1–2 TB can take 1–2 minutes; completely normal. The share itself must exist and be reachable on the NAS in advance; the selector only mounts an existing, reachable share.</span><span class="hu"><b>Türelem NAS-nál.</b> A hálózati tároló lassabb a helyinél: 1–2 TB csatolása 1–2 percig is eltarthat; ez teljesen normális. A megosztásnak előre léteznie és elérhetőnek kell lennie a NAS-on; a választó csak egy meglévő, elérhető megosztást csatol.</span></div>
+      </div>
+      <div class="step-media">
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">zenevalaszto; storage</span></div>
+          <div class="term-body"><span class="t-bar">Zenei gyökér kiválasztása: Fel/Le, Enter=kiválaszt, q/Esc=alapértelmezett</span><span class="tl-gold">Alapértelmezett: /home/kiosk/Zenék  (1.7 GB szabad)</span>
+/mnt/aserver-zene-cd  <span class="tl-dim">(1.0 GB szabad)</span>
+/mnt/aserver-zene-hr  <span class="tl-dim">(9.0 GB szabad)</span>
+<span class="tl-hl">mypassport2  (1.8T, exfat, nincs csatolva)</span>
+WD Unlocker  <span class="tl-dim">(30M, udf, nincs csatolva)</span>
+<span class="tl-white">Mentett playlista betöltése…</span>
+<span class="tl-white">Egyéni útvonal megadása…</span>
+<span class="tl-white">Hálózati megosztás csatolása (NFS/SMB)…</span>
+<span class="cursor">&nbsp;</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">The storage selector: mounted and not-yet-mounted drives alike (cf. Fig. 2).</span><span class="hu">A tárolóválasztó: csatolt és még nem csatolt meghajtók egyaránt (ld. 2. ábra).</span></p>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step rv" id="qs4">
+      <div class="step-num">4</div>
+      <div class="s-body">
+        <h3><span class="en">Select the audio output</span><span class="hu">Hangkimenet kiválasztása</span></h3>
+        <p><span class="en">With several outputs connected (the Pi's built-in output <em>and</em> an external USB DAC), the selector offers a choice: arrows, <code>Enter</code>. One output only? This step is skipped too.</span><span class="hu">Több kimenet esetén (a Pi beépített kimenete <em>és</em> külső USB DAC együtt) a választó kínálja a lehetőségeket: nyilak, <code>Enter</code>. Csak egy kimenet van? Ez a lépés is kimarad.</span></p>
+        <div class="note"><span class="en"><b>You cannot pick wrong by accident.</b> The cursor will not land automatically on a built-in (onboard/HDA-type) sound card if an identifiable external DAC is also in the list.</span><span class="hu"><b>Véletlenül sem tudsz rosszat választani.</b> A kurzor nem áll be automatikusan a beépített (onboard/HDA típusú) hangkártyára, ha azonosítható külső DAC is szerepel a listában.</span></div>
+      </div>
+      <div class="step-media">
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">zenevalaszto; output</span></div>
+          <div class="term-body"><span class="t-bar">Kimenet (hangkártya) kiválasztása: Fel/Le, Enter=kiválaszt</span><span class="tl-dim">Ha bizonytalan vagy: válaszd azt, amelyiknek a márkaneve van
+feltüntetve (nem a beépített hangkártyát).</span>
+[0] <span class="tl-white">bcm2835 Headphones (hw:0,0)</span> <span class="tl-dim">(default)</span>
+<span class="tl-hl">[1] Gustard USB Audio 2.0 (hw:1,0)</span>
+[2] <span class="tl-white">vc4-hdmi-0 (hw:2,0)</span>
+[3] <span class="tl-white">vc4-hdmi-1 (hw:3,0)</span>
+<span class="cursor">&nbsp;</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">The audio output selector; cursor on the external DAC (cf. Fig. 3).</span><span class="hu">A hangkimenet-választó; a kurzor a külső DAC-on áll (ld. 3. ábra).</span></p>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step rv" id="qs5">
+      <div class="step-num">5</div>
+      <div class="s-body">
+        <h3><span class="en">Browse, select, play</span><span class="hu">Válogatás és lejátszás</span></h3>
+        <p><span class="en"><code>Enter</code> opens an album, <code>Esc</code> steps back. <code>Space</code> marks tracks; the counter at the bottom tracks how much RAM your selection needs, and turns red above 70% as a warning. Then press <code>p</code>: the tracks load into memory one by one, and playback starts; gapless.</span><span class="hu">Az <code>Enter</code> belép egy albumba, az <code>Esc</code> visszalép. A <code>Space</code> jelöli a számokat; az alsó számláló mutatja, mennyi RAM kell a kijelöléshez, és 70% felett pirosra vált figyelmeztetésképpen. Aztán nyomd meg a <code>p</code>-t: a számok egyenként a memóriába töltődnek, és indul a lejátszás; gapless.</span></p>
+        <div class="note"><span class="en"><b>Mixed sample rates?</b> bpplay groups tracks with identical rates into one playlist for gapless playback. At a switchover a short 1–2 second muted pause is audible; not an error, the output is simply muted to avoid clicks.</span><span class="hu"><b>Vegyes mintavétel?</b> A bpplay az azonos frekvenciájú számokat gapless lejátszáshoz egy csoportba rendezi. A váltásnál 1–2 másodperc némított szünet hallható; ez nem hiba, a kattanás elkerülésére a kimenet egyszerűen elnémul.</span></div>
+      </div>
+      <div class="step-media">
+        <div class="term-pair">
+          <div>
+            <div class="term">
+              <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">track list; selecting</span></div>
+              <div class="term-body"><span class="t-bar">/2022_zenek/Master Tape Sound Lab _Metaxas recordings | ↑↓ | Space=kijelöl</span><span class="tl-green">[x]</span> <span class="tl-gold">______planets_1_fullversion.wav</span> <span class="tl-dim">(425.0 MB, 48kHz)</span>
+<span class="tl-green">[x]</span> <span class="tl-white">____Takacs_HAYDN_1.wav</span> <span class="tl-dim">(156.9 MB, 48kHz)</span>
+<span class="tl-green">[x]</span> <span class="tl-white">___messiah_45_redeemeth.wav</span> <span class="tl-dim">(114.9 MB, 48kHz)</span>
+<span class="tl-green">[x]</span> <span class="tl-white">__morri_chindamo_3.wav</span> <span class="tl-dim">(151.3 MB, 48kHz)</span>
+<span class="tl-green">[x]</span> <span class="tl-hl">___requiem_AWB_3.wav</span> <span class="tl-dim">(70.0 MB, 48kHz)</span>
+[ ] <span class="tl-white">___requiem_AWB_4.wav</span> <span class="tl-dim">(148.3 MB, 48kHz)</span>
+[ ] <span class="tl-white">___requiem_STRQS.wav</span> <span class="tl-dim">(50.7 MB, 48kHz)</span>
+[ ] <span class="tl-white">__STELLECK_szyzgy.wav</span> <span class="tl-dim">(217.0 MB, 48kHz)</span>
+<span class="tl-count">Kijelölve: 5 track | becsült RAM: 918.1 MB (50% a gép 1844 MB RAM-jából)</span></div>
+            </div>
+            <p class="figure-cap"><span class="en">Space marks, the counter watches your RAM (cf. Fig. 6).</span><span class="hu">A Space jelöl, a számláló a RAM-ot figyeli (ld. 6. ábra).</span></p>
+          </div>
+          <div>
+            <div class="term">
+              <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">playback; integer mode</span></div>
+              <div class="term-body"><span class="tl-white">Lejátszás indul, 9 track:</span>
+<span class="tl-dim">-- ______planets_1_fullversion.wav</span>
+<span class="tl-dim">-- ____Takacs_HAYDN_1.wav</span>
+<span class="tl-dim">-- ___messiah_45_redeemeth.wav …</span>
+<span class="tl-white">Device: Gustard USB Audio 2.0 (hw:1,0)</span>
+<span class="tl-dim">bpplay 1.1.0</span>
+<span class="tl-white">Loading 9 file(s) into RAM…</span>
+<span class="tl-dim">File: /mnt/…/______planets_1_fullversion.wav</span>
+<span class="tl-dim">» 48000 Hz, 16-bit, 2 ch, 1180.5 s</span>
+<span class="tl-white">Physical format: 32-bit integer.</span>
+<span class="tl-gold">Virtual format: integer, 32-bit, 8 B/frame</span>
+<span class="tl-gold">» INTEGER MODE ACTIVE, signal path truly conversion-free</span>
+<span class="cursor">&nbsp;</span></div>
+            </div>
+            <p class="figure-cap"><span class="en">Format check and honest feedback before the first note (cf. Fig. 9).</span><span class="hu">Formátumellenőrzés és őszinte visszajelzés az első hang előtt (ld. 9. ábra).</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= KEYS ================= -->
+<section id="keys">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">REFERENCE</span><span class="hu">REFERENCIA</span></p>
+      <h2><span class="en">Every key you'll ever need.</span><span class="hu">Minden billentyű, amire valaha szükséged lesz.</span></h2>
+      <p class="lede"><span class="en">This is the complete set; there is nothing else to memorize.</span><span class="hu">Ez a teljes készlet; ennél nincs több megjegyzendő.</span></p>
+    </div>
+
+    <div class="keys-grid rv">
+      <div class="key-row"><span class="k"><kbd>↑</kbd> <kbd>↓</kbd></span><span class="f"><span class="en">Navigation in lists</span><span class="hu">Navigáció a listákban</span></span></div>
+      <div class="key-row"><span class="k"><kbd>Enter</kbd></span><span class="f"><span class="en">Enter a subfolder; on a track row it deliberately does <em>nothing</em> (so it cannot undo a <code>Space</code> selection)</span><span class="hu">Belépés almappába; számsoron szándékosan <em>semmit</em> nem csinál (a <code>Space</code>-sel jelöltet nem tudod véletlenül visszavonni)</span></span></div>
+      <div class="key-row"><span class="k"><kbd>Esc</kbd></span><span class="f"><span class="en">Back to the previous (parent) menu item / folder</span><span class="hu">Vissza az előző (szülő) menüpontra / mappába</span></span></div>
+      <div class="key-row"><span class="k"><kbd>Space</kbd></span><span class="f"><span class="en">Select a track (track view); or all tracks of an album at once (album view)</span><span class="hu">Szám kijelölése (számlista); vagy egy album összes száma egyszerre (albumlista)</span></span></div>
+      <div class="key-row"><span class="k"><kbd>a</kbd></span><span class="f"><span class="en">Select all (under the currently open folder, recursively)</span><span class="hu">Mindent kijelöl (a nyitott mappa alatt, rekurzívan)</span></span></div>
+      <div class="key-row"><span class="k"><kbd>n</kbd></span><span class="f"><span class="en">Clear selection</span><span class="hu">Kijelölés törlése</span></span></div>
+      <div class="key-row"><span class="k"><kbd>r</kbd></span><span class="f"><span class="en">Toggle repeat mode; when on, the playlist restarts from the beginning after it finishes</span><span class="hu">Ismétlés be/ki; bekapcsolva a lista a vége után előlről indul újra</span></span></div>
+      <div class="key-row"><span class="k"><kbd>s</kbd></span><span class="f"><span class="en">Save the current selection as a playlist (asks for a name)</span><span class="hu">Az aktuális kijelölés mentése playlistként (nevet kér)</span></span></div>
+      <div class="key-row"><span class="k"><kbd>l</kbd></span><span class="f"><span class="en">Load a previously saved playlist</span><span class="hu">Korábban mentett playlist betöltése</span></span></div>
+      <div class="key-row"><span class="k"><kbd>o</kbd></span><span class="f"><span class="en">Manually re-select the audio output (DAC) during playback; complements the automatic re-check before each playback</span><span class="hu">A hangkimenet (DAC) kézi újraválasztása lejátszás közben; kiegészíti az automatikus újraellenőrzést</span></span></div>
+      <div class="key-row"><span class="k"><kbd>/</kbd></span><span class="f"><span class="en">Search (filters by title)</span><span class="hu">Keresés (cím szerint szűr)</span></span></div>
+      <div class="key-row"><span class="k"><kbd>m</kbd></span><span class="f"><span class="en">Switch drive / storage</span><span class="hu">Meghajtó / tároló váltása</span></span></div>
+      <div class="key-row"><span class="k"><kbd>p</kbd></span><span class="f"><span class="en">Start playback in the selected order</span><span class="hu">Lejátszás indítása a kijelölt sorrendben</span></span></div>
+      <div class="key-row"><span class="k"><kbd>q</kbd></span><span class="f"><span class="en">Quit without playing (the screen restarts automatically); in kiosk mode, at the top level it shuts the device down completely instead</span><span class="hu">Kilépés lejátszás nélkül (a képernyő újraindul); kiosk módban a legfelső szinten a készüléket állítja le teljesen</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HARDWARE ================= -->
+<section id="hardware">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">HARDWARE</span><span class="hu">HARDVER</span></p>
+      <h2><span class="en">Tested where it matters: the connection.</span><span class="hu">Ott tesztelve, ahol számít: a kapcsolat.</span></h2>
+      <p class="lede"><span class="en">The appliance is validated exclusively on Raspberry Pi 4 (CM4 module in the case of Holo Red) and Pi 5, in any RAM variant. Earlier Pi models are not tested, not guaranteed.</span><span class="hu">A készülék kizárólag Raspberry Pi 4 (Holo Red esetén CM4 modul) és Pi 5 alatt van validálva, bármely RAM-változatban. Korábbi Pi modelleken nem tesztelt, nem garantált.</span></p>
+    </div>
+
+    <div class="chips rv">
+      <span class="chip"><span class="en"><b>Board</b> Raspberry Pi 4 / 5</span><span class="hu"><b>Alaplap</b> Raspberry Pi 4 / 5</span></span>
+      <span class="chip"><span class="en"><b>OS</b> Raspberry Pi OS 64-bit (arm64), Debian 13 „trixie"</span><span class="hu"><b>OS</b> Raspberry Pi OS 64-bit (arm64), Debian 13 „trixie"</span></span>
+      <span class="chip"><span class="en"><b>Boot</b> microSD card</span><span class="hu"><b>Boot</b> microSD kártya</span></span>
+      <span class="chip"><span class="en"><b>Kernel</b> PREEMPT_RT (factory-installed)</span><span class="hu"><b>Kernel</b> PREEMPT_RT (gyárilag telepítve)</span></span>
+      <span class="chip"><span class="en"><b>DAC</b> ALSA-compatible USB DAC; or built-in output</span><span class="hu"><b>DAC</b> ALSA-kompatibilis USB DAC; vagy a beépített kimenet</span></span>
+      <span class="chip"><span class="en"><b>Network</b> Ethernet / Wi-Fi; required for the selector</span><span class="hu"><b>Hálózat</b> Ethernet / Wi-Fi; a választóhoz szükséges</span></span>
+    </div>
+
+    <div class="table-wrap rv">
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th scope="col"><span class="en">Device</span><span class="hu">Eszköz</span></th>
+            <th scope="col"><span class="en">Chip / interface</span><span class="hu">Chip / interfész</span></th>
+            <th scope="col">PCM</th>
+            <th scope="col"><span class="en">Native DSD</span><span class="hu">Natív DSD</span></th>
+            <th scope="col">DoP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Gustard USB Audio 2.0</td>
+            <td><span class="en">(direct USB DAC)</span><span class="hu">(közvetlen USB DAC)</span></td>
+            <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+            <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+            <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+          </tr>
+          <tr>
+            <td>TT-DAC-2026 / TT-DAC-NV</td>
+            <td>Amanero Combo 384 <span class="en">and</span><span class="hu">és</span> 768</td>
+            <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+            <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+            <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+          </tr>
+          <tr>
+            <td>Audio-GD DDC → Gustard (I2S)</td>
+            <td>Amanero Combo384</td>
+            <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+            <td class="no"><span class="en">No</span><span class="hu">Nem</span>: <span class="hu small-note">a 384 kHz-es mintavételi plafon miatt a DSD256 hardver szinten kizárt, natívan és DoP-on egyaránt</span><span class="en small-note">the 384 kHz sample-rate ceiling rules DSD256 out at hardware level, both natively and via DoP</span></td>
+            <td class="no"><span class="en">No</span><span class="hu">Nem</span>: <span class="hu small-note">a chip DoP-detektora firmware szinten csak 24 bites frame-eket fogad; a 32 bites DoP-kísérlet hallható zajt adott mindkét bájtsorrenddel, és a kijelző PCM-et mutatott DSD helyett</span><span class="en small-note">the chip's DoP detector only recognizes 24-bit frames at firmware level; the 32-bit DoP attempt produced audible noise with both byte orders, and the display showed PCM instead of DSD</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="figure-cap rv"><span class="en">Tested USB DACs and receivers (manual ch. 4.3). Native DSD and DoP support depends entirely on the DAC's chip and design; not on the Raspberry Pi.</span><span class="hu">Tesztelt USB DAC-ok és receiver-ek (kézikönyv 4.3. fejezet). A natív DSD és DoP támogatás teljes egészében a DAC chipén és felépítésén múlik; nem a Raspberry Pi-n.</span></p>
+  </div>
+</section>
+
+<!-- ================= TRIAL + FAQ ================= -->
+<section id="trial">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">TRIAL PERIOD &amp; FAQ</span><span class="hu">PRÓBAIDŐ &amp; GYIK</span></p>
+      <h2><span class="en">A trial you can actually evaluate.</span><span class="hu">Próbaidő, ami tényleg kipróbálható.</span></h2>
+      <p class="lede"><span class="en">The device is issued as a trial unit. The point is simple: listen to it properly, then decide.</span><span class="hu">A készülék próbapéldányként kerül kiadásra. A lényeg egyszerű: hallgasd meg rendesen, aztán döntsd el.</span></p>
+    </div>
+
+    <div class="trial-grid">
+      <div class="card rv">
+        <span class="c-ico">15 DAYS</span>
+        <h3><span class="en">From the date of manufacture</span><span class="hu">A gyártás dátumától</span></h3>
+        <p><span class="en">The trial runs for 15 days from the writing of the installer image; the date the unit was made.</span><span class="hu">A próbaidő 15 nap a telepítő kép írásától számítva; a készülék gyártási dátumától.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">+15 DAYS</span>
+        <h3><span class="en">Extendable once, remotely</span><span class="hu">Egyszer meghosszabbítható, távolról</span></h3>
+        <p><span class="en">Need more time? The developer can extend the trial once by +15 days (30 in total); just get in touch.</span><span class="hu">Több idő kell? A fejlesztő a próbaidőt egyszer +15 nappal meghosszabbíthatja, összesen 30 napra; csak jelezni kell.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">EXPIRY</span>
+        <h3><span class="en">A clean, explained shutdown</span><span class="hu">Tiszta, magyarázott leállás</span></h3>
+        <p><span class="en">After expiry the device shuts down completely at power-on; the selector never appears, only a brief message explains why. Setting the clock back does not bypass this.</span><span class="hu">Lejárat után a készülék bekapcsoláskor teljesen leáll; a választó nem jelenik meg, csak egy rövid üzenet magyarázza el az okot. Az óra visszaállítása ezt nem kerüli meg.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">1 DEVICE</span>
+        <h3><span class="en">Locked to one Pi</span><span class="hu">Egy Pi-hez zárolva</span></h3>
+        <p><span class="en">On first real boot, the software binds itself to that specific Raspberry Pi's hardware serial number. Moving the card into a different Pi will make it refuse to boot entirely.</span><span class="hu">Az első valódi bekapcsoláskor a szoftver az adott Raspberry Pi hardveres sorozatszámához kötődik. Ha a kártyát másik Pi-be teszed, a készülék egyáltalán nem fog elindulni.</span></p>
+      </div>
+    </div>
+
+    <div class="faq-grid">
+      <div class="faq rv">
+        <h3><span class="en">No sound?</span><span class="hu">Nincs hang?</span></h3>
+        <p><span class="hu"><span class="a">A</span>Ellenőrizd, hogy a megfelelő hangkimenetet választottad-e (3.3), és hogy a DAC be van-e kapcsolva, csatlakoztatva van-e.</span><span class="en"><span class="a">A</span>Check that you selected the right audio output (3.3) and that the DAC is switched on and connected.</span></p>
+      </div>
+      <div class="faq rv">
+        <h3><span class="en">You can't see your music?</span><span class="hu">Nem látod a zenéidet?</span></h3>
+        <p><span class="hu"><span class="a">A</span>Nyisd meg a tárolóválasztót (<kbd>m</kbd>, 3.2), és válaszd ki a helyes meghajtót.</span><span class="en"><span class="a">A</span>Open the storage selector (<kbd>m</kbd>, 3.2) and choose the correct drive.</span></p>
+      </div>
+      <div class="faq rv">
+        <h3><span class="en">The device shows a message, then switches off?</span><span class="hu">A készülék üzenetet mutat, majd kikapcsol?</span></h3>
+        <p><span class="hu"><span class="a">A</span>A próbaidő lejárt (1.5); vedd fel a kapcsolatot a fejlesztővel.</span><span class="en"><span class="a">A</span>The trial period has expired (1.5); contact the developer.</span></p>
+      </div>
+      <div class="faq rv">
+        <h3><span class="en">Anything else unusual?</span><span class="hu">Bármi más szokatlan?</span></h3>
+        <p><span class="hu"><span class="a">A</span>Nincsen teendőd: a gép távolról karbantartható; csak szólj a fejlesztőnek.</span><span class="en"><span class="a">A</span>There is nothing for you to do: the machine can be maintained remotely; just let the developer know.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MANUAL ================= -->
+<section id="manual">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">DOCUMENTATION</span><span class="hu">DOKUMENTÁCIÓ</span></p>
+      <h2><span class="en">The complete v2.0 manual, in the page.</span><span class="hu">A teljes v2.0 kézikönyv, az oldalon.</span></h2>
+      <p class="lede"><span class="en">The full end-user edition of the manual; the same text as the PDF, readable right here. The PDF remains the authoritative offline copy.</span><span class="hu">A kézikönyv teljes végfelhasználói kiadása; ugyanaz a szöveg, mint a PDF-ben, itt olvashatóan. A PDF továbbra is a mérvadó offline példány.</span></p>
+      <div class="manual-top">
+        <a class="btn btn-gold" href="assets/bpplay_bptune_user_manual_v2.0_EN.pdf"><span class="en">↓ Download the PDF (v2.0, EN)</span><span class="hu">↓ PDF letöltése (v2.0, EN)</span></a>
+        <a class="btn btn-ghost" href="https://ferenckoscso.github.io/bpplay/"><span class="en">bpplay for macOS →</span><span class="hu">bpplay macOS-re →</span></a>
+      </div>
+    </div>
+
+    <details class="mtoc-mobile">
+      <summary><span class="en">Manual contents</span><span class="hu">A kézikönyv tartalma</span></summary>
+      <ul>
+        <li><a href="#m-about"><span class="en">About this edition</span><span class="hu">Erről a kiadásról</span></a></li>
+        <li><a href="#m-1"><span class="en">1 · Introduction</span><span class="hu">1 · Bevezetés</span></a></li>
+        <li><a href="#m-2"><span class="en">2 · System requirements</span><span class="hu">2 · Rendszerkövetelmények</span></a></li>
+        <li><a href="#m-3"><span class="en">3 · Using the device</span><span class="hu">3 · A készülék használata</span></a></li>
+        <li><a href="#m-4"><span class="en">4 · Hardware</span><span class="hu">4 · Hardver</span></a></li>
+        <li><a href="#m-5"><span class="en">5 · Technical background</span><span class="hu">5 · Technikai háttér</span></a></li>
+        <li><a href="#m-disc"><span class="en">Disclaimer</span><span class="hu">Jogi nyilatkozat</span></a></li>
+      </ul>
+    </details>
+
+    <div class="manual-grid">
+      <aside class="mtoc mtoc-desktop" aria-label="Manual table of contents">
+        <div class="mtoc-title"><span class="en">Contents</span><span class="hu">Tartalom</span></div>
+        <ul>
+          <li><a href="#m-about"><span class="en">About this edition</span><span class="hu">Erről a kiadásról</span></a></li>
+          <li><a href="#m-1"><span class="en">1 · Introduction</span><span class="hu">1 · Bevezetés</span></a></li>
+          <li><a href="#m-2"><span class="en">2 · System requirements</span><span class="hu">2 · Rendszerkövetelmények</span></a></li>
+          <li><a href="#m-3"><span class="en">3 · Using the device</span><span class="hu">3 · A készülék használata</span></a></li>
+          <li><a href="#m-4"><span class="en">4 · Hardware</span><span class="hu">4 · Hardver</span></a></li>
+          <li><a href="#m-5"><span class="en">5 · Technical background</span><span class="hu">5 · Technikai háttér</span></a></li>
+          <li><a href="#m-disc"><span class="en">Disclaimer</span><span class="hu">Jogi nyilatkozat</span></a></li>
+        </ul>
+      </aside>
+
+      <div class="manual-body">
+        <h3 class="mh" id="m-about"><span class="mno">§</span><span class="en">About this edition</span><span class="hu">Erről a kiadásról</span></h3>
+        <p><span class="en">This end-user edition is derived from the full v2.0 manual of the bpplay/bptune appliance edition: a condensed version that describes only what you need to know for everyday use of the device. The installation, developer and administrator chapters are deliberately omitted.</span><span class="hu">Ez a végfelhasználói kiadás a bpplay/bptune készüléki kiadás teljes v2.0-s kézikönyvéből készült: tömörített változat, amely csak azt írja le, amit a készülék mindennapi használatához tudnod kell. A telepítési, fejlesztői és adminisztrátori fejezeteket szándékosan elhagytuk.</span></p>
+        <p><span class="en">The device boots straight into the music selector, with no login; you simply connect to it over SSH (see 3.1.1). You never see a command line, terminal or login prompt during use; a few keys are enough for navigation: arrow keys, <code>Enter</code>, <code>Space</code>, <code>Esc</code>.</span><span class="hu">A készülék bejelentkezés nélkül, egyenesen a zeneválasztóba bootol; egyszerűen SSH-n kapcsolódsz hozzá (ld. 3.1.1). Használat közben parancssort, terminált vagy bejelentkezési promptot soha nem látsz; a navigációhoz néhány billentyű elég: nyilak, <code>Enter</code>, <code>Space</code>, <code>Esc</code>.</span></p>
+
+        <h3 class="mh" id="m-1"><span class="mno">1</span><span class="en">Introduction</span><span class="hu">Bevezetés</span></h3>
+        <h4><span class="en">1.1 What is bpplay?</span><span class="hu">1.1 Mi az a bpplay?</span></h4>
+        <p><span class="en">bpplay is a command-line, bit-perfect audio file player application for Linux and macOS. It has no graphical interface, no volume control, no equalizer; deliberately. Its goal is one single thing: to deliver the contents of the music file unchanged, via the shortest possible path with the fewest conversion steps, to the DAC (digital-to-analog converter).</span><span class="hu">A bpplay parancssori, bit-tökéletes zenefájl-lejátszó alkalmazás Linuxra és macOS-re. Nincs grafikus felülete, hangerőszabályozása, hangszínszabályozója; szándékosan. Célja egyetlen egy dolog: a zenefájl tartalmát változatlanul juttatnia el, a lehető legrövidebb úton, a lehető legkevesebb konverziós lépéssel, a DAC-hoz (digitál-analóg átalakítóhoz).</span></p>
+        <p><span class="en">Whenever possible, the program plays in so-called "integer mode", which means the integers stored in the file (integer samples) reach the sound card without a single bit shift or conversion. When this is not possible (e.g. the source is in float format, or the DAC does not support the exact bit depth of the source), the program always states this clearly; it never stays silent about being forced into a compromise.</span><span class="hu">Amikor csak lehetséges, a program úgynevezett „integer mode"-ban játszik: ilyenkor a fájlban tárolt egész számok (integer minták) egyetlen biteltolás vagy konverzió nélkül érik el a hangkártyát. Ha ez nem lehetséges (pl. a forrás float formátumú, vagy a DAC nem támogatja a forrás pontos bitmélységét), a program ezt mindig egyértelműen közli; sosem hallgat arról, hogy kompromisszumra kényszerült.</span></p>
+        <p><span class="en">In the appliance edition the end user never launches this program directly; instead, the <code>zenevalaszto.py</code> Python script invokes it in the background for the selected track(s) (see Chapter 3).</span><span class="hu">A készüléki kiadásban a végfelhasználó soha nem indítja közvetlenül ezt a programot; helyette a <code>zenevalaszto.py</code> Python script hívja meg a háttérben a kijelölt szám(ok)hoz (ld. 3. fejezet).</span></p>
+
+        <h4><span class="en">1.2 No tricky or hidden conversions behind the scenes</span><span class="hu">1.2 Nincsenek trükkös vagy rejtett konverziók a kulisszák mögött</span></h4>
+        <p><span class="en">This is the most important design principle of bpplay. If, for any reason, the program cannot achieve exactly the sample rate, bit depth or format the file requires, it:</span><span class="hu">Ez a bpplay legfontosabb tervezési elve. Ha bármely okból a program nem tudja pontosan elérni a fájl által igényelt mintavételi frekvenciát, bitmélységet vagy formátumot, akkor:</span></p>
+        <ul>
+          <li><span class="en">clearly states on screen what happened;</span><span class="hu">egyértelműen kiírja a képernyőre, mi történt;</span></li>
+          <li><span class="en">never silently conceals a format deviation;</span><span class="hu">formátumeltérést sosem palástol el;</span></li>
+          <li><span class="en">if a DAC does not return exactly the requested sample rate, the program retries rather than quietly accepting a wrong rate.</span><span class="hu">ha a DAC nem pontosan a kért mintavételi frekvenciát adja vissza, a program újrapróbálkozik, ahelyett hogy csendesen elfogadna egy rossz frekvenciát.</span></li>
+        </ul>
+
+        <h4><span class="en">1.3 Native DSD and DoP</span><span class="hu">1.3 Natív DSD és DoP</span></h4>
+        <p><span class="en">DSD (Direct Stream Digital) is a high-resolution audio format used by SACDs and some downloadable/streamed releases. Many players repackage DSD data into PCM frames (DoP, DSD over PCM) before sending it to the DAC. bpplay can send DSD data directly, without repackaging, if the DAC supports it; this is called native DSD playback.</span><span class="hu">A DSD (Direct Stream Digital) nagyfelbontású audioformátum, amelyet SACD-k és egyes letölthető/streamelt kiadások használnak. Sok lejátszó a DAC-nak küldés előtt PCM keretekbe csomagolja át a DSD adatot (DoP, DSD over PCM). A bpplay a DSD adatot közvetlenül, átcsomagolás nélkül is elküldheti, ha a DAC támogatja; ezt nevezzük natív DSD lejátszásnak.</span></p>
+        <div class="note"><b><span class="en">Important, Pi-specific limitation.</span><span class="hu">Fontos, Pi-specifikus korlát.</span></b><br><span class="en">Native DSD and DoP support depends entirely on the chip of the connected DAC/USB interface and on the design of the DAC, not on the Raspberry Pi. Tested hardware gave different results; before planning DSD playback with a given device, see the hardware table in Chapter 4.</span><span class="hu">A natív DSD és DoP támogatás teljes egészében a csatlakoztatott DAC/USB interfész chipétől és a DAC felépítésétől függ, nem a Raspberry Pi-től. A tesztelt hardverek eltérő eredményt adtak; adott eszközzel DSD lejátszás tervezése előtt ld. a 4. fejezet hardvertáblázatát.</span></div>
+
+        <h4><span class="en">1.4 What is bptune?</span><span class="hu">1.4 Mi az a bptune?</span></h4>
+        <p><span class="en">bptune is a standalone system-tuning tool (licensed separately from bpplay, non-GPL) that optimizes Linux kernel and hardware settings for low-latency, glitch-free audio playback, and also handles background services that would interfere with playback.</span><span class="hu">A bptune önálló rendszerhangoló eszköz (a bpplay-től külön licencelt, nem-GPL), amely a Linux kernelt és a hardverbeállításokat optimalizálja alacsony késleltetésű, kihagyásmentes zenelejátszásért, és kezeli azokat a háttérszolgáltatásokat is, amelyek zavarnák a lejátszást.</span></p>
+        <p><span class="en">In the appliance edition, the factory installer has already configured bptune; as an end user, there is nothing for you to do with it.</span><span class="hu">A készüléki kiadásban a gyári telepítő már beállította a bptune-t; végfelhasználóként nincs teendőd vele.</span></p>
+
+        <h4><span class="en">1.5 Important: trial period</span><span class="hu">1.5 Fontos: próbaidő</span></h4>
+        <p><span class="en">This device is issued as a trial unit: it can be used for 15 days from the date of manufacture (the writing of the installer image). The trial period can be extended once by +15 days (up to 30 days in total); the developer can do this remotely if you get in touch.</span><span class="hu">Ez a készülék próbapéldányként kerül kiadásra: a gyártás dátumától (a telepítő kép írásától) számított 15 napig használható. A próbaidő egyszer +15 nappal meghosszabbítható (összesen legfeljebb 30 nap); ezt a fejlesztő távolról megteheti, ha felveszed vele a kapcsolatot.</span></p>
+        <p><span class="en">After the trial period expires, the device shuts down automatically and completely at power-on; the music selector never appears, only a brief message explains the reason for the shutdown.</span><span class="hu">A próbaidő lejárta után a készülék bekapcsoláskor automatikusan és teljesen leáll; a zeneválasztó soha nem jelenik meg, csak egy rövid üzenet magyarázza el a leállás okát.</span></p>
+        <p><span class="en">This restriction cannot be bypassed by setting the system clock back.</span><span class="hu">Ez a korlátozás a rendszeróra visszaállításával nem kerülhető meg.</span></p>
+        <div class="note"><b><span class="en">Important.</span><span class="hu">Fontos.</span></b><br><span class="en">This SD card is device-locked: on its first real boot, the software records the hardware serial number of the specific Raspberry Pi it is running in, and from then on it will only start on that exact device. Moving the card into a different Pi will make it refuse to boot at all. This is not a bug; it is a deliberate protection mechanism.</span><span class="hu">Ez az SD-kártya gép-zárolt: az első valódi bekapcsoláskor a szoftver rögzíti annak a konkrét Raspberry Pi-nek a hardveres sorozatszámát, amelyikben éppen fut, és onnantól kizárólag azon a gépen hajlandó elindulni. Ha a kártyát másik Pi-be teszed át, a készülék egyáltalán nem fog elindulni. Ez nem hiba, hanem szándékos védelmi mechanizmus.</span></div>
+
+        <h3 class="mh" id="m-2"><span class="mno">2</span><span class="en">System requirements</span><span class="hu">Rendszerkövetelmények</span></h3>
+        <p><span class="en">This manual assumes a Raspberry Pi 4 or Pi 5 running Raspberry Pi OS (64-bit, Debian-based). Operation as described is not guaranteed on earlier Pi models.</span><span class="hu">Ez a kézikönyv Raspberry Pi 4 vagy Pi 5 alapú, Raspberry Pi OS-t (64 bites, Debian-alapú) futtató készüléket feltételez. A leírt működés korábbi Pi modelleken nem garantált.</span></p>
+        <ul>
+          <li><span class="en">Raspberry Pi 4 or 5, any RAM variant; more RAM allows a larger playlist to be loaded into RAM; the <code>zenevalaszto.py</code> also shows the estimated memory requirement of the selected list at startup, which can serve as a guide.</span><span class="hu">Raspberry Pi 4 vagy 5, bármely RAM-változat; több RAM nagyobb playlist memóriába töltését teszi lehetővé; a <code>zenevalaszto.py</code> induláskor a kijelölt lista becsült memóriaigényét is kiírja, ami támpontul szolgál.</span></li>
+          <li><span class="en">Raspberry Pi OS 64-bit (arm64), based on Debian 13 (trixie).</span><span class="hu">Raspberry Pi OS 64-bit (arm64), Debian 13 (trixie) alapú.</span></li>
+          <li><span class="en">Boot medium: microSD card (used by this appliance edition).</span><span class="hu">Boot adathordozó: microSD kártya (ezt használja a készüléki kiadás).</span></li>
+          <li><span class="en">PREEMPT_RT kernel (installed automatically by the factory installer).</span><span class="hu">PREEMPT_RT kernel (a gyári telepítő automatikusan telepíti).</span></li>
+          <li><span class="en">ALSA-compatible USB DAC (see Chapter 4 for tested hardware); or the Pi's built-in audio output if no external DAC is connected.</span><span class="hu">ALSA-kompatibilis USB DAC (a tesztelt hardverekért ld. 4. fejezet); vagy a Pi beépített hangkimenete, ha külső DAC nincs csatlakoztatva.</span></li>
+          <li><span class="en">Network connection (Ethernet or Wi-Fi); required: the music selector is reached over an SSH connection to the device (see 3.1.1); without it, the end user cannot select and play music.</span><span class="hu">Hálózati kapcsolat (Ethernet vagy Wi-Fi); szükséges: a zeneválasztó a készülékhez SSH-kapcsolaton keresztül érhető el (ld. 3.1.1); enélkül a végfelhasználó nem tud zenét választani és lejátszani.</span></li>
+        </ul>
+
+        <h3 class="mh" id="m-3"><span class="mno">3</span><span class="en">Using the device</span><span class="hu">A készülék használata</span></h3>
+        <p><span class="en">No technical knowledge is required for use; which is exactly why the appliance (kiosk) mode does not offer administrator privileges.</span><span class="hu">A használat nem igényel technikai tudást; épp ezért a készüléki (kiosk) mód adminisztrátori jogosultságokat nem kínál.</span></p>
+
+        <h4><span class="en">3.1 Powering on</span><span class="hu">3.1 Bekapcsolás</span></h4>
+        <p><span class="en">Connect the Raspberry Pi to its power supply (and if you have a separate DAC, connect it to the Pi's USB port as well). It is recommended to connect the DAC via USB 2.0 rather than USB 3.0. These are usually the two outermost connectors on the back panel. Switch the DAC on first, then the RPi. The device starts by itself.</span><span class="hu">Csatlakoztasd a Raspberry Pi-t a tápegységéhez (ha külön DAC-od van, azt is a Pi USB portjára). A DAC-ot ajánlott USB 2.0-n, ne USB 3.0-n csatlakoztatni. Ezek rendszerint a hátsó panel két szélső csatlakozói. Először a DAC-ot kapcsold be, aztán a Pi-t. A készülék magától elindul.</span></p>
+        <p><span class="en">No monitor or keyboard is needed for use: the music selector does not appear on a screen attached to the device; it is reached over an SSH connection from your own tablet, phone or computer. During playback, the graphical user interface is switched off in case a monitor is connected to the Pi after all.</span><span class="hu">A használathoz nincs szükség monitorra vagy billentyűzetre: a zeneválasztó nem a készülékre kötött képernyőn jelenik meg; a saját tabletedről, telefonodról vagy gépedről éred el SSH-kapcsolaton keresztül. Lejátszás közben a grafikus felület kikapcsol, hátha mégis csatlakoztatott monitort a Pi-hez.</span></p>
+        <p><span class="en">After powering on, wait about half to one minute, then establish the SSH connection to the device (see 3.1.1); the music selector screen then appears; no password or any other command needs to be typed.</span><span class="hu">Bekapcsolás után várj körülbelül fél-egy percet, majd létesítsd az SSH-kapcsolatot a készülékkel (ld. 3.1.1); ekkor jelenik meg a zeneválasztó képernyője; jelszót vagy más parancsot nem kell beírni.</span></p>
+        <p><span class="en">If instead you see a brief message that the device can no longer be used, followed by the machine switching itself off: the trial period has expired (see 1.5). Contact the person you received the device from.</span><span class="hu">Ha ehelyett egy rövid üzenetet látsz arról, hogy a készülék már nem használható, majd a gép magától kikapcsol: a próbaidő lejárt (ld. 1.5). Lépj kapcsolatba azzal, akitől a készüléket kaptad.</span></p>
+
+        <h4><span class="en">3.1.1 Connecting via SSH</span><span class="hu">3.1.1 Kapcsolódás SSH-n</span></h4>
+        <p><span class="en">No technical knowledge is needed for this either; just a simple connection with an app, the same way as with any other app. You get the device's IP address or network name from the person you received the device from. Kiosk machines are typically reachable at <code>kiosk@raspberrypi.local</code> or <code>kiosk@IP-address</code>. The usual password, should it be needed: <code>zenehallgatas</code>.</span><span class="hu">Ehhez sem kell technikai tudás; csak egy egyszerű kapcsolódás egy alkalmazással, ugyanúgy, mint bármely más alkalmazással. A készülék IP-címét vagy hálózati nevét attól kapod, akitől a készüléket kaptad. A kiosk gépek jellemzően a <code>kiosk@raspberrypi.local</code> vagy <code>kiosk@IP-cím</code> címen érhetők el. A szokásos jelszó, ha mégis kell: <code>zenehallgatas</code>.</span></p>
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">macOS terminal (Fig. 1)</span></div>
+          <div class="term-body"><span class="tl-white">koscso1@Koscso-MacBook-Air-3 ~ %</span> <span class="tl-gold">ssh kiosk@raspberrypi.local</span><span class="cursor">&nbsp;</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">Figure 1: Connecting via SSH from a macOS terminal.</span><span class="hu">1. ábra: Kapcsolódás SSH-n macOS terminálból.</span></p>
+        <div class="note"><b><span class="en">Important.</span><span class="hu">Fontos.</span></b><br><span class="en">The network connection (Wi-Fi or Ethernet) must stay up for the entire listening session; the SSH connection keeps the music selector screen alive through it. If the network drops, the connection drops too, and you need to reconnect.</span><span class="hu">A hálózati kapcsolatnak (Wi-Fi vagy Ethernet) a teljes hallgatási szakaszban fenn kell maradnia; az SSH-kapcsolat ezen keresztül tartja életben a zeneválasztó képernyőjét. Ha a hálózat megszakad, a kapcsolat is megszakad, és újra kell csatlakoznod.</span></div>
+        <ul>
+          <li><b><span class="en">macOS / Linux:</span><span class="hu">macOS / Linux:</span></b> <span class="en">built-in terminal + <code>ssh</code> command.</span><span class="hu">beépített terminál + <code>ssh</code> parancs.</span></li>
+          <li><b><span class="en">Windows:</span><span class="hu">Windows:</span></b> <span class="en">on Windows 10/11, the built-in OpenSSH client from PowerShell or Windows Terminal, or PuTTY.</span><span class="hu">Windows 10/11 alatt a beépített OpenSSH kliens PowerShellből vagy Windows Terminálból, illetve PuTTY.</span></li>
+          <li><b><span class="en">Android:</span><span class="hu">Android:</span></b> <span class="en">Termux (full terminal emulation), JuiceSSH or ConnectBot.</span><span class="hu">Termux (teljes terminálemuláció), JuiceSSH vagy ConnectBot.</span></li>
+          <li><b><span class="en">iOS / iPadOS:</span><span class="hu">iOS / iPadOS:</span></b> <span class="en">Termius or Blink Shell.</span><span class="hu">Termius vagy Blink Shell.</span></li>
+        </ul>
+
+        <h4><span class="en">3.1.2 If the device can't be found</span><span class="hu">3.1.2 Ha az eszköz nem található</span></h4>
+        <p><span class="en">This device intentionally uses only a wired Ethernet connection; Wi-Fi is deliberately disabled, for determinism and sound quality reasons. If no Ethernet cable is connected, the device will never get an IP address and no finder tool will locate it.</span><span class="hu">Ez a készülék szándékosan csak vezetékes Ethernet-kapcsolatot használ, a Wi-Fi a determinizmus és a hangminőség érdekében tudatosan ki van kapcsolva. Ha nincs Ethernet-kábel bedugva, a gép sosem fog kapni IP-címet, és semmilyen eszközkereső nem fogja megtalálni.</span></p>
+        <p><span class="en">If <code>kiosk@raspberrypi.local</code> is not reachable, check the following, in order:</span><span class="hu">Ha a <code>kiosk@raspberrypi.local</code> nem érhető el, ellenőrizd sorban:</span></p>
+        <ol>
+          <li><span class="en">Confirm an Ethernet cable is actually connected between the device and your router or switch.</span><span class="hu">Ellenőrizd, hogy tényleg van-e Ethernet-kábel bedugva a készülék és a router/switch között.</span></li>
+          <li><span class="en">Give it enough time; especially after a fresh SD card write, first boot can take one to two minutes.</span><span class="hu">Adj neki elég időt; főleg frissen írt SD-kártyánál az első bekapcsolás akár 1-2 percig is tarthat.</span></li>
+          <li><span class="en">Check your router's own admin page for connected devices, rather than relying only on a separate scanner tool; this does not depend on mDNS (<code>.local</code> resolution), which can be blocked on some routers or VLANs.</span><span class="hu">Nézd meg a router saját admin-felületén a csatlakoztatott eszközök listáját, ne csak egy külön eszközkeresőt; ez nem függ az mDNS-től (<code>.local</code> névfeloldás), ami bizonyos routereken vagy VLAN-okon blokkolva lehet.</span></li>
+          <li><span class="en">Confirm you are on the same network; a laptop on Wi-Fi on a guest network may not see a Pi that is wired to the main network, even though both are working.</span><span class="hu">Ellenőrizd, hogy ugyanazon a hálózaton vagy-e; egy vendéghálózaton lévő Wi-Fi-s laptop nem biztos, hogy látja a fő hálózaton vezetékes Pi-t, még akkor sem, ha mindkettő működik.</span></li>
+          <li><span class="en">Watch the SD card activity LED at power-on; a green blink followed by a solid red light around the 30 second mark is a known, documented failure with a known fix.</span><span class="hu">Figyeld az SD-kártya aktivitás-LED-jét bekapcsoláskor; a zöld villogás után kb. 30 másodperccel folyamatosra váltó piros fény egy ismert, dokumentált hiba jele, aminek megvan a megoldása.</span></li>
+          <li><span class="en">Try re-writing the SD card; a partial or corrupted write can cause exactly this symptom.</span><span class="hu">Próbáld újraírni az SD-kártyát; egy félbeszakadt vagy hibás írás pontosan ezt a tünetet okozhatja.</span></li>
+          <li><span class="en">As a last resort, connect a monitor and keyboard directly to the Pi and read the boot console; that immediately shows whether the device is even reaching network initialization.</span><span class="hu">Végső esetben csatlakoztass monitort és billentyűzetet közvetlenül a Pi-hez, és olvasd el a boot-konzolt; ez azonnal megmutatja, hogy a gép egyáltalán eljut-e a hálózati inicializálásig.</span></li>
+        </ol>
+
+        <h4><span class="en">3.2 Selecting storage</span><span class="hu">3.2 Tároló kiválasztása</span></h4>
+        <p><span class="en">If you have just connected a USB drive (flash drive, external HDD/SSD) with music to the device, you can reopen the storage selector on the screen at any time with the <code>m</code> key:</span><span class="hu">Ha most kötöttél zenés USB meghajtót (pendrive, külső HDD/SSD) a készülékre, a tárolóválasztót a képernyőn bármikor újranyithatod az <code>m</code> billentyűvel:</span></p>
+        <ul>
+          <li><span class="en">The selector lists the available drives that contain (or may contain) music; both those already mounted and those plugged in but not yet mounted.</span><span class="hu">A választó felsorolja a (potenciálisan) zenét tartalmazó elérhető meghajtókat; a már csatoltakat és a bedugott, de még nem csatoltakat egyaránt.</span></li>
+          <li><span class="en">Navigate with the Up/Down arrows, select with <code>Enter</code>.</span><span class="hu">A Fel/Le nyilakkal navigálhatsz, az <code>Enter</code>-rel választasz.</span></li>
+          <li><span class="en">If you choose a drive that is not yet mounted, the system mounts it automatically; no password is needed for this.</span><span class="hu">Ha olyan meghajtót választasz, ami még nincs csatolva, a rendszer automatikusan csatolja; ehhez nincs szükség jelszóra.</span></li>
+          <li><span class="en">Some music-selector versions also offer a "Mount network share (NFS/SMB)…" line in the storage selector. With it you can reach a shared music folder on another machine (e.g. your NAS) by entering its address (e.g. <code>192.168.1.10:/zene</code> for NFS, <code>//192.168.1.10/zene</code> for SMB). The music selector automatically recognizes the type (NFS or SMB) from the form of the address. The share itself; whether it exists at all and is accessible; must be set up in advance on the NAS or the other machine; that is not the job of bpplay/the music selector, which only mounts an already existing, reachable share.</span><span class="hu">Egyes zeneválasztó verziók a tárolóválasztóban „Hálózati megosztás csatolása (NFS/SMB)…" sort is kínálnak. Ennek segítségével elérheted egy másik gépen (pl. a NAS-odon) lévő megosztott zenemappát a címének megadásával (pl. <code>192.168.1.10:/zene</code> NFS-hez, <code>//192.168.1.10/zene</code> SMB-hez). A zeneválasztó a cím alakjából automatikusan felismeri a típust (NFS vagy SMB). Maga a megosztás; hogy létezik-e egyáltalán, és elérhető-e; előre be van állítandó a NAS-on vagy a másik gépen; ez nem a bpplay/zeneválasztó feladata, amely csak egy már meglévő, elérhető megosztást csatol fel.</span></li>
+          <li><span class="en">Accessing network storage is naturally slower than local storage and strongly depends on the state of the network. Mounting 1 or 2 TB of network storage can take up to 1–2 minutes; this is completely normal behaviour.</span><span class="hu">A hálózati tároló elérése természetesen lassabb a helyi tárolónál, és erősen függ a hálózat állapotától. 1–2 TB hálózati tároló csatolása akár 1–2 percig is eltarthat; ez teljesen normális viselkedés.</span></li>
+          <li><span class="en">If only a single storage location is available, the screen automatically skips this step.</span><span class="hu">Ha csak egyetlen tárolási hely érhető el, a képernyő ezt a lépést automatikusan kihagyja.</span></li>
+        </ul>
+
+        <h4><span class="en">3.3 Selecting the audio output</span><span class="hu">3.3 Hangkimenet kiválasztása</span></h4>
+        <p><span class="en">If several audio outputs are connected to the device (e.g. the Pi's built-in output AND an external USB DAC at the same time), it offers a choice at startup: Up/Down arrows, <code>Enter</code>. If there is only one output, it automatically skips this step too.</span><span class="hu">Ha több hangkimenet is csatlakozik a készülékhez (pl. a Pi beépített kimenete ÉS külső USB DAC egyszerre), induláskor választást kínál: Fel/Le nyilak, <code>Enter</code>. Ha csak egy kimenet van, ezt a lépést is automatikusan kihagyja.</span></p>
+        <p><span class="en">The selector's cursor cannot land automatically on a built-in (onboard/HDA-type) sound card if an identifiable external DAC is also present in the list; so you cannot pick the wrong output even by accident.</span><span class="hu">A választó kurzora nem állhat be automatikusan beépített (onboard/HDA típusú) hangkártyára, ha a listában azonosítható külső DAC is szerepel; így véletlenül sem választhatsz rossz kimenetet.</span></p>
+
+        <h4><span class="en">3.4 Browsing and playback</span><span class="hu">3.4 Válogatás és lejátszás</span></h4>
+        <ul>
+          <li><span class="en">If your music is organized into folders (albums), you first see an album list: <code>Enter</code> opens the track list of a given album, <code>Esc</code> takes you back.</span><span class="hu">Ha a zenéd mappákba (albumokba) van rendezve, először egy albumlistát látsz: az <code>Enter</code> megnyitja az adott album számlistáját, az <code>Esc</code> visszavisz.</span></li>
+          <li><span class="en">If there is no folder organization (all files are in one place), the track list appears immediately.</span><span class="hu">Ha nincs mappás rendezés (minden fájl egy helyen van), a számlista azonnal megjelenik.</span></li>
+          <li><span class="en">Tracks are selected with the <code>Space</code> key. The selection of any track can be removed with the <code>n</code> key.</span><span class="hu">A számokat a <code>Space</code> billentyűvel jelölöd. Bármely szám kijelölése az <code>n</code> billentyűvel vonható vissza.</span></li>
+          <li><span class="en">The memory usage counter at the bottom of the window tracks how much of the memory your selection fills. At 70% usage the counter turns red, warning of the risk of overfilling. If you still overfill the memory with your selection, playback will not start.</span><span class="hu">Az ablak alján lévő memóriahasználat-számláló követi, hogy a kijelölésed mennyire tölti meg a memóriát. 70%-os használatnál a számláló pirosra vált, ezzel figyelmeztet a túltöltés veszélyére. Ha így is túltöltöd a memóriát a kijelöléseddel, a lejátszás nem indul el.</span></li>
+          <li><span class="en">When you have finished selecting, pressing <code>p</code> starts playback of the playlist, loading the tracks into memory one by one. Playback starts after the loading completes.</span><span class="hu">Ha végzel a kijelöléssel, a <code>p</code> elindítja a playlist lejátszását, és a számokat egyenként a memóriába tölti. A lejátszás a betöltés befejezése után indul.</span></li>
+          <li><span class="en">Loading speed depends on the storage devices and, in the case of a NAS, on the transfer capability of the network. From an SSD, even 96 kHz/24-bit FLAC tracks load instantly, without any waiting.</span><span class="hu">A betöltés sebessége a tárolóeszközöktől, NAS esetén a hálózat átviteli képességétől függ. SSD-ről még a 96 kHz/24 bites FLAC számok is azonnal, várakozás nélkül betöltődnek.</span></li>
+        </ul>
+        <p><span class="en">If the assembled playlist contains files with different sample rates, bpplay groups the tracks with identical sample rates into one playlist for the sake of gapless playback. When the next part of the original playlist, with a different sample rate, starts playing, a short pause of one or two seconds will be audible. This is not an error; the switchover simply takes this long. To avoid clicks, the bpplay software mutes the output for a few tenths of a second.</span><span class="hu">Ha az összeállított playlist különböző mintavételi frekvenciájú fájlokat tartalmaz, a bpplay a gapless lejátszás érdekében az azonos frekvenciájú számokat egy playlistbe csoportosítja. Amikor az eredeti lista eltérő frekvenciájú következő része indul, egy-két másodperces rövid szünet hallható. Ez nem hiba; a váltás egyszerűen ennyi ideig tart. A kattanások elkerülésére a bpplay pár tizedmásodpercre elnémítja a kimenetet.</span></p>
+
+        <h4><span class="en">3.5 All keys needed for operation</span><span class="hu">3.5 Minden billentyű, ami a működéshez kell</span></h4>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th scope="col"><span class="en">Key</span><span class="hu">Billentyű</span></th><th scope="col"><span class="en">Function</span><span class="hu">Funkció</span></th></tr></thead>
+            <tbody>
+              <tr><td><kbd>↑</kbd>/<kbd>↓</kbd></td><td><span class="en">Navigation</span><span class="hu">Navigáció</span></td></tr>
+              <tr><td><kbd>Enter</kbd></td><td><span class="en">Enter a subfolder; on a track row it deliberately does NOTHING (so it cannot accidentally undo a selection made with <code>Space</code>)</span><span class="hu">Belépés almappába; számsoron szándékosan NEM CSINÁL semmit (így a <code>Space</code>-sel készített kijelölést nem tudja véletlenül visszavonni)</span></td></tr>
+              <tr><td><kbd>Esc</kbd></td><td><span class="en">Back to the previous (parent) menu item/folder</span><span class="hu">Vissza az előző (szülő) menüpontra/mappára</span></td></tr>
+              <tr><td><kbd>Space</kbd></td><td><span class="en">Select a track (in track view), or select all tracks of an entire album at once (in album view)</span><span class="hu">Szám kijelölése (számnézetben), vagy egy teljes album összes számának kijelölése egyszerre (albumnézetben)</span></td></tr>
+              <tr><td><kbd>a</kbd></td><td><span class="en">Select all (under the currently open folder, recursively)</span><span class="hu">Mindent kijelöl (a nyitott mappa alatt, rekurzívan)</span></td></tr>
+              <tr><td><kbd>n</kbd></td><td><span class="en">Clear selection</span><span class="hu">Kijelölés törlése</span></td></tr>
+              <tr><td><kbd>r</kbd></td><td><span class="en">Toggle repeat mode; when on, the playlist automatically restarts from the beginning after it finishes</span><span class="hu">Ismétlés be/ki; bekapcsolva a playlist a lefutása után automatikusan előlről indul</span></td></tr>
+              <tr><td><kbd>s</kbd></td><td><span class="en">Save the current selection as a playlist (asks for a name)</span><span class="hu">Az aktuális kijelölés mentése playlistként (nevet kér)</span></td></tr>
+              <tr><td><kbd>l</kbd></td><td><span class="en">Load a previously saved playlist</span><span class="hu">Korábban mentett playlist betöltése</span></td></tr>
+              <tr><td><kbd>o</kbd></td><td><span class="en">Manually re-select the audio output (DAC) during playback; complements (does not replace) the automatic re-check before each playback</span><span class="hu">A hangkimenet (DAC) kézi újraválasztása lejátszás közben; kiegészíti (nem helyettesíti) az automatikus újraellenőrzést minden lejátszás előtt</span></td></tr>
+              <tr><td><kbd>/</kbd></td><td><span class="en">Search (filters by title)</span><span class="hu">Keresés (cím szerint szűr)</span></td></tr>
+              <tr><td><kbd>m</kbd></td><td><span class="en">Switch drive/storage</span><span class="hu">Meghajtó/tároló váltása</span></td></tr>
+              <tr><td><kbd>p</kbd></td><td><span class="en">Start playback in the selected order</span><span class="hu">Lejátszás indítása a kijelölt sorrendben</span></td></tr>
+              <tr><td><kbd>q</kbd></td><td><span class="en">Quit without playing (the screen then restarts automatically, it does not stay "out"); in kiosk mode, at the top level it shuts the device down completely instead</span><span class="hu">Kilépés lejátszás nélkül (a képernyő ezután automatikusan újraindul, nem marad „kint"); kiosk módban a legfelső szinten ehelyett teljesen leállítja a készüléket</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4><span class="en">3.6 If something doesn't work</span><span class="hu">3.6 Ha valami nem működik</span></h4>
+        <ul>
+          <li><b><span class="en">No sound:</span><span class="hu">Nincs hang:</span></b> <span class="en">check that you selected the right audio output (3.3) and that the DAC is switched on and connected.</span><span class="hu">ellenőrizd, hogy a megfelelő hangkimenetet választottad-e (3.3), és hogy a DAC be van-e kapcsolva, csatlakoztatva van-e.</span></li>
+          <li><b><span class="en">You can't see your music:</span><span class="hu">Nem látod a zenéd:</span></b> <span class="en">open the storage selector (<code>m</code>, 3.2) and choose the correct drive.</span><span class="hu">nyisd meg a tárolóválasztót (<code>m</code>, 3.2), és válaszd ki a helyes meghajtót.</span></li>
+          <li><b><span class="en">The device does not start, only shows a message, then switches off:</span><span class="hu">A készülék nem indul, csak üzenetet mutat, majd kikapcsol:</span></b> <span class="en">the trial period has expired (1.5); contact the developer.</span><span class="hu">a próbaidő lejárt (1.5); vedd fel a kapcsolatot a fejlesztővel.</span></li>
+          <li><b><span class="en">Anything else unusual:</span><span class="hu">Bármi más szokatlan:</span></b> <span class="en">there is nothing for you to do; the machine can be maintained remotely; just let the developer know.</span><span class="hu">nincs teendőd; a gép távolról karbantartható; csak szólj a fejlesztőnek.</span></li>
+        </ul>
+
+        <h3 class="mh" id="m-4"><span class="mno">4</span><span class="en">Hardware</span><span class="hu">Hardver</span></h3>
+        <h4><span class="en">4.1 Board/computer</span><span class="hu">4.1 Alaplap/számítógép</span></h4>
+        <p><span class="en">Validated exclusively on Raspberry Pi 4 (CM4 module in the case of Holo Red) and Pi 5, in any RAM variant. Not tested, not guaranteed on earlier Pi models (Pi 3 and older).</span><span class="hu">Kizárólag Raspberry Pi 4 (Holo Red esetén CM4 modul) és Pi 5 alatt validálva, bármely RAM-változatban. Korábbi Pi modelleken (Pi 3 és régebbi) nem tesztelt, nem garantált.</span></p>
+        <h4><span class="en">4.2 Boot medium</span><span class="hu">4.2 Boot adathordozó</span></h4>
+        <p><span class="en">The appliance edition boots from a microSD card.</span><span class="hu">A készüléki kiadás microSD kártyáról bootol.</span></p>
+        <h4><span class="en">4.3 Tested USB DACs and receivers</span><span class="hu">4.3 Tesztelt USB DAC-ok és receiver-ek</span></h4>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th scope="col"><span class="en">Device</span><span class="hu">Eszköz</span></th><th scope="col"><span class="en">Chip/interface</span><span class="hu">Chip/interfész</span></th><th scope="col">PCM</th><th scope="col"><span class="en">Native DSD</span><span class="hu">Natív DSD</span></th><th scope="col">DoP</th></tr></thead>
+            <tbody>
+              <tr>
+                <td>Gustard USB Audio 2.0</td>
+                <td><span class="en">(direct USB DAC)</span><span class="hu">(közvetlen USB DAC)</span></td>
+                <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+                <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+                <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+              </tr>
+              <tr>
+                <td>TT-DAC-2026 / TT-DAC-NV</td>
+                <td>Amanero Combo 384 <span class="en">and</span><span class="hu">és</span> 768</td>
+                <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+                <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+                <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+              </tr>
+              <tr>
+                <td>Audio-GD DDC → Gustard (I2S)</td>
+                <td>Amanero Combo384</td>
+                <td class="yes"><span class="en">Yes</span><span class="hu">Igen</span></td>
+                <td class="no"><span class="en">No</span><span class="hu">Nem</span>: <span class="hu small-note">a 384 kHz-es mintavételi plafon miatt a DSD256 hardver szinten kizárt, natívan és DoP-on egyaránt</span><span class="en small-note">due to the 384 kHz sample-rate ceiling, DSD256 is ruled out at the hardware level both natively and via DoP</span></td>
+                <td class="no"><span class="en">No</span><span class="hu">Nem</span>: <span class="hu small-note">a chip DoP-detektora firmware szinten csak 24 bites frame-eket ismer; a 32 bites DoP-kísérlet hallható zajt adott mindkét bájtsorrenddel, és a kijelző PCM-et mutatott DSD helyett</span><span class="en small-note">the chip's DoP detector only recognizes 24-bit frames at firmware level; the 32-bit DoP attempt produced audible noise with both byte orders, and the display showed PCM instead of DSD</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="mh" id="m-5"><span class="mno">5</span><span class="en">Appendix: technical background</span><span class="hu">Függelék: technikai háttér</span></h3>
+        <h4><span class="en">5.1 The signal path philosophy</span><span class="hu">5.1 A jelút filozófiája</span></h4>
+        <p><span class="en">bpplay's design goal is for sound to travel from the file's loading into memory to the DAC through the fewest, best-documented steps possible. When an integer source meets an integer DAC format, this means zero arithmetic conversion.</span><span class="hu">A bpplay tervezési célja, hogy a hang a fájl memóriába töltésétől a DAC-ig a lehető legkevesebb, legszabályozottabban dokumentált lépésen keresztül haladjon. Amikor integer forrás találkozik integer DAC formátummal, ez nulla aritmetikai konverziót jelent.</span></p>
+        <h4><span class="en">5.2 The role of the sound driver</span><span class="hu">5.2 A hangmeghajtó szerepe</span></h4>
+        <p><span class="en">The phrase "the sound driver performs the last step" in the signal-path messages refers to the audio subsystem of the underlying operating system (ALSA on Linux); a platform-independent, precise wording.</span><span class="hu">Az „a hangmeghajtó végzi az utolsó lépést" kifejezés a jelút-üzenetekben az operációs rendszer hangalrendszerére utal (Linuxon az ALSA); platformfüggetlen, precíz megfogalmazás.</span></p>
+        <p><span class="en">Articles on medium.com about the development of the software and the workings of computer audio systems:</span><span class="hu">Cikkek a medium.com-on a szoftver fejlesztéséről és a számítógépes audio rendszerek működéséről:</span></p>
+        <ul>
+          <li><span class="en">Part 1:</span><span class="hu">1. rész:</span> <a href="https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-5851d54e0ba3"><span class="en">bpplay: no-compromise computer audio, architecture and software minimalism</span><span class="hu">bpplay: kompromisszumok nélküli számítógépes audio, architektúra és szoftver-minimalizmus</span></a></li>
+          <li><span class="en">Part 2:</span><span class="hu">2. rész:</span> <a href="https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-9c01d1e59a24"><span class="en">bpplay: what happens inside the case?</span><span class="hu">bpplay: mi történik a házban?</span></a></li>
+          <li><span class="en">Part 3:</span><span class="hu">3. rész:</span> <a href="https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-4d8e4a3b23de"><span class="en">Bit-perfect, in-memory audio file playback in 2026</span><span class="hu">Bit-tökéletes, memórialapú zenefájl-lejátszás 2026-ban</span></a></li>
+          <li><span class="en">Part 4:</span><span class="hu">4. rész:</span> <a href="https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-for-high-end-audio-f00c11be0d19"><span class="en">Optimization options of Linux and Windows environments for high-end audio playback</span><span class="hu">A Linux és Windows környezet optimalizálási lehetőségei high-end audióhoz</span></a></li>
+          <li><span class="en">Part 5:</span><span class="hu">5. rész:</span> <a href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-2c6d70cb1b17"><span class="en">Bit-perfectness: what it really means and when it truly matters</span><span class="hu">Bit-tökéletesség: mit jelent valójában, és mikor számít igazán</span></a></li>
+        </ul>
+
+        <h3 class="mh" id="m-disc"><span class="mno">§</span><span class="en">Disclaimer</span><span class="hu">Jogi nyilatkozat</span></h3>
+        <p><span class="en">The bpplay and bptune software, as well as the music selector serving this device (<code>zenevalaszto.py</code>) is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose.</span><span class="hu">A bpplay és bptune szoftver, valamint a készüléket kiszolgáló zeneválasztó (<code>zenevalaszto.py</code>) „ahogy van" alapú, bármilyen kifejezett vagy vélelmezett garancia nélkül, beleértve de nem kizárólagosan az eladhatóságra vagy egy adott célra való alkalmasságra vonatkozó garanciákat.</span></p>
+        <p><span class="en">The developer accepts no liability for direct or indirect damages arising from the use, malfunction or failure of the software or the device, including possible damage to connected audio equipment (DAC, amplifier, speakers), loss of data, or any damage resulting from use other than the intended purpose.</span><span class="hu">A fejlesztő nem vállal felelősséget a szoftver vagy a készülék használata, hibás működése vagy meghibásodása miatt bekövetkező közvetlen vagy közvetett károkért, ideértve a csatlakoztatott audioberendezések (DAC, erősítő, hangfalak) esetleges sérülését, adatvesztést, illetve a rendeltetéstől eltérő használatból eredő bármilyen kárt.</span></p>
+        <p><span class="en">This manual strives to describe the most accurate, current state possible, but the developer does not guarantee the completeness or error-freeness of its contents, and reserves the right to update it without prior notice. The device and the manual are made exclusively for the end-user music-listening purpose described herein; any other use is at your own risk.</span><span class="hu">Ez a kézikönyv a lehető legpontosabb, aktuális állapot leírására törekszik, de a fejlesztő nem garantálja tartalma teljességét és hibamentességét, és fenntartja a jogot előzetes értesítés nélküli frissítésére. A készülék és a kézikönyv kizárólag az itt leírt, végfelhasználói zenehallgatási célra készült; minden más használata saját kockázatodra történik.</span></p>
+        <p><span class="en">All rights to the software and the device are reserved; copying, reverse engineering or passing them to third parties may only take place with the prior written permission of the developer.</span><span class="hu">A szoftverre és a készülékre vonatkozóan minden jog fenntartva; másolásuk, visszafejtésük vagy harmadik félnek történő átadásuk kizárólag a fejlesztő előzetes írásbeli engedélyével történhet.</span></p>
+
+        <p class="happy">Happy listening!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="ft">
+  <div class="wrap-wide">
+    <div class="ft-grid">
+      <div>
+        <div class="brandline">bpplay<span style="color:var(--gold)">+</span>bptune <span style="color:var(--silver-dimmer)">· Raspberry Pi appliance edition</span></div>
+        <p class="dev"><span class="en">Developed by Koscso Media Engineering Kft. Bit-perfect playback and system tuning, delivered as a sealed appliance.</span><span class="hu">Fejlesztette a Koscso Media Engineering Kft. Bit-tökéletes lejátszás és rendszerhangolás, lezárt készülékként.</span></p>
+        <div class="happy-foot">Happy listening!</div>
+      </div>
+      <div>
+        <h4><span class="en">Project</span><span class="hu">Projekt</span></h4>
+        <ul>
+          <li><a href="https://github.com/ferenckoscso/bpplay">GitHub; bpplay</a></li>
+          <li><a href="https://ferenckoscso.github.io/bpplay/"><span class="en">bpplay for macOS (site)</span><span class="hu">bpplay macOS-re (oldal)</span></a></li>
+          <li><a href="assets/bpplay_bptune_user_manual_v2.0_EN.pdf"><span class="en">User manual v2.0 (PDF, EN)</span><span class="hu">Felhasználói kézikönyv v2.0 (PDF, EN)</span></a></li>
+          <li><a href="#top"><span class="en">Back to top ↑</span><span class="hu">Vissza az oldal tetejére ↑</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h4><span class="en">Further reading</span><span class="hu">További olvasnivaló</span></h4>
+        <ul>
+          <li><a href="https://medium.com/@mediaengineering"><span class="en">Medium: @mediaengineering</span><span class="hu">Medium: @mediaengineering</span></a></li>
+          <li><a href="https://positive-feedback.com/reviews/music-reviews/bpplay-bit-perfect/"><span class="en">Positive Feedback: review</span><span class="hu">Positive Feedback: teszt</span></a></li>
+          <li><a href="https://pollux.positive-feedback.com/audio-discourse/"><span class="en">Audio Discourse: parts 1–2</span><span class="hu">Audio Discourse: 1–2. rész</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="fineprint"><span class="en">The macOS edition of bpplay is open source under GPL-3.0-or-later (separate repository). This Raspberry Pi appliance edition of bpplay, bptune, and the music selector are licensed separately and are not open source. The software is provided "as is", without warranty of any kind; see the full disclaimer in the manual above. All rights reserved © <span class="yr">2026</span> Koscso Media Engineering Kft.</span><span class="hu">A bpplay macOS-es kiadása nyílt forráskódú, GPL-3.0-or-later licenc alatt (külön repóban). Ennek a Raspberry Pi készüléki kiadásnak a bpplay-je, a bptune és a zeneválasztó külön licencelt, nem nyílt forráskódú. A szoftver „ahogy van" alapú, bármilyen garancia nélkül; ld. a teljes jogi nyilatkozatot a fenti kézikönyvben. Minden jog fenntartva © <span class="yr">2026</span> Koscso Media Engineering Kft.</span></p>
+  </div>
+</footer>
+
+<script>
+/* == script.js inlined so this page works as a single file == */
+/* bpplay + bptune; Raspberry Pi appliance edition
+   language switch · scrollspy · mobile nav · reveal-on-scroll */
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+
+  /* ---------- language ---------- */
+  function setLang(lang, persist) {
+    lang = lang === "hu" ? "hu" : "en";
+    root.setAttribute("data-lang", lang);
+    root.setAttribute("lang", lang);
+    document.querySelectorAll(".lang-switch button").forEach(function (b) {
+      var on = b.getAttribute("data-lang-btn") === lang;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (persist) {
+      try { localStorage.setItem("bppi-lang", lang); } catch (e) {}
+    }
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem("bppi-lang"); } catch (e) {}
+  if (saved === "hu" || saved === "en") {
+    setLang(saved, false);
+  } else if ((navigator.language || "").toLowerCase().indexOf("hu") === 0) {
+    setLang("hu", false);
+  } else {
+    setLang("en", false);
+  }
+
+  document.querySelectorAll(".lang-switch button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      setLang(b.getAttribute("data-lang-btn"), true);
+    });
+  });
+
+  /* ---------- mobile nav ---------- */
+  var burger = document.querySelector(".nav-burger");
+  var links = document.querySelector(".nav-links");
+  if (burger && links) {
+    burger.addEventListener("click", function () {
+      var open = links.classList.toggle("open");
+      burger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    links.addEventListener("click", function (e) {
+      if (e.target.tagName === "A") links.classList.remove("open");
+    });
+  }
+
+  /* ---------- scrollspy ---------- */
+  var spyTargets = [];
+  document.querySelectorAll(".nav-links a[href^='#']").forEach(function (a) {
+    var id = a.getAttribute("href").slice(1);
+    var el = document.getElementById(id);
+    if (el) spyTargets.push({ link: a, el: el });
+  });
+  function spy() {
+    var pos = window.scrollY + (window.innerHeight * 0.28);
+    var current = null;
+    spyTargets.forEach(function (t) {
+      if (t.el.offsetTop <= pos) current = t;
+    });
+    spyTargets.forEach(function (t) {
+      t.link.classList.toggle("active", current === t);
+    });
+  }
+  window.addEventListener("scroll", spy, { passive: true });
+  spy();
+
+  /* ---------- reveal on scroll ---------- */
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var rv = document.querySelectorAll(".rv");
+  if (!reduce && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add("in");
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    rv.forEach(function (el) { io.observe(el); });
+  } else {
+    rv.forEach(function (el) { el.classList.add("in"); });
+  }
+
+  /* ---------- footer year ---------- */
+  document.querySelectorAll(".yr").forEach(function (el) {
+    el.textContent = String(new Date().getFullYear());
+  });
+})();
+
+</script>
+</body>
+</html>
