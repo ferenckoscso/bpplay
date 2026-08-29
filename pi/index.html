@@ -730,7 +730,7 @@ footer.ft {
     <div class="hero-grid">
       <div>
         <p class="overline"><span class="en">LINUX ARM64<span class="sep">·</span>RASPBERRY PI 4 / 5<span class="sep">·</span>APPLIANCE EDITION v2.0</span><span class="hu">LINUX ARM64<span class="sep">·</span>RASPBERRY PI 4 / 5<span class="sep">·</span>KÉSZÜLÉKI KIADÁS v2.0</span></p>
-        <h1><span class="en">Bit-perfect playback, sealed into an <span class="gold">appliance</span>.</span><span class="hu">Bit-tökéletes lejátszás, lezárt <span class="gold">készülékként</span>.</span></h1>
+        <h1><span class="en">Bit-perfect playback, sealed into an <span class="gold">appliance</span>.</span><span class="hu">Bithelyes lejátszás, lezárt <span class="gold">készülékként</span>.</span></h1>
         <p class="sub"><span class="en">bpplay + bptune on Raspberry Pi 4 / 5 boots straight into the music selector. No login, no command line, no monitor; you choose and play over SSH from your own computer, tablet or phone, and the file reaches the DAC unchanged.</span><span class="hu">A bpplay + bptune Raspberry Pi 4 / 5 készülék bekapcsolás után egyenesen a zeneválasztóba bootol. Nincs bejelentkezés, parancssor vagy monitor; SSH-n válogatsz és indítasz a saját gépedről, tabletedről vagy telefonodról, és a fájl változatlanul érkezik a DAC-hoz.</span></p>
         <div class="hero-cta">
           <a class="btn btn-gold" href="#manual"><span class="en">Read the manual</span><span class="hu">Kézikönyv elolvasása</span></a>
@@ -793,7 +793,7 @@ footer.ft {
       </div>
       <div class="card rv">
         <span class="c-ico">02 · INTEGER</span>
-        <h3><span class="en">Bit-perfect, by contract</span><span class="hu">Bit-tökéletes, szerződésszerűen</span></h3>
+        <h3><span class="en">Bit-perfect, by contract</span><span class="hu">Bithelyes, szerződésszerűen</span></h3>
         <p><span class="en">Integer mode whenever the DAC allows it: the samples in the file reach the sound card without a single bit shift. If a compromise is ever forced, bpplay says so on screen; it never stays silent about it.</span><span class="hu">Integer mode, amint a DAC engedi: a fájl mintái egyetlen bitsift nélkül érnek a hangkártyához. Ha mégis kompromisszum kényszerül, a bpplay kiírja; sosem hallgat róla.</span></p>
       </div>
       <div class="card rv">
@@ -1164,7 +1164,7 @@ feltüntetve (nem a beépített hangkártyát).</span>
 
         <h3 class="mh" id="m-1"><span class="mno">1</span><span class="en">Introduction</span><span class="hu">Bevezetés</span></h3>
         <h4><span class="en">1.1 What is bpplay?</span><span class="hu">1.1 Mi az a bpplay?</span></h4>
-        <p><span class="en">bpplay is a command-line, bit-perfect audio file player application for Linux and macOS. It has no graphical interface, no volume control, no equalizer; deliberately. Its goal is one single thing: to deliver the contents of the music file unchanged, via the shortest possible path with the fewest conversion steps, to the DAC (digital-to-analog converter).</span><span class="hu">A bpplay parancssori, bit-tökéletes zenefájl-lejátszó alkalmazás Linuxra és macOS-re. Nincs grafikus felülete, hangerőszabályozása, hangszínszabályozója; szándékosan. Célja egyetlen egy dolog: a zenefájl tartalmát változatlanul juttatnia el, a lehető legrövidebb úton, a lehető legkevesebb konverziós lépéssel, a DAC-hoz (digitál-analóg átalakítóhoz).</span></p>
+        <p><span class="en">bpplay is a command-line, bit-perfect audio file player application for Linux and macOS. It has no graphical interface, no volume control, no equalizer; deliberately. Its goal is one single thing: to deliver the contents of the music file unchanged, via the shortest possible path with the fewest conversion steps, to the DAC (digital-to-analog converter).</span><span class="hu">A bpplay parancssori, bithelyes zenefájl-lejátszó alkalmazás Linuxra és macOS-re. Nincs grafikus felülete, hangerőszabályozása, hangszínszabályozója; szándékosan. Célja egyetlen egy dolog: a zenefájl tartalmát változatlanul juttatnia el, a lehető legrövidebb úton, a lehető legkevesebb konverziós lépéssel, a DAC-hoz (digitál-analóg átalakítóhoz).</span></p>
         <p><span class="en">Whenever possible, the program plays in so-called "integer mode", which means the integers stored in the file (integer samples) reach the sound card without a single bit shift or conversion. When this is not possible (e.g. the source is in float format, or the DAC does not support the exact bit depth of the source), the program always states this clearly; it never stays silent about being forced into a compromise.</span><span class="hu">Amikor csak lehetséges, a program úgynevezett „integer mode"-ban játszik: ilyenkor a fájlban tárolt egész számok (integer minták) egyetlen biteltolás vagy konverzió nélkül érik el a hangkártyát. Ha ez nem lehetséges (pl. a forrás float formátumú, vagy a DAC nem támogatja a forrás pontos bitmélységét), a program ezt mindig egyértelműen közli; sosem hallgat arról, hogy kompromisszumra kényszerült.</span></p>
         <p><span class="en">In the appliance edition the end user never launches this program directly; instead, the <code>zenevalaszto.py</code> Python script invokes it in the background for the selected track(s) (see Chapter 3).</span><span class="hu">A készüléki kiadásban a végfelhasználó soha nem indítja közvetlenül ezt a programot; helyette a <code>zenevalaszto.py</code> Python script hívja meg a háttérben a kijelölt szám(ok)hoz (ld. 3. fejezet).</span></p>
 
@@ -1339,9 +1339,9 @@ feltüntetve (nem a beépített hangkártyát).</span>
         <ul>
           <li><span class="en">Part 1:</span><span class="hu">1. rész:</span> <a href="https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-5851d54e0ba3"><span class="en">bpplay: no-compromise computer audio, architecture and software minimalism</span><span class="hu">bpplay: kompromisszumok nélküli számítógépes audio, architektúra és szoftver-minimalizmus</span></a></li>
           <li><span class="en">Part 2:</span><span class="hu">2. rész:</span> <a href="https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-9c01d1e59a24"><span class="en">bpplay: what happens inside the case?</span><span class="hu">bpplay: mi történik a házban?</span></a></li>
-          <li><span class="en">Part 3:</span><span class="hu">3. rész:</span> <a href="https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-4d8e4a3b23de"><span class="en">Bit-perfect, in-memory audio file playback in 2026</span><span class="hu">Bit-tökéletes, memórialapú zenefájl-lejátszás 2026-ban</span></a></li>
+          <li><span class="en">Part 3:</span><span class="hu">3. rész:</span> <a href="https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-4d8e4a3b23de"><span class="en">Bit-perfect, in-memory audio file playback in 2026</span><span class="hu">Bithelyes, memórialapú zenefájl-lejátszás 2026-ban</span></a></li>
           <li><span class="en">Part 4:</span><span class="hu">4. rész:</span> <a href="https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-for-high-end-audio-f00c11be0d19"><span class="en">Optimization options of Linux and Windows environments for high-end audio playback</span><span class="hu">A Linux és Windows környezet optimalizálási lehetőségei high-end audióhoz</span></a></li>
-          <li><span class="en">Part 5:</span><span class="hu">5. rész:</span> <a href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-2c6d70cb1b17"><span class="en">Bit-perfectness: what it really means and when it truly matters</span><span class="hu">Bit-tökéletesség: mit jelent valójában, és mikor számít igazán</span></a></li>
+          <li><span class="en">Part 5:</span><span class="hu">5. rész:</span> <a href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-2c6d70cb1b17"><span class="en">Bit-perfectness: what it really means and when it truly matters</span><span class="hu">Bithelyesség: mit jelent valójában, és mikor számít igazán</span></a></li>
         </ul>
 
         <h3 class="mh" id="m-disc"><span class="mno">§</span><span class="en">Disclaimer</span><span class="hu">Jogi nyilatkozat</span></h3>
@@ -1362,7 +1362,7 @@ feltüntetve (nem a beépített hangkártyát).</span>
     <div class="ft-grid">
       <div>
         <div class="brandline">bpplay<span style="color:var(--gold)">+</span>bptune <span style="color:var(--silver-dimmer)">· Raspberry Pi appliance edition</span></div>
-        <p class="dev"><span class="en">Developed by Koscso Media Engineering Kft. Bit-perfect playback and system tuning, delivered as a sealed appliance.</span><span class="hu">Fejlesztette a Koscso Media Engineering Kft. Bit-tökéletes lejátszás és rendszerhangolás, lezárt készülékként.</span></p>
+        <p class="dev"><span class="en">Developed by Koscso Media Engineering Kft. Bit-perfect playback and system tuning, delivered as a sealed appliance.</span><span class="hu">Fejlesztette a Koscso Media Engineering Kft. Bithelyes lejátszás és rendszerhangolás, lezárt készülékként.</span></p>
         <div class="happy-foot">Happy listening!</div>
       </div>
       <div>
