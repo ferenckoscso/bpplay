@@ -636,6 +636,22 @@ footer.ft {
 }
 .happy-foot { font-family: var(--display); font-weight: 700; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-top: 18px; font-size: 13px; }
 
+/* ---------- demo video ---------- */
+.video-frame {
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+  margin-top: 36px;
+}
+.video-frame video { width: 100%; aspect-ratio: 16 / 9; background: #000; }
+.video-caption {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver-dimmer);
+}
+
 /* ---------- reveal animation ---------- */
 .rv { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .rv.in { opacity: 1; transform: none; }
@@ -704,6 +720,7 @@ footer.ft {
 
     <ul class="nav-links">
       <li><a href="#device"><span class="en">Device</span><span class="hu">Készülék</span></a></li>
+      <li><a href="#demo"><span class="en">Demo</span><span class="hu">Demó</span></a></li>
       <li><a href="#quickstart"><span class="en">Quick start</span><span class="hu">Gyorsindítás</span></a></li>
       <li><a href="#keys"><span class="en">Keys</span><span class="hu">Billentyűk</span></a></li>
       <li><a href="#hardware"><span class="en">Hardware</span><span class="hu">Hardver</span></a></li>
@@ -807,6 +824,23 @@ footer.ft {
         <p><span class="en">A PREEMPT_RT kernel and system tuning for low-latency, glitch-free playback; installed and configured by the factory installer. As an end user, there is nothing for you to do with it.</span><span class="hu">PREEMPT_RT kernel és rendszerhangolás a késleltetésmentes, kihagyásmentes lejátszásért; a gyári telepítő már beállította. Végfelhasználóként nincs teendőd vele.</span></p>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ================= DEMO ================= -->
+<section id="demo">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">SEE IT</span><span class="hu">NÉZD MEG</span></p>
+      <h2><span class="en">Kiosk mode, from boot to first track.</span><span class="hu">Kiosk mód, bootolástól az első számig.</span></h2>
+      <p class="lede"><span class="en">A short, unedited screen recording of the kiosk experience: connecting over SSH, browsing, and starting playback.</span><span class="hu">Egy rövid, vágatlan képernyőfelvétel a kiosk élményről: SSH-kapcsolódás, böngészés, lejátszás indítása.</span></p>
+    </div>
+    <div class="video-frame rv">
+      <video controls preload="metadata" playsinline>
+        <source src="../assets/bpplay_bptune_kiosk_mode_intro.mp4" type="video/mp4">
+      </video>
+    </div>
+    <div class="video-caption">bpplay_bptune_kiosk_mode_intro.mp4 · 2:12</div>
   </div>
 </section>
 
