@@ -161,6 +161,13 @@ img, video { max-width: 100%; display: block; }
 }
 .nav-links a.subtle { color: var(--silver-dim); text-decoration: none; }
 .nav-links a.subtle:hover { color: var(--silver); }
+.nav-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--silver-dimmer);
+  margin-right: -14px;
+}
 
 .lang-toggle {
   display: flex;
@@ -703,7 +710,9 @@ footer {
       <a class="subtle" href="#path" data-i18n="nav.path">Signal path</a>
       <a class="subtle" href="#formats" data-i18n="nav.formats">Formats</a>
       <a class="subtle" href="#demo" data-i18n="nav.demo">Demo</a>
-      <a class="subtle" href="pi/" data-i18n="nav.pi">Raspberry Pi</a>
+      <span class="nav-tag">LINUX</span>
+      <a class="subtle" href="pi/" data-i18n="nav.pi">Pi</a>
+      <a class="subtle" href="x64/" data-i18n="nav.x64">x64</a>
       <a class="subtle" href="https://github.com/ferenckoscso/bpplay">GitHub</a>
       <a class="subtle" href="#press" data-i18n="nav.press">Blog &amp; Press</a>
       <a class="btn btn-gold" href="https://github.com/ferenckoscso/bpplay/releases/latest" data-i18n="nav.download">Download</a>
@@ -936,6 +945,7 @@ footer {
       <div class="footer-col">
         <div class="footer-h" data-i18n="footer.project">Project</div>
         <a href="pi/" data-i18n="footer.piLink">Raspberry Pi appliance edition</a>
+        <a href="x64/" data-i18n="footer.x64Link">x86_64 Live-USB kiosk edition</a>
         <a href="https://github.com/ferenckoscso/bpplay" data-i18n="footer.repo">GitHub repository</a>
         <a href="https://github.com/ferenckoscso/bpplay/releases/latest" data-i18n="footer.latest">Latest release</a>
         <a href="https://github.com/ferenckoscso/bpplay/blob/main/CHANGELOG.md" data-i18n="footer.changelog">Changelog</a>
@@ -1070,7 +1080,8 @@ footer {
       "nav.path": "Signal path",
       "nav.formats": "Formats",
       "nav.demo": "Demo",
-      "nav.pi": "Raspberry Pi",
+      "nav.pi": "Pi",
+      "nav.x64": "x64",
       "nav.download": "Download",
       "nav.press": "Blog &amp; Press",
       "hero.piBanner": "Also available as a sealed Raspberry Pi 4/5 appliance",
@@ -1159,6 +1170,7 @@ footer {
       "quote.cite": "From the project's design philosophy",
       "footer.project": "Project",
       "footer.piLink": "Raspberry Pi appliance edition",
+      "footer.x64Link": "x86_64 Live-USB kiosk edition",
       "footer.repo": "GitHub repository",
       "footer.latest": "Latest release",
       "footer.changelog": "Changelog",
@@ -1186,7 +1198,8 @@ footer {
       "nav.path": "Jelút",
       "nav.formats": "Formátumok",
       "nav.demo": "Demó",
-      "nav.pi": "Raspberry Pi",
+      "nav.pi": "Pi",
+      "nav.x64": "x64",
       "nav.download": "Letöltés",
       "hero.piBanner": "Zárt Raspberry Pi 4/5 készülékként is elérhető",
       "nav.press": "Blog és sajtó",
@@ -1275,6 +1288,7 @@ footer {
       "quote.cite": "A projekt tervezési filozófiájából",
       "footer.project": "Projekt",
       "footer.piLink": "Raspberry Pi készüléki kiadás",
+      "footer.x64Link": "x86_64 Live-USB kiosk kiadás",
       "footer.repo": "GitHub repó",
       "footer.latest": "Legfrissebb kiadás",
       "footer.changelog": "Changelog",
