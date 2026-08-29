@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>bpplay — the shortest deterministic path from file to DAC</title>
+<title>bpplay: the shortest deterministic path from file to DAC</title>
 <meta name="description" content="A minimalist, bit-perfect music player for macOS. Hog mode, whole-track-in-RAM, zero software processing between the file and your DAC. Free, open source.">
-<meta property="og:title" content="bpplay — the shortest deterministic path from file to DAC">
+<meta property="og:title" content="bpplay: the shortest deterministic path from file to DAC">
 <meta property="og:description" content="A minimalist, bit-perfect music player for macOS. Free, open source, GPL-3.0.">
 <meta property="og:image" content="assets/og-logo.png">
 <meta property="og:type" content="website">
@@ -14,10 +14,10 @@
 <style>
 
 /* ---------------------------------------------------------------- */
-/* Fonts — subset WOFF2, inlined as data: URIs (CSP has no font CDN) */
-/* DIN Condensed Bold  — nameplate/instrument-panel display face     */
-/* Charter             — book-serif body, reads like a hi-fi manual  */
-/* PT Mono             — technical data, code, the signal-path labels*/
+/* Fonts: subset WOFF2, inlined as data: URIs (CSP has no font CDN) */
+/* DIN Condensed Bold: nameplate/instrument-panel display face       */
+/* Charter: book-serif body, reads like a hi-fi manual                */
+/* PT Mono: technical data, code, the signal-path labels              */
 /* ---------------------------------------------------------------- */
 @font-face {
   font-family: "DIN Cond";
@@ -411,7 +411,7 @@ canvas#pathCanvas { width: 100%; height: 96px; display: block; }
 }
 
 /* ---------------------------------------------------------------- */
-/* Signal path — the 4 real steps                                    */
+/* Signal path: the 4 real steps                                     */
 /* ---------------------------------------------------------------- */
 .steps {
   display: grid;
@@ -729,7 +729,7 @@ footer {
     <a class="pi-banner" href="pi/"><span class="tag">NEW</span><span data-i18n="hero.piBanner">Also available as a sealed Raspberry Pi 4/5 appliance</span><span class="arrow">&nbsp;&rarr;</span></a>
     <div class="eyebrow" data-i18n="hero.eyebrow">macOS · Core edition · v0.9.7 · GPL-3.0</div>
     <h1 data-i18n="hero.h1">The shortest<br>deterministic path<br>from <span class="accent">file</span> to <span class="accent">DAC</span>.</h1>
-    <p class="hero-sub" data-i18n="hero.sub">bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched — no resampling, no software volume, no mixing.</p>
+    <p class="hero-sub" data-i18n="hero.sub">bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched; no resampling, no software volume, no mixing.</p>
     <div class="hero-actions">
       <a class="btn btn-gold" href="https://github.com/ferenckoscso/bpplay/releases/latest" data-i18n="hero.downloadBtn">↓ Download for macOS</a>
       <a class="btn btn-ghost" href="#demo" data-i18n="hero.demoBtn">Watch the 80-second demo</a>
@@ -753,7 +753,7 @@ footer {
   <div class="wrap">
     <div class="eyebrow" data-i18n="problem.eyebrow">The detour most players take</div>
     <h2 data-i18n="problem.h2">Software gets between<br>the file and the DAC.</h2>
-    <p class="lede" data-i18n="problem.lede">On an ordinary macOS app, audio doesn't reach the DAC directly — it passes through CoreAudio's system mixer, where resampling, floating-point mixing and software volume can all quietly change the signal.</p>
+    <p class="lede" data-i18n="problem.lede">On an ordinary macOS app, audio doesn't reach the DAC directly; it passes through CoreAudio's system mixer, where resampling, floating-point mixing and software volume can all quietly change the signal.</p>
 
     <div class="compare reveal">
       <div class="bad">
@@ -771,7 +771,7 @@ footer {
         <div class="compare-label">bpplay</div>
         <ul class="hop-list">
           <li><span class="n">1</span> <span data-i18n="problem.good1">Decode file, once, before playback</span></li>
-          <li><span class="n">2</span> <span data-i18n="problem.good2">Hog mode — exclusive DAC ownership</span></li>
+          <li><span class="n">2</span> <span data-i18n="problem.good2">Hog mode: exclusive DAC ownership</span></li>
           <li><span class="n">3</span> DAC</li>
         </ul>
       </div>
@@ -789,12 +789,12 @@ footer {
       <div class="step">
         <div class="step-n">1</div>
         <h3 data-i18n="path.step1.h">Device acquisition</h3>
-        <p data-i18n="path.step1.p"><code>hog mode</code> — bpplay becomes the sole owner of the DAC. No other app can interfere; the system mixer is disabled.</p>
+        <p data-i18n="path.step1.p"><code>hog mode</code>: bpplay becomes the sole owner of the DAC. No other app can interfere; the system mixer is disabled.</p>
       </div>
       <div class="step">
         <div class="step-n">2</div>
         <h3 data-i18n="path.step2.h">Format negotiation</h3>
-        <p data-i18n="path.step2.p">bpplay asks the hardware for an integer physical format. If the device only offers float32, it takes that instead — and tells you which route it took.</p>
+        <p data-i18n="path.step2.p">bpplay asks the hardware for an integer physical format. If the device only offers float32, it takes that instead, and tells you which route it took.</p>
       </div>
       <div class="step">
         <div class="step-n">3</div>
@@ -809,7 +809,7 @@ footer {
     </div>
 
     <div class="realtime-line reveal" data-i18n="path.realtime">
-      During playback, the real-time <code>IOProc</code> does exactly one thing: <strong>memcpy</strong>. No float math, no allocation, no file reads, no locks — the callback that feeds your DAC never does anything a real-time thread shouldn't.
+      During playback, the real-time <code>IOProc</code> does exactly one thing: <strong>memcpy</strong>. No float math, no allocation, no file reads, no locks; the callback that feeds your DAC never does anything a real-time thread shouldn't.
     </div>
   </div>
 </section>
@@ -819,7 +819,7 @@ footer {
     <div class="eyebrow" data-i18n="ram.eyebrow">The full-RAM model</div>
     <h2 data-i18n="ram.h2">The whole track loads<br>before a single sound plays.</h2>
     <p class="lede" data-i18n="ram.lede">No on-the-fly buffering, no disk reads during playback. The track sits in RAM, locked there, and reaches the DAC with a single memory copy.</p>
-    <p data-i18n="ram.p1">This also has an electrical rationale, not just a signal-path one. A conventional player continuously reads, decodes and re-buffers — each operation is a brief, spiky load on the machine's power supply. A modern NVMe SSD's read spike can jump from 15&nbsp;mA to 2&nbsp;A in microseconds, a di/dt of nearly two million amps per second, a real source of high-frequency EMI. Once the track is fully in RAM, none of that happens during playback — there's nothing left to spike.</p>
+    <p data-i18n="ram.p1">This also has an electrical rationale, not just a signal-path one. A conventional player continuously reads, decodes and re-buffers; each operation is a brief, spiky load on the machine's power supply. A modern NVMe SSD's read spike can jump from 15&nbsp;mA to 2&nbsp;A in microseconds, a di/dt of nearly two million amps per second, a real source of high-frequency EMI. Once the track is fully in RAM, none of that happens during playback; there's nothing left to spike.</p>
 
     <div class="stat-row reveal">
       <div class="stat"><div class="v">0</div><div class="l" data-i18n="ram.stat1">Disk reads during playback</div></div>
@@ -831,7 +831,7 @@ footer {
     <div class="mem-equation reveal" data-i18n="ram.equation">
       <b>4&nbsp;GB</b> DSD256 file <span class="eq-op">×</span> 1.5 <span class="eq-op">(DoP packing)</span> <span class="eq-op">×</span> 1.333 <span class="eq-op">(float32 path)</span> <span class="eq-op">=</span> <b>~7.5&nbsp;GB</b> in RAM
     </div>
-    <p style="max-width:56ch; color:var(--silver-dim); font-size:15px;" data-i18n="ram.p2">Neither step is lossy. The float32 mantissa is 24 bits, so the 16/24-bit integer range fits inside it exactly — the extra memory is the honest cost of two lossless conversions, not waste.</p>
+    <p style="max-width:56ch; color:var(--silver-dim); font-size:15px;" data-i18n="ram.p2">Neither step is lossy. The float32 mantissa is 24 bits, so the 16/24-bit integer range fits inside it exactly; the extra memory is the honest cost of two lossless conversions, not waste.</p>
   </div>
 </section>
 
@@ -839,7 +839,7 @@ footer {
   <div class="wrap">
     <div class="eyebrow">DoP &amp; DSD</div>
     <h2 data-i18n="dsd.h2">DSD, carried inside PCM,<br>bit-for-bit.</h2>
-    <p class="lede" data-i18n="dsd.lede">DSD256 stores the signal as 1-bit samples at 11.2896&nbsp;MHz per channel — too dense for USB audio to carry directly. bpplay packs it into PCM using the DoP (DSD over PCM v1.1) protocol.</p>
+    <p class="lede" data-i18n="dsd.lede">DSD256 stores the signal as 1-bit samples at 11.2896&nbsp;MHz per channel; too dense for USB audio to carry directly. bpplay packs it into PCM using the DoP (DSD over PCM v1.1) protocol.</p>
 
     <div class="word reveal">
       <div class="bit-group marker" data-i18n="dsd.marker8">8 bits</div>
@@ -847,16 +847,16 @@ footer {
     </div>
     <div class="word-caption">
       <div class="marker-cap" data-i18n="dsd.markerCap">Marker: alternates 0x05 / 0xFA</div>
-      <div class="bits-cap" data-i18n="dsd.bitsCap">The DSD payload — untouched</div>
+      <div class="bits-cap" data-i18n="dsd.bitsCap">The DSD payload: untouched</div>
     </div>
-    <p style="margin-top:26px;" data-i18n="dsd.p">The alternating marker is a self-checking handshake: a DAC that understands DoP unpacks the bits into its own DSD decoder; one that doesn't just plays it as plain PCM and stays passive. Either way, the DoP frame is only the transport — never the content. Validated up to <strong style="color:var(--silver)">DSD256</strong>, architecture scales to DSD512.</p>
+    <p style="margin-top:26px;" data-i18n="dsd.p">The alternating marker is a self-checking handshake: a DAC that understands DoP unpacks the bits into its own DSD decoder; one that doesn't just plays it as plain PCM and stays passive. Either way, the DoP frame is only the transport; never the content. Validated up to <strong style="color:var(--silver)">DSD256</strong>, architecture scales to DSD512.</p>
   </div>
 </section>
 
 <section id="formats">
   <div class="wrap">
     <div class="eyebrow" data-i18n="formats.eyebrow">Formats</div>
-    <h2 data-i18n="formats.h2">What it plays —<br>and what it deliberately doesn't.</h2>
+    <h2 data-i18n="formats.h2">What it plays:<br>and what it deliberately doesn't.</h2>
 
     <div class="table-wrap reveal">
       <table class="formats">
@@ -864,18 +864,18 @@ footer {
         <tbody>
           <tr><td>WAV</td><td data-i18n="formats.wav">16 / 24 / 32-bit integer and 32-bit float</td></tr>
           <tr><td>FLAC</td><td data-i18n="formats.flac">16 / 24-bit, Vorbis metadata, MQA detection (not decoding)</td></tr>
-          <tr><td>ALAC (M4A)</td><td data-i18n="formats.alac">16 / 24-bit — what iTunes / Music.app produce</td></tr>
+          <tr><td>ALAC (M4A)</td><td data-i18n="formats.alac">16 / 24-bit: what iTunes / Music.app produce</td></tr>
           <tr><td>AIFF / AIFC</td><td data-i18n="formats.aiff">16 / 24 / 32-bit, uncompressed only</td></tr>
           <tr><td>DSF (DSD)</td><td data-i18n="formats.dsf">DSD64–DSD256 via DoP</td></tr>
         </tbody>
       </table>
     </div>
 
-    <p class="lede" style="margin-top:22px; font-size:15px;" data-i18n="formats.localOnly">bpplay plays files — from local storage, a NAS, or a Google Drive / Dropbox folder, as long as it's mounted on the Mac. It is not a streaming client: no built-in connection to Spotify, Tidal, Qobuz or similar services.</p>
+    <p class="lede" style="margin-top:22px; font-size:15px;" data-i18n="formats.localOnly">bpplay plays files: from local storage, a NAS, or a Google Drive / Dropbox folder, as long as it's mounted on the Mac. It is not a streaming client: no built-in connection to Spotify, Tidal, Qobuz or similar services.</p>
 
     <div class="omitted reveal">
       <h3 data-i18n="formats.omittedH">Deliberately out of scope</h3>
-      <p data-i18n="formats.omittedP">Library management, a graphical interface, network streaming, signal processing, volume control. None are oversights — each would be a place where the signal could change, or noise could arise, between the file and the DAC.</p>
+      <p data-i18n="formats.omittedP">Library management, a graphical interface, network streaming, signal processing, volume control. None are oversights; each would be a place where the signal could change, or noise could arise, between the file and the DAC.</p>
     </div>
   </div>
 </section>
@@ -884,7 +884,7 @@ footer {
   <div class="wrap">
     <div class="eyebrow" data-i18n="demo.eyebrow">See it</div>
     <h2 data-i18n="demo.h2">Install and play,<br>in under two minutes.</h2>
-    <p class="lede" data-i18n="demo.lede">A short, unedited screen recording of installing bpplay and playing an album — start to finish.</p>
+    <p class="lede" data-i18n="demo.lede">A short, unedited screen recording of installing bpplay and playing an album, start to finish.</p>
     <div class="video-frame reveal">
       <video controls preload="metadata" playsinline poster="assets/og-logo.png">
         <source src="assets/bpplay-install-demo.mp4" type="video/mp4">
@@ -898,7 +898,7 @@ footer {
   <div class="wrap">
     <div class="eyebrow" data-i18n="validated.eyebrow">Validated, not assumed</div>
     <h2 data-i18n="validated.h2">Tested where it matters:<br>the connection.</h2>
-    <p class="lede" data-i18n="validated.lede">Bit-perfect behaviour was identical across every topology and cable tried — the bit path is independent of how you connect it.</p>
+    <p class="lede" data-i18n="validated.lede">Bit-perfect behaviour was identical across every topology and cable tried; the bit path is independent of how you connect it.</p>
     <ul class="chain-list reveal">
       <li><b data-i18n="validated.l1b">Interfaces</b><span data-i18n="validated.l1">Gustard XMOS, Amanero Combo384/768</span></li>
       <li><b data-i18n="validated.l2b">DACs</b><span data-i18n="validated.l2">TT and Gustard</span></li>
@@ -914,16 +914,16 @@ footer {
   <div class="wrap">
     <div class="eyebrow" data-i18n="start.eyebrow">Get started</div>
     <h2 data-i18n="start.h2">Terminal, or drag-and-drop.<br>Your choice.</h2>
-    <p class="lede" data-i18n="start.lede">The DMG bundles the CLI binary plus two zero-configuration launchers — a drag-and-drop app and a Finder Quick Action. Both are Developer ID signed and notarised.</p>
+    <p class="lede" data-i18n="start.lede">The DMG bundles the CLI binary plus two zero-configuration launchers: a drag-and-drop app and a Finder Quick Action. Both are Developer ID signed and notarised.</p>
 
     <div class="terminal reveal" data-i18n="start.terminal"><span class="c">$</span> <span class="s">./bpplay -l</span>                      <span class="c"># list available output devices</span>
 <span class="c">$</span> <span class="s">./bpplay -d 1 track.flac</span>          <span class="c"># play on device index 1</span>
 <span class="c">$</span> <span class="s">./bpplay -d 1 01.flac 02.flac</span>     <span class="c"># gapless across same-format files</span>
 <span class="c">$</span> <span class="s">./bpplay -d 1 -dir ~/Music/Album</span> <span class="c"># play a whole folder, recursively</span>
 
-<span class="c">while playing —</span> <span class="g">n</span> <span class="c">next ·</span> <span class="g">b</span> <span class="c">previous ·</span> <span class="g">space</span> <span class="c">pause/resume ·</span> <span class="g">q</span> <span class="c">quit</span></div>
+<span class="c">while playing:</span> <span class="g">n</span> <span class="c">next ·</span> <span class="g">b</span> <span class="c">previous ·</span> <span class="g">space</span> <span class="c">pause/resume ·</span> <span class="g">q</span> <span class="c">quit</span></div>
 
-    <div class="reqs" data-i18n="start.reqs">Requires <b>macOS 10.15+</b> and at least <b>8&nbsp;GB RAM</b> (more for large DSD albums — see the memory math above).</div>
+    <div class="reqs" data-i18n="start.reqs">Requires <b>macOS 10.15+</b> and at least <b>8&nbsp;GB RAM</b> (more for large DSD albums, see the memory math above).</div>
 
     <div class="get-started-actions">
       <a class="btn btn-gold" href="https://github.com/ferenckoscso/bpplay/releases/latest" data-i18n="start.downloadBtn">↓ Download the DMG</a>
@@ -934,7 +934,7 @@ footer {
 
 <section class="quote">
   <div class="wrap">
-    <blockquote data-i18n="quote.text">"bpplay forgoes a polished interface and convenience features, and in return gives a <span class="accent">reference</span> — a fixed point to measure against."</blockquote>
+    <blockquote data-i18n="quote.text">"bpplay forgoes a polished interface and convenience features, and in return gives a <span class="accent">reference</span>, a fixed point to measure against."</blockquote>
     <cite data-i18n="quote.cite">From the project's design philosophy</cite>
   </div>
 </section>
@@ -963,11 +963,11 @@ footer {
       </div>
       <div class="footer-col" id="press">
         <div class="footer-h" data-i18n="footer.press">Blog &amp; press</div>
-        <a data-i18n="footer.medium1" data-i18n-href="footer.medium1Url" href="https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-software-minimalism-fbcc30753b28">Part 1 — Uncompromising architecture</a>
-        <a data-i18n="footer.medium2" data-i18n-href="footer.medium2Url" href="https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-85d5159bb739">Part 2 — What happens under the hood</a>
-        <a data-i18n="footer.medium3" data-i18n-href="footer.medium3Url" href="https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-7199a2921b53">Part 3 — Memory-based playback in 2026</a>
-        <a data-i18n="footer.medium4" data-i18n-href="footer.medium4Url" href="https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-possibilities-for-high-end-audio-playback-c2e6c8c1fee0">Part 4 — Linux/Windows optimization</a>
-        <a data-i18n="footer.medium5" data-i18n-href="footer.medium5Url" href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-and-when-does-it-actually-matter-9b98efaca480">Part 5 — What bit-perfect really means</a>
+        <a data-i18n="footer.medium1" data-i18n-href="footer.medium1Url" href="https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-software-minimalism-fbcc30753b28">Part 1: Uncompromising architecture</a>
+        <a data-i18n="footer.medium2" data-i18n-href="footer.medium2Url" href="https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-85d5159bb739">Part 2: What happens under the hood</a>
+        <a data-i18n="footer.medium3" data-i18n-href="footer.medium3Url" href="https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-7199a2921b53">Part 3: Memory-based playback in 2026</a>
+        <a data-i18n="footer.medium4" data-i18n-href="footer.medium4Url" href="https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-possibilities-for-high-end-audio-playback-c2e6c8c1fee0">Part 4: Linux/Windows optimization</a>
+        <a data-i18n="footer.medium5" data-i18n-href="footer.medium5Url" href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-and-when-does-it-actually-matter-9b98efaca480">Part 5: What bit-perfect really means</a>
         <div class="footer-h" style="margin-top:16px;" data-i18n="footer.pfHeading">Positive Feedback (reprints, EN)</div>
         <a href="https://pollux.positive-feedback.com/audio-discourse/bplay-bit-perfect-playback-software-solution-part1/">Part 1</a>
         <a href="https://pollux.positive-feedback.com/audio-discourse/bpplay-bit-perfect-playback-software-solution-part2/">Part 2</a>
@@ -975,7 +975,7 @@ footer {
       </div>
     </div>
     <div class="footer-bottom">
-      <span data-i18n="footer.copyright">© 2026 Koscsó Ferenc. Free software — no warranty, as permitted by the GPL.</span>
+      <span data-i18n="footer.copyright">© 2026 Koscsó Ferenc. Free software; no warranty, as permitted by the GPL.</span>
       <span data-i18n="footer.myReelClub">A My Reel Club® practice, translated into software.</span>
     </div>
   </div>
@@ -1076,7 +1076,7 @@ footer {
 (function(){
   var I18N = {
     en: {
-      title: "bpplay — the shortest deterministic path from file to DAC",
+      title: "bpplay: the shortest deterministic path from file to DAC",
       "nav.path": "Signal path",
       "nav.formats": "Formats",
       "nav.demo": "Demo",
@@ -1087,7 +1087,7 @@ footer {
       "hero.piBanner": "Also available as a sealed Raspberry Pi 4/5 appliance",
       "hero.eyebrow": "macOS · Core edition · v0.9.7 · GPL-3.0",
       "hero.h1": 'The shortest<br>deterministic path<br>from <span class="accent">file</span> to <span class="accent">DAC</span>.',
-      "hero.sub": "bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched — no resampling, no software volume, no mixing.",
+      "hero.sub": "bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched; no resampling, no software volume, no mixing.",
       "hero.downloadBtn": "↓ Download for macOS",
       "hero.demoBtn": "Watch the 80-second demo",
       "hero.pathLabel1": "FILE",
@@ -1098,7 +1098,7 @@ footer {
       "hero.note": "Free, open source, and short enough to read end to end.",
       "problem.eyebrow": "The detour most players take",
       "problem.h2": "Software gets between<br>the file and the DAC.",
-      "problem.lede": "On an ordinary macOS app, audio doesn't reach the DAC directly — it passes through CoreAudio's system mixer, where resampling, floating-point mixing and software volume can all quietly change the signal.",
+      "problem.lede": "On an ordinary macOS app, audio doesn't reach the DAC directly; it passes through CoreAudio's system mixer, where resampling, floating-point mixing and software volume can all quietly change the signal.",
       "problem.badLabel": "Typical player",
       "problem.bad1": "Decode file",
       "problem.bad2": "System mixer (CoreAudio)",
@@ -1106,53 +1106,53 @@ footer {
       "problem.bad4": "Float32 mixing + software volume",
       "problem.bad5": "Buffer, re-buffer, dither",
       "problem.good1": "Decode file, once, before playback",
-      "problem.good2": "Hog mode — exclusive DAC ownership",
+      "problem.good2": "Hog mode: exclusive DAC ownership",
       "path.eyebrow": "Architecture",
       "path.h2": "Four steps, each run once,<br>all finished before playback starts.",
       "path.lede": "Everything that could touch the signal happens before the DAC is running. During playback there is exactly one operation left.",
       "path.step1.h": "Device acquisition",
-      "path.step1.p": '<code>hog mode</code> — bpplay becomes the sole owner of the DAC. No other app can interfere; the system mixer is disabled.',
+      "path.step1.p": '<code>hog mode</code>: bpplay becomes the sole owner of the DAC. No other app can interfere; the system mixer is disabled.',
       "path.step2.h": "Format negotiation",
-      "path.step2.p": "bpplay asks the hardware for an integer physical format. If the device only offers float32, it takes that instead — and tells you which route it took.",
+      "path.step2.p": "bpplay asks the hardware for an integer physical format. If the device only offers float32, it takes that instead, and tells you which route it took.",
       "path.step3.h": "Load &amp; match",
       "path.step3.p": "The whole file is read into memory. If a lossless format conversion is needed, it happens once here, on a non-real-time thread.",
       "path.step4.p": "The decoded buffer is pinned in RAM. The operating system cannot page it out mid-playback.",
-      "path.realtime": 'During playback, the real-time <code>IOProc</code> does exactly one thing: <strong>memcpy</strong>. No float math, no allocation, no file reads, no locks — the callback that feeds your DAC never does anything a real-time thread shouldn\'t.',
+      "path.realtime": 'During playback, the real-time <code>IOProc</code> does exactly one thing: <strong>memcpy</strong>. No float math, no allocation, no file reads, no locks; the callback that feeds your DAC never does anything a real-time thread shouldn\'t.',
       "ram.eyebrow": "The full-RAM model",
       "ram.h2": "The whole track loads<br>before a single sound plays.",
       "ram.lede": "No on-the-fly buffering, no disk reads during playback. The track sits in RAM, locked there, and reaches the DAC with a single memory copy.",
-      "ram.p1": "This also has an electrical rationale, not just a signal-path one. A conventional player continuously reads, decodes and re-buffers — each operation is a brief, spiky load on the machine's power supply. A modern NVMe SSD's read spike can jump from 15&nbsp;mA to 2&nbsp;A in microseconds, a di/dt of nearly two million amps per second, a real source of high-frequency EMI. Once the track is fully in RAM, none of that happens during playback — there's nothing left to spike.",
+      "ram.p1": "This also has an electrical rationale, not just a signal-path one. A conventional player continuously reads, decodes and re-buffers; each operation is a brief, spiky load on the machine's power supply. A modern NVMe SSD's read spike can jump from 15&nbsp;mA to 2&nbsp;A in microseconds, a di/dt of nearly two million amps per second, a real source of high-frequency EMI. Once the track is fully in RAM, none of that happens during playback; there's nothing left to spike.",
       "ram.stat1": "Disk reads during playback",
       "ram.stat2": "Typical NVMe read spike",
       "ram.stat3": "di/dt of that spike",
       "ram.stat4": "Operation in the real-time path",
       "ram.equation": '<b>4&nbsp;GB</b> DSD256 file <span class="eq-op">×</span> 1.5 <span class="eq-op">(DoP packing)</span> <span class="eq-op">×</span> 1.333 <span class="eq-op">(float32 path)</span> <span class="eq-op">=</span> <b>~7.5&nbsp;GB</b> in RAM',
-      "ram.p2": "Neither step is lossy. The float32 mantissa is 24 bits, so the 16/24-bit integer range fits inside it exactly — the extra memory is the honest cost of two lossless conversions, not waste.",
+      "ram.p2": "Neither step is lossy. The float32 mantissa is 24 bits, so the 16/24-bit integer range fits inside it exactly; the extra memory is the honest cost of two lossless conversions, not waste.",
       "dsd.h2": "DSD, carried inside PCM,<br>bit-for-bit.",
-      "dsd.lede": "DSD256 stores the signal as 1-bit samples at 11.2896&nbsp;MHz per channel — too dense for USB audio to carry directly. bpplay packs it into PCM using the DoP (DSD over PCM v1.1) protocol.",
+      "dsd.lede": "DSD256 stores the signal as 1-bit samples at 11.2896&nbsp;MHz per channel; too dense for USB audio to carry directly. bpplay packs it into PCM using the DoP (DSD over PCM v1.1) protocol.",
       "dsd.marker8": "8 bits",
       "dsd.bits16": "16 bits of raw DSD, bit-for-bit identical to the .dsf file",
       "dsd.markerCap": "Marker: alternates 0x05 / 0xFA",
-      "dsd.bitsCap": "The DSD payload — untouched",
-      "dsd.p": 'The alternating marker is a self-checking handshake: a DAC that understands DoP unpacks the bits into its own DSD decoder; one that doesn\'t just plays it as plain PCM and stays passive. Either way, the DoP frame is only the transport — never the content. Validated up to <strong style="color:var(--silver)">DSD256</strong>, architecture scales to DSD512.',
+      "dsd.bitsCap": "The DSD payload: untouched",
+      "dsd.p": 'The alternating marker is a self-checking handshake: a DAC that understands DoP unpacks the bits into its own DSD decoder; one that doesn\'t just plays it as plain PCM and stays passive. Either way, the DoP frame is only the transport; never the content. Validated up to <strong style="color:var(--silver)">DSD256</strong>, architecture scales to DSD512.',
       "formats.eyebrow": "Formats",
-      "formats.h2": "What it plays —<br>and what it deliberately doesn't.",
+      "formats.h2": "What it plays:<br>and what it deliberately doesn't.",
       "formats.thFormat": "Format",
       "formats.thDetails": "Details",
       "formats.wav": "16 / 24 / 32-bit integer and 32-bit float",
       "formats.flac": "16 / 24-bit, Vorbis metadata, MQA detection (not decoding)",
-      "formats.alac": "16 / 24-bit — what iTunes / Music.app produce",
+      "formats.alac": "16 / 24-bit: what iTunes / Music.app produce",
       "formats.aiff": "16 / 24 / 32-bit, uncompressed only",
       "formats.dsf": "DSD64–DSD256 via DoP",
-      "formats.localOnly": "bpplay plays files — from local storage, a NAS, or a Google Drive / Dropbox folder, as long as it's mounted on the Mac. It is not a streaming client: no built-in connection to Spotify, Tidal, Qobuz or similar services.",
+      "formats.localOnly": "bpplay plays files: from local storage, a NAS, or a Google Drive / Dropbox folder, as long as it's mounted on the Mac. It is not a streaming client: no built-in connection to Spotify, Tidal, Qobuz or similar services.",
       "formats.omittedH": "Deliberately out of scope",
-      "formats.omittedP": "Library management, a graphical interface, network streaming, signal processing, volume control. None are oversights — each would be a place where the signal could change, or noise could arise, between the file and the DAC.",
+      "formats.omittedP": "Library management, a graphical interface, network streaming, signal processing, volume control. None are oversights; each would be a place where the signal could change, or noise could arise, between the file and the DAC.",
       "demo.eyebrow": "See it",
       "demo.h2": "Install and play,<br>in under two minutes.",
-      "demo.lede": "A short, unedited screen recording of installing bpplay and playing an album — start to finish.",
+      "demo.lede": "A short, unedited screen recording of installing bpplay and playing an album, start to finish.",
       "validated.eyebrow": "Validated, not assumed",
       "validated.h2": "Tested where it matters:<br>the connection.",
-      "validated.lede": "Bit-perfect behaviour was identical across every topology and cable tried — the bit path is independent of how you connect it.",
+      "validated.lede": "Bit-perfect behaviour was identical across every topology and cable tried; the bit path is independent of how you connect it.",
       "validated.l1b": "Interfaces", "validated.l1": "Gustard XMOS, Amanero Combo384/768",
       "validated.l2b": "DACs", "validated.l2": "TT and Gustard",
       "validated.l3b": "Direct connection", "validated.l3": "DAC plugged straight into the MacBook Air port",
@@ -1161,12 +1161,12 @@ footer {
       "validated.l6b": "Cabling", "validated.l6": "Both expensive and cheap",
       "start.eyebrow": "Get started",
       "start.h2": "Terminal, or drag-and-drop.<br>Your choice.",
-      "start.lede": "The DMG bundles the CLI binary plus two zero-configuration launchers — a drag-and-drop app and a Finder Quick Action. Both are Developer ID signed and notarised.",
-      "start.terminal": '<span class="c">$</span> <span class="s">./bpplay -l</span>                      <span class="c"># list available output devices</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 track.flac</span>          <span class="c"># play on device index 1</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 01.flac 02.flac</span>     <span class="c"># gapless across same-format files</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 -dir ~/Music/Album</span> <span class="c"># play a whole folder, recursively</span>\n\n<span class="c">while playing —</span> <span class="g">n</span> <span class="c">next ·</span> <span class="g">b</span> <span class="c">previous ·</span> <span class="g">space</span> <span class="c">pause/resume ·</span> <span class="g">q</span> <span class="c">quit</span>',
-      "start.reqs": "Requires <b>macOS 10.15+</b> and at least <b>8&nbsp;GB RAM</b> (more for large DSD albums — see the memory math above).",
+      "start.lede": "The DMG bundles the CLI binary plus two zero-configuration launchers: a drag-and-drop app and a Finder Quick Action. Both are Developer ID signed and notarised.",
+      "start.terminal": '<span class="c">$</span> <span class="s">./bpplay -l</span>                      <span class="c"># list available output devices</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 track.flac</span>          <span class="c"># play on device index 1</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 01.flac 02.flac</span>     <span class="c"># gapless across same-format files</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 -dir ~/Music/Album</span> <span class="c"># play a whole folder, recursively</span>\n\n<span class="c">while playing:</span> <span class="g">n</span> <span class="c">next ·</span> <span class="g">b</span> <span class="c">previous ·</span> <span class="g">space</span> <span class="c">pause/resume ·</span> <span class="g">q</span> <span class="c">quit</span>',
+      "start.reqs": "Requires <b>macOS 10.15+</b> and at least <b>8&nbsp;GB RAM</b> (more for large DSD albums, see the memory math above).",
       "start.downloadBtn": "↓ Download the DMG",
       "start.sourceBtn": "View source on GitHub",
-      "quote.text": '"bpplay forgoes a polished interface and convenience features, and in return gives a <span class="accent">reference</span> — a fixed point to measure against."',
+      "quote.text": '"bpplay forgoes a polished interface and convenience features, and in return gives a <span class="accent">reference</span>, a fixed point to measure against."',
       "quote.cite": "From the project's design philosophy",
       "footer.project": "Project",
       "footer.piLink": "Raspberry Pi appliance edition",
@@ -1178,23 +1178,23 @@ footer {
       "footer.philosophy": "Philosophy &amp; architecture",
       "footer.license": "License",
       "footer.press": "Blog &amp; press",
-      "footer.medium1": "Part 1 — Uncompromising architecture",
+      "footer.medium1": "Part 1: Uncompromising architecture",
       "footer.medium1Url": "https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-software-minimalism-fbcc30753b28",
-      "footer.medium2": "Part 2 — What happens under the hood",
+      "footer.medium2": "Part 2: What happens under the hood",
       "footer.medium2Url": "https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-85d5159bb739",
-      "footer.medium3": "Part 3 — Memory-based playback in 2026",
+      "footer.medium3": "Part 3: Memory-based playback in 2026",
       "footer.medium3Url": "https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-7199a2921b53",
-      "footer.medium4": "Part 4 — Linux/Windows optimization",
+      "footer.medium4": "Part 4: Linux/Windows optimization",
       "footer.medium4Url": "https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-possibilities-for-high-end-audio-playback-c2e6c8c1fee0",
-      "footer.medium5": "Part 5 — What bit-perfect really means",
+      "footer.medium5": "Part 5: What bit-perfect really means",
       "footer.medium5Url": "https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-and-when-does-it-actually-matter-9b98efaca480",
       "footer.pfHeading": "Positive Feedback (reprints, EN)",
       "footer.thirdParty": "Third-party notices",
-      "footer.copyright": "© 2026 Koscsó Ferenc. Free software — no warranty, as permitted by the GPL.",
+      "footer.copyright": "© 2026 Koscsó Ferenc. Free software; no warranty, as permitted by the GPL.",
       "footer.myReelClub": "A My Reel Club® practice, translated into software."
     },
     hu: {
-      title: "bpplay — a legrövidebb determinisztikus út a fájltól a DAC-ig",
+      title: "bpplay: a legrövidebb determinisztikus út a fájltól a DAC-ig",
       "nav.path": "Jelút",
       "nav.formats": "Formátumok",
       "nav.demo": "Demó",
@@ -1205,7 +1205,7 @@ footer {
       "nav.press": "Blog és sajtó",
       "hero.eyebrow": "macOS · Core edition · v0.9.7 · GPL-3.0",
       "hero.h1": 'A legrövidebb<br>determinisztikus út<br><span class="accent">fájltól</span> a <span class="accent">DAC-ig</span>.',
-      "hero.sub": "A bpplay egy minimalista, bithelyes zenelejátszó macOS-re. Egyetlen C fájl, kb. kétezer sor, külső függőség nélkül. Egyetlen feladata van: a zenei fájl mintáit érintetlenül eljuttatni a DAC-hoz — nincs újramintavétel, nincs szoftveres hangerő, nincs keverés.",
+      "hero.sub": "A bpplay egy minimalista, bithelyes zenelejátszó macOS-re. Egyetlen C fájl, kb. kétezer sor, külső függőség nélkül. Egyetlen feladata van: a zenei fájl mintáit érintetlenül eljuttatni a DAC-hoz; nincs újramintavétel, nincs szoftveres hangerő, nincs keverés.",
       "hero.downloadBtn": "↓ Letöltés macOS-hez",
       "hero.demoBtn": "Nézd meg a 80 másodperces demót",
       "hero.pathLabel1": "FÁJL",
@@ -1216,7 +1216,7 @@ footer {
       "hero.note": "Ingyenes, nyílt forráskódú, és elég rövid ahhoz, hogy elejétől a végéig el lehessen olvasni.",
       "problem.eyebrow": "A legtöbb lejátszó ezt a kerülőutat választja",
       "problem.h2": "Mi a legrövidebb út<br>a fájl és a DAC között?",
-      "problem.lede": "Egy átlagos macOS-alkalmazásnál a hang nem közvetlenül jut a DAC-hoz — áthalad a CoreAudio rendszerkeverőjén, ahol az újramintavételezés, a lebegőpontos keverés és a szoftveres hangerő mind csendben megváltoztathatják a jelet.",
+      "problem.lede": "Egy átlagos macOS-alkalmazásnál a hang nem közvetlenül jut a DAC-hoz; áthalad a CoreAudio rendszerkeverőjén, ahol az újramintavételezés, a lebegőpontos keverés és a szoftveres hangerő mind csendben megváltoztathatják a jelet.",
       "problem.badLabel": "Tipikus lejátszó",
       "problem.bad1": "Fájl dekódolása",
       "problem.bad2": "Rendszerkeverő (CoreAudio)",
@@ -1224,53 +1224,53 @@ footer {
       "problem.bad4": "Float32 keverés + szoftveres hangerő",
       "problem.bad5": "Pufferelés, újrapufferelés, dither",
       "problem.good1": "Fájl dekódolása, egyszer, lejátszás előtt",
-      "problem.good2": "Hog mode — kizárólagos DAC-tulajdonlás",
+      "problem.good2": "Hog mode: kizárólagos DAC-tulajdonlás",
       "path.eyebrow": "Architektúra",
       "path.h2": "Négy lépés, mindegyik egyszer fut le,<br>mind a lejátszás indulása előtt fejeződik be.",
       "path.lede": "Minden folyamat, ami a lejátszáshoz szükséges, megtörténik a lejátszás megkezdése előtt. Csupán annyi a feladat, hogy a RAM-ból közvetlenül és a lehető legrövidebb idő alatt a DAC pufferébe kerüljenek a minták.",
       "path.step1.h": "Eszközfoglalás",
-      "path.step1.p": '<code>hog mode</code> — a bpplay a DAC kizárólagos tulajdonosává válik. Más alkalmazás nem szólhat bele; a rendszerkeverő le van tiltva.',
+      "path.step1.p": '<code>hog mode</code>: a bpplay a DAC kizárólagos tulajdonosává válik. Más alkalmazás nem szólhat bele; a rendszerkeverő le van tiltva.',
       "path.step2.h": "Formátum-egyeztetés",
-      "path.step2.p": "A bpplay egy integer fizikai formátumot kér a hardvertől. Ha az eszköz csak float32-t kínál, azt is elfogadja — és megmondja, melyik utat választotta.",
+      "path.step2.p": "A bpplay egy integer fizikai formátumot kér a hardvertől. Ha az eszköz csak float32-t kínál, azt is elfogadja, és megmondja, melyik utat választotta.",
       "path.step3.h": "Betöltés és illesztés",
       "path.step3.p": "A teljes fájl a memóriába kerül. Ha veszteségmentes formátum-átalakítás szükséges, az itt, egyszer megtörténik, egy nem valós idejű szálon.",
       "path.step4.p": "A dekódolt puffer rögzítve marad a RAM-ban. Az operációs rendszer lejátszás közben nem lapozhatja ki.",
-      "path.realtime": 'Lejátszás közben a valós idejű <code>IOProc</code> pontosan egyetlen dolgot csinál: <strong>memcpy</strong>. Nincs lebegőpontos számítás, nincs memóriafoglalás, nincs fájlolvasás, nincs lock — a DAC-ot kiszolgáló visszahívás soha nem tesz olyat, amit egy valós idejű szálnak nem szabadna.',
+      "path.realtime": 'Lejátszás közben a valós idejű <code>IOProc</code> pontosan egyetlen dolgot csinál: <strong>memcpy</strong>. Nincs lebegőpontos számítás, nincs memóriafoglalás, nincs fájlolvasás, nincs lock; a DAC-ot kiszolgáló visszahívás soha nem tesz olyat, amit egy valós idejű szálnak nem szabadna.',
       "ram.eyebrow": "A teljes-RAM modell",
       "ram.h2": "A teljes track betölt,<br>mielőtt egyetlen hang is megszólalna.",
       "ram.lede": "Nincs menet közbeni pufferelés, nincs lemezolvasás lejátszás közben. A track a RAM-ban ül, oda rögzítve, és egyetlen memóriamásolással jut a DAC-hoz.",
-      "ram.p1": "Ennek elektromos indoklása is van, nem csak jelúti. Egy hagyományos lejátszó folyamatosan olvas, dekódol és újrapufferel — minden ilyen művelet rövid, tüskeszerű terhelést ró a gép tápegységére. Egy modern NVMe SSD olvasási tüskéje mikroszekundumok alatt 15&nbsp;mA-ről 2&nbsp;A-re ugorhat, közel kétmillió amper/másodperces di/dt-vel — ez nagyfrekvenciás EMI-zavarokat okozhat. Ha a track már teljesen a RAM-ban van, lejátszás közben ebből semmi nem történik — nincs mi tüskézzen.",
+      "ram.p1": "Ennek elektromos indoklása is van, nem csak jelúti. Egy hagyományos lejátszó folyamatosan olvas, dekódol és újrapufferel; minden ilyen művelet rövid, tüskeszerű terhelést ró a gép tápegységére. Egy modern NVMe SSD olvasási tüskéje mikroszekundumok alatt 15&nbsp;mA-ről 2&nbsp;A-re ugorhat, közel kétmillió amper/másodperces di/dt-vel; ez nagyfrekvenciás EMI-zavarokat okozhat. Ha a track már teljesen a RAM-ban van, lejátszás közben ebből semmi nem történik; nincs mi tüskézzen.",
       "ram.stat1": "Lemezolvasás lejátszás közben",
       "ram.stat2": "Tipikus NVMe olvasási tüske",
       "ram.stat3": "A tüske di/dt-je",
       "ram.stat4": "Művelet a valós idejű útban",
       "ram.equation": '<b>4&nbsp;GB</b>-os DSD256 fájl <span class="eq-op">×</span> 1,5 <span class="eq-op">(DoP-csomagolás)</span> <span class="eq-op">×</span> 1,333 <span class="eq-op">(float32 út)</span> <span class="eq-op">=</span> <b>~7,5&nbsp;GB</b> a RAM-ban',
-      "ram.p2": "Egyik lépés sem veszteséges. A float32 mantisszája 24 bites, így a 16/24 bites egész tartomány pontosan ábrázolható benne — a plusz memória két veszteségmentes átalakítás becsületes ára, nem pazarlás.",
+      "ram.p2": "Egyik lépés sem veszteséges. A float32 mantisszája 24 bites, így a 16/24 bites egész tartomány pontosan ábrázolható benne; a plusz memória két veszteségmentes átalakítás becsületes ára, nem pazarlás.",
       "dsd.h2": "DSD, PCM-be csomagolva,<br>bitről bitre.",
-      "dsd.lede": "A DSD256 a jelet 1 bites mintákban tárolja, csatornánként 11,2896&nbsp;MHz-en — ez túl sűrű ahhoz, hogy USB audio közvetlenül hordozza. A bpplay a DoP (DSD over PCM v1.1) protokollal csomagolja PCM-be.",
+      "dsd.lede": "A DSD256 a jelet 1 bites mintákban tárolja, csatornánként 11,2896&nbsp;MHz-en; ez túl sűrű ahhoz, hogy USB audio közvetlenül hordozza. A bpplay a DoP (DSD over PCM v1.1) protokollal csomagolja PCM-be.",
       "dsd.marker8": "8 bit",
       "dsd.bits16": "16 bit nyers DSD, bitről bitre azonos a .dsf fájllal",
       "dsd.markerCap": "Jelző: felváltva 0x05 / 0xFA",
-      "dsd.bitsCap": "A DSD-tartalom — érintetlenül",
-      "dsd.p": 'A felváltva változó jelzőbájt egy önellenőrző handshake: egy DoP-ot ismerő DAC kicsomagolja a biteket a saját DSD-dekóderének; amelyik nem, az egyszerű PCM-ként játssza le, passzívan. Mindkét esetben a DoP-keret csak a szállítás — soha nem a tartalom. <strong style="color:var(--silver)">DSD256</strong>-ig validált, az architektúra DSD512-ig skálázódik.',
+      "dsd.bitsCap": "A DSD-tartalom: érintetlenül",
+      "dsd.p": 'A felváltva változó jelzőbájt egy önellenőrző handshake: egy DoP-ot ismerő DAC kicsomagolja a biteket a saját DSD-dekóderének; amelyik nem, az egyszerű PCM-ként játssza le, passzívan. Mindkét esetben a DoP-keret csak a szállítás; soha nem a tartalom. <strong style="color:var(--silver)">DSD256</strong>-ig validált, az architektúra DSD512-ig skálázódik.',
       "formats.eyebrow": "Formátumok",
-      "formats.h2": "Amit lejátszik —<br>és amit tudatosan nem.",
+      "formats.h2": "Amit lejátszik:<br>és amit tudatosan nem.",
       "formats.thFormat": "Formátum",
       "formats.thDetails": "Részletek",
       "formats.wav": "16 / 24 / 32 bites integer és 32 bites float",
       "formats.flac": "16 / 24 bit, Vorbis metaadat, MQA felismerés (nem dekódolás)",
-      "formats.alac": "16 / 24 bit — amit az iTunes / Music.app előállít",
+      "formats.alac": "16 / 24 bit: amit az iTunes / Music.app előállít",
       "formats.aiff": "16 / 24 / 32 bit, csak tömörítetlen",
       "formats.dsf": "DSD64–DSD256, DoP-on keresztül",
-      "formats.localOnly": "A bpplay fájlokat játszik le — helyi tárhelyről, NAS-ról, vagy egy Google Drive-/Dropbox-mappából, amennyiben az a Macen csatolva (mountolva) van. Nem streaming-kliens: nincs beépített kapcsolata a Spotify, Tidal, Qobuz vagy hasonló szolgáltatásokhoz.",
+      "formats.localOnly": "A bpplay fájlokat játszik le: helyi tárhelyről, NAS-ról, vagy egy Google Drive-/Dropbox-mappából, amennyiben az a Macen csatolva (mountolva) van. Nem streaming-kliens: nincs beépített kapcsolata a Spotify, Tidal, Qobuz vagy hasonló szolgáltatásokhoz.",
       "formats.omittedH": "Tudatosan kimaradt",
-      "formats.omittedP": "Könyvtárkezelés, grafikus felület, hálózati streaming, jelfeldolgozás, hangerőszabályzás. Egyik sem mulasztás — mindegyik egy-egy hely lenne, ahol a jel megváltozhatna, vagy zaj keletkezhetne a fájl és a DAC között.",
+      "formats.omittedP": "Könyvtárkezelés, grafikus felület, hálózati streaming, jelfeldolgozás, hangerőszabályzás. Egyik sem mulasztás; mindegyik egy-egy hely lenne, ahol a jel megváltozhatna, vagy zaj keletkezhetne a fájl és a DAC között.",
       "demo.eyebrow": "Nézd meg",
       "demo.h2": "Telepítés és lejátszás,<br>két percen belül.",
-      "demo.lede": "Egy rövid, vágatlan képernyőfelvétel a bpplay telepítéséről és egy album lejátszásáról — elejétől a végéig.",
+      "demo.lede": "Egy rövid, vágatlan képernyőfelvétel a bpplay telepítéséről és egy album lejátszásáról, elejétől a végéig.",
       "validated.eyebrow": "Ellenőrzött, nem feltételezett",
       "validated.h2": "A ma széleskörben használatos<br>XMOS és Amanero USB interfészekkel alaposan tesztelve.",
-      "validated.lede": "A bithelyes viselkedés minden kipróbált topológiában és kábelezésnél azonos volt — a bitút független a csatlakozás módjától.",
+      "validated.lede": "A bithelyes viselkedés minden kipróbált topológiában és kábelezésnél azonos volt; a bitút független a csatlakozás módjától.",
       "validated.l1b": "Interfészek", "validated.l1": "Gustard XMOS, Amanero Combo384/768",
       "validated.l2b": "DAC-ok", "validated.l2": "TT és Gustard",
       "validated.l3b": "Közvetlen csatlakozás", "validated.l3": "DAC közvetlenül a MacBook Air portjába dugva",
@@ -1279,12 +1279,12 @@ footer {
       "validated.l6b": "Kábelezés", "validated.l6": "Drága és olcsó egyaránt",
       "start.eyebrow": "Kezdéshez",
       "start.h2": "Terminál, vagy húzd-és-dobd.<br>Te választasz.",
-      "start.lede": "A DMG a CLI binárist plusz két nulla-konfigurációs indítót tartalmaz — egy drag-and-drop appot és egy Finder Quick Actiont. Mindkettő Developer ID-vel aláírt és notarizált.",
-      "start.terminal": '<span class="c">$</span> <span class="s">./bpplay -l</span>                      <span class="c"># elérhető kimeneti eszközök listázása</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 track.flac</span>          <span class="c"># lejátszás az 1-es eszközön</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 01.flac 02.flac</span>     <span class="c"># gapless, azonos formátumú fájlok között</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 -dir ~/Music/Album</span> <span class="c"># egy teljes mappa lejátszása, rekurzívan</span>\n\n<span class="c">lejátszás közben —</span> <span class="g">n</span> <span class="c">köv. ·</span> <span class="g">b</span> <span class="c">előző ·</span> <span class="g">space</span> <span class="c">szünet/folytatás ·</span> <span class="g">q</span> <span class="c">kilépés</span>',
-      "start.reqs": "Legalább <b>macOS 10.15</b> és <b>8&nbsp;GB RAM</b> szükséges (nagyobb DSD-albumokhoz több — lásd a fenti memória-matekot).",
+      "start.lede": "A DMG a CLI binárist plusz két nulla-konfigurációs indítót tartalmaz: egy drag-and-drop appot és egy Finder Quick Actiont. Mindkettő Developer ID-vel aláírt és notarizált.",
+      "start.terminal": '<span class="c">$</span> <span class="s">./bpplay -l</span>                      <span class="c"># elérhető kimeneti eszközök listázása</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 track.flac</span>          <span class="c"># lejátszás az 1-es eszközön</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 01.flac 02.flac</span>     <span class="c"># gapless, azonos formátumú fájlok között</span>\n<span class="c">$</span> <span class="s">./bpplay -d 1 -dir ~/Music/Album</span> <span class="c"># egy teljes mappa lejátszása, rekurzívan</span>\n\n<span class="c">lejátszás közben:</span> <span class="g">n</span> <span class="c">köv. ·</span> <span class="g">b</span> <span class="c">előző ·</span> <span class="g">space</span> <span class="c">szünet/folytatás ·</span> <span class="g">q</span> <span class="c">kilépés</span>',
+      "start.reqs": "Legalább <b>macOS 10.15</b> és <b>8&nbsp;GB RAM</b> szükséges (nagyobb DSD-albumokhoz több, lásd a fenti memória-matekot).",
       "start.downloadBtn": "↓ DMG letöltése",
       "start.sourceBtn": "Forráskód a GitHubon",
-      "quote.text": '„A bpplay feláldozza a látványos GUI-t és a funkciók tucatjait a determinisztikusság és az alacsony késleltetés oltárán — <span class="accent">referenciaeszközként</span> mindent a minőségi, zajtalan lejátszásra optimalizál."',
+      "quote.text": '„A bpplay feláldozza a látványos GUI-t és a funkciók tucatjait a determinisztikusság és az alacsony késleltetés oltárán, <span class="accent">referenciaeszközként</span> mindent a minőségi, zajtalan lejátszásra optimalizál."',
       "quote.cite": "A projekt tervezési filozófiájából",
       "footer.project": "Projekt",
       "footer.piLink": "Raspberry Pi készüléki kiadás",
@@ -1296,19 +1296,19 @@ footer {
       "footer.philosophy": "Filozófia és architektúra",
       "footer.license": "Licenc",
       "footer.press": "Blog és sajtó",
-      "footer.medium1": "1. rész — Kompromisszummentes architektúra",
+      "footer.medium1": "1. rész: Kompromisszummentes architektúra",
       "footer.medium1Url": "https://medium.com/@mediaengineering/bpplay-kompromisszummentes-sz%C3%A1m%C3%ADt%C3%B3g%C3%A9pes-audi%C3%B3-architekt%C3%BAra-%C3%A9s-szoftveres-minimalizmus-a842919fd73e",
-      "footer.medium2": "2. rész — Mi történik a gépházban?",
+      "footer.medium2": "2. rész: Mi történik a gépházban?",
       "footer.medium2Url": "https://medium.com/@mediaengineering/bpplay-mi-t%C3%B6rt%C3%A9nik-a-g%C3%A9ph%C3%A1zban-722cf398e7dd",
-      "footer.medium3": "3. rész — Bithelyes, memóriából lejátszás",
+      "footer.medium3": "3. rész: Bithelyes, memóriából lejátszás",
       "footer.medium3Url": "https://medium.com/@mediaengineering/bithelyes-%C3%A9s-mem%C3%B3ri%C3%A1b%C3%B3l-t%C3%B6rt%C3%A9n%C5%91-audio-file-lej%C3%A1tsz%C3%A1s-2026-ban-ee9456c3f505",
-      "footer.medium4": "4. rész — Linux/Windows optimalizálás",
+      "footer.medium4": "4. rész: Linux/Windows optimalizálás",
       "footer.medium4Url": "https://medium.com/@mediaengineering/linux-%C3%A9s-windows-k%C3%B6rnyezet-optimaliz%C3%A1l%C3%A1si-lehet%C5%91s%C3%A9gei-high-end-audio-lej%C3%A1tsz%C3%A1shoz-5a5dfc3ec328",
-      "footer.medium5": "5. rész — Bithelyesség, valójában",
+      "footer.medium5": "5. rész: Bithelyesség, valójában",
       "footer.medium5Url": "https://medium.com/@mediaengineering/bithelyess%C3%A9g-mit-jelent-val%C3%B3j%C3%A1ban-%C3%A9s-mikor-sz%C3%A1m%C3%ADt-igaz%C3%A1n-ebdfc40f1f27",
       "footer.pfHeading": "Positive Feedback (angol nyelvű újraközlés)",
       "footer.thirdParty": "Harmadik féltől származó közlemények",
-      "footer.copyright": "© 2026 Koscsó Ferenc. Szabad szoftver — nincs garancia, a GPL által megengedett mértékben.",
+      "footer.copyright": "© 2026 Koscsó Ferenc. Szabad szoftver; nincs garancia, a GPL által megengedett mértékben.",
       "footer.myReelClub": "Egy My Reel Club® gyakorlat, szoftverré fordítva."
     }
   };
