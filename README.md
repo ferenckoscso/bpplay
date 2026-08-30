@@ -30,6 +30,18 @@ floating-point mixing and software volume. bpplay bypasses all of it:
   there is no disk I/O during playback, and the realtime IOProc does nothing but `memcpy`
 - **A single format-matching step** — once, at load time, lossless, off the realtime thread
 
+## Other editions
+
+This repo is the macOS core edition. Linux users can try bpplay too, without installing anything —
+see [ferenckoscso.github.io/bpplay](https://ferenckoscso.github.io/bpplay/) for details:
+
+- **[Raspberry Pi appliance edition](https://ferenckoscso.github.io/bpplay/pi/)** — a sealed
+  Pi 4/5 device that boots straight into the music selector, controlled over SSH.
+- **[x86_64 Live-USB kiosk edition](https://ferenckoscso.github.io/bpplay/x64/)** — boot any
+  Intel/AMD PC from a USB stick and try it risk-free; your computer stays untouched.
+
+Both are separately licensed trial editions (not GPL); see the linked pages for details.
+
 ## Supported formats
 
 | Format | Details |
@@ -155,6 +167,18 @@ A szokásos macOS-lejátszók a CoreAudio rendszermixerén keresztül dolgoznak,
 lebegőpontos keverést és szoftveres hangerőt visz a láncba. A bpplay ezt megkerüli: hog mode
 (kizárólagos eszköz-hozzáférés), integer mode, teljes-RAM modell `mlock`-kal, és egyetlen,
 betöltéskori formátum-illesztés — a valós idejű szálon már csak `memcpy` fut.
+
+### Egyéb kiadások
+
+Ez a repó a macOS-es core kiadás. Linux alól is kipróbálható a bpplay, telepítés nélkül —
+részletek: [ferenckoscso.github.io/bpplay](https://ferenckoscso.github.io/bpplay/).
+
+- **[Raspberry Pi készülék-kiadás](https://ferenckoscso.github.io/bpplay/pi/)** — zárt Pi 4/5
+  eszköz, ami egyenesen a zeneválasztóba bootol, SSH-n keresztül vezérelve.
+- **[x86_64 Live-USB kiosk kiadás](https://ferenckoscso.github.io/bpplay/x64/)** — bármely
+  Intel/AMD gép bootolható USB-kulcsról, kockázatmentesen kipróbálható; a géped érintetlen marad.
+
+Mindkettő külön licencelt próbakiadás (nem GPL); részletek a linkelt oldalakon.
 
 Fordítás: `cd src && make` (nulla külső függőség, az Xcode parancssori eszközei kellenek).
 Magyar nyelvű üzenetek: `-hu` kapcsoló.
