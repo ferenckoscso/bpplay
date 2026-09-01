@@ -776,7 +776,7 @@ footer.ft {
 <span class="cursor">&nbsp;</span></div>
           <div class="term-status"><span>zenevalaszto:bash*</span><span>"bpplay-kiosk" 12:41 29-Aug-26</span></div>
         </div>
-        <p class="figure-cap"><span class="en">The music selector, reached over SSH; illustration redrawn from the actual browser screen.</span><span class="hu">A zeneválasztó SSH-n keresztül; a valódi böngésző-képernyő alapján újrarajzolt illusztráció.</span></p>
+        <p class="figure-cap"><span class="en">The music selector, reached over SSH; illustration redrawn from the actual browser screen (the device UI itself is in Hungarian).</span><span class="hu">A zeneválasztó SSH-n keresztül; a valódi böngésző-képernyő alapján újrarajzolt illusztráció (a készülék felülete magyar nyelvű).</span></p>
       </div>
     </div>
 
@@ -1025,7 +1025,7 @@ footer.ft {
       <span class="chip"><span class="en"><b>Network</b> wired Ethernet only; required for SSH control</span><span class="hu"><b>Hálózat</b> csak vezetékes Ethernet; SSH-vezérléshez szükséges</span></span>
     </div>
 
-    <div class="note rv" style="margin-top:28px;"><span class="en"><b>Larger stick or SSD?</b> The writable/persistent area is about 7.1 GB by default. On a 32 GB+ stick, you can grow it: <code>sudo growpart /dev/sdX 3</code> (extend the partition), then <code>sudo resize2fs /dev/sdX3</code> (extend the filesystem); in that order, on Linux.</span><span class="hu"><b>Nagyobb kulcs vagy SSD?</b> Az írható/perzisztens terület alapból kb. 7,1 GB. Egy 32 GB-os vagy nagyobb kulcson kiterjesztheted: <code>sudo growpart /dev/sdX 3</code> (particio kiterjesztése), majd <code>sudo resize2fs /dev/sdX3</code> (fájlrendszer kiterjesztése); ebben a sorrendben, Linuxon.</span></div>
+    <div class="note rv" style="margin-top:28px;"><span class="en"><b>Larger stick or SSD?</b> The writable/persistent area is about 7.1 GB by default. On a 32 GB+ stick, you can grow it: <code>sudo growpart /dev/sdX 3</code> (extend the partition), then <code>sudo resize2fs /dev/sdX3</code> (extend the filesystem); in that order, on Linux.</span><span class="hu"><b>Nagyobb kulcs vagy SSD?</b> Az írható/perzisztens terület alapból kb. 7,1 GB. Egy 32 GB-os vagy nagyobb kulcson kiterjesztheted: <code>sudo growpart /dev/sdX 3</code> (partíció kiterjesztése), majd <code>sudo resize2fs /dev/sdX3</code> (fájlrendszer kiterjesztése); ebben a sorrendben, Linuxon.</span></div>
   </div>
 </section>
 
@@ -1104,7 +1104,7 @@ footer.ft {
       <ul>
         <li><a href="#g-1"><span class="en">1 · What you'll need</span><span class="hu">1 · Amire szükséged lesz</span></a></li>
         <li><a href="#g-2"><span class="en">2 · Writing the image</span><span class="hu">2 · Az image felírása</span></a></li>
-        <li><a href="#g-3"><span class="en">3 · Booting from the USB stick</span><span class="hu">3 · Bootolás a USB-ről</span></a></li>
+        <li><a href="#g-3"><span class="en">3 · Booting from the USB stick</span><span class="hu">3 · Bootolás a USB-kulcsról</span></a></li>
         <li><a href="#g-4"><span class="en">4 · First boot and navigation</span><span class="hu">4 · Első indítás és navigáció</span></a></li>
         <li><a href="#g-5"><span class="en">5 · What runs in the background</span><span class="hu">5 · Mi fut a háttérben</span></a></li>
         <li><a href="#g-6"><span class="en">6 · Trial period</span><span class="hu">6 · Próbaidő</span></a></li>
@@ -1120,7 +1120,7 @@ footer.ft {
         <ul>
           <li><a href="#g-1"><span class="en">1 · What you'll need</span><span class="hu">1 · Amire szükséged lesz</span></a></li>
           <li><a href="#g-2"><span class="en">2 · Writing the image</span><span class="hu">2 · Az image felírása</span></a></li>
-          <li><a href="#g-3"><span class="en">3 · Booting from the USB stick</span><span class="hu">3 · Bootolás a USB-ről</span></a></li>
+          <li><a href="#g-3"><span class="en">3 · Booting from the USB stick</span><span class="hu">3 · Bootolás a USB-kulcsról</span></a></li>
           <li><a href="#g-4"><span class="en">4 · First boot and navigation</span><span class="hu">4 · Első indítás és navigáció</span></a></li>
           <li><a href="#g-5"><span class="en">5 · What runs in the background</span><span class="hu">5 · Mi fut a háttérben</span></a></li>
           <li><a href="#g-6"><span class="en">6 · Trial period</span><span class="hu">6 · Próbaidő</span></a></li>
@@ -1133,21 +1133,21 @@ footer.ft {
       <div class="manual-body">
         <h3 class="mh" id="g-1"><span class="mno">1</span><span class="en">What you'll need</span><span class="hu">Amire szükséged lesz</span></h3>
         <ul>
-          <li><span class="en">A USB stick, at least 8 GB (its current contents will be erased).</span><span class="hu">Egy USB-stick, legalább 8 GB (a meglévő tartalma törlődik).</span></li>
+          <li><span class="en">A USB stick, at least 8 GB (its current contents will be erased).</span><span class="hu">Egy USB-kulcs, legalább 8 GB (a meglévő tartalma törlődik).</span></li>
           <li><span class="en"><a href="https://etcher.balena.io">Balena Etcher</a> (recommended, free, identical on Mac and Windows).</span><span class="hu"><a href="https://etcher.balena.io">Balena Etcher</a> (ajánlott, ingyenes, azonos Mac-en és Windowson).</span></li>
           <li><span class="en">The <code>bpplay-kiosk-x86_64.img.gz</code> file (Google Drive link).</span><span class="hu">A <code>bpplay-kiosk-x86_64.img.gz</code> fájl (Google Drive-linken).</span></li>
           <li><span class="en">A wired Ethernet connection for the machine (Wi-Fi is deliberately disabled); required, since the music selector is reached over an SSH connection to the machine (see 3), without it you cannot select or play anything.</span><span class="hu">Vezetékes Ethernet-kapcsolat a gépnek (a Wi-Fi szándékosan ki van kapcsolva); szükséges, mert a zeneválasztó SSH-kapcsolaton keresztül érhető el (ld. 3.), enélkül nem tudsz zenét választani vagy lejátszani.</span></li>
           <li><span class="en">An SSH app on your own computer, tablet or phone (see 3); no monitor or keyboard is needed on the machine itself.</span><span class="hu">Egy SSH-alkalmazás a saját géped, tableted vagy telefonod (ld. 3.); magán a gépen nincs szükség monitorra vagy billentyűzetre.</span></li>
         </ul>
-        <p><span class="en">The downloaded <code>.gz</code> file is about 920 MB; once written, it takes up 8 GB on the stick. Of that, about 7.1 GB is a writable/persistent area (your settings and the trial countdown live here); the rest is the read-only system.</span><span class="hu">A letöltött <code>.gz</code> fájl kb. 920 MB; kiírás után a USB-sticken 8 GB-ot foglal. Ebből kb. 7,1 GB egy írható/megmarad terület (ide kerülnek a beállításaid és a próbaidő-számláló is); a maradék a rendszer (read-only) része.</span></p>
+        <p><span class="en">The downloaded <code>.gz</code> file is about 920 MB; once written, it takes up 8 GB on the stick. Of that, about 7.1 GB is a writable/persistent area (your settings and the trial countdown live here); the rest is the read-only system.</span><span class="hu">A letöltött <code>.gz</code> fájl kb. 920 MB; kiírás után a USB-kulcson 8 GB-ot foglal. Ebből kb. 7,1 GB egy írható/megmarad terület (ide kerülnek a beállításaid és a próbaidő-számláló is); a maradék a rendszer (read-only) része.</span></p>
 
-        <h3 class="mh" id="g-2"><span class="mno">2</span><span class="en">Writing the image to the USB stick</span><span class="hu">Az image felírása a USB-stickre</span></h3>
+        <h3 class="mh" id="g-2"><span class="mno">2</span><span class="en">Writing the image to the USB stick</span><span class="hu">Az image felírása a USB-kulcsra</span></h3>
         <h4><span class="en">A) Balena Etcher: recommended for everyone</span><span class="hu">A) Balena Etcher: ajánlott mindenkinek</span></h4>
         <ul>
-          <li><span class="en">Download and install Balena Etcher, plug in the stick.</span><span class="hu">Töltsd le és telepítsd a Balena Etchert, dugd be a sticket.</span></li>
+          <li><span class="en">Download and install Balena Etcher, plug in the stick.</span><span class="hu">Töltsd le és telepítsd a Balena Etchert, dugd be a kulcsot.</span></li>
           <li><span class="en">Open Etcher → "Flash from file" → select the downloaded <code>.img.gz</code> (Etcher decompresses it automatically while writing).</span><span class="hu">Nyisd meg az Etchert → "Flash from file" → válaszd ki a letöltött <code>.img.gz</code>-t (az Etcher írás közben automatikusan kicsomagolja).</span></li>
-          <li><span class="en">"Select target" → the USB stick; double-check the size (GB) if several drives are connected.</span><span class="hu">"Select target" → a USB-stick; ellenőrizd a méretet (GB), ha több meghajtó is csatlakozik.</span></li>
-          <li><span class="en">"Flash!"; erases the stick and writes the image, a few minutes.</span><span class="hu">"Flash!"; törli a sticket és felírja az image-et, néhány percig tart.</span></li>
+          <li><span class="en">"Select target" → the USB stick; double-check the size (GB) if several drives are connected.</span><span class="hu">"Select target" → a USB-kulcs; ellenőrizd a méretet (GB), ha több meghajtó is csatlakozik.</span></li>
+          <li><span class="en">"Flash!"; erases the stick and writes the image, a few minutes.</span><span class="hu">"Flash!"; törli a kulcsot és felírja az image-et, néhány percig tart.</span></li>
         </ul>
         <h4><span class="en">B) <code>dd</code>: for advanced Linux/Mac users</span><span class="hu">B) <code>dd</code>: haladó felhasználóknak, Linuxon és Mac-en</span></h4>
         <div class="warn note"><span class="en"><b>Important safety warning:</b> <code>dd</code> irreversibly overwrites the target device. If you specify the wrong device, you will lose data. Always double-check the device name before pressing Enter.</span><span class="hu"><b>Fontos biztonsági figyelmeztetés:</b> a <code>dd</code> parancs a megadott eszközt teljesen felülírja, visszafordíthatatlanul. Mindig kétszer ellenőrizd az eszköznevet, mielőtt Entert nyomsz.</span></div>
@@ -1176,14 +1176,14 @@ footer.ft {
         <ol>
           <li><span class="en">Fully shut down the machine (not sleep).</span><span class="hu">Kapcsold ki a gépet teljesen (ne csak alvó állapot).</span></li>
           <li><span class="en">As it powers on, immediately press and hold Option (⌥).</span><span class="hu">Bekapcsoláskor azonnal nyomd le és tartsd az Option (⌥) billentyűt.</span></li>
-          <li><span class="en">Select the USB stick from the boot menu (usually labeled "EFI Boot").</span><span class="hu">Válaszd ki a USB-sticket a boot-menüből ("EFI Boot" vagy hasonló néven).</span></li>
+          <li><span class="en">Select the USB stick from the boot menu (usually labeled "EFI Boot").</span><span class="hu">Válaszd ki a USB-kulcsot a boot-menüből ("EFI Boot" vagy hasonló néven).</span></li>
         </ol>
         <p><span class="en"><i>If the Mac doesn't offer the USB as a boot option:</i> on Intel Macs, the Startup Security Utility may be set to "Full Security", which blocks external boot. Restart holding ⌘+R to enter Recovery, then select "No Security" or "Medium Security" and enable "Allow booting from external media".</span><span class="hu"><i>Ha a Mac nem ajánlja fel a USB-t:</i> Intel Mac-eken a Startup Security Utility "Full Security" beállítása blokkolhatja a külső indítást. ⌘+R-rel Recovery módba lépve, a Startup Security Utility-ben válaszd a "No Security" vagy "Medium Security" + "Allow booting from external media" opciót.</span></p>
         <h4><span class="en">Windows</span><span class="hu">Windows</span></h4>
         <ol>
           <li><span class="en">Fully shut down the machine.</span><span class="hu">Kapcsold ki a gépet teljesen.</span></li>
           <li><span class="en">As it powers on, repeatedly press the boot-menu key; commonly F12, F2, Esc or Del depending on the manufacturer.</span><span class="hu">Bekapcsoláskor nyomogasd a boot-menü billentyűt (gyártónként eltérő: leggyakrabban F12, F2, Esc vagy Del).</span></li>
-          <li><span class="en">Select the USB stick from the list.</span><span class="hu">Válaszd ki a USB-sticket a listából.</span></li>
+          <li><span class="en">Select the USB stick from the list.</span><span class="hu">Válaszd ki a USB-kulcsot a listából.</span></li>
         </ol>
         <p><span class="en"><i>If Windows won't boot the USB:</i> you may need to disable Secure Boot in the BIOS/UEFI, or enable Legacy/CSM / "boot from removable media".</span><span class="hu"><i>Ha a Windows nem indítja a USB-t:</i> a BIOS/UEFI-ben lehet, hogy ki kell kapcsolni a Secure Bootot, vagy be kell kapcsolni a Legacy/CSM vagy "boot from removable media" opciót.</span></p>
 
@@ -1242,8 +1242,8 @@ footer.ft {
           <li><span class="en">If you need an extension, contact whoever gave you the USB stick.</span><span class="hu">Ha meghosszabbításra van szükséged, vedd fel a kapcsolatot azzal, akitől a USB-kulcsot kaptad.</span></li>
         </ul>
 
-        <h3 class="mh" id="g-7"><span class="mno">7</span><span class="en">Using a larger USB stick / SSD (optional)</span><span class="hu">Nagyobb USB-stick / SSD használata (opcionális)</span></h3>
-        <p><span class="en">The writable (persistent) area is about 7.1 GB by default. If you're using a 32 GB or larger stick/SSD and want to use the extra space:</span><span class="hu">Az írható (perzisztens) terület alapból kb. 7,1 GB. Ha 32 GB-os vagy nagyobb sticket/SSD-t használsz, és ki szeretnéd használni a plusz helyet:</span></p>
+        <h3 class="mh" id="g-7"><span class="mno">7</span><span class="en">Using a larger USB stick / SSD (optional)</span><span class="hu">Nagyobb USB-kulcs / SSD használata (opcionális)</span></h3>
+        <p><span class="en">The writable (persistent) area is about 7.1 GB by default. If you're using a 32 GB or larger stick/SSD and want to use the extra space:</span><span class="hu">Az írható (perzisztens) terület alapból kb. 7,1 GB. Ha 32 GB-os vagy nagyobb kulcsot/SSD-t használsz, és ki szeretnéd használni a plusz helyet:</span></p>
         <div class="term">
           <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Linux</span></div>
           <div class="term-body"><span class="tl-dim"># 1: extend the partition into the free space:</span>
@@ -1258,7 +1258,7 @@ footer.ft {
           <table class="tbl">
             <thead><tr><th scope="col"><span class="en">Symptom</span><span class="hu">Tünet</span></th><th scope="col"><span class="en">Solution</span><span class="hu">Megoldás</span></th></tr></thead>
             <tbody>
-              <tr><td><span class="en">Nothing happens, blank/black screen</span><span class="hu">Nem indul semmi, üres/fekete képernyő</span></td><td><span class="en">Wait ~30 seconds; first boot can take a bit longer; if still blank, re-write the stick</span><span class="hu">Várj kb. 30 másodpercet; az első boot tovább tarthat; ha ennél is tovább üres marad, írd újra a sticket</span></td></tr>
+              <tr><td><span class="en">Nothing happens, blank/black screen</span><span class="hu">Nem indul semmi, üres/fekete képernyő</span></td><td><span class="en">Wait ~30 seconds; first boot can take a bit longer; if still blank, re-write the stick</span><span class="hu">Várj kb. 30 másodpercet; az első boot tovább tarthat; ha ennél is tovább üres marad, írd újra a kulcsot</span></td></tr>
               <tr><td><span class="en">Can't connect via SSH / don't know the IP</span><span class="hu">Nem sikerül az SSH-kapcsolódás / nem ismerem az IP-t</span></td><td><span class="en">Check the machine has a wired Ethernet cable plugged in (Wi-Fi is disabled by design); temporarily connect a monitor to read the IP address shown on screen right after boot</span><span class="hu">Ellenőrizd, hogy be van-e dugva a vezetékes Ethernet-kábel (a Wi-Fi szándékosan ki van kapcsolva); csatlakoztass ideiglenesen egy monitort, hogy leolvasd a boot után kiírt IP-címet</span></td></tr>
               <tr><td><span class="en">No sound during playback</span><span class="hu">Nem hallok semmit lejátszáskor</span></td><td><span class="en">Check the DAC/sound card is connected; the <code>m</code> key or selecting a different drive may help</span><span class="hu">Ellenőrizd, hogy a DAC/hangkártya csatlakoztatva van-e; az <code>m</code> billentyű vagy másik meghajtó választása segíthet</span></td></tr>
               <tr><td><span class="en">Can't find my network share</span><span class="hu">Nem találom a hálózati megosztásomat</span></td><td><span class="en">Check same network as the NAS, and address format (NFS: server:/path, SMB: //server/share)</span><span class="hu">Ellenőrizd, hogy ugyanazon a hálózaton van-e, mint a NAS, és a cím formátumát (NFS: szerver:/út, SMB: //szerver/share)</span></td></tr>
