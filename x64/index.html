@@ -504,6 +504,9 @@ table.tbl td {
 }
 table.tbl tr:last-child td { border-bottom: 0; }
 table.tbl td:first-child { color: var(--silver); white-space: nowrap; }
+table.tbl.tbl-troubleshoot { table-layout: fixed; }
+table.tbl.tbl-troubleshoot td:first-child, table.tbl.tbl-troubleshoot th:first-child { width: 34%; white-space: normal; }
+table.tbl.tbl-troubleshoot td:last-child, table.tbl.tbl-troubleshoot th:last-child { width: 66%; }
 .yes { color: var(--green-bright); font-weight: 700; }
 .no { color: var(--red); font-weight: 700; }
 .small-note { font-size: 12px; line-height: 1.5; }
@@ -860,7 +863,7 @@ footer.ft {
           <span class="chip"><span class="en">Download is <b>~920 MB</b>, writes to <b>8 GB</b></span><span class="hu">A letöltés <b>~920 MB</b>, kiírva <b>8 GB</b>-ot foglal</span></span>
           <span class="chip"><span class="en">Advanced: <code>dd</code> works too (Linux/Mac)</span><span class="hu">Haladóknak: <code>dd</code> is működik (Linux/Mac)</span></span>
         </div>
-        <div class="warn note"><span class="en"><b>If using <code>dd</code> instead of Etcher:</b> it irreversibly overwrites the target device. Always double-check the device name (<code>diskutil list</code> / <code>lsblk</code>) before pressing Enter; the wrong device means data loss.</span><span class="hu"><b>Ha az Etcher helyett <code>dd</code>-t használsz:</b> visszafordíthatatlanul felülírja a megadott eszközt. Mindig kétszer ellenőrizd az eszköznevet (<code>diskutil list</code> / <code>lsblk</code>), mielőtt Entert nyomsz; a rossz eszköz adatvesztést okoz.</span></div>
+        <div class="warn note"><span class="en"><b>If using <code>dd</code> instead of Etcher:</b> it irreversibly overwrites the target device. Always double-check the device name (<code>diskutil list</code> / <code>lsblk</code>) before pressing Enter; the wrong device means data loss.</span><span class="hu"><b>Ha az Etcher helyett <code>dd</code> használatos:</b> visszafordíthatatlanul felülírja a megadott eszközt. Az eszköznevet (<code>diskutil list</code> / <code>lsblk</code>) mindig érdemes kétszer ellenőrizni Enter lenyomása előtt; a rossz eszköz adatvesztést okoz.</span></div>
       </div>
       <div class="step-media">
         <div class="term">
@@ -893,7 +896,7 @@ footer.ft {
 <span class="tl-dim">│</span>  <span class="tl-gold">↑↓ select · Enter boot</span>
 <span class="tl-dim">└──────────────────────────────────────────┘</span></div>
         </div>
-        <p class="figure-cap"><span class="en">Mac: hold Option at power-on. Windows: press the boot-menu key repeatedly.</span><span class="hu">Mac: tartsd az Optiont bekapcsoláskor. Windows: nyomogasd a boot-menü billentyűt.</span></p>
+        <p class="figure-cap"><span class="en">Mac: hold Option at power-on. Windows: press the boot-menu key repeatedly.</span><span class="hu">Mac: az Optiont bekapcsoláskor nyomva kell tartani. Windows: a boot-menü billentyűt kell nyomogatni.</span></p>
       </div>
     </div>
 
@@ -1034,15 +1037,15 @@ footer.ft {
   <div class="wrap">
     <div class="sec-head rv">
       <p class="overline"><span class="en">TRIAL PERIOD &amp; FAQ</span><span class="hu">PRÓBAIDŐ &amp; GYIK</span></p>
-      <h2><span class="en">A trial you can actually evaluate.</span><span class="hu">Próbaidő, ami tényleg kipróbálható.</span></h2>
-      <p class="lede"><span class="en">The stick is issued as a trial unit. The point is simple: listen to it properly, then decide.</span><span class="hu">A kulcs próbapéldányként kerül kiadásra. A lényeg egyszerű: hallgasd meg rendesen, aztán döntsd el.</span></p>
+      <h2><span class="en">A trial you can extend once.</span><span class="hu">Egyszer hosszabbítható próbaidő.</span></h2>
+      <p class="lede"><span class="en">The stick is issued as a trial unit. The point is simple: listen to it properly, then decide.</span><span class="hu">A kulcs próbapéldányként kerül kiadásra. A lényeg egyszerű: érdemes rendesen meghallgatni, aztán eldönteni.</span></p>
     </div>
 
     <div class="trial-grid">
       <div class="card rv">
         <span class="c-ico">15 DAYS</span>
-        <h3><span class="en">From your first boot</span><span class="hu">Az első bootolásodtól</span></h3>
-        <p><span class="en">The trial starts counting from the first time you actually boot the stick; not from whenever it was written, so it doesn't matter how long the download link sat unopened.</span><span class="hu">A próbaidő attól a pillanattól számít, amikor ténylegesen elindítod a kulcsot; nem attól, amikor felírták, tehát nem számít, mennyi ideig hevert a letöltési link megnyitatlanul.</span></p>
+        <h3><span class="en">From your first boot</span><span class="hu">Az első bootolástól</span></h3>
+        <p><span class="en">The trial starts counting from the first time you actually boot the stick; not from whenever it was written, so it doesn't matter how long the download link sat unopened.</span><span class="hu">A próbaidő attól a pillanattól számít, amikor a kulcs ténylegesen elindul; nem attól, amikor felírták, tehát nem számít, mennyi ideig hevert a letöltési link megnyitatlanul.</span></p>
       </div>
       <div class="card rv">
         <span class="c-ico">+15 DAYS</span>
@@ -1144,13 +1147,13 @@ footer.ft {
         <h3 class="mh" id="g-2"><span class="mno">2</span><span class="en">Writing the image to the USB stick</span><span class="hu">Az image felírása a USB-kulcsra</span></h3>
         <h4><span class="en">A) Balena Etcher: recommended for everyone</span><span class="hu">A) Balena Etcher: ajánlott mindenkinek</span></h4>
         <ul>
-          <li><span class="en">Download and install Balena Etcher, plug in the stick.</span><span class="hu">Töltsd le és telepítsd a Balena Etchert, dugd be a kulcsot.</span></li>
+          <li><span class="en">Download and install Balena Etcher, plug in the stick.</span><span class="hu">Balena Etcher letöltése és telepítése; a kulcs bedugása.</span></li>
           <li><span class="en">Open Etcher → "Flash from file" → select the downloaded <code>.img.gz</code> (Etcher decompresses it automatically while writing).</span><span class="hu">Az Etcher megnyitható → "Flash from file" → kiválasztható a letöltött <code>.img.gz</code> (az Etcher írás közben automatikusan kicsomagolja).</span></li>
-          <li><span class="en">"Select target" → the USB stick; double-check the size (GB) if several drives are connected.</span><span class="hu">"Select target" → a USB-kulcs; ellenőrizd a méretet (GB), ha több meghajtó is csatlakozik.</span></li>
+          <li><span class="en">"Select target" → the USB stick; double-check the size (GB) if several drives are connected.</span><span class="hu">"Select target" → a USB-kulcs; érdemes ellenőrizni a méretet (GB), ha több meghajtó is csatlakozik.</span></li>
           <li><span class="en">"Flash!"; erases the stick and writes the image, a few minutes.</span><span class="hu">"Flash!"; törli a kulcsot és felírja az image-et, néhány percig tart.</span></li>
         </ul>
         <h4><span class="en">B) <code>dd</code>: for advanced Linux/Mac users</span><span class="hu">B) <code>dd</code>: haladó felhasználóknak, Linuxon és Mac-en</span></h4>
-        <div class="warn note"><span class="en"><b>Important safety warning:</b> <code>dd</code> irreversibly overwrites the target device. If you specify the wrong device, you will lose data. Always double-check the device name before pressing Enter.</span><span class="hu"><b>Fontos biztonsági figyelmeztetés:</b> a <code>dd</code> parancs a megadott eszközt teljesen felülírja, visszafordíthatatlanul. Mindig kétszer ellenőrizd az eszköznevet, mielőtt Entert nyomsz.</span></div>
+        <div class="warn note"><span class="en"><b>Important safety warning:</b> <code>dd</code> irreversibly overwrites the target device. If you specify the wrong device, you will lose data. Always double-check the device name before pressing Enter.</span><span class="hu"><b>Fontos biztonsági figyelmeztetés:</b> a <code>dd</code> parancs a megadott eszközt teljesen felülírja, visszafordíthatatlanul. Az eszköznevet mindig érdemes kétszer ellenőrizni Enter lenyomása előtt.</span></div>
         <div class="term">
           <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Linux / macOS</span></div>
           <div class="term-body"><span class="tl-dim"># Linux:</span>
@@ -1175,7 +1178,7 @@ footer.ft {
         <h4><span class="en">Mac (Intel)</span><span class="hu">Mac (Intel)</span></h4>
         <ol>
           <li><span class="en">Fully shut down the machine (not sleep).</span><span class="hu">Kapcsold ki a gépet teljesen (ne csak alvó állapot).</span></li>
-          <li><span class="en">As it powers on, immediately press and hold Option (⌥).</span><span class="hu">Bekapcsoláskor azonnal nyomd le és tartsd az Option (⌥) billentyűt.</span></li>
+          <li><span class="en">As it powers on, immediately press and hold Option (⌥).</span><span class="hu">Bekapcsoláskor azonnal le kell nyomni és tartani az Option (⌥) billentyűt.</span></li>
           <li><span class="en">Select the USB stick from the boot menu (usually labeled "EFI Boot").</span><span class="hu">Válaszd ki a USB-kulcsot a boot-menüből ("EFI Boot" vagy hasonló néven).</span></li>
         </ol>
         <p><span class="en"><i>If the Mac doesn't offer the USB as a boot option:</i> on Intel Macs, the Startup Security Utility may be set to "Full Security", which blocks external boot. Restart holding ⌘+R to enter Recovery, then select "No Security" or "Medium Security" and enable "Allow booting from external media".</span><span class="hu"><i>Ha a Mac nem ajánlja fel az USB-t:</i> Intel Mac-eken a Startup Security Utility "Full Security" beállítása blokkolhatja a külső indítást. ⌘+R-rel Recovery módba lépve, a Startup Security Utility-ben kiválasztható a "No Security" vagy "Medium Security" + "Allow booting from external media" opció.</span></p>
@@ -1255,7 +1258,7 @@ footer.ft {
 
         <h3 class="mh" id="g-8"><span class="mno">8</span><span class="en">Troubleshooting</span><span class="hu">Hibaelhárítás</span></h3>
         <div class="table-wrap">
-          <table class="tbl">
+          <table class="tbl tbl-troubleshoot">
             <thead><tr><th scope="col"><span class="en">Symptom</span><span class="hu">Tünet</span></th><th scope="col"><span class="en">Solution</span><span class="hu">Megoldás</span></th></tr></thead>
             <tbody>
               <tr><td><span class="en">Nothing happens, blank/black screen</span><span class="hu">Nem indul semmi, üres/fekete képernyő</span></td><td><span class="en">Wait ~30 seconds; first boot can take a bit longer; if still blank, re-write the stick</span><span class="hu">Várj kb. 30 másodpercet; az első boot tovább tarthat; ha ennél is tovább üres marad, írd újra a kulcsot</span></td></tr>
