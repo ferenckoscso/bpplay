@@ -1143,6 +1143,10 @@ feltüntetve (nem a beépített hangkártyát).</span>
         <p><span class="hu"><span class="a">A</span>Nyisd meg a tárolóválasztót (<kbd>m</kbd>, 3.2), és válaszd ki a helyes meghajtót.</span><span class="en"><span class="a">A</span>Open the storage selector (<kbd>m</kbd>, 3.2) and choose the correct drive.</span></p>
       </div>
       <div class="faq rv">
+        <h3><span class="en">"REMOTE HOST IDENTIFICATION HAS CHANGED" warning?</span><span class="hu">"REMOTE HOST IDENTIFICATION HAS CHANGED" figyelmeztetés?</span></h3>
+        <p><span class="hu"><span class="a">A</span>Ez várható, ha a <code>raspberrypi.local</code> néven korábban egy MÁSIK Pi-hez kapcsolódtál (pl. egy másik saját Pi-d ugyanazon a hálózaton), vagy az SD-kártyát újraírtad; minden készüléknek saját SSH-azonosítója van. Futtasd le: <code>ssh-keygen -R raspberrypi.local</code> (vagy a használt IP-címre), majd kapcsolódj újra.</span><span class="en"><span class="a">A</span>Expected if <code>raspberrypi.local</code> previously pointed at a DIFFERENT Pi (e.g. another Pi of your own on the same network), or the SD card was re-written; each device has its own SSH identity. Run <code>ssh-keygen -R raspberrypi.local</code> (or for the IP address you used), then reconnect.</span></p>
+      </div>
+      <div class="faq rv">
         <h3><span class="en">The device shows a message, then switches off?</span><span class="hu">A készülék üzenetet mutat, majd kikapcsol?</span></h3>
         <p><span class="hu"><span class="a">A</span>A próbaidő lejárt (1.5); vedd fel a kapcsolatot a fejlesztővel.</span><span class="en"><span class="a">A</span>The trial period has expired (1.5); contact the developer.</span></p>
       </div>
