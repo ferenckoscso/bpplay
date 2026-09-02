@@ -322,6 +322,11 @@ section + section { border-top: 1px solid var(--hairline); }
   font-size: 12.5px;
   color: var(--silver-dimmer);
 }
+.banner-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
 .pi-banner {
   display: inline-flex;
   align-items: center;
@@ -726,7 +731,10 @@ footer {
 
 <section class="hero" id="top">
   <div class="wrap">
-    <a class="pi-banner" href="pi/"><span class="tag">NEW</span><span data-i18n="hero.piBanner">Also available as a sealed Raspberry Pi 4/5 appliance</span><span class="arrow">&nbsp;&rarr;</span></a>
+    <div class="banner-row">
+      <a class="pi-banner" href="pi/"><span data-i18n="hero.piBanner">Also available as a sealed Raspberry Pi 4/5 appliance</span><span class="arrow">&nbsp;&rarr;</span></a>
+      <a class="pi-banner" href="x64/"><span data-i18n="hero.x64Banner">Also available as an x86_64 Live-USB kiosk edition</span><span class="arrow">&nbsp;&rarr;</span></a>
+    </div>
     <div class="eyebrow" data-i18n="hero.eyebrow">macOS · Core edition · v0.9.7 · GPL-3.0</div>
     <h1 data-i18n="hero.h1">The shortest<br>deterministic path<br>from <span class="accent">file</span> to <span class="accent">DAC</span>.</h1>
     <p class="hero-sub" data-i18n="hero.sub">bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched; no resampling, no software volume, no mixing.</p>
@@ -1086,6 +1094,7 @@ footer {
       "nav.download": "Download",
       "nav.press": "Blog &amp; Press",
       "hero.piBanner": "Also available as a sealed Raspberry Pi 4/5 appliance",
+      "hero.x64Banner": "Also available as an x86_64 Live-USB kiosk edition",
       "hero.eyebrow": "macOS · Core edition · v0.9.7 · GPL-3.0",
       "hero.h1": 'The shortest<br>deterministic path<br>from <span class="accent">file</span> to <span class="accent">DAC</span>.',
       "hero.sub": "bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched; no resampling, no software volume, no mixing.",
@@ -1204,6 +1213,7 @@ footer {
       "nav.x64": "x64",
       "nav.download": "Letöltés",
       "hero.piBanner": "Zárt Raspberry Pi 4/5 készülékként is elérhető",
+      "hero.x64Banner": "x86_64 Live-USB kioszk kiadásként is elérhető",
       "nav.press": "Blog és sajtó",
       "hero.eyebrow": "macOS · Core edition · v0.9.7 · GPL-3.0",
       "hero.h1": 'A legrövidebb<br>determinisztikus út<br><span class="accent">fájltól</span> a <span class="accent">DAC-ig</span>.',
