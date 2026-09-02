@@ -812,12 +812,12 @@ footer.ft {
       <div class="card rv">
         <span class="c-ico">03 · DSD</span>
         <h3><span class="en">Native DSD and DoP</span><span class="hu">Natív DSD és DoP</span></h3>
-        <p><span class="en">DSD data goes to the DAC unpackaged when the chip supports it. Support depends entirely on the DAC you plug in, not on the PC; bring your own USB DAC to find out.</span><span class="hu">A DSD adat csomagolatlanul megy a DAC-hoz, ha a chip támogatja. A támogatás teljes egészében a csatlakoztatott DAC-on múlik, nem a PC-n; hozd magaddal a saját USB DAC-odat, hogy kiderüljön.</span></p>
+        <p><span class="en">DSD data goes to the DAC unpackaged when the chip supports it. Support depends entirely on the DAC you plug in, not on the PC; bring your own USB DAC to find out.</span><span class="hu">A DSD adat csomagolatlanul megy a DAC-hoz, ha a chip támogatja. A támogatás teljes egészében a csatlakoztatott DAC-on múlik, nem a PC-n; érdemes egy saját USB DAC-ot kipróbálni, hogy kiderüljön.</span></p>
       </div>
       <div class="card rv">
         <span class="c-ico">04 · BPTUNE</span>
-        <h3><span class="en">bptune runs, but conservatively</span><span class="hu">A bptune fut, de visszafogottan</span></h3>
-        <p><span class="en">The CPU governor is set to "performance" and Turbo Boost/Precision Boost is disabled automatically at boot. Kernel-level CPU-core isolation and DAC IRQ affinity are deliberately <b>not</b> included here; they can't be safely preset on unknown hardware. This trial favors a risk-free try-out over the maximally tuned experience.</span><span class="hu">A CPU-kormányzó automatikusan "performance" módra áll, a Turbo Boost/Precision Boost kikapcsol induláskor. A kernel-szintű CPU-mag-izoláció és a DAC IRQ-affinitás szándékosan <b>nincs</b> ebben benne; ismeretlen hardveren ezt nem lehet biztonságosan előre beállítani. Ez a próbaverzió a kockázatmentes kipróbálást részesíti előnyben a maximálisan hangolt élménnyel szemben.</span></p>
+        <h3><span class="en">bptune runs, but conservatively</span><span class="hu">A zajos háttér elnémul</span></h3>
+        <p><span class="en">The CPU governor is set to "performance" and Turbo Boost/Precision Boost is disabled automatically at boot. Kernel-level CPU-core isolation and DAC IRQ affinity are deliberately <b>not</b> included here; they can't be safely preset on unknown hardware. This trial favors a risk-free try-out over the maximally tuned experience.</span><span class="hu">A bptune kikapcsolja mindazt, ami nem a zenéről szól — csak az marad, ami a lejátszáshoz feltétlenül kell. A CPU-kormányzó automatikusan "performance" módra áll, a Turbo Boost/Precision Boost kikapcsol induláskor. A kernel-szintű CPU-mag-izoláció és a DAC IRQ-affinitás szándékosan <b>nincs</b> ebben benne; ismeretlen hardveren ezt nem lehet biztonságosan előre beállítani. Ez a próbaverzió a kockázatmentes kipróbálást részesíti előnyben a maximálisan hangolt élménnyel szemben.</span></p>
       </div>
     </div>
   </div>
@@ -984,7 +984,7 @@ footer.ft {
   <div class="wrap">
     <div class="sec-head rv">
       <p class="overline"><span class="en">REFERENCE</span><span class="hu">REFERENCIA</span></p>
-      <h2><span class="en">Every key you'll ever need.</span><span class="hu">Minden billentyű, amire valaha szükséged lesz.</span></h2>
+      <h2><span class="en">Every key you'll ever need.</span><span class="hu">Minden billentyű, amire valaha szükség lehet.</span></h2>
       <p class="lede"><span class="en">The same music selector as the Raspberry Pi edition; this is the complete set.</span><span class="hu">Ugyanaz a zeneválasztó, mint a Raspberry Pi kiadásban; ez a teljes készlet.</span></p>
     </div>
 
@@ -1102,7 +1102,7 @@ footer.ft {
     <details class="mtoc-mobile">
       <summary><span class="en">Guide contents</span><span class="hu">Az útmutató tartalma</span></summary>
       <ul>
-        <li><a href="#g-1"><span class="en">1 · What you'll need</span><span class="hu">1 · Amire szükséged lesz</span></a></li>
+        <li><a href="#g-1"><span class="en">1 · What you'll need</span><span class="hu">1 · Amire szükség van</span></a></li>
         <li><a href="#g-2"><span class="en">2 · Writing the image</span><span class="hu">2 · Az image felírása</span></a></li>
         <li><a href="#g-3"><span class="en">3 · Booting from the USB stick</span><span class="hu">3 · Bootolás a USB-kulcsról</span></a></li>
         <li><a href="#g-4"><span class="en">4 · First boot and navigation</span><span class="hu">4 · Első indítás és navigáció</span></a></li>
@@ -1118,7 +1118,7 @@ footer.ft {
       <aside class="mtoc mtoc-desktop" aria-label="Guide table of contents">
         <div class="mtoc-title"><span class="en">Contents</span><span class="hu">Tartalom</span></div>
         <ul>
-          <li><a href="#g-1"><span class="en">1 · What you'll need</span><span class="hu">1 · Amire szükséged lesz</span></a></li>
+          <li><a href="#g-1"><span class="en">1 · What you'll need</span><span class="hu">1 · Amire szükség van</span></a></li>
           <li><a href="#g-2"><span class="en">2 · Writing the image</span><span class="hu">2 · Az image felírása</span></a></li>
           <li><a href="#g-3"><span class="en">3 · Booting from the USB stick</span><span class="hu">3 · Bootolás a USB-kulcsról</span></a></li>
           <li><a href="#g-4"><span class="en">4 · First boot and navigation</span><span class="hu">4 · Első indítás és navigáció</span></a></li>
@@ -1131,7 +1131,7 @@ footer.ft {
       </aside>
 
       <div class="manual-body">
-        <h3 class="mh" id="g-1"><span class="mno">1</span><span class="en">What you'll need</span><span class="hu">Amire szükséged lesz</span></h3>
+        <h3 class="mh" id="g-1"><span class="mno">1</span><span class="en">What you'll need</span><span class="hu">Amire szükség van</span></h3>
         <ul>
           <li><span class="en">A USB stick, at least 8 GB (its current contents will be erased).</span><span class="hu">Egy USB-kulcs, legalább 8 GB (a meglévő tartalma törlődik).</span></li>
           <li><span class="en"><a href="https://etcher.balena.io">Balena Etcher</a> (recommended, free, identical on Mac and Windows).</span><span class="hu"><a href="https://etcher.balena.io">Balena Etcher</a> (ajánlott, ingyenes, azonos Mac-en és Windowson).</span></li>
