@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>bpplay: the shortest deterministic path from file to DAC</title>
-<meta name="description" content="A minimalist, bit-perfect music player for macOS. Hog mode, whole-track-in-RAM, zero software processing between the file and your DAC. Free, open source.">
+<meta name="description" content="The shortest deterministic path from file to DAC: bit-perfect, memory-loaded playback, zero software processing. macOS app (free, open source); also as a Raspberry Pi appliance and x86_64 kiosk edition.">
 <meta property="og:title" content="bpplay: the shortest deterministic path from file to DAC">
-<meta property="og:description" content="A minimalist, bit-perfect music player for macOS. Free, open source, GPL-3.0.">
+<meta property="og:description" content="Bit-perfect audio, on a deterministic path from file to DAC. macOS: free, open source. Also: Raspberry Pi appliance, x86_64 kiosk edition.">
 <meta property="og:image" content="assets/og-logo.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -679,6 +679,8 @@ footer {
 }
 .footer-col a { display: block; color: var(--silver-dim); text-decoration: none; margin-bottom: 8px; }
 .footer-col a:hover { color: var(--gold); }
+.footer-col .license-line { display: block; color: var(--silver-dim); margin-bottom: 8px; }
+.footer-col .license-line a { display: inline; margin-bottom: 0; }
 .footer-bottom {
   margin-top: 48px;
   padding-top: 24px;
@@ -965,9 +967,9 @@ footer {
         <a href="https://github.com/ferenckoscso/bpplay/blob/main/docs/about-bpplay.md" data-i18n="footer.philosophy">Philosophy &amp; architecture</a>
       </div>
       <div class="footer-col">
-        <div class="footer-h" data-i18n="footer.license">License</div>
-        <a href="https://github.com/ferenckoscso/bpplay/blob/main/LICENSE">GPL-3.0-or-later</a>
-        <a href="https://github.com/ferenckoscso/bpplay/blob/main/THIRD_PARTY_NOTICES.md" data-i18n="footer.thirdParty">Third-party notices</a>
+        <div class="footer-h" data-i18n="footer.license">License (macOS Core edition)</div>
+        <div class="license-line" data-i18n="footer.licenseLine">GPL-3.0-or-later &middot; Third-party notices</div>
+        <div class="license-line" data-i18n="footer.licenseNote">Pi &amp; x86_64 editions &mdash; separate terms, see Pi / x64</div>
       </div>
       <div class="footer-col" id="press">
         <div class="footer-h" data-i18n="footer.press">Blog &amp; press</div>
@@ -1186,7 +1188,9 @@ footer {
       "footer.changelog": "Changelog",
       "footer.docs": "Documentation",
       "footer.philosophy": "Philosophy &amp; architecture",
-      "footer.license": "License",
+      "footer.license": "License (macOS Core edition)",
+      "footer.licenseLine": "<a href=\"https://github.com/ferenckoscso/bpplay/blob/main/LICENSE\">GPL-3.0-or-later</a> &middot; <a href=\"https://github.com/ferenckoscso/bpplay/blob/main/THIRD_PARTY_NOTICES.md\">Third-party notices</a>",
+      "footer.licenseNote": "Pi &amp; x86_64 editions &mdash; separate terms, see <a href=\"pi/\">Pi</a> / <a href=\"x64/\">x64</a>",
       "footer.press": "Blog &amp; press",
       "footer.medium1": "Part 1: Uncompromising architecture",
       "footer.medium1Url": "https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-software-minimalism-fbcc30753b28",
@@ -1200,8 +1204,8 @@ footer {
       "footer.medium5Url": "https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-and-when-does-it-actually-matter-9b98efaca480",
       "footer.pfHeading": "Positive Feedback (reprints, EN)",
       "footer.thirdParty": "Third-party notices",
-      "footer.copyright": "© 2026 Koscsó Ferenc. Free software; no warranty, as permitted by the GPL.",
-      "footer.privacy": "bpplay is provided \"as is\", without warranty of any kind; the developer accepts no liability for damages arising from its use, malfunction or failure, including any connected equipment. This site and the software collect, transmit, or store no usage data whatsoever; no analytics, telemetry, or tracking software runs in the background, on the site or in the software itself.",
+      "footer.copyright": "© 2026 Koscsó Ferenc. The macOS Core edition is free software, provided with no warranty, as permitted by the GPL; the Raspberry Pi appliance and x86_64 kiosk editions are distributed under separate terms.",
+      "footer.privacy": "All editions are provided \"as is\", without warranty of any kind; the developer accepts no liability for damages arising from its use, malfunction or failure, including any connected equipment. This site and the software collect, transmit, or store no usage data whatsoever; no analytics, telemetry, or tracking software runs in the background, on the site or in the software itself.",
       "footer.myReelClub": "A My Reel Club® practice, translated into software."
     },
     hu: {
@@ -1306,7 +1310,9 @@ footer {
       "footer.changelog": "Changelog",
       "footer.docs": "Dokumentáció",
       "footer.philosophy": "Filozófia és architektúra",
-      "footer.license": "Licenc",
+      "footer.license": "Licenc (macOS Core kiadás)",
+      "footer.licenseLine": "<a href=\"https://github.com/ferenckoscso/bpplay/blob/main/LICENSE\">GPL-3.0-or-later</a> &middot; <a href=\"https://github.com/ferenckoscso/bpplay/blob/main/THIRD_PARTY_NOTICES.md\">Harmadik féltől származó közlemények</a>",
+      "footer.licenseNote": "A Pi és x86_64 kiadásokra eltérő feltételek vonatkoznak, lásd: <a href=\"pi/\">Pi</a> / <a href=\"x64/\">x64</a>",
       "footer.press": "Blog és sajtó",
       "footer.medium1": "1. rész: Kompromisszummentes architektúra",
       "footer.medium1Url": "https://medium.com/@mediaengineering/bpplay-kompromisszummentes-sz%C3%A1m%C3%ADt%C3%B3g%C3%A9pes-audi%C3%B3-architekt%C3%BAra-%C3%A9s-szoftveres-minimalizmus-a842919fd73e",
@@ -1320,8 +1326,8 @@ footer {
       "footer.medium5Url": "https://medium.com/@mediaengineering/bithelyess%C3%A9g-mit-jelent-val%C3%B3j%C3%A1ban-%C3%A9s-mikor-sz%C3%A1m%C3%ADt-igaz%C3%A1n-ebdfc40f1f27",
       "footer.pfHeading": "Positive Feedback (angol nyelvű újraközlés)",
       "footer.thirdParty": "Harmadik féltől származó közlemények",
-      "footer.copyright": "© 2026 Koscsó Ferenc. Szabad szoftver; nincs garancia, a GPL által megengedett mértékben.",
-      "footer.privacy": "A bpplay „ahogy van” alapon kerül átadásra, bármilyen garancia nélkül; a fejlesztő nem vállal felelősséget a használatából, hibás működéséből vagy meghibásodásából eredő károkért, ideértve a csatlakoztatott eszközöket is. Ez az oldal és a szoftver semmilyen használati adatot nem gyűjt, nem továbbít és nem tárol; a háttérben sem az oldalon, sem magában a szoftverben nem fut semmilyen analitikai, telemetriai vagy nyomkövető eszköz.",
+      "footer.copyright": "© 2026 Koscsó Ferenc. A macOS Core kiadás szabad szoftver, garancia nélkül, a GPL által megengedett mértékben; a Raspberry Pi készüléki és x86_64 kiosk kiadásokra eltérő feltételek vonatkoznak.",
+      "footer.privacy": "Minden kiadás „ahogy van” alapon kerül átadásra, bármilyen garancia nélkül; a fejlesztő nem vállal felelősséget a használatából, hibás működéséből vagy meghibásodásából eredő károkért, ideértve a csatlakoztatott eszközöket is. Ez az oldal és a szoftver semmilyen használati adatot nem gyűjt, nem továbbít és nem tárol; a háttérben sem az oldalon, sem magában a szoftverben nem fut semmilyen analitikai, telemetriai vagy nyomkövető eszköz.",
       "footer.myReelClub": "Egy My Reel Club® gyakorlat, szoftverré fordítva."
     }
   };
