@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bpplay + bptune: press &amp; reviews</title>
+<meta name="description" content="Independent reviews, editor commentary, and real-world listener reports on bpplay + bptune.">
+<meta property="og:title" content="bpplay + bptune: press &amp; reviews">
+<meta property="og:description" content="What independent reviewers and real listeners say about bpplay + bptune.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a09'/%3E%3Ctext x='14' y='46' font-family='Arial' font-size='38' font-weight='bold' fill='%23eeeeec'%3Eb%3C/text%3E%3Cpath d='M36 22 L54 32 L36 42 Z' fill='%23df8d20'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=PT+Mono:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a09;
+  --bg-raised: #131311;
+  --bg-raised-2: #1c1c19;
+  --silver: #eeeeec;
+  --silver-dim: #948f83;
+  --silver-dimmer: #59564c;
+  --gold: #df8d20;
+  --gold-bright: #f3a53d;
+  --gold-dim: #7a5420;
+  --hairline: rgba(238,238,236,0.09);
+  --hairline-strong: rgba(238,238,236,0.16);
+  --radius: 2px;
+  --measure: 62ch;
+  --display: "Barlow Condensed", "DIN Cond", "Arial Narrow", sans-serif;
+  --body: "Charter", "Bitstream Charter", "PT Serif", Georgia, serif;
+  --mono: "PT Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --nav-h: 60px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--silver);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--gold); color: #0a0a09; }
+a { color: var(--gold-bright); text-decoration: none; }
+a:hover { color: var(--silver); text-decoration: underline; text-underline-offset: 3px; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+.wrap-wide { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+section { position: relative; padding: 56px 0; border-top: 1px solid var(--hairline); }
+h1, h2, h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  color: var(--silver);
+  text-wrap: balance;
+  margin: 0;
+}
+h2 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.1; margin-bottom: 8px; }
+h3 { font-size: 16px; letter-spacing: 0.02em; color: var(--gold-bright); margin-bottom: 4px; }
+p { margin: 0 0 16px; max-width: var(--measure); }
+.lede { font-size: 18px; color: var(--silver-dim); max-width: 60ch; }
+[data-lang="en"] .hu { display: none !important; }
+[data-lang="hu"] .en { display: none !important; }
+
+/* header / nav */
+header.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10,10,9,0.86);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: var(--nav-h); max-width: 1160px; }
+.brand { font-family: var(--mono); font-weight: 700; font-size: 15px; letter-spacing: 0.02em; color: var(--silver); text-decoration: none; white-space: nowrap; }
+.brand:hover { color: var(--gold-bright); text-decoration: none; }
+.brand .plus { color: var(--gold); }
+.brand .ed { color: var(--silver-dimmer); font-weight: 400; }
+.nav-links { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.nav-links a { font-family: var(--mono); font-size: 12.5px; letter-spacing: 0.04em; color: var(--silver-dim); padding: 7px 9px; border-radius: var(--radius); text-decoration: none; white-space: nowrap; }
+.nav-links a:hover { color: var(--silver); background: var(--bg-raised-2); text-decoration: none; }
+.nav-tools { display: flex; align-items: center; gap: 10px; }
+.lang-switch { display: inline-flex; border: 1px solid var(--hairline-strong); border-radius: var(--radius); overflow: hidden; }
+.lang-switch button { font-family: var(--mono); font-size: 11.5px; font-weight: 700; letter-spacing: 0.08em; background: transparent; color: var(--silver-dim); border: 0; padding: 6px 10px; cursor: pointer; }
+.lang-switch button.on { background: var(--gold); color: #0a0a09; }
+.lang-switch button:not(.on):hover { color: var(--silver); }
+
+/* quote cards */
+.quote-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline-strong);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 22px 26px;
+  margin: 0 0 28px;
+}
+.quote-card blockquote {
+  margin: 0 0 14px;
+  padding: 0;
+  font-family: var(--body);
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.55;
+  color: var(--silver);
+  max-width: none;
+}
+.quote-source { font-family: var(--mono); font-size: 12.5px; color: var(--silver-dim); display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; }
+.quote-source b { color: var(--silver); font-weight: 700; }
+.quote-source .tag { background: var(--bg-raised-2); border: 1px solid var(--hairline-strong); border-radius: var(--radius); padding: 1px 7px; font-size: 11px; letter-spacing: 0.04em; color: var(--silver-dim); }
+
+.link-list { list-style: none; margin: 0; padding: 0; }
+.link-list li { border-bottom: 1px solid var(--hairline); padding: 12px 0; display: flex; justify-content: space-between; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+.link-list li:last-child { border-bottom: 0; }
+.link-list .lbl { color: var(--silver); }
+.link-list .go { font-family: var(--mono); font-size: 12.5px; white-space: nowrap; }
+
+.overline { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 0 0 10px; }
+
+.field-note {
+  background: rgba(223,141,32,0.07);
+  border: 1px solid rgba(223,141,32,0.25);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  font-size: 15px;
+  color: var(--silver-dim);
+  max-width: 68ch;
+}
+.field-note b { color: var(--gold-bright); }
+
+footer.ft { border-top: 1px solid var(--hairline); padding: 40px 0 32px; background: #080807; }
+.ft p { color: var(--silver-dimmer); font-size: 12.5px; }
+.ft a { color: var(--silver-dim); }
+
+@media (max-width: 700px) {
+  .nav-links { display: none; }
+  .quote-card blockquote { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap wrap-wide">
+    <a class="brand" href="../"><span class="en">bpplay</span><span class="hu">bpplay</span><span class="plus">+</span>bptune<span class="ed"> · press</span></a>
+    <ul class="nav-links">
+      <li><a href="../"><span class="en">macOS</span><span class="hu">macOS</span></a></li>
+      <li><a href="../pi/"><span class="en">Raspberry Pi</span><span class="hu">Raspberry Pi</span></a></li>
+      <li><a href="../x64/"><span class="en">x86_64 kiosk</span><span class="hu">x86_64 kiosk</span></a></li>
+      <li><a href="../demo/"><span class="en">Live demo</span><span class="hu">Élő demó</span></a></li>
+    </ul>
+    <div class="nav-tools">
+      <div class="lang-switch" role="group" aria-label="Language / Nyelv">
+        <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-btn="hu" aria-pressed="false">HU</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:48px;">
+  <div class="wrap">
+    <p class="overline"><span class="en">INDEPENDENT VOICES<span style="color:var(--silver-dimmer);margin:0 6px;">·</span>NO PAID PLACEMENTS</span><span class="hu">FÜGGETLEN VÉLEMÉNYEK<span style="color:var(--silver-dimmer);margin:0 6px;">·</span>NINCS FIZETETT MEGJELENÉS</span></p>
+    <h1 style="font-size:clamp(30px,4.6vw,46px); margin-bottom:14px;"><span class="en">Press &amp; reviews.</span><span class="hu">Sajtó &amp; vélemények.</span></h1>
+    <p class="lede"><span class="en">What independent reviewers, editors, and real listeners have said about bpplay + bptune — quoted with the source linked, so you can read the full piece yourself.</span><span class="hu">Amit független kritikusok, szerkesztők és valódi hallgatók írtak a bpplay + bptune-ról — a forrás mindenhol linkelve, hogy magad is elolvashasd a teljes szöveget.</span></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="en">Independent reviews</span><span class="hu">Független vélemények</span></h2>
+    <p class="lede" style="margin-bottom:28px;"><span class="en">Written by reviewers with no connection to the project.</span><span class="hu">A projekthez semmilyen módon nem kötődő kritikusoktól.</span></p>
+
+    <div class="quote-card">
+      <blockquote>
+        <span class="en">&ldquo;Clean! That's the word that comes to mind. Absolutely clean. Transparent, resolving. Nothing but the plain truth. Of course, care is needed with volume, since the signal comes through unattenuated.&rdquo;</span>
+        <span class="hu">&bdquo;Sauber! Das ist das Wort das sich aufdrängt. Absolut sauber. Durchsichtig, auflösend. Nichts als die reine Wahrheit. Natürlich ist Vorsicht geboten mit der Lautstärke, da das Signal ja unabgeschwächt durchkommt.&rdquo;</span>
+      </blockquote>
+      <div class="quote-source">
+        <b>Reinhard Haberfellner</b>
+        <span class="tag">DE</span>
+        <span>&middot; <span class="en">Aug 12, 2026</span><span class="hu">2026. aug. 12.</span> &middot;</span>
+        <a href="https://haberfellner.net/2026/08/ferenc-koscso-der-grossmeister-des-puren-sounds-mit-bpplay/"><span class="en">Read the full article ↗</span><span class="hu">Teljes cikk ↗</span></a>
+      </div>
+    </div>
+
+    <div class="quote-card">
+      <blockquote>
+        <span class="en">&ldquo;What a phenomenally fine article. Ferenc has hit a grand slam about DSD, the like of which I've never seen, and which fundamentally advances the state of the art. Absolutely brilliant!&rdquo;</span>
+        <span class="hu">&bdquo;Micsoda fenomenálisan jó cikk. Ferenc telibe találta a DSD-ről szólót, ehhez foghatót még nem láttam, és alapjaiban viszi előre a szakma állását. Egyszerűen zseniális!&rdquo;</span>
+      </blockquote>
+      <div class="quote-source">
+        <b>David W. Robinson</b>
+        <span class="tag">Positive Feedback</span>
+        <span>&middot; <span class="en">editor's comment</span><span class="hu">szerkesztői komment</span> &middot;</span>
+        <a href="https://positive-feedback.com/reviews/music-reviews/bpplay-bit-perfect-playback-software-solution-part3/"><span class="en">Read the article ↗</span><span class="hu">Cikk ↗</span></a>
+      </div>
+    </div>
+
+    <h3 style="margin-top:32px;"><span class="en">Positive Feedback, full 3-part review</span><span class="hu">Positive Feedback, teljes 3 részes teszt</span></h3>
+    <ul class="link-list">
+      <li><span class="lbl"><span class="en">Part 1</span><span class="hu">1. rész</span></span><a class="go" href="https://pollux.positive-feedback.com/audio-discourse/bplay-bit-perfect-playback-software-solution-part1/">positive-feedback.com ↗</a></li>
+      <li><span class="lbl"><span class="en">Part 2</span><span class="hu">2. rész</span></span><a class="go" href="https://pollux.positive-feedback.com/audio-discourse/bpplay-bit-perfect-playback-software-solution-part2/">positive-feedback.com ↗</a></li>
+      <li><span class="lbl"><span class="en">Part 3</span><span class="hu">3. rész</span></span><a class="go" href="https://positive-feedback.com/reviews/music-reviews/bpplay-bit-perfect-playback-software-solution-part3/">positive-feedback.com ↗</a></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="en">From the developer</span><span class="hu">A fejlesztőtől</span></h2>
+    <p class="lede" style="margin-bottom:28px;"><span class="en">Self-authored technical essays — not third-party reviews, listed here for transparency.</span><span class="hu">Saját szerzésű, technikai esszék — nem független vélemények, az átláthatóság kedvéért itt is felsorolva.</span></p>
+    <ul class="link-list">
+      <li><span class="lbl"><span class="en">Part 1: Uncompromising architecture</span><span class="hu">1. rész: Kompromisszummentes architektúra</span></span><a class="go" href="https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-software-minimalism-fbcc30753b28">Medium ↗</a></li>
+      <li><span class="lbl"><span class="en">Part 2: What happens under the hood</span><span class="hu">2. rész: Mi történik a motorháztető alatt</span></span><a class="go" href="https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-85d5159bb739">Medium ↗</a></li>
+      <li><span class="lbl"><span class="en">Part 3: Memory-based playback in 2026</span><span class="hu">3. rész: Memória-alapú lejátszás 2026-ban</span></span><a class="go" href="https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-7199a2921b53">Medium ↗</a></li>
+      <li><span class="lbl"><span class="en">Part 4: Linux/Windows optimization</span><span class="hu">4. rész: Linux/Windows optimalizáció</span></span><a class="go" href="https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-possibilities-for-high-end-audio-playback-c2e6c8c1fee0">Medium ↗</a></li>
+      <li><span class="lbl"><span class="en">Part 5: What bit-perfect really means</span><span class="hu">5. rész: Mit jelent valójában a bit-perfect</span></span><a class="go" href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-and-when-does-it-actually-matter-9b98efaca480">Medium ↗</a></li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="en">In the field</span><span class="hu">Éles használatban</span></h2>
+    <p class="lede" style="margin-bottom:28px;"><span class="en">Real setups, from hi-fi community discussions — not formal reviews, just honest technical chatter.</span><span class="hu">Valódi felállások, hifis közösségi beszélgetésekből — nem hivatalos tesztek, csak őszinte technikai csevegés.</span></p>
+
+    <div class="quote-card">
+      <blockquote>
+        <span class="en">&ldquo;Today I converted a genuinely high-grade build — linear power supply, Pink Faun OCXO ultra-clocked motherboard, Matrix Audio USB card, and a Core Audio Ethernet card, running Windows 11 — into a dual-boot machine, and the Debian Linux side now runs my bpplay+bptune audio file player. It was a struggle, but I think it was worth it. The manual for the app is done too.&rdquo;</span>
+        <span class="hu">&bdquo;Ma egy igen nívós kivitelű, lineáris tápos, Pink Faun OCXO ultra clockolt alaplapos, Matrix Audio USB kártyás és Core Audio Ethernet kártyás Windows 11 operációs rendszerű gépet alakíthattam át dual bootosra, és a debian linuxos részén fut a bpplay+bptune audio file lejátszó alkalmazásom. Küzdelmes volt, de azt hiszem megérte. Elkészült a kézikönyv is az alkalmazáshoz.&rdquo;</span>
+      </blockquote>
+      <div class="quote-source">
+        <b>kaef2</b>
+        <span class="tag"><span class="en">developer's own post</span><span class="hu">a fejlesztő saját posztja</span></span>
+      </div>
+    </div>
+
+    <div class="field-note">
+      <span class="en"><b>Note:</b> a companion quote from an independent forum member is in progress and will be added here shortly.</span>
+      <span class="hu"><b>Megjegyzés:</b> egy független fórumtag idézete hamarosan idekerül.</span>
+    </div>
+  </div>
+</section>
+
+<footer class="ft">
+  <div class="wrap">
+    <p><span class="en">Quotes are reproduced with attribution and a link to the original source. See the <a href="../">macOS</a>, <a href="../pi/">Raspberry Pi</a>, or <a href="../x64/">x86_64 kiosk</a> pages for the software itself, or <a href="../demo/">try the live demo</a>.</span><span class="hu">Az idézetek forrásmegjelöléssel és az eredeti forrásra mutató linkkel szerepelnek. A szoftverhez lásd a <a href="../">macOS</a>, <a href="../pi/">Raspberry Pi</a> vagy <a href="../x64/">x86_64 kiosk</a> oldalt, vagy <a href="../demo/">próbáld ki az élő demót</a>.</span></p>
+    <p>&copy; 2026 Koscsó Ferenc.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  function setLang(lang, persist) {
+    lang = lang === "hu" ? "hu" : "en";
+    root.setAttribute("data-lang", lang);
+    root.setAttribute("lang", lang);
+    document.querySelectorAll(".lang-switch button").forEach(function (b) {
+      var on = b.getAttribute("data-lang-btn") === lang;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (persist) { try { localStorage.setItem("bpdemo-lang", lang); } catch (e) {} }
+  }
+  var savedLang = null;
+  try { savedLang = localStorage.getItem("bpdemo-lang"); } catch (e) {}
+  document.querySelectorAll(".lang-switch button").forEach(function (b) {
+    b.addEventListener("click", function () { setLang(b.getAttribute("data-lang-btn"), true); });
+  });
+  if (savedLang === "hu" || savedLang === "en") { setLang(savedLang, false); }
+  else if ((navigator.language || "").toLowerCase().indexOf("hu") === 0) { setLang("hu", false); }
+  else { setLang("en", false); }
+})();
+</script>
+</body>
+</html>
