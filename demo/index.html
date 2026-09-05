@@ -192,6 +192,21 @@ header.nav {
 .dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
 .dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
 .term-title { margin-left: 8px; font-size: 11px; color: var(--silver-dim); letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.term-help-btn {
+  margin-left: auto;
+  flex: 0 0 auto;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--hairline-strong);
+  background: transparent;
+  color: var(--silver-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+.term-help-btn:hover { color: var(--gold-bright); border-color: var(--gold-dim); }
 .term-body {
   padding: 16px 18px;
   overflow-x: auto;
@@ -305,12 +320,13 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
       <div class="term-bar">
         <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
         <span class="term-title">demo@bpplay: zenevalaszto</span>
+        <button type="button" class="term-help-btn" id="helpBtn" aria-label="Help / Súgó">?</button>
       </div>
       <pre class="term-body" id="termBody" tabindex="0" aria-label="Interactive music selector demo terminal"></pre>
       <div class="term-status" id="termStatus" style="display:none;"></div>
     </div>
     <p class="term-focus-note">
-      <span class="en">Click the terminal, then use your keyboard.</span><span class="hu">Kattints a terminálba, aztán használd a billentyűzeted.</span>
+      <span class="en">Click the terminal, then use your keyboard — press <kbd>?</kbd> any time for a quick key reference.</span><span class="hu">Kattints a terminálba, aztán használd a billentyűzeted — bármikor nyomj <kbd>?</kbd>-et egy gyors billentyű-puskáért.</span>
     </p>
 
     <div class="touch-pad" id="touchPad">
@@ -336,6 +352,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
         <button class="touch-key" data-key="p">p</button>
         <button class="touch-key" data-key="b">b</button>
         <button class="touch-key" data-key="q">q</button>
+        <button class="touch-key" data-key="?">?</button>
       </div>
     </div>
   </div>
@@ -416,6 +433,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     netPromptBadFormat: { en: "Can't recognize the address format (NFS: server:/path, SMB: //server/share).", hu: "Nem ismerhető fel a cím formátuma (NFS: szerver:/út, SMB: //szerver/share)." },
     netMounting: { en: "Mounting ({fstype}): {addr} -> {mp} ...", hu: "Csatolás ({fstype}): {addr} -> {mp} ..." },
     netMounted: { en: "Mounted: {mp}", hu: "Csatolva: {mp}" },
+    helpHeader: { en: " Help — Esc to close ", hu: " Súgó — Esc a bezáráshoz " },
     browserHint: function (path) {
       return {
         en: " " + (path.length ? path.join("/") : "/") + " — Up/Down | Enter=open | Space=select | Esc=up | a=all | n=clear | r=repeat | /=search | m=drives | o=output | p=play ",
@@ -525,6 +543,57 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     return tr(T.rootItemCustom);
   }
 
+  /* ---------- contextual help ('?') ---------- */
+  var HELP_ROWS = {
+    device: [
+      { k: "↑ / ↓", d: { en: "Move", hu: "Mozgás" } },
+      { k: "Enter", d: { en: "Select this output", hu: "Kimenet kiválasztása" } }
+    ],
+    root: [
+      { k: "↑ / ↓", d: { en: "Move", hu: "Mozgás" } },
+      { k: "Enter", d: { en: "Select / mount", hu: "Kiválasztás / csatolás" } },
+      { k: "q / Esc", d: { en: "Back to the browser", hu: "Vissza a böngészőbe" } }
+    ],
+    netprompt: [
+      { k: "type", d: { en: "Enter the address", hu: "Cím beírása" } },
+      { k: "Enter", d: { en: "Mount", hu: "Csatolás" } },
+      { k: "Esc", d: { en: "Cancel", hu: "Mégse" } }
+    ],
+    mounting: [
+      { k: "—", d: { en: "Please wait, mounting...", hu: "Kis türelmet, csatolás folyamatban..." } }
+    ],
+    browser: [
+      { k: "↑ / ↓", d: { en: "Move in the list", hu: "Mozgás a listában" } },
+      { k: "Enter", d: { en: "Open folder", hu: "Mappa megnyitása" } },
+      { k: "Space", d: { en: "Select track / whole folder", hu: "Track / egész mappa kijelölése" } },
+      { k: "Esc", d: { en: "Go up one level", hu: "Egy szinttel feljebb" } },
+      { k: "a", d: { en: "Select all here", hu: "Mind kijelölése itt" } },
+      { k: "n", d: { en: "Clear selection", hu: "Kijelölés törlése" } },
+      { k: "r", d: { en: "Toggle repeat", hu: "Ismétlés ki/be" } },
+      { k: "/", d: { en: "Search", hu: "Keresés" } },
+      { k: "m", d: { en: "Storage selector", hu: "Tárterület-választó" } },
+      { k: "o", d: { en: "Output selector", hu: "Kimenet-választó" } },
+      { k: "p", d: { en: "Play the selection", hu: "Lejátszás indítása" } }
+    ],
+    playing: [
+      { k: "Space", d: { en: "Pause / resume", hu: "Szünet / folytatás" } },
+      { k: "n", d: { en: "Next track", hu: "Következő track" } },
+      { k: "b", d: { en: "Previous track", hu: "Előző track" } },
+      { k: "q", d: { en: "Stop playback", hu: "Lejátszás leállítása" } }
+    ]
+  };
+  function renderHelp() {
+    termBody.appendChild(line(tr(T.helpHeader), "term-hint"));
+    termBody.appendChild(document.createTextNode("\n\n"));
+    var rows = HELP_ROWS[state.screen] || [];
+    var keyWidth = rows.reduce(function (w, r) { return Math.max(w, r.k.length); }, 0);
+    rows.forEach(function (r) {
+      var pad = r.k + new Array(Math.max(0, keyWidth - r.k.length + 3)).join(" ");
+      termBody.appendChild(line("  " + pad + tr(r.d), "tl-white"));
+      termBody.appendChild(document.createTextNode("\n"));
+    });
+  }
+
   function humanKhz(hz) {
     if (!hz) return "?";
     return (hz % 1000 === 0 ? (hz / 1000) : (hz / 1000).toFixed(1)) + "kHz";
@@ -556,6 +625,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     deviceReturnScreen: "root", // where to go after confirming a device
     netInput: "",           // text typed into the network-share prompt
     mountMsg: "",           // status line shown on the "mounting" screen
+    helpOpen: false,         // '?' contextual help overlay
     play: null              // { segments, segIndex, trackIndex, audio, paused }
   };
 
@@ -612,6 +682,11 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
   function render() {
     termBody.innerHTML = "";
     termStatus.style.display = "none";
+
+    if (state.helpOpen) {
+      renderHelp();
+      return;
+    }
 
     if (state.screen === "device") {
       termBody.appendChild(line(tr(T.deviceHeader), "term-hint"));
@@ -757,6 +832,12 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
   }
 
   function handleKey(key) {
+    if (key === "?") { state.helpOpen = !state.helpOpen; render(); return; }
+    if (state.helpOpen) {
+      if (key === "Escape") { state.helpOpen = false; render(); }
+      return;
+    }
+
     state.statusMsg = "";
 
     if (state.screen === "device") {
@@ -932,7 +1013,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
 
   /* ---------- input wiring ---------- */
   termBody.addEventListener("keydown", function (ev) {
-    var typingChar = state.screen === "netprompt" ? /^[\x20-\x7e]$/.test(ev.key) : /^[a-zA-Z/]$/.test(ev.key);
+    var typingChar = state.screen === "netprompt" ? /^[\x20-\x7e]$/.test(ev.key) : /^[a-zA-Z/?]$/.test(ev.key);
     var handled = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Escape", " ", "Backspace"].indexOf(ev.key) !== -1
       || typingChar;
     if (handled) { ev.preventDefault(); handleKey(ev.key); }
@@ -943,6 +1024,13 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
       handleKey(btn.getAttribute("data-key"));
     });
   });
+  var helpBtn = document.getElementById("helpBtn");
+  if (helpBtn) {
+    helpBtn.addEventListener("click", function () {
+      termBody.focus();
+      handleKey("?");
+    });
+  }
 
   /* init */
   state.cursor = defaultDeviceCursor();
