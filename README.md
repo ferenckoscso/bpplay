@@ -11,6 +11,15 @@
 
 `v0.9` · Core edition · GPL-3.0-or-later
 
+🌐 [Website](https://ferenckoscso.github.io/bpplay) ·
+🎛️ [Try the live demo](https://ferenckoscso.github.io/bpplay/demo/) ·
+📰 [Press & reviews](https://ferenckoscso.github.io/bpplay/press/)
+
+This repo is the **macOS Core edition** (source, CLI). bpplay + bptune is also available as a
+sealed [Raspberry Pi 4/5 appliance](https://ferenckoscso.github.io/bpplay/pi/) and an
+[x86_64 Live-USB kiosk edition](https://ferenckoscso.github.io/bpplay/x64/) — both boot straight
+into a curses-based music browser, no keyboard/screen required after setup.
+
 ---
 
 ## What is this?
@@ -122,6 +131,15 @@ cases: the bit path is independent of the connection method.
 ---
 
 ## Magyar
+
+🌐 [Weboldal](https://ferenckoscso.github.io/bpplay) ·
+🎛️ [Élő demó kipróbálása](https://ferenckoscso.github.io/bpplay/demo/) ·
+📰 [Sajtó és vélemények](https://ferenckoscso.github.io/bpplay/press/)
+
+Ez a repó a **macOS Core kiadás** (forráskód, parancssoros). A bpplay + bptune elérhető zárt
+[Raspberry Pi 4/5 készülékként](https://ferenckoscso.github.io/bpplay/pi/) és
+[x86_64 Live-USB kiosk kiadásként](https://ferenckoscso.github.io/bpplay/x64/) is — mindkettő
+egyből egy curses-alapú zeneböngészőbe bootol, beállítás után billentyűzet/monitor nélkül is.
 
 A bpplay egy minimalista, bithelyes zenelejátszó macOS-re. Egyetlen célja van: a zenei fájl
 mintáit a lehető legrövidebb, determinisztikus úton, érintetlenül eljuttatni a DAC-hoz.
