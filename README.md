@@ -9,7 +9,7 @@
 
 **A bit-perfect music player for macOS — the shortest deterministic signal path from file to DAC.**
 
-`v0.9` · Core edition · GPL-3.0-or-later
+`v0.9.7` · Core edition · GPL-3.0-or-later
 
 🌐 [Website](https://ferenckoscso.github.io/bpplay) ·
 🎛️ [Try the live demo](https://ferenckoscso.github.io/bpplay/demo/) ·
@@ -39,12 +39,25 @@ floating-point mixing and software volume. bpplay bypasses all of it:
   there is no disk I/O during playback, and the realtime IOProc does nothing but `memcpy`
 - **A single format-matching step** — once, at load time, lossless, off the realtime thread
 
+## Other editions
+
+This repo is the macOS core edition. Linux users can try bpplay too, without installing anything —
+see [ferenckoscso.github.io/bpplay](https://ferenckoscso.github.io/bpplay/) for details:
+
+- **[Raspberry Pi appliance edition](https://ferenckoscso.github.io/bpplay/pi/)** — a sealed
+  Pi 4/5 device that boots straight into the music selector, controlled over SSH.
+- **[x86_64 Live-USB kiosk edition](https://ferenckoscso.github.io/bpplay/x64/)** — boot any
+  Intel/AMD PC from a USB stick and try it risk-free; your computer stays untouched.
+
+Both are separately licensed trial editions (not GPL); see the linked pages for details.
+
 ## Supported formats
 
 | Format | Details |
 |---|---|
 | WAV | 16 / 24 / 32-bit integer and 32-bit float |
 | FLAC | 16 / 24-bit, with Vorbis metadata and MQA **detection** (not decoding) |
+| ALAC (in M4A) | 16 / 24-bit — what iTunes/Music.app produce |
 | AIFF / AIFC | 16 / 24 / 32-bit, uncompressed only (`NONE` / `sowt`) |
 | DSF (DSD) | DSD64 – DSD256 via DoP (the architecture scales to DSD512) |
 
@@ -90,6 +103,21 @@ make universal
 
 During playback: `n` next · `b` previous · `space` pause/resume · `q` quit
 
+## Drag-and-drop, or right-click — without the terminal
+
+The DMG also bundles two zero-configuration launchers, both self-contained (the `bpplay` binary is
+bundled inside each) and both playing on the system's default output device:
+
+- **`bpplay drop.app`** — drop a file, several files, or a whole album folder onto its icon, and
+  playback starts in a Terminal window (transport keys still work there).
+- **`bpplay play.workflow`** — a Finder Quick Action. Copy it once into `~/Library/Services/` (see
+  the DMG readme), then select files/a folder anywhere in Finder, right-click, and choose
+  "bpplay play".
+
+If you want a specific DAC instead of the system default, either use `-d <index>` from Terminal, or
+build your own custom Automator app with a fixed device index — see
+[`tools/bpplay-drop.sh`](tools/bpplay-drop.sh) and the manual's drag-and-drop chapter.
+
 ## Things worth knowing
 
 - **Memory use can exceed the file size** — by design. The whole track lives in RAM, and the
@@ -104,8 +132,10 @@ During playback: `n` next · `b` previous · `space` pause/resume · `q` quit
   was written, never a music sample, so the audible content stays bit-exact. For DoP/DSD the
   ramp is disabled on purpose, because scaling a DoP word would destroy its marker byte.
 - The queue is limited to 256 files per invocation.
-- bpplay is **not notarised**. Gatekeeper will warn on first launch. Either right-click →
-  "Open" in Finder, or run `xattr -d com.apple.quarantine bpplay` once.
+- The `bpplay` binary and `bpplay drop.app` are **signed and notarised** (since v0.9.7) — no
+  Gatekeeper warning on first launch. `bpplay play.workflow` (the Quick Action) is signed but
+  cannot be notarised: Apple's `stapler` tool does not support `.workflow` bundles, so it still
+  needs the one-time bypass on first use — see the DMG readme.
 
 ## Requirements
 
@@ -124,9 +154,15 @@ cases: the bit path is independent of the connection method.
 - [`docs/about-bpplay.md`](docs/about-bpplay.md) — philosophy and architecture (EN / HU)
 - [`docs/bpplay-manual-en.pdf`](docs/bpplay-manual-en.pdf) — full user manual (English)
 - [`docs/bpplay-manual-hu.pdf`](docs/bpplay-manual-hu.pdf) — full user manual (Hungarian)
-- [`tools/bpplay-drop.sh`](tools/bpplay-drop.sh) — drag-and-drop launcher for an Automator
-  application, also runnable on its own. Set `BPPLAY` and `DEVICE` at the top before first use,
-  and run `chmod +x tools/bpplay-drop.sh` after cloning.
+- [`docs/bpplay-install-demo.mp4`](docs/bpplay-install-demo.mp4) — short screen-recorded walkthrough of installing and using bpplay
+- `bpplay drop.app` / `bpplay play.workflow` (in the DMG) — ready-to-use launchers, zero
+  configuration, each bundles its own `bpplay` binary. See "Drag-and-drop, or right-click" above.
+- [`tools/bpplay-drop.sh`](tools/bpplay-drop.sh) — the same drag-and-drop logic as a standalone
+  script, for building your **own** custom Automator app with a fixed output device. Set `BPPLAY`
+  and `DEVICE` at the top before first use, and run `chmod +x tools/bpplay-drop.sh` after cloning.
+- [`tools/build-dmg.sh`](tools/build-dmg.sh) / [`tools/build-drop-app.sh`](tools/build-drop-app.sh)
+  / [`tools/build-quickaction.sh`](tools/build-quickaction.sh) — reproducible build scripts for the
+  release DMG and the two bundled launchers.
 
 ---
 
@@ -149,6 +185,18 @@ A szokásos macOS-lejátszók a CoreAudio rendszermixerén keresztül dolgoznak,
 lebegőpontos keverést és szoftveres hangerőt visz a láncba. A bpplay ezt megkerüli: hog mode
 (kizárólagos eszköz-hozzáférés), integer mode, teljes-RAM modell `mlock`-kal, és egyetlen,
 betöltéskori formátum-illesztés — a valós idejű szálon már csak `memcpy` fut.
+
+### Egyéb kiadások
+
+Ez a repó a macOS-es core kiadás. Linux alól is kipróbálható a bpplay, telepítés nélkül —
+részletek: [ferenckoscso.github.io/bpplay](https://ferenckoscso.github.io/bpplay/).
+
+- **[Raspberry Pi készülék-kiadás](https://ferenckoscso.github.io/bpplay/pi/)** — zárt Pi 4/5
+  eszköz, ami egyenesen a zeneválasztóba bootol, SSH-n keresztül vezérelve.
+- **[x86_64 Live-USB kiosk kiadás](https://ferenckoscso.github.io/bpplay/x64/)** — bármely
+  Intel/AMD gép bootolható USB-kulcsról, kockázatmentesen kipróbálható; a géped érintetlen marad.
+
+Mindkettő külön licencelt próbakiadás (nem GPL); részletek a linkelt oldalakon.
 
 Fordítás: `cd src && make` (nulla külső függőség, az Xcode parancssori eszközei kellenek).
 Magyar nyelvű üzenetek: `-hu` kapcsoló.

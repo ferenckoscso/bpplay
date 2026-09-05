@@ -3,6 +3,138 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.7] — 2026-08-16
+
+### Added
+- **Developer ID signing + Apple notarization** for the `bpplay` binary and `bpplay drop.app` —
+  both now launch with zero Gatekeeper warnings, even on a freshly downloaded copy. `bpplay
+  play.workflow` (the Quick Action) is signed too, but Apple's notarization tooling does not
+  support `.workflow` bundles (`stapler` explicitly refuses them: "Stapler is incapable of
+  working with Workflow files") — it still needs the one-time bypass, now documented as applying
+  only to that one item plus the plain-script "Remove old version.command" (which also can't be
+  notarized, being a script rather than a signed executable/bundle).
+- `tools/build-dmg.sh`, `tools/build-drop-app.sh`, `tools/build-quickaction.sh` all sign with the
+  real "Developer ID Application" identity when it's present in the keychain and a
+  `notarytool` credential profile (`bpplay-notarize`) is set up, submitting the finished DMG for
+  notarization and stapling the ticket — with automatic fallback to the previous ad-hoc/unsigned
+  behavior on a machine without those set up, so the scripts keep working either way.
+
+### Why
+The user obtained an Apple Developer account and Developer ID certificate specifically to close
+the Gatekeeper friction documented across the v0.9.6 patches (PRs #11-#13). Setup hit two real
+obstacles worth recording: a stray user-level Trust Settings override on the leaf certificate
+itself (`kSecTrustSettingsResultTrustAsRoot` across every policy, likely from an accidental
+"Always Trust" click) caused a misleading `errSecInternalComponent` chain-building failure that
+had nothing to do with the certificate chain itself — removed via `security remove-trusted-cert`.
+Signing `bpplay play.workflow` also needed `--deep` specifically (unlike the drop.app), since a
+`.workflow` bundle has no `CFBundleExecutable`/`CFBundlePackageType`, and without `--deep`
+codesign refuses with "code object is not signed at all" on the loose `Contents/document.wflow`
+file.
+
+## [0.9.6] — 2026-08-16
+
+### Added
+- **"Remove old version.command"** (bilingual HU/EN), bundled in the DMG — an optional,
+  double-clickable helper for people upgrading from a previous bpplay version. Finds old
+  `bpplay` / `bpplay drop.app` / `bpplay play.workflow` copies in the usual install locations,
+  shows what it found, and — only after explicit confirmation — moves them to the Trash (never a
+  permanent delete). Only matches the plain `bpplay` binary candidates as regular files, never
+  directories, so an unrelated folder that happens to be named "bpplay" (e.g. a git checkout)
+  can't be swept up by mistake.
+
+### Fixed
+- The DMG's `bpplay` binary and `bpplay drop.app` shipped without the bpplay logo as their
+  Finder icon — both showed a generic icon instead. Root cause: `osacompile` bakes its own
+  compiled asset catalog (`Assets.car`, holding Apple's stock "droplet" template icon) into
+  every AppleScript applet it builds, and on current macOS that compiled catalog wins icon
+  resolution over the classic `CFBundleIconFile` + `.icns` pair, even when the latter correctly
+  points at a bundled custom icon. `tools/build-drop-app.sh` now removes the stock `Assets.car`
+  after compiling, letting the bundled `droplet.icns` (the actual bpplay logo) take effect. The
+  plain `bpplay` CLI binary never had a Finder icon at all (it isn't a bundle, so it has no
+  `Info.plist` to carry one) — a new `tools/set-file-icon.sh` (NSWorkspace via JXA, no external
+  dependency) now stamps a custom Finder icon onto it directly during the DMG build.
+
+### Why
+Reported after downloading the v0.9.5 DMG onto a fresh machine/account: neither the app nor the
+drop script showed the icon set that had been designed for them weeks earlier.
+
+## [0.9.5] — 2026-08-12
+
+### Fixed
+- Right-clicking a lossy AAC `.m4a` file (an iTunes/Music.app purchase, most commonly) — which
+  the "bpplay play" Quick Action makes directly reachable — produced a codec-jargon error
+  (`M4A: no ALAC audio track found`) instead of a plain explanation. Now says outright: this is
+  AAC, not Apple Lossless, and bpplay does not decode lossy audio.
+
+### Why
+Caught during a review of the Quick Action's real-world failure modes ahead of wider release:
+an M4A file being lossless is not something a user can tell from the file icon, and the Quick
+Action's whole point is to be reachable without knowing anything about codecs.
+
+## [0.9.4] — 2026-08-11
+
+### Added
+- **ALAC (Apple Lossless) playback, in the M4A container** (`.m4a`) — the same bit-perfect,
+  whole-track-in-RAM path as WAV/FLAC/AIFF. Handles 16 and 24-bit ALAC (what iTunes/Music.app
+  actually produce), any channel count, `-dir` folder playback and mixed-format playlists.
+  Verified bit-exact: decoding a set of ALAC-encoded 16-bit/44.1kHz and 24-bit/96kHz test files
+  and comparing byte-for-byte against the original PCM showed zero differing bytes across both.
+- `src/alac.h` — Apple's own open-sourced ALAC reference decoder (Apache License 2.0), vendored
+  as a single header in the same style as `dr_flac.h`. The codec math is Apple's C source
+  essentially verbatim; the one C++ file in that project (a thin orchestration class) was ported
+  to plain C by hand so the build stays a single C translation unit. See the file header for the
+  full account, and `THIRD_PARTY_NOTICES.md` for the license text.
+
+### Fixed
+- The upstream ALAC endianness-detection macro only recognised `__i386__`/`__x86_64__`, silently
+  treating Apple Silicon as big-endian — which would have corrupted every multi-byte field in the
+  magic cookie on an arm64 build. Fixed while vendoring, before it ever shipped.
+
+### Why
+Requested after shipping v0.9.3: iTunes/Music.app rips and purchases are commonly ALAC-in-M4A,
+and until now bpplay had no way to play them bit-perfect without a manual re-encode to FLAC.
+
+## [0.9.3] — 2026-08-11
+
+### Added
+- **`bpplay play.workflow`**, bundled directly in the DMG — a self-contained Finder Quick Action.
+  Select one or more music files, or a single album folder, anywhere in Finder, right-click, and
+  choose "bpplay play". Same zero-configuration design as `bpplay drop.app` (bundles its own copy
+  of the `bpplay` binary, plays on the system's default output device). Requires a one-time copy
+  into `~/Library/Services/` — documented in the DMG readme.
+- `tools/build-quickaction.sh`, `tools/set-quickaction-command.py` — reproducible build for the
+  Quick Action (the Automator `.workflow` document skeleton, `tools/bpplay-play.workflow-template/`,
+  was authored once by hand in Automator.app and is tracked as a template).
+
+### Why
+Suggested by a user after trying `bpplay drop.app`: a right-click "play with bpplay" option (the
+same UX pattern as macOS's built-in "Quick Actions") complements drag-and-drop for people who'd
+rather select files in place than drag them onto an icon.
+
+## [0.9.2] — 2026-08-11
+
+### Fixed
+- `bpplay drop.app`'s no-files-dropped dialog was in Hungarian regardless of the user's language
+  (a leftover from development). It's now in English, matching the project's primary language.
+  (Reported by a v0.9.1 user.)
+
+## [0.9.1] — 2026-08-11
+
+### Added
+- `bpplay drop.app`, bundled directly in the DMG — a self-contained drag-and-drop launcher
+  (AppleScript droplet). No Automator setup, no path/device configuration: drop a file, several
+  files, or an album folder onto its icon, and playback starts in a Terminal window on the
+  system's default output device. The `bpplay` binary is bundled inside the app itself.
+- `tools/build-drop-app.sh` and `tools/build-dmg.sh` — reproducible build scripts for the drop
+  app and the full release DMG (previously an untracked, manual process).
+- `tools/main.applescript` / `tools/bpplay-drop-runtime.sh` — source for the bundled drop app.
+
+### Why
+Feedback from the first GitHub downloaders showed that the manual Automator-app setup (open
+Automator, add a Run Shell Script action, paste the script body, hand-edit two variables) was
+too high a bar for non-technical users, who never made it to actual drag-and-drop playback.
+The new bundled app needs zero setup.
+
 ## [0.9] — 2026-06-17
 
 First public release (release candidate) — macOS Core edition.
