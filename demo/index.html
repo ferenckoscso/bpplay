@@ -349,6 +349,8 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
         <button class="touch-key" data-key="r">r</button>
         <button class="touch-key" data-key="m">m</button>
         <button class="touch-key" data-key="o">o</button>
+        <button class="touch-key" data-key="s">s</button>
+        <button class="touch-key" data-key="l">l</button>
         <button class="touch-key" data-key="p">p</button>
         <button class="touch-key" data-key="b">b</button>
         <button class="touch-key" data-key="q">q</button>
@@ -372,6 +374,8 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
       <div class="key-row"><span><kbd>r</kbd></span><span class="f"><span class="en">Toggle repeat</span><span class="hu">Ismétlés ki/be</span></span></div>
       <div class="key-row"><span><kbd>m</kbd></span><span class="f"><span class="en">Storage selector — mount a USB drive or NFS/SMB network share</span><span class="hu">Tárterület-választó — USB meghajtó vagy NFS/SMB hálózati megosztás csatolása</span></span></div>
       <div class="key-row"><span><kbd>o</kbd></span><span class="f"><span class="en">Output (DAC) selector, even mid-playback</span><span class="hu">Kimenet (DAC) választó, lejátszás közben is</span></span></div>
+      <div class="key-row"><span><kbd>s</kbd></span><span class="f"><span class="en">Save the current selection as a playlist</span><span class="hu">Jelenlegi kijelölés mentése playlistaként</span></span></div>
+      <div class="key-row"><span><kbd>l</kbd></span><span class="f"><span class="en">Load a saved playlist</span><span class="hu">Mentett playlista betöltése</span></span></div>
       <div class="key-row"><span><kbd>p</kbd></span><span class="f"><span class="en">Start playback of the selection</span><span class="hu">Lejátszás indítása a kijelölésből</span></span></div>
       <div class="key-row"><span><kbd>b</kbd></span><span class="f"><span class="en">Previous track (playback)</span><span class="hu">Előző track (lejátszás)</span></span></div>
       <div class="key-row"><span><kbd>Space</kbd></span><span class="f"><span class="en">Pause / resume (playback)</span><span class="hu">Szünet / folytatás (lejátszás)</span></span></div>
@@ -434,10 +438,23 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     netMounting: { en: "Mounting ({fstype}): {addr} -> {mp} ...", hu: "Csatolás ({fstype}): {addr} -> {mp} ..." },
     netMounted: { en: "Mounted: {mp}", hu: "Csatolva: {mp}" },
     helpHeader: { en: " Help — Esc to close ", hu: " Súgó — Esc a bezáráshoz " },
+    savePromptHeader: { en: " Save playlist — Enter=save, Esc=cancel ", hu: " Playlista mentése — Enter=mentés, Esc=mégse " },
+    savePromptLabel: { en: "Name: ", hu: "Név: " },
+    noSelectionToSave: { en: "Nothing selected, nothing to save.", hu: "Nincs kijelölés, nincs mit menteni." },
+    playlistSaved: { en: "Saved: {name} ({n} track(s))", hu: "Elmentve: {name} ({n} track)" },
+    loadPlaylistHeader: { en: " Load saved playlist — Up/Down, Enter=select, Esc/q=cancel ", hu: " Mentett playlista betöltése — Fel/Le, Enter=kiválaszt, Esc/q=mégse " },
+    playlistLoaded: { en: "Loaded: {name} ({n} track(s))", hu: "Betöltve: {name} ({n} track)" },
+    notAvailableInPlaylistView: { en: "Not available in playlist view (Esc to exit).", hu: "Nem elérhető playlista-nézetben (Esc = kilépés belőle)." },
     browserHint: function (path) {
       return {
-        en: " " + (path.length ? path.join("/") : "/") + " — Up/Down | Enter=open | Space=select | Esc=up | a=all | n=clear | r=repeat | /=search | m=drives | o=output | p=play ",
-        hu: " " + (path.length ? path.join("/") : "/") + " — Fel/Le | Enter=megnyit | Space=kijelöl | Esc=fel | a=mind | n=törlés | r=ismétlés | /=keresés | m=meghajtók | o=kimenet | p=lejátszás "
+        en: " " + (path.length ? path.join("/") : "/") + " — Up/Down | Enter=open | Space=select | Esc=up | a=all | n=clear | r=repeat | /=search | m=drives | o=output | s=save | l=load | p=play ",
+        hu: " " + (path.length ? path.join("/") : "/") + " — Fel/Le | Enter=megnyit | Space=kijelöl | Esc=fel | a=mind | n=törlés | r=ismétlés | /=keresés | m=meghajtók | o=kimenet | s=mentés | l=betöltés | p=lejátszás "
+      };
+    },
+    playlistHint: function (name) {
+      return {
+        en: " Playlist: " + name + " — Up/Down | Space=select | Esc=exit playlist | s=save | l=load | p=play ",
+        hu: " Playlista: " + name + " — Fel/Le | Space=kijelöl | Esc=kilépés a playlistából | s=mentés | l=betöltés | p=lejátszás "
       };
     },
     selCount: { en: "Selected: {n} track(s)", hu: "Kijelölve: {n} track" },
@@ -562,6 +579,16 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     mounting: [
       { k: "—", d: { en: "Please wait, mounting...", hu: "Kis türelmet, csatolás folyamatban..." } }
     ],
+    saveprompt: [
+      { k: "type", d: { en: "Enter a name", hu: "Név beírása" } },
+      { k: "Enter", d: { en: "Save", hu: "Mentés" } },
+      { k: "Esc", d: { en: "Cancel", hu: "Mégse" } }
+    ],
+    loadplaylist: [
+      { k: "↑ / ↓", d: { en: "Move", hu: "Mozgás" } },
+      { k: "Enter", d: { en: "Load this playlist", hu: "Playlista betöltése" } },
+      { k: "q / Esc", d: { en: "Cancel", hu: "Mégse" } }
+    ],
     browser: [
       { k: "↑ / ↓", d: { en: "Move in the list", hu: "Mozgás a listában" } },
       { k: "Enter", d: { en: "Open folder", hu: "Mappa megnyitása" } },
@@ -573,6 +600,8 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
       { k: "/", d: { en: "Search", hu: "Keresés" } },
       { k: "m", d: { en: "Storage selector", hu: "Tárterület-választó" } },
       { k: "o", d: { en: "Output selector", hu: "Kimenet-választó" } },
+      { k: "s", d: { en: "Save selection as a playlist", hu: "Kijelölés mentése playlistaként" } },
+      { k: "l", d: { en: "Load a saved playlist", hu: "Mentett playlista betöltése" } },
       { k: "p", d: { en: "Play the selection", hu: "Lejátszás indítása" } }
     ],
     playing: [
@@ -610,6 +639,36 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     return node;
   }
 
+  /* ---------- playlists (localStorage; mirrors save_playlist()/
+     load_playlist() -- a pointer-list, not a copy of the files) ---------- */
+  var ALL_TRACKS_CACHE = null;
+  function allTracks() {
+    if (!ALL_TRACKS_CACHE) {
+      ALL_TRACKS_CACHE = [];
+      Object.keys(ROOTS).forEach(function (rid) { ALL_TRACKS_CACHE = ALL_TRACKS_CACHE.concat(collectTracksRecursive(ROOTS[rid])); });
+    }
+    return ALL_TRACKS_CACHE;
+  }
+  function findTrackById(id) {
+    return allTracks().filter(function (t) { return t.id === id; })[0];
+  }
+  function sanitizePlaylistName(name) {
+    name = (name || "").trim();
+    if (!name) return null;
+    name = name.split("/").pop().split("\\").pop();
+    if (!/\.m3u$/i.test(name)) { name += ".m3u"; }
+    return name;
+  }
+  function loadSavedPlaylists() {
+    try {
+      var raw = localStorage.getItem("bpdemo-playlists");
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) { return {}; }
+  }
+  function writeSavedPlaylists(obj) {
+    try { localStorage.setItem("bpdemo-playlists", JSON.stringify(obj)); } catch (e) {}
+  }
+
   /* ---------- state ---------- */
   var state = {
     screen: "device",      // device | root | netprompt | mounting | browser | playing
@@ -626,14 +685,22 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     netInput: "",           // text typed into the network-share prompt
     mountMsg: "",           // status line shown on the "mounting" screen
     helpOpen: false,         // '?' contextual help overlay
+    playlistView: null,      // { name, entries: [track, ...] } or null = normal folder browsing
+    saveInput: "",           // text typed into the save-playlist prompt
+    playlistNames: [],       // snapshot shown on the loadplaylist screen
+    playlistReturnScreen: "browser", // where to go if loadplaylist is cancelled
     play: null              // { segments, segIndex, trackIndex, audio, paused }
   };
 
   function currentEntries() {
-    var node = folderByPath(state.path) || activeRoot();
     var entries = [];
-    (node.folders || []).forEach(function (f) { entries.push({ type: "folder", name: f.name }); });
-    (node.tracks || []).forEach(function (t) { entries.push({ type: "track", track: t }); });
+    if (state.playlistView) {
+      state.playlistView.entries.forEach(function (t) { entries.push({ type: "track", track: t }); });
+    } else {
+      var node = folderByPath(state.path) || activeRoot();
+      (node.folders || []).forEach(function (f) { entries.push({ type: "folder", name: f.name }); });
+      (node.tracks || []).forEach(function (t) { entries.push({ type: "track", track: t }); });
+    }
     if (state.filter) {
       var f = state.filter.toLowerCase();
       entries = entries.filter(function (e) {
@@ -653,8 +720,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
 
   function orderedSelection() {
     return Object.keys(state.selected).map(function (id) {
-      var all = collectTracksRecursive(activeRoot());
-      return all.filter(function (t) { return t.id === id; })[0];
+      return findTrackById(id);
     }).filter(Boolean);
   }
 
@@ -737,8 +803,30 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
       return;
     }
 
+    if (state.screen === "saveprompt") {
+      termBody.appendChild(line(tr(T.savePromptHeader), "term-hint"));
+      termBody.appendChild(document.createTextNode("\n\n"));
+      termBody.appendChild(line("  " + tr(T.savePromptLabel) + state.saveInput, "tl-white"));
+      return;
+    }
+
+    if (state.screen === "loadplaylist") {
+      termBody.appendChild(line(tr(T.loadPlaylistHeader), "term-hint"));
+      termBody.appendChild(document.createTextNode("\n\n"));
+      if (!state.playlistNames.length) {
+        termBody.appendChild(line("  " + tr(T.noSavedPlaylist), "tl-dim"));
+      } else {
+        state.playlistNames.forEach(function (name, i) {
+          var cls = i === state.cursor ? "tl-hl" : "tl-white";
+          termBody.appendChild(line("  " + name, cls));
+          termBody.appendChild(document.createTextNode("\n"));
+        });
+      }
+      return;
+    }
+
     if (state.screen === "browser") {
-      var hint = tr(T.browserHint(state.path));
+      var hint = state.playlistView ? tr(T.playlistHint(state.playlistView.name)) : tr(T.browserHint(state.path));
       termBody.appendChild(line(hint, "term-hint"));
       termBody.appendChild(document.createTextNode("\n"));
       if (state.searchMode) {
@@ -797,7 +885,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     render();
     setTimeout(function () {
       state.rootId = "usb1";
-      state.selected = {}; state.path = []; state.cursor = 0; state.filter = "";
+      state.selected = {}; state.path = []; state.cursor = 0; state.filter = ""; state.playlistView = null;
       state.screen = "browser";
       state.statusMsg = tr(T.mountedUsb, { path: "/media/usb1" });
       render();
@@ -816,7 +904,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     render();
     setTimeout(function () {
       state.rootId = "netshare";
-      state.selected = {}; state.path = []; state.cursor = 0; state.filter = "";
+      state.selected = {}; state.path = []; state.cursor = 0; state.filter = ""; state.playlistView = null;
       state.screen = "browser";
       state.statusMsg = tr(T.netMounted, { mp: mountpoint });
       render();
@@ -863,13 +951,16 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
         var item = items[state.cursor];
         if (item.type === "default") {
           if (state.rootId !== "default") {
-            state.rootId = "default"; state.selected = {}; state.path = []; state.filter = "";
+            state.rootId = "default"; state.selected = {}; state.path = []; state.filter = ""; state.playlistView = null;
           }
           state.cursor = 0; state.screen = "browser";
         } else if (item.type === "usb") {
           mountUsb(); return;
         } else if (item.type === "playlist") {
-          state.statusMsg = tr(T.noSavedPlaylist);
+          state.playlistNames = Object.keys(loadSavedPlaylists()).sort();
+          state.playlistReturnScreen = "root";
+          state.cursor = 0;
+          state.screen = "loadplaylist";
         } else if (item.type === "network") {
           state.netInput = ""; state.screen = "netprompt";
         } else if (item.type === "custom") {
@@ -886,6 +977,43 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
         if (state.netInput && !mountNetwork(state.netInput)) { state.statusMsg = tr(T.netPromptBadFormat); }
         else if (state.netInput) { return; }
       } else if (key.length === 1) { state.netInput += key; }
+      render(); return;
+    }
+
+    if (state.screen === "saveprompt") {
+      if (key === "Escape") { state.screen = "browser"; }
+      else if (key === "Backspace") { state.saveInput = state.saveInput.slice(0, -1); }
+      else if (key === "Enter") {
+        var fname = sanitizePlaylistName(state.saveInput);
+        if (fname) {
+          var ids = orderedSelection().map(function (t) { return t.id; });
+          var pls = loadSavedPlaylists();
+          pls[fname] = ids;
+          writeSavedPlaylists(pls);
+          state.screen = "browser";
+          state.statusMsg = tr(T.playlistSaved, { name: fname, n: ids.length });
+        }
+      } else if (key.length === 1) { state.saveInput += key; }
+      render(); return;
+    }
+
+    if (state.screen === "loadplaylist") {
+      var plNames = state.playlistNames;
+      if (key === "q" || key === "Escape") {
+        state.screen = state.playlistReturnScreen || "browser";
+      } else if (key === "ArrowUp") { state.cursor = Math.max(0, state.cursor - 1); }
+      else if (key === "ArrowDown") { state.cursor = Math.min(plNames.length - 1, state.cursor + 1); }
+      else if (key === "Enter" && plNames.length) {
+        var chosenName = plNames[state.cursor];
+        var savedIds = loadSavedPlaylists()[chosenName] || [];
+        var resolved = savedIds.map(findTrackById).filter(Boolean);
+        state.selected = {};
+        resolved.forEach(function (t) { state.selected[t.id] = true; });
+        if (resolved.length) { state.playlistView = { name: chosenName, entries: resolved }; }
+        state.cursor = 0; state.filter = "";
+        state.screen = "browser";
+        state.statusMsg = tr(T.playlistLoaded, { name: chosenName, n: resolved.length });
+      }
       render(); return;
     }
 
@@ -915,10 +1043,12 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
           collectTracksRecursive(node).forEach(function (t) { state.selected[t.id] = true; });
         }
       } else if (key === "Escape") {
-        if (state.path.length) { state.path = state.path.slice(0, -1); state.cursor = 0; state.filter = ""; }
+        if (state.playlistView) { state.playlistView = null; state.cursor = 0; state.filter = ""; }
+        else if (state.path.length) { state.path = state.path.slice(0, -1); state.cursor = 0; state.filter = ""; }
         else { state.screen = "root"; state.cursor = 0; }
       } else if (key === "a") {
-        collectTracksRecursive(folderByPath(state.path) || activeRoot()).forEach(function (t) { state.selected[t.id] = true; });
+        if (state.playlistView) { state.statusMsg = tr(T.notAvailableInPlaylistView); }
+        else { collectTracksRecursive(folderByPath(state.path) || activeRoot()).forEach(function (t) { state.selected[t.id] = true; }); }
       } else if (key === "n") {
         state.selected = {};
       } else if (key === "r") {
@@ -929,6 +1059,14 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
         state.deviceReturnScreen = "browser";
         state.cursor = state.device ? DEVICES.indexOf(state.device) : defaultDeviceCursor();
         state.screen = "device";
+      } else if (key === "s") {
+        if (!orderedSelection().length) { state.statusMsg = tr(T.noSelectionToSave); }
+        else { state.saveInput = ""; state.screen = "saveprompt"; }
+      } else if (key === "l") {
+        state.playlistNames = Object.keys(loadSavedPlaylists()).sort();
+        state.playlistReturnScreen = "browser";
+        state.cursor = 0;
+        state.screen = "loadplaylist";
       } else if (key === "/") {
         state.searchMode = true; state.filter = "";
       } else if (key === "p") {
@@ -1013,7 +1151,8 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
 
   /* ---------- input wiring ---------- */
   termBody.addEventListener("keydown", function (ev) {
-    var typingChar = state.screen === "netprompt" ? /^[\x20-\x7e]$/.test(ev.key) : /^[a-zA-Z/?]$/.test(ev.key);
+    var freeTyping = state.screen === "netprompt" || state.screen === "saveprompt";
+    var typingChar = freeTyping ? (ev.key.length === 1) : /^[a-zA-Z/?]$/.test(ev.key);
     var handled = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Escape", " ", "Backspace"].indexOf(ev.key) !== -1
       || typingChar;
     if (handled) { ev.preventDefault(); handleKey(ev.key); }
