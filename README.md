@@ -144,6 +144,10 @@ directly into a MacBook Air port, through a Sonnet Tech Thunderbolt 5 hub, and t
 USB hub — with both expensive and cheap cabling. Bit-perfect behaviour was identical in all three
 cases: the bit path is independent of the connection method.
 
+Channel count is read straight from the file header and passed to the DAC unchanged (up to 64
+channels) — no downmixing, no remapping. 4-channel (quadraphonic) playback was confirmed on
+v0.9.1 through a Ravenna-based Merging Anubis DAC.
+
 ## Documentation
 
 - [`docs/about-bpplay.md`](docs/about-bpplay.md) — philosophy and architecture (EN / HU)
