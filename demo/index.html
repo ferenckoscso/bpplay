@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bpplay + bptune: interactive browser demo</title>
+<meta name="description" content="Try the actual zeneválasztó music browser in your own browser: navigate with the real keys, select tracks, and play a short, licensed preview clip. No download needed.">
+<meta property="og:title" content="bpplay + bptune: interactive browser demo">
+<meta property="og:description" content="Navigate the real music-selector interface in your browser, with real keys and a real (short, licensed) audio preview.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a09'/%3E%3Ctext x='14' y='46' font-family='Arial' font-size='38' font-weight='bold' fill='%23eeeeec'%3Eb%3C/text%3E%3Cpath d='M36 22 L54 32 L36 42 Z' fill='%23df8d20'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=PT+Mono:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a09;
+  --bg-raised: #131311;
+  --bg-raised-2: #1c1c19;
+  --silver: #eeeeec;
+  --silver-dim: #948f83;
+  --silver-dimmer: #59564c;
+  --gold: #df8d20;
+  --gold-bright: #f3a53d;
+  --gold-dim: #7a5420;
+  --green: #58a55c;
+  --green-bright: #7fc584;
+  --red: #e5534b;
+  --hairline: rgba(238,238,236,0.09);
+  --hairline-strong: rgba(238,238,236,0.16);
+  --radius: 2px;
+  --measure: 62ch;
+  --display: "Barlow Condensed", "DIN Cond", "Arial Narrow", sans-serif;
+  --body: "Charter", "Bitstream Charter", "PT Serif", Georgia, serif;
+  --mono: "PT Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --nav-h: 60px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--silver);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--gold); color: #0a0a09; }
+a { color: var(--gold-bright); text-decoration: none; }
+a:hover { color: var(--silver); text-decoration: underline; text-underline-offset: 3px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 28px; }
+.wrap-wide { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+section { position: relative; padding: 56px 0; border-top: 1px solid var(--hairline); }
+h1, h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  color: var(--silver);
+  text-wrap: balance;
+  margin: 0;
+}
+h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; margin-bottom: 14px; }
+p { margin: 0 0 16px; max-width: var(--measure); }
+.lede { font-size: 18px; color: var(--silver-dim); max-width: 60ch; }
+code {
+  font-family: var(--mono);
+  color: var(--silver);
+  background: var(--bg-raised-2);
+  padding: 1px 5px;
+  border-radius: var(--radius);
+  font-size: 13px;
+}
+kbd {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver);
+  background: var(--bg-raised-2);
+  border: 1px solid var(--hairline-strong);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+.overline {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 14px;
+}
+.overline .sep { color: var(--silver-dimmer); margin: 0 6px; }
+[data-lang="en"] .hu { display: none !important; }
+[data-lang="hu"] .en { display: none !important; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 9px 16px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  background: none;
+}
+.btn:hover { text-decoration: none; }
+.btn-gold { background: var(--gold); color: #0a0a09; }
+.btn-gold:hover { background: var(--gold-bright); color: #0a0a09; }
+.btn-ghost { border-color: var(--hairline-strong); color: var(--silver); }
+.btn-ghost:hover { border-color: var(--silver-dim); color: var(--gold-bright); }
+
+/* header / nav */
+header.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10,10,9,0.86);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: var(--nav-h);
+  max-width: 1160px;
+}
+.brand {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--silver);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand:hover { color: var(--gold-bright); text-decoration: none; }
+.brand .plus { color: var(--gold); }
+.brand .ed { color: var(--silver-dimmer); font-weight: 400; }
+.nav-links { display: flex; align-items: center; gap: 4px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--silver-dim);
+  padding: 7px 9px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--silver); background: var(--bg-raised-2); text-decoration: none; }
+.nav-tools { display: flex; align-items: center; gap: 10px; }
+.lang-switch { display: inline-flex; border: 1px solid var(--hairline-strong); border-radius: var(--radius); overflow: hidden; }
+.lang-switch button {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: transparent;
+  color: var(--silver-dim);
+  border: 0;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.lang-switch button.on { background: var(--gold); color: #0a0a09; }
+.lang-switch button:not(.on):hover { color: var(--silver); }
+
+/* terminal mockup (shared visual language with pi/x64 pages) */
+.term {
+  background: #0d0d0b;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 100%;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 4px 14px rgba(0,0,0,0.4);
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.term-bar { display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: #161613; border-bottom: 1px solid var(--hairline); }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
+.term-title { margin-left: 8px; font-size: 11px; color: var(--silver-dim); letter-spacing: 0.06em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.term-body {
+  padding: 16px 18px;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--silver-dim);
+  min-height: 340px;
+  outline: none;
+  cursor: text;
+}
+.term-body:focus { box-shadow: inset 0 0 0 1px var(--gold-dim); }
+.term-hint { display: block; background: var(--gold); color: #0a0a09; font-weight: 700; padding: 2px 6px; margin: 0 0 8px -6px; }
+.tl-dim { color: #948f83; }
+.tl-white { color: #eeeeec; }
+.tl-gold { color: #f3a53d; }
+.tl-green { color: #8fd694; }
+.tl-red { color: #e5534b; }
+.tl-hl { background: rgba(223,141,32,0.16); color: #f3a53d; display: block; }
+.term-status {
+  display: flex; justify-content: space-between; gap: 12px;
+  background: #2e7d32; color: #eaffe9; padding: 3px 12px; font-size: 11.5px; letter-spacing: 0.02em;
+}
+.term-focus-note { font-family: var(--mono); font-size: 11.5px; color: var(--silver-dimmer); margin: 10px 0 0; text-align: center; }
+
+/* on-screen touch controls */
+.touch-pad { display: none; margin-top: 18px; }
+.touch-pad.show { display: block; }
+.touch-row { display: flex; justify-content: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.touch-key {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--silver);
+  background: var(--bg-raised-2);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  min-width: 44px;
+  cursor: pointer;
+  user-select: none;
+}
+.touch-key:active { background: var(--gold-dim); }
+
+/* disclaimer note */
+.note {
+  background: rgba(223,141,32,0.07);
+  border: 1px solid rgba(223,141,32,0.25);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin: 18px 0;
+  font-size: 15px;
+  color: var(--silver-dim);
+  max-width: 72ch;
+}
+.note b { color: var(--gold-bright); }
+
+/* keys reference table */
+.keys-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 40px; margin-top: 8px; }
+.key-row { display: grid; grid-template-columns: 110px 1fr; gap: 16px; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--hairline); }
+.key-row .f { font-size: 14.5px; color: var(--silver-dim); }
+
+/* footer */
+footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; background: #080807; }
+.ft p { color: var(--silver-dimmer); font-size: 12.5px; }
+.ft a { color: var(--silver-dim); }
+
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+}
+@media (hover: none) {
+  .touch-pad { display: block; }
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">bpplay<span class="plus">+</span>bptune<span class="ed"> · demo</span></a>
+    <ul class="nav-links">
+      <li><a href="../"><span class="en">macOS</span><span class="hu">macOS</span></a></li>
+      <li><a href="../pi/"><span class="en">Raspberry Pi</span><span class="hu">Raspberry Pi</span></a></li>
+      <li><a href="../x64/"><span class="en">x86_64 kiosk</span><span class="hu">x86_64 kiosk</span></a></li>
+    </ul>
+    <div class="nav-tools">
+      <div class="lang-switch" role="group" aria-label="Language / Nyelv">
+        <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-btn="hu" aria-pressed="false">HU</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="top" style="padding-top:48px;">
+  <div class="wrap">
+    <p class="overline"><span class="en">TRY IT RIGHT HERE<span class="sep">·</span>NO DOWNLOAD NEEDED</span><span class="hu">PRÓBÁLD KI ITT<span class="sep">·</span>LETÖLTÉS NÉLKÜL</span></p>
+    <h1 style="font-size:clamp(32px,5vw,52px); margin-bottom:14px;"><span class="en">The real music selector, in your browser.</span><span class="hu">A valódi zeneválasztó, a böngésződben.</span></h1>
+    <p class="lede"><span class="en">This is the actual <code>zenevalaszto.py</code> browsing experience, reimplemented for the web: the same keys, the same screens, a short real (licensed) preview clip. Click into the terminal below and use your keyboard — or the on-screen keys on mobile.</span><span class="hu">Ez a valódi <code>zenevalaszto.py</code> böngészési élmény, webre újraépítve: ugyanazok a billentyűk, ugyanazok a képernyők, egy rövid, valódi (jogtiszta) előnézeti klippel. Kattints a lenti terminálba, és használd a billentyűzeted — mobilon a képernyőn lévő gombokkal.</span></p>
+
+    <div class="note">
+      <b><span class="en">Note:</span><span class="hu">Megjegyzés:</span></b>
+      <span class="en"> no browser audio path (Web Audio, HTML5 <code>&lt;audio&gt;</code>) is bit-perfect — every browser resamples through its own OS audio stack. This demo faithfully shows the <b>navigation experience</b>; the audio quality itself is not the same as bpplay's native, bit-perfect signal path. Native DSD playback isn't possible in a browser at all — DSD-format demo tracks are shown here as their PCM-decoded equivalent.</span>
+      <span class="hu"> egyetlen böngészős hang-útvonal sem (Web Audio, HTML5 <code>&lt;audio&gt;</code>) bit-helyes — minden böngésző a saját OS-audio-stackjén keresztül futtatja, resample-elve. Ez a demó a <b>navigációs élményt</b> mutatja hitelesen; maga a hangminőség nem egyezik a bpplay natív, bit-helyes jelútjával. Natív DSD-lejátszás böngészőben eleve nem lehetséges — a DSD-formátumú demó-trackek itt a PCM-re dekódolt megfelelőjükként szerepelnek.</span>
+    </div>
+  </div>
+</section>
+
+<section style="border-top:none; padding-top:0;">
+  <div class="wrap">
+    <div class="term">
+      <div class="term-bar">
+        <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="term-title">demo@bpplay: zenevalaszto</span>
+      </div>
+      <pre class="term-body" id="termBody" tabindex="0" aria-label="Interactive music selector demo terminal"></pre>
+      <div class="term-status" id="termStatus" style="display:none;"></div>
+    </div>
+    <p class="term-focus-note">
+      <span class="en">Click the terminal, then use your keyboard.</span><span class="hu">Kattints a terminálba, aztán használd a billentyűzeted.</span>
+    </p>
+
+    <div class="touch-pad" id="touchPad">
+      <div class="touch-row">
+        <button class="touch-key" data-key="ArrowUp">↑</button>
+      </div>
+      <div class="touch-row">
+        <button class="touch-key" data-key="ArrowLeft">←</button>
+        <button class="touch-key" data-key="ArrowDown">↓</button>
+        <button class="touch-key" data-key="ArrowRight">→</button>
+      </div>
+      <div class="touch-row">
+        <button class="touch-key" data-key=" ">Space</button>
+        <button class="touch-key" data-key="Enter">Enter</button>
+        <button class="touch-key" data-key="Escape">Esc</button>
+      </div>
+      <div class="touch-row">
+        <button class="touch-key" data-key="a">a</button>
+        <button class="touch-key" data-key="n">n</button>
+        <button class="touch-key" data-key="r">r</button>
+        <button class="touch-key" data-key="m">m</button>
+        <button class="touch-key" data-key="p">p</button>
+        <button class="touch-key" data-key="b">b</button>
+        <button class="touch-key" data-key="q">q</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="keys">
+  <div class="wrap">
+    <h2><span class="en">Full key reference</span><span class="hu">Teljes billentyű-lista</span></h2>
+    <p class="lede"><span class="en">Every key below works in the demo exactly as it does on a real device.</span><span class="hu">A lenti billentyűk mindegyike pontosan úgy működik a demóban, mint egy valódi eszközön.</span></p>
+    <div class="keys-grid">
+      <div class="key-row"><span><kbd>↑</kbd> / <kbd>↓</kbd></span><span class="f"><span class="en">Move in the list</span><span class="hu">Mozgás a listában</span></span></div>
+      <div class="key-row"><span><kbd>Enter</kbd></span><span class="f"><span class="en">Open folder / select root</span><span class="hu">Mappa megnyitása / gyökér kiválasztása</span></span></div>
+      <div class="key-row"><span><kbd>Space</kbd></span><span class="f"><span class="en">Select track (or whole album)</span><span class="hu">Track (vagy egész album) kijelölése</span></span></div>
+      <div class="key-row"><span><kbd>Esc</kbd></span><span class="f"><span class="en">Go up one level</span><span class="hu">Egy szinttel feljebb</span></span></div>
+      <div class="key-row"><span><kbd>a</kbd></span><span class="f"><span class="en">Select all in this folder</span><span class="hu">Mind kijelölése ebben a mappában</span></span></div>
+      <div class="key-row"><span><kbd>n</kbd></span><span class="f"><span class="en">Clear selection (browser) / Next track (playback)</span><span class="hu">Kijelölés törlése (böngésző) / Következő track (lejátszás)</span></span></div>
+      <div class="key-row"><span><kbd>r</kbd></span><span class="f"><span class="en">Toggle repeat</span><span class="hu">Ismétlés ki/be</span></span></div>
+      <div class="key-row"><span><kbd>m</kbd></span><span class="f"><span class="en">Back to storage selector</span><span class="hu">Vissza a tárterület-választóhoz</span></span></div>
+      <div class="key-row"><span><kbd>p</kbd></span><span class="f"><span class="en">Start playback of the selection</span><span class="hu">Lejátszás indítása a kijelölésből</span></span></div>
+      <div class="key-row"><span><kbd>b</kbd></span><span class="f"><span class="en">Previous track (playback)</span><span class="hu">Előző track (lejátszás)</span></span></div>
+      <div class="key-row"><span><kbd>Space</kbd></span><span class="f"><span class="en">Pause / resume (playback)</span><span class="hu">Szünet / folytatás (lejátszás)</span></span></div>
+      <div class="key-row"><span><kbd>q</kbd></span><span class="f"><span class="en">Stop playback, back to the browser / back to default at the root</span><span class="hu">Lejátszás leállítása, vissza a böngészőbe / vissza az alapértelmezettre a gyökérnél</span></span></div>
+    </div>
+  </div>
+</section>
+
+<footer class="ft">
+  <div class="wrap">
+    <p><span class="en">This is a browser recreation of the real interface for demonstration purposes; the shipped software is the actual source of truth. See the <a href="../pi/">Raspberry Pi</a> or <a href="../x64/">x86_64 kiosk</a> pages for the real thing.</span><span class="hu">Ez a valódi felület böngészős újraalkotása bemutatási céllal; a tényleges szoftver a hiteles forrás. A valódihoz lásd a <a href="../pi/">Raspberry Pi</a> vagy az <a href="../x64/">x86_64 kiosk</a> oldalt.</span></p>
+    <p>&copy; <span class="yr">2026</span> Koscso Media Engineering Kft.</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- language (same pattern as pi/x64 pages) ---------- */
+  var root = document.documentElement;
+  function setLang(lang, persist) {
+    lang = lang === "hu" ? "hu" : "en";
+    root.setAttribute("data-lang", lang);
+    root.setAttribute("lang", lang);
+    document.querySelectorAll(".lang-switch button").forEach(function (b) {
+      var on = b.getAttribute("data-lang-btn") === lang;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (persist) { try { localStorage.setItem("bpdemo-lang", lang); } catch (e) {} }
+    render();
+  }
+  var savedLang = null;
+  try { savedLang = localStorage.getItem("bpdemo-lang"); } catch (e) {}
+  document.querySelectorAll(".lang-switch button").forEach(function (b) {
+    b.addEventListener("click", function () { setLang(b.getAttribute("data-lang-btn"), true); });
+  });
+
+  /* ---------- demo strings (HU/EN; small port of zenevalaszto.py's _STRINGS_EN pattern) ---------- */
+  var T = {
+    rootHeader: { en: " Music root selection — Up/Down, Enter=select, q/Esc=default ", hu: " Zenei gyökér kiválasztása — Fel/Le, Enter=kiválaszt, q/Esc=alapértelmezett " },
+    rootDefault: { en: "Default: Demo Library", hu: "Alapértelmezett: Demo könyvtár" },
+    browserHint: function (path) {
+      return {
+        en: " " + (path.length ? path.join("/") : "/") + " — Up/Down | Enter=open | Space=select | Esc=up | a=all | n=clear | r=repeat | /=search | m=drives | p=play ",
+        hu: " " + (path.length ? path.join("/") : "/") + " — Fel/Le | Enter=megnyit | Space=kijelöl | Esc=fel | a=mind | n=törlés | r=ismétlés | /=keresés | m=meghajtók | p=lejátszás "
+      };
+    },
+    selCount: { en: "Selected: {n} track(s)", hu: "Kijelölve: {n} track" },
+    repeatOn: { en: "Repeat: ON", hu: "Ismétlés: BE" },
+    loading: { en: "Loading into memory...", hu: "Betöltés a memóriába..." },
+    playingKeys: { en: "Playing...  [n] next  [b] prev  [space] pause  [q] quit", hu: "Lejátszás...  [n] köv.  [b] előző  [space] szünet  [q] kilépés" },
+    segment: { en: "-- Segment {idx}/{total} ({n} track(s), {rate}) --", hu: "-- Szegmens {idx}/{total} ({n} track, {rate}) --" },
+    done: { en: "Done, device released.", hu: "Kész, eszköz felszabadítva." },
+    stopped: { en: "Stopped.", hu: "Leállítva." },
+    emptySelection: { en: "Nothing selected -- press Space on a track first.", hu: "Nincs kijelölés -- előbb nyomj Space-t egy trackre." }
+  };
+  function tr(entry, vars) {
+    var lang = root.getAttribute("data-lang") === "hu" ? "hu" : "en";
+    var s = entry[lang] || entry.en;
+    if (vars) { for (var k in vars) { s = s.split("{" + k + "}").join(vars[k]); } }
+    return s;
+  }
+
+  /* ---------- demo content (virtual filesystem) ----------
+     Licensed preview clips supplied 2026-09-05; metadata below matches
+     the actual files (verified via afinfo). Album B mixes 44.1kHz/16bit
+     and 96kHz/24bit tracks on purpose, to demo bpplay's segment-change
+     behavior when selection spans differing sample rates. */
+  var DEMO_LIBRARY = {
+    name: "Demo Library",
+    folders: [
+      {
+        name: "Album A (PCM 44.1kHz/16bit)",
+        tracks: [
+          { id: "a1", title: "Track A1", file: "assets/demo-a1.wav", sample_rate: 44100, bit_depth: 16, duration: 115, format: "PCM" },
+          { id: "a2", title: "Track A2", file: "assets/demo-a2.wav", sample_rate: 44100, bit_depth: 16, duration: 71, format: "PCM" }
+        ]
+      },
+      {
+        name: "Album B (mixed rates)",
+        tracks: [
+          { id: "b1", title: "Track B1", file: "assets/demo-b1.wav", sample_rate: 44100, bit_depth: 16, duration: 110, format: "PCM" },
+          { id: "b2", title: "Track B2", file: "assets/demo-b2.wav", sample_rate: 96000, bit_depth: 24, duration: 62, format: "PCM" }
+        ]
+      }
+    ]
+  };
+
+  function humanKhz(hz) {
+    if (!hz) return "?";
+    return (hz % 1000 === 0 ? (hz / 1000) : (hz / 1000).toFixed(1)) + "kHz";
+  }
+  function folderByPath(path) {
+    var node = DEMO_LIBRARY;
+    for (var i = 0; i < path.length; i++) {
+      node = node.folders.filter(function (f) { return f.name === path[i]; })[0];
+      if (!node) return null;
+    }
+    return node;
+  }
+
+  /* ---------- state ---------- */
+  var state = {
+    screen: "root",        // root | browser | playing
+    cursor: 0,
+    path: [],              // folder stack (array of folder names)
+    filter: "",
+    searchMode: false,
+    selected: {},           // id -> true  (dict = insertion-order "ordered set", same trick as zenevalaszto.py)
+    repeat: false,
+    statusMsg: "",
+    play: null              // { segments, segIndex, trackIndex, audio, paused }
+  };
+
+  function currentEntries() {
+    var node = folderByPath(state.path) || DEMO_LIBRARY;
+    var entries = [];
+    (node.folders || []).forEach(function (f) { entries.push({ type: "folder", name: f.name }); });
+    (node.tracks || []).forEach(function (t) { entries.push({ type: "track", track: t }); });
+    if (state.filter) {
+      var f = state.filter.toLowerCase();
+      entries = entries.filter(function (e) {
+        var label = e.type === "folder" ? e.name : e.track.title;
+        return label.toLowerCase().indexOf(f) !== -1;
+      });
+    }
+    return entries;
+  }
+
+  function collectTracksRecursive(node) {
+    var out = [];
+    (node.tracks || []).forEach(function (t) { out.push(t); });
+    (node.folders || []).forEach(function (f) { out = out.concat(collectTracksRecursive(f)); });
+    return out;
+  }
+
+  function orderedSelection() {
+    return Object.keys(state.selected).map(function (id) {
+      var all = collectTracksRecursive(DEMO_LIBRARY);
+      return all.filter(function (t) { return t.id === id; })[0];
+    }).filter(Boolean);
+  }
+
+  function buildSegments(tracks) {
+    var segments = [];
+    tracks.forEach(function (t) {
+      var last = segments[segments.length - 1];
+      if (last && last.sample_rate === t.sample_rate) { last.tracks.push(t); }
+      else { segments.push({ sample_rate: t.sample_rate, tracks: [t] }); }
+    });
+    return segments;
+  }
+
+  /* ---------- rendering ---------- */
+  var termBody = document.getElementById("termBody");
+  var termStatus = document.getElementById("termStatus");
+
+  function line(text, cls) {
+    var span = document.createElement("span");
+    if (cls) span.className = cls;
+    span.textContent = text;
+    return span;
+  }
+
+  function render() {
+    termBody.innerHTML = "";
+    termStatus.style.display = "none";
+
+    if (state.screen === "root") {
+      termBody.appendChild(line(tr(T.rootHeader), "term-hint"));
+      termBody.appendChild(document.createTextNode("\n\n"));
+      var rootRow = line("  " + tr(T.rootDefault), state.cursor === 0 ? "tl-hl" : "tl-white");
+      termBody.appendChild(rootRow);
+      return;
+    }
+
+    if (state.screen === "browser") {
+      var hint = tr(T.browserHint(state.path));
+      termBody.appendChild(line(hint, "term-hint"));
+      termBody.appendChild(document.createTextNode("\n"));
+      if (state.searchMode) {
+        termBody.appendChild(line("/" + state.filter, "tl-gold"));
+        termBody.appendChild(document.createTextNode("\n"));
+      }
+      termBody.appendChild(document.createTextNode("\n"));
+
+      var entries = currentEntries();
+      entries.forEach(function (e, i) {
+        var selected = e.type === "track" && state.selected[e.track.id];
+        var marker = e.type === "track" ? (selected ? "[x] " : "[ ] ") : "";
+        var label = e.type === "folder" ? ("/ " + e.name) : (marker + e.track.title + "  (" + humanKhz(e.track.sample_rate) + ", " + e.track.bit_depth + "-bit, " + e.track.format + ")");
+        var cls = i === state.cursor ? "tl-hl" : (selected ? "tl-green" : "tl-white");
+        termBody.appendChild(line("  " + label, cls));
+        termBody.appendChild(document.createTextNode("\n"));
+      });
+
+      termBody.appendChild(document.createTextNode("\n"));
+      var selCount = Object.keys(state.selected).length;
+      termBody.appendChild(line(tr(T.selCount, { n: selCount }), "tl-gold"));
+      if (state.repeat) {
+        termBody.appendChild(document.createTextNode("   "));
+        termBody.appendChild(line(tr(T.repeatOn), "tl-green"));
+      }
+      if (state.statusMsg) {
+        termBody.appendChild(document.createTextNode("\n"));
+        termBody.appendChild(line(state.statusMsg, "tl-dim"));
+      }
+      return;
+    }
+
+    if (state.screen === "playing") {
+      var p = state.play;
+      var seg = p.segments[p.segIndex];
+      var lines = [];
+      if (p.segments.length > 1) {
+        lines.push({ text: tr(T.segment, { idx: p.segIndex + 1, total: p.segments.length, n: seg.tracks.length, rate: humanKhz(seg.sample_rate) }), cls: "tl-gold" });
+      }
+      var track = seg.tracks[p.trackIndex];
+      lines.push({ text: tr(T.playingKeys), cls: "tl-dim" });
+      lines.push({ text: "", cls: null });
+      lines.push({ text: "  ▶ " + track.title + "  (" + humanKhz(track.sample_rate) + ", " + track.bit_depth + "-bit)" + (p.paused ? "  [" + (root.getAttribute("data-lang") === "hu" ? "szünet" : "paused") + "]" : ""), cls: "tl-white" });
+      lines.forEach(function (l) {
+        termBody.appendChild(line(l.text, l.cls));
+        termBody.appendChild(document.createTextNode("\n"));
+      });
+      return;
+    }
+  }
+
+  /* ---------- key handling ---------- */
+  function moveCursor(delta) {
+    if (state.screen === "root") { state.cursor = 0; return; }
+    var n = currentEntries().length;
+    if (!n) return;
+    state.cursor = Math.max(0, Math.min(n - 1, state.cursor + delta));
+  }
+
+  function handleKey(key) {
+    state.statusMsg = "";
+
+    if (state.screen === "root") {
+      if (key === "Enter" || key === "q" || key === "Escape") {
+        state.screen = "browser"; state.path = []; state.cursor = 0;
+      }
+      render(); return;
+    }
+
+    if (state.screen === "browser") {
+      if (state.searchMode) {
+        if (key === "Enter" || key === "Escape") { state.searchMode = false; }
+        else if (key === "Backspace") { state.filter = state.filter.slice(0, -1); }
+        else if (key.length === 1) { state.filter += key; }
+        state.cursor = 0; render(); return;
+      }
+      var entries = currentEntries();
+      var e = entries[state.cursor];
+      if (key === "ArrowUp") { moveCursor(-1); }
+      else if (key === "ArrowDown") { moveCursor(1); }
+      else if (key === "Enter") {
+        if (e && e.type === "folder") { state.path = state.path.concat([e.name]); state.cursor = 0; state.filter = ""; }
+      } else if (key === " ") {
+        if (e && e.type === "track") {
+          if (state.selected[e.track.id]) { delete state.selected[e.track.id]; }
+          else { state.selected[e.track.id] = true; }
+        } else if (e && e.type === "folder") {
+          var node = folderByPath(state.path.concat([e.name]));
+          collectTracksRecursive(node).forEach(function (t) { state.selected[t.id] = true; });
+        }
+      } else if (key === "Escape") {
+        if (state.path.length) { state.path = state.path.slice(0, -1); state.cursor = 0; state.filter = ""; }
+        else { state.screen = "root"; state.cursor = 0; }
+      } else if (key === "a") {
+        collectTracksRecursive(folderByPath(state.path) || DEMO_LIBRARY).forEach(function (t) { state.selected[t.id] = true; });
+      } else if (key === "n") {
+        state.selected = {};
+      } else if (key === "r") {
+        state.repeat = !state.repeat;
+      } else if (key === "m") {
+        state.screen = "root"; state.cursor = 0; state.selected = {}; state.path = [];
+      } else if (key === "/") {
+        state.searchMode = true; state.filter = "";
+      } else if (key === "p") {
+        var tracks = orderedSelection();
+        if (!tracks.length) { state.statusMsg = tr(T.emptySelection); render(); return; }
+        startPlayback(tracks);
+        return;
+      }
+      render(); return;
+    }
+
+    if (state.screen === "playing") {
+      var p = state.play;
+      var seg = p.segments[p.segIndex];
+      if (key === " ") {
+        p.paused = !p.paused;
+        if (p.audio) { p.paused ? p.audio.pause() : p.audio.play().catch(function () {}); }
+      } else if (key === "q") {
+        stopPlayback(); return;
+      } else if (key === "n") {
+        advanceTrack(true);
+        return;
+      } else if (key === "b") {
+        if (p.trackIndex > 0) { p.trackIndex--; playCurrentTrack(); }
+        return;
+      }
+      render(); return;
+    }
+  }
+
+  /* ---------- playback ---------- */
+  function startPlayback(tracks) {
+    var segments = buildSegments(tracks);
+    state.screen = "playing";
+    state.play = { segments: segments, segIndex: 0, trackIndex: 0, audio: null, paused: false };
+    render();
+    playCurrentTrack();
+  }
+
+  function playCurrentTrack() {
+    var p = state.play;
+    if (!p) return;
+    var seg = p.segments[p.segIndex];
+    var track = seg.tracks[p.trackIndex];
+    if (p.audio) { p.audio.pause(); p.audio.onended = null; }
+    p.audio = new Audio(track.file);
+    p.paused = false;
+    p.audio.onended = function () { advanceTrack(false); };
+    p.audio.play().catch(function () { /* autoplay/blocked or missing demo file -- silent in this stub */ });
+    render();
+  }
+
+  function advanceTrack(userSkip) {
+    var p = state.play;
+    if (!p) return;
+    var seg = p.segments[p.segIndex];
+    if (p.trackIndex + 1 < seg.tracks.length) {
+      p.trackIndex++;
+      playCurrentTrack();
+    } else if (p.segIndex + 1 < p.segments.length) {
+      /* mirrors today's bpplay.c g_skip fix: last track in a segment ->
+         move to the next (possibly differently-rated) segment right away,
+         whether it finished naturally or the user pressed 'n'. */
+      p.segIndex++;
+      p.trackIndex = 0;
+      playCurrentTrack();
+    } else if (state.repeat) {
+      p.segIndex = 0; p.trackIndex = 0; playCurrentTrack();
+    } else {
+      stopPlayback();
+    }
+  }
+
+  function stopPlayback() {
+    var p = state.play;
+    if (p && p.audio) { p.audio.pause(); p.audio.onended = null; }
+    state.play = null;
+    state.screen = "browser";
+    state.statusMsg = tr(T.done);
+    render();
+  }
+
+  /* ---------- input wiring ---------- */
+  termBody.addEventListener("keydown", function (ev) {
+    var handled = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Escape", " ", "Backspace"].indexOf(ev.key) !== -1
+      || /^[a-zA-Z/]$/.test(ev.key);
+    if (handled) { ev.preventDefault(); handleKey(ev.key); }
+  });
+  document.querySelectorAll(".touch-key").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      termBody.focus();
+      handleKey(btn.getAttribute("data-key"));
+    });
+  });
+
+  /* init */
+  if (savedLang === "hu" || savedLang === "en") { setLang(savedLang, false); }
+  else if ((navigator.language || "").toLowerCase().indexOf("hu") === 0) { setLang("hu", false); }
+  else { setLang("en", false); }
+  render();
+})();
+</script>
+</body>
+</html>
