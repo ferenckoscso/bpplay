@@ -293,8 +293,8 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
 
     <div class="note">
       <b><span class="en">Note:</span><span class="hu">Megjegyzés:</span></b>
-      <span class="en"> no browser audio path (Web Audio, HTML5 <code>&lt;audio&gt;</code>) is bit-perfect — every browser resamples through its own OS audio stack. This demo faithfully shows the <b>navigation experience</b>; the audio quality itself is not the same as bpplay's native, bit-perfect signal path. Native DSD playback isn't possible in a browser at all — DSD-format demo tracks are shown here as their PCM-decoded equivalent.</span>
-      <span class="hu"> egyetlen böngészős hang-útvonal sem (Web Audio, HTML5 <code>&lt;audio&gt;</code>) bit-helyes — minden böngésző a saját OS-audio-stackjén keresztül futtatja, resample-elve. Ez a demó a <b>navigációs élményt</b> mutatja hitelesen; maga a hangminőség nem egyezik a bpplay natív, bit-helyes jelútjával. Natív DSD-lejátszás böngészőben eleve nem lehetséges — a DSD-formátumú demó-trackek itt a PCM-re dekódolt megfelelőjükként szerepelnek.</span>
+      <span class="en"> no browser audio path (Web Audio, HTML5 <code>&lt;audio&gt;</code>) is bit-perfect — every browser resamples through its own OS audio stack. This demo faithfully shows the <b>navigation experience</b>; the audio quality itself is not the same as bpplay's native, bit-perfect signal path. Native DSD playback isn't possible in a browser at all — DSD-format demo tracks are shown here as their PCM-decoded equivalent. The output (DAC) list and the USB/NFS/SMB mounting shown here are simulated with mock data, exactly as the real screens behave — no actual hardware or network is contacted from your browser.</span>
+      <span class="hu"> egyetlen böngészős hang-útvonal sem (Web Audio, HTML5 <code>&lt;audio&gt;</code>) bit-helyes — minden böngésző a saját OS-audio-stackjén keresztül futtatja, resample-elve. Ez a demó a <b>navigációs élményt</b> mutatja hitelesen; maga a hangminőség nem egyezik a bpplay natív, bit-helyes jelútjával. Natív DSD-lejátszás böngészőben eleve nem lehetséges — a DSD-formátumú demó-trackek itt a PCM-re dekódolt megfelelőjükként szerepelnek. A kimenet (DAC) lista és az USB/NFS/SMB csatolás itt szimulált, kitalált adatokkal működik, pontosan úgy viselkedve, mint a valódi képernyők — a böngésződ nem ér el semmilyen valódi hardvert vagy hálózatot.</span>
     </div>
   </div>
 </section>
@@ -332,6 +332,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
         <button class="touch-key" data-key="n">n</button>
         <button class="touch-key" data-key="r">r</button>
         <button class="touch-key" data-key="m">m</button>
+        <button class="touch-key" data-key="o">o</button>
         <button class="touch-key" data-key="p">p</button>
         <button class="touch-key" data-key="b">b</button>
         <button class="touch-key" data-key="q">q</button>
@@ -352,7 +353,8 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
       <div class="key-row"><span><kbd>a</kbd></span><span class="f"><span class="en">Select all in this folder</span><span class="hu">Mind kijelölése ebben a mappában</span></span></div>
       <div class="key-row"><span><kbd>n</kbd></span><span class="f"><span class="en">Clear selection (browser) / Next track (playback)</span><span class="hu">Kijelölés törlése (böngésző) / Következő track (lejátszás)</span></span></div>
       <div class="key-row"><span><kbd>r</kbd></span><span class="f"><span class="en">Toggle repeat</span><span class="hu">Ismétlés ki/be</span></span></div>
-      <div class="key-row"><span><kbd>m</kbd></span><span class="f"><span class="en">Back to storage selector</span><span class="hu">Vissza a tárterület-választóhoz</span></span></div>
+      <div class="key-row"><span><kbd>m</kbd></span><span class="f"><span class="en">Storage selector — mount a USB drive or NFS/SMB network share</span><span class="hu">Tárterület-választó — USB meghajtó vagy NFS/SMB hálózati megosztás csatolása</span></span></div>
+      <div class="key-row"><span><kbd>o</kbd></span><span class="f"><span class="en">Output (DAC) selector, even mid-playback</span><span class="hu">Kimenet (DAC) választó, lejátszás közben is</span></span></div>
       <div class="key-row"><span><kbd>p</kbd></span><span class="f"><span class="en">Start playback of the selection</span><span class="hu">Lejátszás indítása a kijelölésből</span></span></div>
       <div class="key-row"><span><kbd>b</kbd></span><span class="f"><span class="en">Previous track (playback)</span><span class="hu">Előző track (lejátszás)</span></span></div>
       <div class="key-row"><span><kbd>Space</kbd></span><span class="f"><span class="en">Pause / resume (playback)</span><span class="hu">Szünet / folytatás (lejátszás)</span></span></div>
@@ -394,12 +396,30 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
 
   /* ---------- demo strings (HU/EN; small port of zenevalaszto.py's _STRINGS_EN pattern) ---------- */
   var T = {
+    deviceHeader: { en: " Output (sound card) selection — Up/Down, Enter=select ", hu: " Kimenet (hangkártya) kiválasztása — Fel/Le, Enter=kiválaszt " },
+    deviceHint: { en: " If unsure: pick the one with a brand name listed, not the onboard sound card. ", hu: " Ha bizonytalan vagy: válaszd azt, amelyiknek a márkaneve van feltüntetve (nem a beépített hangkártyát). " },
+    deviceChosen: { en: "Output set: {label}", hu: "Kimenet átállítva: {label}" },
     rootHeader: { en: " Music root selection — Up/Down, Enter=select, q/Esc=default ", hu: " Zenei gyökér kiválasztása — Fel/Le, Enter=kiválaszt, q/Esc=alapértelmezett " },
-    rootDefault: { en: "Default: Demo Library", hu: "Alapértelmezett: Demo könyvtár" },
+    rootItemDefault: { en: "Demo Library (default)", hu: "Demo könyvtár (alapértelmezett)" },
+    rootItemUsb: { en: "◆ USB drive (not mounted) — SanDisk Extreme, exFAT", hu: "◆ USB meghajtó (nincs csatolva) — SanDisk Extreme, exFAT" },
+    rootItemPlaylist: { en: "Load saved playlist...", hu: "Mentett playlista betöltése..." },
+    rootItemNetwork: { en: "Mount network share (NFS/SMB)...", hu: "Hálózati megosztás csatolása (NFS/SMB)..." },
+    rootItemCustom: { en: "Enter custom path...", hu: "Egyéni útvonal megadása..." },
+    mountingUsb: { en: "Mounting USB drive...", hu: "USB meghajtó csatolása..." },
+    mountedUsb: { en: "Mounted: {path}", hu: "Csatolva: {path}" },
+    noSavedPlaylist: { en: "No saved playlists yet.", hu: "Nincs mentett playlista." },
+    customPathNote: { en: "This browser demo can only open the storage options listed here.", hu: "Ez a böngészős demó csak az itt felsorolt tárterületeket tudja megnyitni." },
+    netPromptHeader: { en: " Network share (NFS or SMB/CIFS) — Enter=mount, Esc=cancel ", hu: " Hálózati megosztás (NFS vagy SMB/CIFS) — Enter=csatol, Esc=mégse " },
+    netPromptExampleNfs: { en: "Example NFS:  192.168.1.10:/export/music", hu: "Példa NFS-hez:  192.168.1.10:/export/zene" },
+    netPromptExampleSmb: { en: "Example SMB:  //192.168.1.10/music", hu: "Példa SMB-hez:  //192.168.1.10/zene" },
+    netPromptLabel: { en: "Address: ", hu: "Cím: " },
+    netPromptBadFormat: { en: "Can't recognize the address format (NFS: server:/path, SMB: //server/share).", hu: "Nem ismerhető fel a cím formátuma (NFS: szerver:/út, SMB: //szerver/share)." },
+    netMounting: { en: "Mounting ({fstype}): {addr} -> {mp} ...", hu: "Csatolás ({fstype}): {addr} -> {mp} ..." },
+    netMounted: { en: "Mounted: {mp}", hu: "Csatolva: {mp}" },
     browserHint: function (path) {
       return {
-        en: " " + (path.length ? path.join("/") : "/") + " — Up/Down | Enter=open | Space=select | Esc=up | a=all | n=clear | r=repeat | /=search | m=drives | p=play ",
-        hu: " " + (path.length ? path.join("/") : "/") + " — Fel/Le | Enter=megnyit | Space=kijelöl | Esc=fel | a=mind | n=törlés | r=ismétlés | /=keresés | m=meghajtók | p=lejátszás "
+        en: " " + (path.length ? path.join("/") : "/") + " — Up/Down | Enter=open | Space=select | Esc=up | a=all | n=clear | r=repeat | /=search | m=drives | o=output | p=play ",
+        hu: " " + (path.length ? path.join("/") : "/") + " — Fel/Le | Enter=megnyit | Space=kijelöl | Esc=fel | a=mind | n=törlés | r=ismétlés | /=keresés | m=meghajtók | o=kimenet | p=lejátszás "
       };
     },
     selCount: { en: "Selected: {n} track(s)", hu: "Kijelölve: {n} track" },
@@ -422,33 +442,98 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
      Licensed preview clips supplied 2026-09-05; metadata below matches
      the actual files (verified via afinfo). Album B mixes 44.1kHz/16bit
      and 96kHz/24bit tracks on purpose, to demo bpplay's segment-change
-     behavior when selection spans differing sample rates. */
-  var DEMO_LIBRARY = {
-    name: "Demo Library",
-    folders: [
-      {
-        name: "Album A (PCM 44.1kHz/16bit)",
-        tracks: [
-          { id: "a1", title: "Track A1", file: "assets/demo-a1.wav", sample_rate: 44100, bit_depth: 16, duration: 115, format: "PCM" },
-          { id: "a2", title: "Track A2", file: "assets/demo-a2.wav", sample_rate: 44100, bit_depth: 16, duration: 71, format: "PCM" }
-        ]
-      },
-      {
-        name: "Album B (mixed rates)",
-        tracks: [
-          { id: "b1", title: "Track B1", file: "assets/demo-b1.wav", sample_rate: 44100, bit_depth: 16, duration: 110, format: "PCM" },
-          { id: "b2", title: "Track B2", file: "assets/demo-b2.wav", sample_rate: 96000, bit_depth: 24, duration: 62, format: "PCM" }
-        ]
-      }
-    ]
+     behavior when selection spans differing sample rates.
+
+     ROOTS simulates the storage roots offered by the real pick_root()
+     screen: the default library, a plugged-but-unmounted USB drive, and
+     a mounted network share. Selecting the USB/network entries "mounts"
+     them (simulated) and switches the active root -- no real hardware or
+     network is touched, this is all in-page mock data. */
+  var ROOTS = {
+    "default": {
+      name: "Demo Library",
+      folders: [
+        {
+          name: "Album A (PCM 44.1kHz/16bit)",
+          tracks: [
+            { id: "a1", title: "Track A1", file: "assets/demo-a1.wav", sample_rate: 44100, bit_depth: 16, duration: 115, format: "PCM" },
+            { id: "a2", title: "Track A2", file: "assets/demo-a2.wav", sample_rate: 44100, bit_depth: 16, duration: 71, format: "PCM" }
+          ]
+        },
+        {
+          name: "Album B (mixed rates)",
+          tracks: [
+            { id: "b1", title: "Track B1", file: "assets/demo-b1.wav", sample_rate: 44100, bit_depth: 16, duration: 110, format: "PCM" },
+            { id: "b2", title: "Track B2", file: "assets/demo-b2.wav", sample_rate: 96000, bit_depth: 24, duration: 62, format: "PCM" }
+          ]
+        }
+      ]
+    },
+    "usb1": {
+      name: "USB Drive (SanDisk Extreme)",
+      folders: [
+        {
+          name: "Live Recording",
+          tracks: [
+            { id: "u1", title: "Live Take 1", file: "assets/demo-a2.wav", sample_rate: 44100, bit_depth: 16, duration: 71, format: "PCM" }
+          ]
+        }
+      ]
+    },
+    "netshare": {
+      name: "Network Share",
+      folders: [
+        {
+          name: "NAS Library",
+          tracks: [
+            { id: "n1", title: "NAS Track", file: "assets/demo-b1.wav", sample_rate: 44100, bit_depth: 16, duration: 110, format: "PCM" }
+          ]
+        }
+      ]
+    }
   };
+
+  /* Mock ALSA-style output list, in the same shape/order-preference as
+     the real list_bpplay_devices()/pick_device(): default cursor lands
+     on the first non-onboard-looking device, not the "(default)" one,
+     mirroring the real app's UX reasoning (see zenevalaszto.py). */
+  var DEVICES = [
+    { index: "0", label: "[0] HDA Intel PCH (default)", onboard: true },
+    { index: "1", label: "[1] USB Audio DAC — Topping D90" },
+    { index: "2", label: "[2] USB Audio DAC — RME ADI-2 Pro" }
+  ];
+  function defaultDeviceCursor() {
+    for (var i = 0; i < DEVICES.length; i++) { if (!DEVICES[i].onboard) return i; }
+    for (var j = 0; j < DEVICES.length; j++) { if (DEVICES[j].label.indexOf("(default)") !== -1) return j; }
+    return 0;
+  }
+
+  function rootItems() {
+    return [
+      { type: "default" },
+      { type: "usb" },
+      { type: "playlist" },
+      { type: "network" },
+      { type: "custom" }
+    ];
+  }
+  function rootItemLabel(item) {
+    if (item.type === "default") return tr(T.rootItemDefault);
+    if (item.type === "usb") return tr(T.rootItemUsb);
+    if (item.type === "playlist") return tr(T.rootItemPlaylist);
+    if (item.type === "network") return tr(T.rootItemNetwork);
+    return tr(T.rootItemCustom);
+  }
 
   function humanKhz(hz) {
     if (!hz) return "?";
     return (hz % 1000 === 0 ? (hz / 1000) : (hz / 1000).toFixed(1)) + "kHz";
   }
+  function activeRoot() {
+    return ROOTS[state.rootId] || ROOTS["default"];
+  }
   function folderByPath(path) {
-    var node = DEMO_LIBRARY;
+    var node = activeRoot();
     for (var i = 0; i < path.length; i++) {
       node = node.folders.filter(function (f) { return f.name === path[i]; })[0];
       if (!node) return null;
@@ -458,7 +543,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
 
   /* ---------- state ---------- */
   var state = {
-    screen: "root",        // root | browser | playing
+    screen: "device",      // device | root | netprompt | mounting | browser | playing
     cursor: 0,
     path: [],              // folder stack (array of folder names)
     filter: "",
@@ -466,11 +551,16 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     selected: {},           // id -> true  (dict = insertion-order "ordered set", same trick as zenevalaszto.py)
     repeat: false,
     statusMsg: "",
+    rootId: "default",      // which ROOTS entry is currently browsed
+    device: null,           // chosen DEVICES entry (label)
+    deviceReturnScreen: "root", // where to go after confirming a device
+    netInput: "",           // text typed into the network-share prompt
+    mountMsg: "",           // status line shown on the "mounting" screen
     play: null              // { segments, segIndex, trackIndex, audio, paused }
   };
 
   function currentEntries() {
-    var node = folderByPath(state.path) || DEMO_LIBRARY;
+    var node = folderByPath(state.path) || activeRoot();
     var entries = [];
     (node.folders || []).forEach(function (f) { entries.push({ type: "folder", name: f.name }); });
     (node.tracks || []).forEach(function (t) { entries.push({ type: "track", track: t }); });
@@ -493,7 +583,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
 
   function orderedSelection() {
     return Object.keys(state.selected).map(function (id) {
-      var all = collectTracksRecursive(DEMO_LIBRARY);
+      var all = collectTracksRecursive(activeRoot());
       return all.filter(function (t) { return t.id === id; })[0];
     }).filter(Boolean);
   }
@@ -523,11 +613,52 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     termBody.innerHTML = "";
     termStatus.style.display = "none";
 
+    if (state.screen === "device") {
+      termBody.appendChild(line(tr(T.deviceHeader), "term-hint"));
+      termBody.appendChild(document.createTextNode("\n"));
+      termBody.appendChild(line(tr(T.deviceHint), "tl-dim"));
+      termBody.appendChild(document.createTextNode("\n\n"));
+      DEVICES.forEach(function (d, i) {
+        var cls = i === state.cursor ? "tl-hl" : "tl-white";
+        termBody.appendChild(line("  " + d.label, cls));
+        termBody.appendChild(document.createTextNode("\n"));
+      });
+      return;
+    }
+
     if (state.screen === "root") {
       termBody.appendChild(line(tr(T.rootHeader), "term-hint"));
       termBody.appendChild(document.createTextNode("\n\n"));
-      var rootRow = line("  " + tr(T.rootDefault), state.cursor === 0 ? "tl-hl" : "tl-white");
-      termBody.appendChild(rootRow);
+      rootItems().forEach(function (item, i) {
+        var current = item.type === "default" && state.rootId === "default";
+        var cls = i === state.cursor ? "tl-hl" : (current ? "tl-green" : "tl-white");
+        termBody.appendChild(line("  " + rootItemLabel(item), cls));
+        termBody.appendChild(document.createTextNode("\n"));
+      });
+      if (state.statusMsg) {
+        termBody.appendChild(document.createTextNode("\n"));
+        termBody.appendChild(line(state.statusMsg, "tl-gold"));
+      }
+      return;
+    }
+
+    if (state.screen === "netprompt") {
+      termBody.appendChild(line(tr(T.netPromptHeader), "term-hint"));
+      termBody.appendChild(document.createTextNode("\n\n"));
+      termBody.appendChild(line("  " + tr(T.netPromptExampleNfs), "tl-dim"));
+      termBody.appendChild(document.createTextNode("\n"));
+      termBody.appendChild(line("  " + tr(T.netPromptExampleSmb), "tl-dim"));
+      termBody.appendChild(document.createTextNode("\n\n"));
+      termBody.appendChild(line("  " + tr(T.netPromptLabel) + state.netInput, "tl-white"));
+      if (state.statusMsg) {
+        termBody.appendChild(document.createTextNode("\n\n"));
+        termBody.appendChild(line(state.statusMsg, "tl-red"));
+      }
+      return;
+    }
+
+    if (state.screen === "mounting") {
+      termBody.appendChild(line(state.mountMsg, "tl-dim"));
       return;
     }
 
@@ -584,9 +715,42 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
     }
   }
 
+  /* ---------- storage / device mounting (simulated) ---------- */
+  function mountUsb() {
+    state.screen = "mounting";
+    state.mountMsg = tr(T.mountingUsb);
+    render();
+    setTimeout(function () {
+      state.rootId = "usb1";
+      state.selected = {}; state.path = []; state.cursor = 0; state.filter = "";
+      state.screen = "browser";
+      state.statusMsg = tr(T.mountedUsb, { path: "/media/usb1" });
+      render();
+    }, 700);
+  }
+
+  function mountNetwork(addr) {
+    var fstype;
+    if (addr.indexOf("//") === 0 || addr.indexOf("\\\\") === 0) { fstype = "cifs"; }
+    else if (addr.indexOf(":") !== -1) { fstype = "nfs"; }
+    else { return false; }
+    var slug = addr.replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 40) || "share";
+    var mountpoint = "/mnt/netshare-" + slug;
+    state.screen = "mounting";
+    state.mountMsg = tr(T.netMounting, { fstype: fstype, addr: addr, mp: mountpoint });
+    render();
+    setTimeout(function () {
+      state.rootId = "netshare";
+      state.selected = {}; state.path = []; state.cursor = 0; state.filter = "";
+      state.screen = "browser";
+      state.statusMsg = tr(T.netMounted, { mp: mountpoint });
+      render();
+    }, 900);
+    return true;
+  }
+
   /* ---------- key handling ---------- */
   function moveCursor(delta) {
-    if (state.screen === "root") { state.cursor = 0; return; }
     var n = currentEntries().length;
     if (!n) return;
     state.cursor = Math.max(0, Math.min(n - 1, state.cursor + delta));
@@ -595,11 +759,57 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
   function handleKey(key) {
     state.statusMsg = "";
 
-    if (state.screen === "root") {
-      if (key === "Enter" || key === "q" || key === "Escape") {
-        state.screen = "browser"; state.path = []; state.cursor = 0;
+    if (state.screen === "device") {
+      if (key === "ArrowUp") { state.cursor = Math.max(0, state.cursor - 1); }
+      else if (key === "ArrowDown") { state.cursor = Math.min(DEVICES.length - 1, state.cursor + 1); }
+      else if (key === "Enter") {
+        state.device = DEVICES[state.cursor];
+        var target = state.deviceReturnScreen;
+        state.screen = target;
+        if (target === "browser") { state.statusMsg = tr(T.deviceChosen, { label: state.device.label }); }
+        else { state.cursor = 0; }
       }
       render(); return;
+    }
+
+    if (state.screen === "root") {
+      var items = rootItems();
+      if (key === "ArrowUp") { state.cursor = Math.max(0, state.cursor - 1); }
+      else if (key === "ArrowDown") { state.cursor = Math.min(items.length - 1, state.cursor + 1); }
+      else if (key === "q" || key === "Escape") {
+        state.screen = "browser";
+      } else if (key === "Enter") {
+        var item = items[state.cursor];
+        if (item.type === "default") {
+          if (state.rootId !== "default") {
+            state.rootId = "default"; state.selected = {}; state.path = []; state.filter = "";
+          }
+          state.cursor = 0; state.screen = "browser";
+        } else if (item.type === "usb") {
+          mountUsb(); return;
+        } else if (item.type === "playlist") {
+          state.statusMsg = tr(T.noSavedPlaylist);
+        } else if (item.type === "network") {
+          state.netInput = ""; state.screen = "netprompt";
+        } else if (item.type === "custom") {
+          state.statusMsg = tr(T.customPathNote);
+        }
+      }
+      render(); return;
+    }
+
+    if (state.screen === "netprompt") {
+      if (key === "Escape") { state.screen = "root"; }
+      else if (key === "Backspace") { state.netInput = state.netInput.slice(0, -1); }
+      else if (key === "Enter") {
+        if (state.netInput && !mountNetwork(state.netInput)) { state.statusMsg = tr(T.netPromptBadFormat); }
+        else if (state.netInput) { return; }
+      } else if (key.length === 1) { state.netInput += key; }
+      render(); return;
+    }
+
+    if (state.screen === "mounting") {
+      return; // busy: ignore all keys until the simulated mount completes
     }
 
     if (state.screen === "browser") {
@@ -627,13 +837,17 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
         if (state.path.length) { state.path = state.path.slice(0, -1); state.cursor = 0; state.filter = ""; }
         else { state.screen = "root"; state.cursor = 0; }
       } else if (key === "a") {
-        collectTracksRecursive(folderByPath(state.path) || DEMO_LIBRARY).forEach(function (t) { state.selected[t.id] = true; });
+        collectTracksRecursive(folderByPath(state.path) || activeRoot()).forEach(function (t) { state.selected[t.id] = true; });
       } else if (key === "n") {
         state.selected = {};
       } else if (key === "r") {
         state.repeat = !state.repeat;
       } else if (key === "m") {
-        state.screen = "root"; state.cursor = 0; state.selected = {}; state.path = [];
+        state.screen = "root"; state.cursor = 0;
+      } else if (key === "o") {
+        state.deviceReturnScreen = "browser";
+        state.cursor = state.device ? DEVICES.indexOf(state.device) : defaultDeviceCursor();
+        state.screen = "device";
       } else if (key === "/") {
         state.searchMode = true; state.filter = "";
       } else if (key === "p") {
@@ -718,8 +932,9 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
 
   /* ---------- input wiring ---------- */
   termBody.addEventListener("keydown", function (ev) {
+    var typingChar = state.screen === "netprompt" ? /^[\x20-\x7e]$/.test(ev.key) : /^[a-zA-Z/]$/.test(ev.key);
     var handled = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Escape", " ", "Backspace"].indexOf(ev.key) !== -1
-      || /^[a-zA-Z/]$/.test(ev.key);
+      || typingChar;
     if (handled) { ev.preventDefault(); handleKey(ev.key); }
   });
   document.querySelectorAll(".touch-key").forEach(function (btn) {
@@ -730,6 +945,7 @@ footer.ft { border-top: 1px solid var(--hairline); padding: 48px 0 32px; backgro
   });
 
   /* init */
+  state.cursor = defaultDeviceCursor();
   if (savedLang === "hu" || savedLang === "en") { setLang(savedLang, false); }
   else if ((navigator.language || "").toLowerCase().indexOf("hu") === 0) { setLang("hu", false); }
   else { setLang("en", false); }
