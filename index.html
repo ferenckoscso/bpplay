@@ -884,6 +884,8 @@ footer {
 
     <p class="lede" style="margin-top:22px; font-size:15px;" data-i18n="formats.localOnly">bpplay plays files: from local storage, a NAS, or a Google Drive / Dropbox folder, as long as it's mounted on the Mac. It is not a streaming client: no built-in connection to Spotify, Tidal, Qobuz or similar services.</p>
 
+    <p class="lede" style="margin-top:14px; font-size:15px;" data-i18n="formats.channels">Channel count comes straight from the file header — stereo, quadraphonic, 5.1, or anything else the format carries — and goes to the DAC unchanged, up to 64 channels. No downmixing, no channel remapping.</p>
+
     <div class="omitted reveal">
       <h3 data-i18n="formats.omittedH">Deliberately out of scope</h3>
       <p data-i18n="formats.omittedP">Library management, a graphical interface, network streaming, signal processing, volume control. None are oversights; each would be a place where the signal could change, or noise could arise, between the file and the DAC.</p>
@@ -918,6 +920,7 @@ footer {
       <li><b data-i18n="validated.l4b">Thunderbolt hub</b><span data-i18n="validated.l4">Sonnet Tech Thunderbolt 5</span></li>
       <li><b data-i18n="validated.l5b">USB hub</b><span data-i18n="validated.l5">A no-name hub, for the honest baseline</span></li>
       <li><b data-i18n="validated.l6b">Cabling</b><span data-i18n="validated.l6">Both expensive and cheap</span></li>
+      <li><b data-i18n="validated.l7b">Multichannel</b><span data-i18n="validated.l7">4-channel (quadraphonic) playback confirmed on v0.9.1, through a Ravenna-based Merging Anubis DAC</span></li>
     </ul>
   </div>
 </section>
@@ -1163,6 +1166,7 @@ footer {
       "formats.aiff": "16 / 24 / 32-bit, uncompressed only",
       "formats.dsf": "DSD64–DSD256 via DoP",
       "formats.localOnly": "bpplay plays files: from local storage, a NAS, or a Google Drive / Dropbox folder, as long as it's mounted on the Mac. It is not a streaming client: no built-in connection to Spotify, Tidal, Qobuz or similar services.",
+      "formats.channels": "Channel count comes straight from the file header — stereo, quadraphonic, 5.1, or anything else the format carries — and goes to the DAC unchanged, up to 64 channels. No downmixing, no channel remapping.",
       "formats.omittedH": "Deliberately out of scope",
       "formats.omittedP": "Library management, a graphical interface, network streaming, signal processing, volume control. None are oversights; each would be a place where the signal could change, or noise could arise, between the file and the DAC.",
       "demo.eyebrow": "See it",
@@ -1178,6 +1182,7 @@ footer {
       "validated.l4b": "Thunderbolt hub", "validated.l4": "Sonnet Tech Thunderbolt 5",
       "validated.l5b": "USB hub", "validated.l5": "A no-name hub, for the honest baseline",
       "validated.l6b": "Cabling", "validated.l6": "Both expensive and cheap",
+      "validated.l7b": "Multichannel", "validated.l7": "4-channel (quadraphonic) playback confirmed on v0.9.1, through a Ravenna-based Merging Anubis DAC",
       "start.eyebrow": "Get started",
       "start.h2": "Terminal, or drag-and-drop.<br>Your choice.",
       "start.lede": "The DMG bundles the CLI binary plus two zero-configuration launchers: a drag-and-drop app and a Finder Quick Action. Both are Developer ID signed and notarised.",
@@ -1290,6 +1295,7 @@ footer {
       "formats.aiff": "16 / 24 / 32 bit, csak tömörítetlen",
       "formats.dsf": "DSD64–DSD256, DoP-on keresztül",
       "formats.localOnly": "A bpplay fájlokat játszik le: helyi tárhelyről, NAS-ról, vagy egy Google Drive-/Dropbox-mappából, amennyiben az a Macen csatolva (mountolva) van. Nem streaming-kliens: nincs beépített kapcsolata a Spotify, Tidal, Qobuz vagy hasonló szolgáltatásokhoz.",
+      "formats.channels": "A csatornaszám egyenesen a fájl fejlécéből jön — sztereó, kvadrofón, 5.1, vagy bármi más, amit a formátum hordoz —, és változtatás nélkül jut el a DAC-hoz, akár 64 csatornáig. Nincs downmix, nincs csatorna-áthelyezés.",
       "formats.omittedH": "Tudatosan kimaradt",
       "formats.omittedP": "Könyvtárkezelés, grafikus felület, hálózati streaming, jelfeldolgozás, hangerőszabályzás. Egyik sem mulasztás; mindegyik egy-egy hely lenne, ahol a jel megváltozhatna, vagy zaj keletkezhetne a fájl és a DAC között.",
       "demo.eyebrow": "Nézd meg",
@@ -1305,6 +1311,7 @@ footer {
       "validated.l4b": "Thunderbolt hub", "validated.l4": "Sonnet Tech Thunderbolt 5",
       "validated.l5b": "USB hub", "validated.l5": "Egy no-name hub, a becsületes alapszinthez",
       "validated.l6b": "Kábelezés", "validated.l6": "Drága és olcsó egyaránt",
+      "validated.l7b": "Többcsatornás", "validated.l7": "4 csatornás (kvadrofón) lejátszás igazolva v0.9.1-en, Ravenna-alapú Merging Anubis DAC-kal",
       "start.eyebrow": "Kezdéshez",
       "start.h2": "Terminál, vagy húzd-és-dobd.<br>Te választasz.",
       "start.lede": "A DMG a CLI binárist plusz két nulla-konfigurációs indítót tartalmaz: egy drag-and-drop appot és egy Finder Quick Actiont. Mindkettő Developer ID-vel aláírt és notarizált.",
