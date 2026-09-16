@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>bpplay + bptune: x86_64 Live-USB kiosk edition</title>
-<meta name="description" content="A path to perfect silence: the file decodes once into locked memory, and nothing else runs while it plays. Try it risk-free from a USB stick that leaves your computer untouched.">
-<meta property="og:title" content="bpplay + bptune: x86_64 Live-USB kiosk edition">
-<meta property="og:description" content="Path to perfect silence: the computer disappears from computer audio playback.">
+<title>bpplay + bptune: x86_64 Live-USB desktop edition</title>
+<meta name="description" content="A path to perfect silence: the file decodes once into locked memory, and nothing else runs while it plays. Boot a normal desktop from a USB stick, drag a file onto the bpplay icon, and listen — risk-free, your computer stays untouched.">
+<meta property="og:title" content="bpplay + bptune: x86_64 Live-USB desktop edition">
+<meta property="og:description" content="Path to perfect silence: the computer disappears from computer audio playback. No SSH, no install — a normal desktop with a drag-and-drop player.">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a09'/%3E%3Ctext x='14' y='46' font-family='Arial' font-size='38' font-weight='bold' fill='%23eeeeec'%3Eb%3C/text%3E%3Cpath d='M36 22 L54 32 L36 42 Z' fill='%23df8d20'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +15,7 @@
 <style>
 /* == style.css inlined so this page works as a single file == */
 /* ============================================================
-   bpplay + bptune; x86_64 Live-USB kiosk edition
+   bpplay + bptune; x86_64 Live-USB desktop edition
    Design language: matched to ferenckoscso.github.io/bpplay
    ============================================================ */
 
@@ -719,18 +719,15 @@ footer.ft {
 <!-- ================= HEADER ================= -->
 <header class="nav">
   <div class="wrap">
-    <a class="brand" href="#top">bpplay<span class="plus">+</span>bptune<span class="ed"> · x64</span></a>
+    <a class="brand" href="#top">bpplay<span class="plus">+</span>bptune<span class="ed"> · x64 desktop</span></a>
 
     <ul class="nav-links">
       <li><a href="#device"><span class="en">Device</span><span class="hu">Készülék</span></a></li>
-      <li><a href="#demo"><span class="en">Demo</span><span class="hu">Demó</span></a></li>
-      <li><a href="../demo/"><span class="en">Live demo ↗</span><span class="hu">Élő demó ↗</span></a></li>
       <li><a href="#quickstart"><span class="en">Quick start</span><span class="hu">Gyorsindítás</span></a></li>
-      <li><a href="#keys"><span class="en">Keys</span><span class="hu">Billentyűk</span></a></li>
       <li><a href="#hardware"><span class="en">Hardware</span><span class="hu">Hardver</span></a></li>
       <li><a href="#trial"><span class="en">Trial &amp; FAQ</span><span class="hu">Próba &amp; GYIK</span></a></li>
       <li><a href="#guide"><span class="en">Guide</span><span class="hu">Útmutató</span></a></li>
-      <li><a href="../x64-desktop/"><span class="en">Desktop edition ↗</span><span class="hu">Desktop kiadás ↗</span></a></li>
+      <li><a href="../x64/"><span class="en">Kiosk (SSH) edition ↗</span><span class="hu">Kiosk (SSH) kiadás ↗</span></a></li>
       <li><a href="../press/"><span class="en">Press &amp; Reviews</span><span class="hu">Sajtó &amp; vélemények</span></a></li>
       <li><a href="https://github.com/ferenckoscso/bpplay">GitHub ↗</a></li>
     </ul>
@@ -740,8 +737,8 @@ footer.ft {
         <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
         <button type="button" data-lang-btn="hu" aria-pressed="false">HU</button>
       </div>
-      <a class="btn btn-gold nav-cta-desktop en" href="https://drive.google.com/file/d/1-xx-mXRtoZqlQTIblYUC2_zZezKAotZv/view?usp=sharing">Download (EN)</a>
-      <a class="btn btn-gold nav-cta-desktop hu" href="https://drive.google.com/file/d/1_zq5m5T-k0EMWXxDIvITraocY8B7cxfi/view?usp=sharing">Letöltés (HU)</a>
+      <a class="btn btn-gold nav-cta-desktop en" href="REPLACE_WITH_DRIVE_LINK_EN">Download (EN)</a>
+      <a class="btn btn-gold nav-cta-desktop hu" href="REPLACE_WITH_DRIVE_LINK_HU">Letöltés (HU)</a>
       <button class="nav-burger" type="button" aria-expanded="false" aria-controls="navlinks">≡</button>
     </div>
   </div>
@@ -752,42 +749,42 @@ footer.ft {
   <div class="wrap-wide">
     <div class="hero-grid">
       <div>
-        <p class="overline"><span class="en">LINUX x86_64<span class="sep">·</span>LIVE USB<span class="sep">·</span>KIOSK EDITION</span><span class="hu">LINUX x86_64<span class="sep">·</span>LIVE USB<span class="sep">·</span>KIOSK KIADÁS</span></p>
+        <p class="overline"><span class="en">LINUX x86_64<span class="sep">·</span>LIVE USB<span class="sep">·</span>DESKTOP EDITION</span><span class="hu">LINUX x86_64<span class="sep">·</span>LIVE USB<span class="sep">·</span>DESKTOP KIADÁS</span></p>
         <h1><span class="en">Path to perfect <span class="gold">silence</span>.</span><span class="hu">Út a tökéletes <span class="gold">csend</span> felé.</span></h1>
-        <p class="sub"><span class="en">The entire file decodes once, at load time, into locked memory. During playback, no other process runs. The computer disappears from computer audio playback.</span><span class="hu">A teljes fájl egyszer, betöltéskor dekódolódik és zárolt memóriába kerül, lejátszás közben semmilyen más folyamat nem fut. Eltűnik a számítógép a számítógépes lejátszásból.</span></p>
+        <p class="sub"><span class="en">Boots into a normal desktop, on your own screen and keyboard. Drag a file or an album folder onto the bpplay icon; it decodes once into locked memory, and nothing else runs while it plays.</span><span class="hu">Egy normál asztali környezetbe bootol, a saját kijelződön és billentyűzeteden. Húzz rá egy fájlt vagy egy album-mappát a bpplay ikonra; a fájl egyszer dekódolódik és zárolt memóriába kerül, lejátszás közben semmilyen más folyamat nem fut.</span></p>
         <div class="hero-cta">
-          <a class="btn btn-gold en" href="https://drive.google.com/file/d/1-xx-mXRtoZqlQTIblYUC2_zZezKAotZv/view?usp=sharing">↓ Download the image (EN)</a>
-          <a class="btn btn-gold hu" href="https://drive.google.com/file/d/1_zq5m5T-k0EMWXxDIvITraocY8B7cxfi/view?usp=sharing">↓ Image letöltése (HU)</a>
+          <a class="btn btn-gold en" href="REPLACE_WITH_DRIVE_LINK_EN">↓ Download the image (EN)</a>
+          <a class="btn btn-gold hu" href="REPLACE_WITH_DRIVE_LINK_HU">↓ Image letöltése (HU)</a>
           <a class="btn btn-ghost" href="#guide"><span class="en">Read the guide</span><span class="hu">Útmutató elolvasása</span></a>
           <a class="btn btn-ghost" href="https://github.com/ferenckoscso/bpplay">GitHub</a>
         </div>
-        <p class="hero-note"><span class="en"><b>On a laptop, with its own screen you can't unplug?</b> Use the <a href="../x64-desktop/">x64 desktop edition →</a> instead — this kiosk edition assumes a fully headless machine. Looking for the sealed Raspberry Pi appliance? <a href="../pi/">bpplay for Pi →</a> · Looking for the native computer version? <a href="https://ferenckoscso.github.io/bpplay/">bpplay for macOS →</a></span><span class="hu"><b>Laptopon próbálod, aminek nem húzható ki a saját kijelzője?</b> Inkább az <a href="../x64-desktop/">x64 desktop kiadást →</a> használd — ez a kiosk kiadás egy teljesen fejnélküli gépet feltételez. A lezárt Raspberry Pi készüléket keresed? <a href="../pi/">bpplay Pi-re →</a> · A natív számítógépes verziót keresed? <a href="https://ferenckoscso.github.io/bpplay/">bpplay macOS-re →</a></span></p>
+        <p class="hero-note"><span class="en">Want to run it headless, controlled over SSH (e.g. on a shelf, no monitor)? <a href="../x64/">bpplay x64 kiosk edition →</a> · Looking for the sealed Raspberry Pi appliance? <a href="../pi/">bpplay for Pi →</a> · Looking for the native computer version? <a href="https://ferenckoscso.github.io/bpplay/">bpplay for macOS →</a></span><span class="hu">Fejnélküli, SSH-n vezérelt lejátszót keresel (pl. polcra, monitor nélkül)? <a href="../x64/">bpplay x64 kiosk kiadás →</a> · A lezárt Raspberry Pi készüléket keresed? <a href="../pi/">bpplay Pi-re →</a> · A natív számítógépes verziót keresed? <a href="https://ferenckoscso.github.io/bpplay/">bpplay macOS-re →</a></span></p>
       </div>
 
       <div class="rv">
-        <div class="term" role="img" aria-label="Illustration of the music selector screen">
+        <div class="term" role="img" aria-label="Illustration of the desktop playback terminal">
           <div class="term-bar">
             <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
-            <span class="term-title">bpplay-kiosk-x86_64; zenevalaszto</span>
+            <span class="term-title">bpplay; drag &amp; drop</span>
           </div>
-          <div class="term-body"><span class="t-bar">/ | ↑↓ | Enter=belép | Space=kijelöl | a/n | r=ismétlés | s=mentés l=betöltés | /=keresés | Esc=fel | m=…</span>[ ] <span class="tl-dim">[D]</span> <span class="tl-hl">2022_zenek</span>
-[ ] <span class="tl-dim">[D]</span> <span class="tl-white">DSD256 Archive</span>
-[ ] <span class="tl-dim">[D]</span> <span class="tl-white">French Cafe</span>
-[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Gojdar_T_LP</span>
-[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Kada Ad Lib 9624</span>
-[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Live Session Recordings</span>
-[ ] <span class="tl-dim">[D]</span> <span class="tl-white">MRC2020</span>
-[ ] <span class="tl-dim">[D]</span> <span class="tl-white">Analog Tape Transfers</span>
-<span class="tl-gold">33Bowls_breathe_MQA.mqa.flac</span> <span class="tl-dim">(1630.0 MB, 48kHz)</span>
+          <div class="term-body"><span class="tl-white">Lejátszás indul, 9 track:</span>
+<span class="tl-dim">-- 01 - Sunny.flac</span>
+<span class="tl-dim">-- 02 - Daddy Cool.flac …</span>
+<span class="tl-white">Device: USB Audio DAC (hw:1,0)</span>
+<span class="tl-white">Loading 9 file(s) into RAM…</span>
+<span class="tl-white">Physical format: 32-bit integer.</span>
+<span class="tl-gold">Virtual format: integer, 32-bit, 8 B/frame</span>
+<span class="tl-gold">» INTEGER MODE ACTIVE, signal path truly conversion-free</span>
+<span class="tl-white">Playing…  [n] next  [b] prev  [space] pause  [q] quit</span>
 <span class="cursor">&nbsp;</span></div>
-          <div class="term-status"><span>zenevalaszto:bash*</span><span>"bpplay-kiosk" 12:41 29-Aug-26</span></div>
+          <div class="term-status"><span>bpplay_drop.sh</span><span>"bpplay-desktop" 12:41 29-Aug-26</span></div>
         </div>
-        <p class="figure-cap"><span class="en">The music selector, reached over SSH; illustration redrawn from the actual browser screen (the device UI itself is in Hungarian).</span><span class="hu">A zeneválasztó SSH-n keresztül; a valódi böngésző-képernyő alapján újrarajzolt illusztráció (a készülék felülete magyar nyelvű).</span></p>
+        <p class="figure-cap"><span class="en">The window that opens after dropping a file onto the desktop icon; illustration redrawn from the actual terminal output.</span><span class="hu">Az ablak, ami egy fájl asztali ikonra húzása után nyílik; a valódi terminál-kimenet alapján újrarajzolt illusztráció.</span></p>
       </div>
     </div>
 
     <div class="stat-strip rv">
-      <div class="stat"><b><span class="en">5 steps</span><span class="hu">5 lépés</span></b><span><span class="en">from stick to music</span><span class="hu">kulcstól a zenéig</span></span></div>
+      <div class="stat"><b><span class="en">3 steps</span><span class="hu">3 lépés</span></b><span><span class="en">from stick to music</span><span class="hu">kulcstól a zenéig</span></span></div>
       <div class="stat"><b>15 + 15</b><span><span class="en">days of trial</span><span class="hu">nap próbaidő</span></span></div>
       <div class="stat"><b>DSD</b><span><span class="en">native + DoP</span><span class="hu">natív + DoP</span></span></div>
       <div class="stat"><b><span class="en">0 install</span><span class="hu">0 telepítés</span></b><span><span class="en">your computer stays untouched</span><span class="hu">a gép érintetlen marad</span></span></div>
@@ -807,9 +804,9 @@ footer.ft {
 
     <div class="cards">
       <div class="card rv">
-        <span class="c-ico">01 · KIOSK</span>
-        <h3><span class="en">Sealed kiosk mode</span><span class="hu">Zárt kiosk mód</span></h3>
-        <p><span class="en">The stick boots straight into the music selector, with no login. You connect to it over SSH from your own device; no monitor, keyboard or mouse is needed on the machine itself, and no terminal emulator is even installed on the stick. Once connected, a handful of keys is enough: arrows, <code>Enter</code>, <code>Space</code>, <code>Esc</code>.</span><span class="hu">A kulcs egyenesen, bejelentkezés nélkül a zeneválasztóba bootol. SSH-n lehet hozzá kapcsolódni egy saját eszközről; magán a gépen nincs szükség monitorra, billentyűzetre vagy egérre, és a kulcson terminálemulátor sincs telepítve. Kapcsolódás után néhány billentyű elég: nyilak, <code>Enter</code>, <code>Space</code>, <code>Esc</code>.</span></p>
+        <span class="c-ico">01 · DESKTOP</span>
+        <h3><span class="en">A real desktop, no SSH needed</span><span class="hu">Valódi asztali környezet, SSH nélkül</span></h3>
+        <p><span class="en">The stick boots into a normal desktop, on the machine's own screen, keyboard and mouse; no second device, no terminal typing. Drag a music file or an entire album folder onto the bpplay icon to play it.</span><span class="hu">A kulcs egy normál asztali környezetbe bootol, a gép saját kijelzőjén, billentyűzetén és egerén; nincs szükség második eszközre, nem kell parancsot begépelni. Egy zenefájlt vagy egy teljes album-mappát ráhúzva a bpplay ikonra elindul a lejátszás.</span></p>
       </div>
       <div class="card rv">
         <span class="c-ico">02 · INTEGER</span>
@@ -824,27 +821,9 @@ footer.ft {
       <div class="card rv">
         <span class="c-ico">04 · BPTUNE</span>
         <h3><span class="en">bptune runs, but conservatively</span><span class="hu">A zajos háttér elnémul</span></h3>
-        <p><span class="en">The CPU governor is set to "performance" and Turbo Boost/Precision Boost is disabled automatically at boot. Kernel-level CPU-core isolation and DAC IRQ affinity are deliberately <b>not</b> included here; they can't be safely preset on unknown hardware. This trial favors a risk-free try-out over the maximally tuned experience.</span><span class="hu">A bptune kikapcsolja mindazt, ami nem a zenéről szól; csak az marad, ami a lejátszáshoz feltétlenül kell. A CPU-kormányzó automatikusan "performance" módra áll, a Turbo Boost/Precision Boost kikapcsol induláskor. A kernel-szintű CPU-mag-izoláció és a DAC IRQ-affinitás szándékosan <b>nincs</b> ebben benne; ismeretlen hardveren ezt nem lehet biztonságosan előre beállítani. Ez a próbaverzió a kockázatmentes kipróbálást részesíti előnyben a maximálisan hangolt élménnyel szemben.</span></p>
+        <p><span class="en">Turbo Boost/Precision Boost is disabled automatically each time you start playback. Kernel-level CPU-core isolation and DAC IRQ affinity are deliberately <b>not</b> included here; they can't be safely preset on unknown hardware, and this edition keeps the rest of the desktop usable between listening sessions. This trial favors a risk-free try-out over the maximally tuned experience.</span><span class="hu">A Turbo Boost/Precision Boost minden lejátszás-indításkor automatikusan kikapcsol. A kernel-szintű CPU-mag-izoláció és a DAC IRQ-affinitás szándékosan <b>nincs</b> ebben benne; ismeretlen hardveren ezt nem lehet biztonságosan előre beállítani, és ez a kiadás a hallgatási munkamenetek között is használható asztali környezetet hagy. Ez a próbaverzió a kockázatmentes kipróbálást részesíti előnyben a maximálisan hangolt élménnyel szemben.</span></p>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- ================= DEMO ================= -->
-<section id="demo">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <p class="overline"><span class="en">SEE IT</span><span class="hu">NÉZD MEG</span></p>
-      <h2><span class="en">Kiosk mode, from boot to first track.</span><span class="hu">Kiosk mód, bootolástól az első számig.</span></h2>
-      <p class="lede"><span class="en">A short, unedited screen recording of the kiosk experience: connecting over SSH, browsing, and starting playback.</span><span class="hu">Egy rövid, vágatlan képernyőfelvétel a kiosk élményről: SSH-kapcsolódás, böngészés, lejátszás indítása.</span></p>
-    </div>
-    <div class="video-frame rv">
-      <video controls preload="metadata" playsinline>
-        <source src="../assets/bpplay_bptune_kiosk_mode_intro.mp4" type="video/mp4">
-      </video>
-    </div>
-    <div class="video-caption">bpplay_bptune_kiosk_mode_intro.mp4 · 2:12</div>
-    <p style="margin-top:24px;"><a class="btn btn-ghost" href="../demo/"><span class="en">Try the interactive demo in your browser →</span><span class="hu">Próbáld ki az interaktív demót a böngésződben →</span></a></p>
   </div>
 </section>
 
@@ -853,8 +832,8 @@ footer.ft {
   <div class="wrap">
     <div class="sec-head rv">
       <p class="overline"><span class="en">QUICK START</span><span class="hu">GYORSINDÍTÁS</span></p>
-      <h2><span class="en">From USB stick to music in five steps.</span><span class="hu">Öt lépés a USB-kulcstól a zenéig.</span></h2>
-      <p class="lede"><span class="en">No technical knowledge is required for any of this; Balena Etcher handles the writing, and the stick does the rest.</span><span class="hu">Egyik lépéshez sem kell technikai tudás; a Balena Etcher elvégzi az írást, a többit a kulcs csinálja.</span></p>
+      <h2><span class="en">From USB stick to music in three steps.</span><span class="hu">Három lépés a USB-kulcstól a zenéig.</span></h2>
+      <p class="lede"><span class="en">No technical knowledge is required for any of this; Balena Etcher handles the writing, and the desktop does the rest.</span><span class="hu">Egyik lépéshez sem kell technikai tudás; a Balena Etcher elvégzi az írást, a többit az asztali környezet csinálja.</span></p>
     </div>
 
     <!-- STEP 1 -->
@@ -865,7 +844,6 @@ footer.ft {
         <p><span class="en">You'll need a USB stick of at least 8 GB (its current contents will be erased). Download <a href="https://etcher.balena.io">Balena Etcher</a> (free, identical on Mac and Windows), open it, choose "Flash from file" and select the downloaded <code>.img.gz</code>; Etcher decompresses it automatically while writing, no manual unzip needed. Then "Select target" → your USB stick (double-check the size if several drives are connected) → "Flash!".</span><span class="hu">Kell egy legalább 8 GB-os USB-kulcs (a jelenlegi tartalma törlődik). Letölthető a <a href="https://etcher.balena.io">Balena Etcher</a> (ingyenes, Mac-en és Windowson egyforma); megnyitás után a "Flash from file" választható, majd kijelölhető a letöltött <code>.img.gz</code> fájl; az Etcher írás közben automatikusan kicsomagolja, nincs szükség kézi kitömörítésre. Utána "Select target" → az USB-kulcs (ha több meghajtó is csatlakozik, érdemes ellenőrizni a méretet) → "Flash!".</span></p>
         <div class="chips">
           <span class="chip"><span class="en"><b>USB stick</b> 8 GB or larger</span><span class="hu"><b>USB-kulcs</b> 8 GB vagy nagyobb</span></span>
-          <span class="chip"><span class="en">Download is <b>~920 MB</b>, writes to <b>8 GB</b></span><span class="hu">A letöltés <b>~920 MB</b>, kiírva <b>8 GB</b>-ot foglal</span></span>
           <span class="chip"><span class="en">Advanced: <code>dd</code> works too (Linux/Mac)</span><span class="hu">Haladóknak: <code>dd</code> is működik (Linux/Mac)</span></span>
         </div>
         <div class="warn note"><span class="en"><b>If using <code>dd</code> instead of Etcher:</b> it irreversibly overwrites the target device. Always double-check the device name (<code>diskutil list</code> / <code>lsblk</code>) before pressing Enter; the wrong device means data loss.</span><span class="hu"><b>Ha az Etcher helyett <code>dd</code> használatos:</b> visszafordíthatatlanul felülírja a megadott eszközt. Az eszköznevet (<code>diskutil list</code> / <code>lsblk</code>) mindig érdemes kétszer ellenőrizni Enter lenyomása előtt; a rossz eszköz adatvesztést okoz.</span></div>
@@ -873,7 +851,7 @@ footer.ft {
       <div class="step-media">
         <div class="term">
           <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Balena Etcher</span></div>
-          <div class="term-body"><span class="tl-white">1.</span> <span class="tl-gold">Flash from file</span> <span class="tl-dim">→ bpplay-kiosk-x86_64.img.gz</span>
+          <div class="term-body"><span class="tl-white">1.</span> <span class="tl-gold">Flash from file</span> <span class="tl-dim">→ bpplay-desktop-x86_64.img.gz</span>
 <span class="tl-white">2.</span> <span class="tl-gold">Select target</span> <span class="tl-dim">→ your USB stick</span>
 <span class="tl-white">3.</span> <span class="tl-hl">Flash!</span>
 <span class="tl-dim">Etcher decompresses .gz automatically while writing.</span>
@@ -896,7 +874,7 @@ footer.ft {
           <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title"><span class="en">boot menu (typical)</span><span class="hu">boot-menü (jellemző)</span></span></div>
           <div class="term-body"><span class="tl-dim">┌──────────────────────────────────────────┐</span>
 <span class="tl-dim">│</span>  <span class="tl-white">Macintosh HD</span>
-<span class="tl-dim">│</span>  <span class="tl-hl">EFI Boot</span>  <span class="tl-dim">← bpplay-kiosk USB stick</span>
+<span class="tl-dim">│</span>  <span class="tl-hl">EFI Boot</span>  <span class="tl-dim">← bpplay-desktop USB stick</span>
 <span class="tl-dim">│</span>
 <span class="tl-dim">│</span>  <span class="tl-gold">↑↓ select · Enter boot</span>
 <span class="tl-dim">└──────────────────────────────────────────┘</span></div>
@@ -909,72 +887,21 @@ footer.ft {
     <div class="step rv" id="qs3">
       <div class="step-num">3</div>
       <div class="s-body">
-        <h3><span class="en">Connect over SSH</span><span class="hu">Kapcsolódás SSH-n</span></h3>
-        <p><span class="en">From your own device, open an SSH app and connect to <code>kiosk@bpplay-kiosk-en.local</code> (<code>kiosk@bpplay-kiosk-hu.local</code> for the Hungarian image) &mdash; this works even without a router or DHCP, straight over a single Ethernet cable between the two machines. If <code>.local</code> names don't resolve on your network, note the machine's IP address instead (shown on screen right after boot, before the login prompt would appear) and connect to <code>kiosk@</code> that address. When the SSH app asks for a password, it is <code>bitperfectsound</code> &mdash; both the user name (<code>kiosk</code>) and the password use only characters that sit in the same place, without Shift, on the common keyboard layouts (QWERTY, QWERTZ, AZERTY). The music selector screen then appears; nothing else needs to be typed.</span><span class="hu">Egy saját eszközről megnyitható egy SSH-alkalmazás, és kapcsolódni lehet a <code>kiosk@bpplay-kiosk-hu.local</code> címhez (angol image esetén <code>kiosk@bpplay-kiosk-en.local</code>) &mdash; ez router vagy DHCP nélkül is működik, akár egyetlen Ethernet-kábellel közvetlenül összekötve a két gépet. Ha a <code>.local</code> nevek nem oldódnak fel a hálózaton, érdemes megjegyezni helyette a gép IP-címét (közvetlenül boot után kiírja a képernyő, még a bejelentkezési prompt előtt), és a <code>kiosk@</code> és ez a cím kombinációjához lehet kapcsolódni. Amikor az SSH-alkalmazás jelszót kér, az a <code>bitperfectsound</code> &mdash; a felhasználónév (<code>kiosk</code>) és a jelszó is csak olyan karakterekből áll, amelyek a legelterjedtebb billentyűzetkiosztásokon (QWERTY, QWERTZ, AZERTY) ugyanazon a helyen, Shift nélkül vannak. Ezután megjelenik a zeneválasztó képernyője; mást nem kell beírni.</span></p>
-        <div class="chips">
-          <span class="chip"><b>macOS / Linux</b>: <span class="en">Terminal + ssh</span><span class="hu">Terminál + ssh</span></span>
-          <span class="chip"><b>Windows 10/11</b>: OpenSSH · PuTTY</span>
-          <span class="chip"><b>Android</b>: Termux · JuiceSSH · ConnectBot</span>
-          <span class="chip"><b>iOS / iPadOS</b>: Termius · Blink Shell</span>
-        </div>
-        <div class="note"><span class="en"><b>Wired Ethernet only.</b> This kiosk edition deliberately uses only a wired Ethernet connection (Wi-Fi is disabled by design, for determinism and sound quality); plug in a cable before booting. Keep the network up for the entire listening session; the SSH connection keeps the music selector alive through it.</span><span class="hu"><b>Csak vezetékes Ethernet.</b> Ez a kiosk kiadás szándékosan csak vezetékes Ethernet-kapcsolatot használ (a Wi-Fi ki van kapcsolva, a determinizmus/hangminőség érdekében); dugj be egy kábelt bootolás előtt. A hálózat maradjon fenn a teljes hallgatás alatt; az SSH-kapcsolat ezen keresztül tartja életben a zeneválasztót.</span></div>
-      </div>
-      <div class="step-media">
-        <div class="term">
-          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">your-computer; Terminal</span></div>
-          <div class="term-body"><span class="tl-white">you@your-mac ~ %</span> <span class="tl-gold">ssh kiosk@bpplay-kiosk-en.local</span>
-<span class="tl-dim">Linux bpplay-kiosk 6.x … x86_64</span>
-
-<span class="tl-white">Zenei gyökér kiválasztása; Fel/Le, Enter=kiválaszt…</span>
-<span class="tl-green">connected; the music selector takes over</span>
-<span class="cursor">&nbsp;</span></div>
-        </div>
-        <p class="figure-cap"><span class="en">One command from your computer; the selector appears by itself.</span><span class="hu">Egy parancs egy saját gépről; a választó magától megjelenik.</span></p>
-      </div>
-    </div>
-
-    <!-- STEP 4 -->
-    <div class="step rv" id="qs4">
-      <div class="step-num">4</div>
-      <div class="s-body">
-        <h3><span class="en">First screen and storage</span><span class="hu">Kezdőképernyő és tárterület</span></h3>
-        <p><span class="en">Once connected over SSH, the music browser appears straight away; no further login or setup step. The start screen lists connected drives; if your music lives on a NAS, there's also a "Mount network share (NFS/SMB)…" line; just enter its address (e.g. <code>192.168.1.10:/music</code> for NFS, <code>//192.168.1.10/music</code> for SMB).</span><span class="hu">Az SSH-kapcsolódás után egyenesen megjelenik a zeneválasztó böngésző; nincs további bejelentkezés vagy beállítási lépés. A kezdőképernyő felsorolja a csatlakoztatott meghajtókat; ha a zene NAS-on van, van egy "Hálózati megosztás csatolása (NFS/SMB)…" sor is; ott megadható a címe (pl. <code>192.168.1.10:/zene</code> NFS-hez, <code>//192.168.1.10/zene</code> SMB-hez).</span></p>
+        <h3><span class="en">Drag, drop, play</span><span class="hu">Húzd, ejtsd, hallgasd</span></h3>
+        <p><span class="en">The stick boots straight into a normal desktop, no login needed. Find your music (a connected drive, or a folder already on the stick), then drag a track or an entire album folder onto the <b>bpplay</b> icon on the desktop. A small window opens showing the format check and playback controls: <code>n</code>/<code>b</code> next/previous track, <code>Space</code> pause/resume, <code>q</code> stops playback.</span><span class="hu">A kulcs egyenesen, bejelentkezés nélkül egy normál asztali környezetbe bootol. Meg kell keresni a zenét (egy csatlakoztatott meghajtón, vagy egy már a kulcson lévő mappában), majd egy számot vagy egy teljes album-mappát rá kell húzni a <b>bpplay</b> asztali ikonra. Egy kis ablak nyílik, benne a formátumellenőrzéssel és a lejátszás-vezérléssel: <code>n</code>/<code>b</code> következő/előző track, <code>Space</code> szünet/folytatás, <code>q</code> leállítja a lejátszást.</span></p>
         <div class="chips">
           <span class="chip"><span class="en"><b>Auto-login</b>, no password</span><span class="hu"><b>Automatikus belépés</b>, jelszó nélkül</span></span>
-          <span class="chip"><span class="en"><b>NAS</b> via NFS / SMB</span><span class="hu"><b>NAS</b> NFS / SMB-n</span></span>
           <span class="chip"><span class="en">Wait <b>~30 s</b> on first boot</span><span class="hu">Várj <b>~30 mp-et</b> az első bootnál</span></span>
+          <span class="chip"><span class="en">Works with local drives, USB sticks, or shares mounted via the file manager</span><span class="hu">Helyi meghajtókkal, USB-kulcsokkal, vagy a fájlkezelőn keresztül csatolt megosztásokkal is működik</span></span>
         </div>
       </div>
       <div class="step-media">
         <div class="term">
-          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">bpplay-kiosk; storage</span></div>
-          <div class="term-body"><span class="t-bar">Zenei gyökér kiválasztása: Fel/Le, Enter=kiválaszt, q/Esc=alapértelmezett</span><span class="tl-gold">Alapértelmezett: /home/bpplay/Zenék  (6.8 GB szabad)</span>
-<span class="tl-hl">usb-drive-1  (32G, exfat, nincs csatolva)</span>
-<span class="tl-white">Mentett playlista betöltése…</span>
-<span class="tl-white">Egyéni útvonal megadása…</span>
-<span class="tl-white">Hálózati megosztás csatolása (NFS/SMB)…</span>
-<span class="cursor">&nbsp;</span></div>
-        </div>
-        <p class="figure-cap"><span class="en">The storage selector, right after connecting; no manual setup command needed.</span><span class="hu">A tárolóválasztó, közvetlenül csatlakozás után; nincs szükség kézi setup-parancsra.</span></p>
-      </div>
-    </div>
-
-    <!-- STEP 5 -->
-    <div class="step rv" id="qs5">
-      <div class="step-num">5</div>
-      <div class="s-body">
-        <h3><span class="en">Browse, select, play</span><span class="hu">Válogatás és lejátszás</span></h3>
-        <p><span class="en"><code>Enter</code> opens a folder, <code>Esc</code> steps back, <code>Space</code> selects a track or a whole subfolder. When you're done, <code>p</code> starts playback in the selected order. During playback: <code>n</code>/<code>b</code> next/previous track, <code>Space</code> pause/resume, <code>q</code> stops and returns to the browser.</span><span class="hu">Az <code>Enter</code> megnyit egy mappát, az <code>Esc</code> visszalép, a <code>Space</code> kijelöl egy számot vagy egy teljes almappát. Ha végeztél, a <code>p</code> elindítja a lejátszást a kijelölt sorrendben. Lejátszás közben: <code>n</code>/<code>b</code> következő/előző track, <code>Space</code> szünet/folytatás, <code>q</code> leállít és visszavisz a böngészőbe.</span></p>
-        <div class="note"><span class="en"><b><code>q</code> at the very top level shuts the machine down.</b> This is intentional; it's the clean way to end a session, not a bug.</span><span class="hu"><b>A <code>q</code> a legfelső szinten leállítja a gépet.</b> Ez szándékos; ez a tiszta módja a munkamenet lezárásának, nem hiba.</span></div>
-      </div>
-      <div class="step-media">
-        <div class="term">
-          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">playback; integer mode</span></div>
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">bpplay_drop.sh</span></div>
           <div class="term-body"><span class="tl-white">Lejátszás indul, 9 track:</span>
-<span class="tl-dim">-- ______planets_1_fullversion.wav</span>
-<span class="tl-dim">-- ____Takacs_HAYDN_1.wav …</span>
+<span class="tl-dim">-- 01 - Sunny.flac</span>
+<span class="tl-dim">-- 02 - Daddy Cool.flac …</span>
 <span class="tl-white">Device: USB Audio DAC (hw:1,0)</span>
-<span class="tl-dim">bpplay 1.1.0</span>
 <span class="tl-white">Loading 9 file(s) into RAM…</span>
 <span class="tl-white">Physical format: 32-bit integer.</span>
 <span class="tl-gold">Virtual format: integer, 32-bit, 8 B/frame</span>
@@ -983,34 +910,6 @@ footer.ft {
         </div>
         <p class="figure-cap"><span class="en">Same format check and honest feedback as every other bpplay edition.</span><span class="hu">Ugyanaz a formátumellenőrzés és őszinte visszajelzés, mint minden más bpplay-kiadásban.</span></p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================= KEYS ================= -->
-<section id="keys">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <p class="overline"><span class="en">REFERENCE</span><span class="hu">REFERENCIA</span></p>
-      <h2><span class="en">Every key you'll ever need.</span><span class="hu">Minden billentyű, amire valaha szükség lehet.</span></h2>
-      <p class="lede"><span class="en">The same music selector as the Raspberry Pi edition; this is the complete set.</span><span class="hu">Ugyanaz a zeneválasztó, mint a Raspberry Pi kiadásban; ez a teljes készlet.</span></p>
-    </div>
-
-    <div class="keys-grid rv">
-      <div class="key-row"><span class="k"><kbd>↑</kbd> <kbd>↓</kbd></span><span class="f"><span class="en">Navigation in lists</span><span class="hu">Navigáció a listákban</span></span></div>
-      <div class="key-row"><span class="k"><kbd>Enter</kbd></span><span class="f"><span class="en">Enter a subfolder; on a track row it deliberately does <em>nothing</em></span><span class="hu">Belépés almappába; számsoron szándékosan <em>semmit</em> nem csinál</span></span></div>
-      <div class="key-row"><span class="k"><kbd>Esc</kbd></span><span class="f"><span class="en">Back to the previous (parent) menu item / folder</span><span class="hu">Vissza az előző (szülő) menüpontra / mappába</span></span></div>
-      <div class="key-row"><span class="k"><kbd>Space</kbd></span><span class="f"><span class="en">Select a track, or all tracks of an album at once</span><span class="hu">Szám kijelölése; vagy egy album összes száma egyszerre</span></span></div>
-      <div class="key-row"><span class="k"><kbd>a</kbd></span><span class="f"><span class="en">Select all (under the currently open folder, recursively)</span><span class="hu">Mindent kijelöl (a nyitott mappa alatt, rekurzívan)</span></span></div>
-      <div class="key-row"><span class="k"><kbd>n</kbd></span><span class="f"><span class="en">Clear selection</span><span class="hu">Kijelölés törlése</span></span></div>
-      <div class="key-row"><span class="k"><kbd>r</kbd></span><span class="f"><span class="en">Toggle repeat mode</span><span class="hu">Ismétlés be/ki</span></span></div>
-      <div class="key-row"><span class="k"><kbd>s</kbd></span><span class="f"><span class="en">Save the current selection as a playlist</span><span class="hu">Az aktuális kijelölés mentése playlistként</span></span></div>
-      <div class="key-row"><span class="k"><kbd>l</kbd></span><span class="f"><span class="en">Load a previously saved playlist</span><span class="hu">Korábban mentett playlist betöltése</span></span></div>
-      <div class="key-row"><span class="k"><kbd>o</kbd></span><span class="f"><span class="en">Manually re-select the audio output during playback</span><span class="hu">A hangkimenet kézi újraválasztása lejátszás közben</span></span></div>
-      <div class="key-row"><span class="k"><kbd>/</kbd></span><span class="f"><span class="en">Search (filters by title)</span><span class="hu">Keresés (cím szerint szűr)</span></span></div>
-      <div class="key-row"><span class="k"><kbd>m</kbd></span><span class="f"><span class="en">Switch drive / storage</span><span class="hu">Meghajtó / tároló váltása</span></span></div>
-      <div class="key-row"><span class="k"><kbd>p</kbd></span><span class="f"><span class="en">Start playback in the selected order</span><span class="hu">Lejátszás indítása a kijelölt sorrendben</span></span></div>
-      <div class="key-row"><span class="k"><kbd>q</kbd></span><span class="f"><span class="en">Quit without playing; at the top level, shuts the machine down instead</span><span class="hu">Kilépés lejátszás nélkül; a legfelső szinten ehelyett leállítja a gépet</span></span></div>
     </div>
   </div>
 </section>
@@ -1030,7 +929,7 @@ footer.ft {
       <span class="chip"><span class="en"><b>OS</b> Debian 13 "trixie", console only</span><span class="hu"><b>OS</b> Debian 13 „trixie", csak konzol</span></span>
       <span class="chip"><span class="en"><b>Storage</b> USB stick, 8 GB minimum</span><span class="hu"><b>Tárolás</b> USB-kulcs, minimum 8 GB</span></span>
       <span class="chip"><span class="en"><b>DAC</b> ALSA-compatible USB DAC, or built-in audio</span><span class="hu"><b>DAC</b> ALSA-kompatibilis USB DAC, vagy beépített hang</span></span>
-      <span class="chip"><span class="en"><b>Network</b> wired Ethernet only; required for SSH control</span><span class="hu"><b>Hálózat</b> csak vezetékes Ethernet; SSH-vezérléshez szükséges</span></span>
+      <span class="chip"><span class="en"><b>Network</b> not required for playback itself</span><span class="hu"><b>Hálózat</b> magához a lejátszáshoz nem szükséges</span></span>
     </div>
 
     <div class="note rv" style="margin-top:28px;"><span class="en"><b>Larger stick or SSD?</b> The writable/persistent area is about 7.1 GB by default. On a 32 GB+ stick, you can grow it: <code>sudo growpart /dev/sdX 3</code> (extend the partition), then <code>sudo resize2fs /dev/sdX3</code> (extend the filesystem); in that order, on Linux.</span><span class="hu"><b>Nagyobb kulcs vagy SSD?</b> Az írható/perzisztens terület alapból kb. 7,1 GB. Egy 32 GB-os vagy nagyobb kulcson kiterjesztheted: <code>sudo growpart /dev/sdX 3</code> (partíció kiterjesztése), majd <code>sudo resize2fs /dev/sdX3</code> (fájlrendszer kiterjesztése); ebben a sorrendben, Linuxon.</span></div>
@@ -1072,11 +971,11 @@ footer.ft {
     <div class="faq-grid">
       <div class="faq rv">
         <h3><span class="en">No sound?</span><span class="hu">Nincs hang?</span></h3>
-        <p><span class="hu"><span class="a">A</span>Ellenőrizd, hogy a DAC/hangkártya csatlakoztatva van-e; a böngészőben az <code>m</code> billentyű vagy egy másik meghajtó kiválasztása segíthet.</span><span class="en"><span class="a">A</span>Check the DAC/sound card is connected; the <code>m</code> key or selecting a different drive in the browser may help.</span></p>
+        <p><span class="hu"><span class="a">A</span>Ellenőrizd, hogy a DAC/hangkártya csatlakoztatva van-e, és próbálj egy másik USB-portot; a lejátszó a beépített hangkártyát is használja, ha nincs mást talál.</span><span class="en"><span class="a">A</span>Check the DAC/sound card is connected, and try a different USB port; the player falls back to the built-in audio if it finds nothing else.</span></p>
       </div>
       <div class="faq rv">
-        <h3><span class="en">Can't find your NAS share?</span><span class="hu">Nem találod a NAS-megosztásod?</span></h3>
-        <p><span class="hu"><span class="a">A</span>Ellenőrizd, hogy a gép ugyanazon a hálózaton van, mint a NAS, és hogy a cím formátuma helyes (NFS: <code>szerver:/út</code>, SMB: <code>//szerver/share</code>).</span><span class="en"><span class="a">A</span>Check the machine is on the same network as the NAS, and that the address format is correct (NFS: <code>server:/path</code>, SMB: <code>//server/share</code>).</span></p>
+        <h3><span class="en">Nothing happens when you drop a file?</span><span class="hu">Semmi nem történik, amikor ráhúzol egy fájlt?</span></h3>
+        <p><span class="hu"><span class="a">A</span>Ellenőrizd, hogy a fájl támogatott formátumú-e (WAV, FLAC, ALAC/M4A, AIFF/AIFC, DSF); más formátumot a lejátszó csendben elutasít.</span><span class="en"><span class="a">A</span>Check the file is a supported format (WAV, FLAC, ALAC/M4A, AIFF/AIFC, DSF); other formats are silently rejected.</span></p>
       </div>
       <div class="faq rv">
         <h3><span class="en">USB boot not offered?</span><span class="hu">Nem ajánlja fel a USB-bootot?</span></h3>
@@ -1098,10 +997,9 @@ footer.ft {
       <h2><span class="en">The complete setup guide, in the page.</span><span class="hu">A teljes telepítési útmutató, az oldalon.</span></h2>
       <p class="lede"><span class="en">Everything above in short form, spelled out in full detail here; including the parts most people won't need.</span><span class="hu">Minden, ami fentebb röviden szerepelt, itt részletesen kifejtve; beleértve azt is, amire a legtöbb embernek nem lesz szüksége.</span></p>
       <div class="manual-top">
-        <a class="btn btn-gold en" href="https://drive.google.com/file/d/1-xx-mXRtoZqlQTIblYUC2_zZezKAotZv/view?usp=sharing">↓ Download the image (EN)</a>
-        <a class="btn btn-gold hu" href="https://drive.google.com/file/d/1_zq5m5T-k0EMWXxDIvITraocY8B7cxfi/view?usp=sharing">↓ Image letöltése (HU)</a>
-        <a class="btn btn-ghost en" href="assets/bpplay_bptune_user_manual_x64_v2.0_EN.pdf">↓ PDF manual (v2.0, EN)</a>
-        <a class="btn btn-ghost hu" href="assets/bpplay_bptune_user_manual_x64_v2.0_HU.pdf">↓ PDF kézikönyv (v2.0, HU)</a>
+        <a class="btn btn-gold en" href="REPLACE_WITH_DRIVE_LINK_EN">↓ Download the image (EN)</a>
+        <a class="btn btn-gold hu" href="REPLACE_WITH_DRIVE_LINK_HU">↓ Image letöltése (HU)</a>
+        <a class="btn btn-ghost" href="../x64/"><span class="en">bpplay x64 kiosk edition →</span><span class="hu">bpplay x64 kiosk kiadás →</span></a>
         <a class="btn btn-ghost" href="../pi/"><span class="en">bpplay for Pi →</span><span class="hu">bpplay Pi-re →</span></a>
         <a class="btn btn-ghost" href="https://ferenckoscso.github.io/bpplay/"><span class="en">bpplay for macOS →</span><span class="hu">bpplay macOS-re →</span></a>
       </div>
@@ -1129,7 +1027,7 @@ footer.ft {
           <li><a href="#g-1"><span class="en">1 · What you'll need</span><span class="hu">1 · Amire szükség van</span></a></li>
           <li><a href="#g-2"><span class="en">2 · Writing the image</span><span class="hu">2 · Az image felírása</span></a></li>
           <li><a href="#g-3"><span class="en">3 · Booting from the USB stick</span><span class="hu">3 · Bootolás a USB-kulcsról</span></a></li>
-          <li><a href="#g-4"><span class="en">4 · First boot and navigation</span><span class="hu">4 · Első indítás és navigáció</span></a></li>
+          <li><a href="#g-4"><span class="en">4 · First boot and playback</span><span class="hu">4 · Első indítás és lejátszás</span></a></li>
           <li><a href="#g-5"><span class="en">5 · What runs in the background</span><span class="hu">5 · Mi fut a háttérben</span></a></li>
           <li><a href="#g-6"><span class="en">6 · Trial period</span><span class="hu">6 · Próbaidő</span></a></li>
           <li><a href="#g-7"><span class="en">7 · Larger USB stick / SSD</span><span class="hu">7 · Nagyobb USB-kulcs / SSD</span></a></li>
@@ -1143,9 +1041,8 @@ footer.ft {
         <ul>
           <li><span class="en">A USB stick, at least 8 GB (its current contents will be erased).</span><span class="hu">Egy USB-kulcs, legalább 8 GB (a meglévő tartalma törlődik).</span></li>
           <li><span class="en"><a href="https://etcher.balena.io">Balena Etcher</a> (recommended, free, identical on Mac and Windows).</span><span class="hu"><a href="https://etcher.balena.io">Balena Etcher</a> (ajánlott, ingyenes, azonos Mac-en és Windowson).</span></li>
-          <li><span class="en">The <code>bpplay-kiosk-x86_64.img.gz</code> file (Google Drive link).</span><span class="hu">A <code>bpplay-kiosk-x86_64.img.gz</code> fájl (Google Drive-linken).</span></li>
-          <li><span class="en">A wired Ethernet connection for the machine (Wi-Fi is deliberately disabled); required, since the music selector is reached over an SSH connection to the machine (see 3), without it you cannot select or play anything.</span><span class="hu">Vezetékes Ethernet-kapcsolat a gépnek (a Wi-Fi szándékosan ki van kapcsolva); szükséges, mert a zeneválasztó SSH-kapcsolaton keresztül érhető el (ld. 3.), enélkül nem tudsz zenét választani vagy lejátszani.</span></li>
-          <li><span class="en">An SSH app on your own computer, tablet or phone (see 3); no monitor or keyboard is needed on the machine itself.</span><span class="hu">Egy SSH-alkalmazás egy saját gépen, tableten vagy telefonon (ld. 3.); magán a gépen nincs szükség monitorra vagy billentyűzetre.</span></li>
+          <li><span class="en">The <code>bpplay-desktop-x86_64.img.gz</code> file (Google Drive link).</span><span class="hu">A <code>bpplay-desktop-x86_64.img.gz</code> fájl (Google Drive-linken).</span></li>
+          <li><span class="en">A monitor, keyboard and mouse on the machine itself; this edition needs no second device and no network connection to play music.</span><span class="hu">Monitor, billentyűzet és egér a gépen; ehhez a kiadáshoz nincs szükség második eszközre, és a zenehallgatáshoz hálózati kapcsolat sem kell.</span></li>
         </ul>
         <p><span class="en">The downloaded <code>.gz</code> file is about 920 MB; once written, it takes up 8 GB on the stick. Of that, about 7.1 GB is a writable/persistent area (your settings and the trial countdown live here); the rest is the read-only system.</span><span class="hu">A letöltött <code>.gz</code> fájl kb. 920 MB; kiírás után a USB-kulcson 8 GB-ot foglal. Ebből kb. 7,1 GB egy írható/megmarad terület (ide kerülnek a beállításaid és a próbaidő-számláló is); a maradék a rendszer (read-only) része.</span></p>
 
@@ -1165,7 +1062,7 @@ footer.ft {
 <span class="tl-white">lsblk</span>
 <span class="tl-dim"># after plugging in, identify the NEW entry:</span>
 <span class="tl-white">lsblk</span>
-<span class="tl-gold">gunzip -c bpplay-kiosk-x86_64.img.gz | sudo dd of=/dev/sdX bs=4M status=progress</span>
+<span class="tl-gold">gunzip -c bpplay-desktop-x86_64.img.gz | sudo dd of=/dev/sdX bs=4M status=progress</span>
 <span class="tl-white">sync</span>
 
 <span class="tl-dim"># macOS:</span>
@@ -1173,7 +1070,7 @@ footer.ft {
 <span class="tl-dim"># after plugging in, identify the new device (e.g. /dev/disk4):</span>
 <span class="tl-white">diskutil list</span>
 <span class="tl-white">diskutil unmountDisk /dev/diskN</span>
-<span class="tl-gold">gunzip -c bpplay-kiosk-x86_64.img.gz | sudo dd of=/dev/rdiskN bs=4m</span>
+<span class="tl-gold">gunzip -c bpplay-desktop-x86_64.img.gz | sudo dd of=/dev/rdiskN bs=4m</span>
 <span class="tl-white">sync</span>
 <span class="tl-white">diskutil eject /dev/diskN</span></div>
         </div>
@@ -1195,37 +1092,9 @@ footer.ft {
         </ol>
         <p><span class="en"><i>If Windows won't boot the USB:</i> you may need to disable Secure Boot in the BIOS/UEFI, or enable Legacy/CSM / "boot from removable media".</span><span class="hu"><i>Ha a Windows nem indítja a USB-t:</i> a BIOS/UEFI-ben lehet, hogy ki kell kapcsolni a Secure Bootot, vagy be kell kapcsolni a Legacy/CSM vagy "boot from removable media" opciót.</span></p>
 
-        <h4 id="g-3-1"><span class="en">3.1 Connecting via SSH</span><span class="hu">3.1 Kapcsolódás SSH-n</span></h4>
-        <p><span class="en">The machine boots straight into the music selector, with no login; you simply connect to it over SSH. You never see a command line, terminal or login prompt on the machine's own screen; if you connect a monitor anyway, it stays blank. From your own device, open an SSH app and connect to <code>kiosk@bpplay-kiosk-en.local</code> (<code>kiosk@bpplay-kiosk-hu.local</code> for the Hungarian image) &mdash; this works even without a router or DHCP, straight over a single Ethernet cable between just the two machines. If <code>.local</code> names don't resolve on your network, note the machine's IP address instead (shown briefly on screen right after boot, before it would otherwise show a login prompt) and connect to <code>kiosk@</code> that address. When the SSH app asks for a password, it is <code>bitperfectsound</code> &mdash; both the user name (<code>kiosk</code>) and the password use only characters that sit in the same place, without Shift, on the common keyboard layouts (QWERTY, QWERTZ, AZERTY), so the login works even if your computer's layout differs from what you're used to. The music selector screen then appears; nothing else needs to be typed.</span><span class="hu">A gép bejelentkezés nélkül, egyenesen a zeneválasztóba bootol; egyszerűen SSH-n lehet hozzá kapcsolódni. Parancssor, terminál vagy bejelentkezési prompt a gép saját képernyőjén sosem jelenik meg; ha mégis csatlakozik hozzá monitor, az üres marad. Egy saját eszközről megnyitható egy SSH-alkalmazás, és kapcsolódni lehet a <code>kiosk@bpplay-kiosk-hu.local</code> címhez (angol image esetén <code>kiosk@bpplay-kiosk-en.local</code>) &mdash; ez router vagy DHCP nélkül is működik, akár egyetlen Ethernet-kábellel közvetlenül összekötve a két gépet. Ha a <code>.local</code> nevek nem oldódnak fel a hálózaton, érdemes megjegyezni helyette a gép IP-címét (röviden kiírja a képernyő közvetlenül boot után, mielőtt egyébként egy bejelentkezési prompt jelenne meg), és a <code>kiosk@</code> és ez a cím kombinációjához lehet kapcsolódni. Amikor az SSH-alkalmazás jelszót kér, az a <code>bitperfectsound</code> &mdash; a felhasználónév (<code>kiosk</code>) és a jelszó is csak olyan karakterekből áll, amelyek a legelterjedtebb billentyűzetkiosztásokon (QWERTY, QWERTZ, AZERTY) ugyanazon a helyen, Shift nélkül vannak, így a bejelentkezés akkor is működik, ha az adott gép kiosztása eltér a megszokottól. Ezután megjelenik a zeneválasztó képernyője; mást nem kell beírni.</span></p>
-        <div class="chips">
-          <span class="chip"><b>macOS / Linux</b>: <span class="en">Terminal + ssh</span><span class="hu">Terminál + ssh</span></span>
-          <span class="chip"><b>Windows 10/11</b>: OpenSSH · PuTTY</span>
-          <span class="chip"><b>Android</b>: Termux · JuiceSSH · ConnectBot</span>
-          <span class="chip"><b>iOS / iPadOS</b>: Termius · Blink Shell</span>
-        </div>
-        <div class="term">
-          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">your-computer; Terminal</span></div>
-          <div class="term-body"><span class="tl-white">you@your-mac ~ %</span> <span class="tl-gold">ssh kiosk@bpplay-kiosk-en.local</span><span class="cursor">&nbsp;</span></div>
-        </div>
-        <p class="figure-cap"><span class="en">Connecting via SSH from a macOS terminal.</span><span class="hu">Kapcsolódás SSH-n macOS terminálból.</span></p>
-        <div class="note"><span class="en"><b>Wired Ethernet only.</b> This kiosk edition deliberately uses only a wired Ethernet connection, for determinism and sound quality; Wi-Fi is disabled by design. Plug in a cable before booting, and keep it connected for the entire listening session; the SSH connection keeps the music selector alive through it. If the network drops, the connection drops too, and you need to reconnect.</span><span class="hu"><b>Csak vezetékes Ethernet.</b> Ez a kiosk kiadás szándékosan csak vezetékes Ethernet-kapcsolatot használ, a determinizmus és a hangminőség érdekében; a Wi-Fi ki van kapcsolva. Dugj be egy kábelt bootolás előtt, és hagyd bedugva a teljes hallgatás alatt; az SSH-kapcsolat ezen keresztül tartja életben a zeneválasztót. Ha a hálózat megszakad, a kapcsolat is megszakad, és újra kell csatlakoznod.</span></div>
-
-        <h3 class="mh" id="g-4"><span class="mno">4</span><span class="en">First boot and navigation</span><span class="hu">Első indítás és navigáció</span></h3>
-        <p><span class="en">Once connected over SSH, the music selector browser appears straight away; no manual installer/setup command is needed. The start screen lets you pick from the connected drives/mountpoints; if your music is on a NAS, the list includes a "Mount network share (NFS/SMB)…" line; just enter the address.</span><span class="hu">Az SSH-kapcsolódás után egyenesen megjelenik a zeneválasztó böngésző; nincs szükség semmilyen kézi telepítő-/setup-parancsra. A kezdő képernyőn a csatlakoztatott meghajtók/mountpointok közül lehet választani; ha a zene NAS-on van, a listában van egy "Hálózati megosztás csatolása (NFS/SMB)…" sor is; ott megadható a cím.</span></p>
-        <div class="table-wrap">
-          <table class="tbl">
-            <thead><tr><th scope="col"><span class="en">Key</span><span class="hu">Billentyű</span></th><th scope="col"><span class="en">Function</span><span class="hu">Funkció</span></th></tr></thead>
-            <tbody>
-              <tr><td>↑ / ↓</td><td><span class="en">Move in the list</span><span class="hu">Mozgás a listában</span></td></tr>
-              <tr><td>Enter</td><td><span class="en">Open folder / select</span><span class="hu">Mappa megnyitása / kiválasztás</span></td></tr>
-              <tr><td>Space</td><td><span class="en">Select track (or whole subfolder)</span><span class="hu">Track (vagy egész almappa) kijelölése</span></td></tr>
-              <tr><td>p</td><td><span class="en">Start playback of the selection</span><span class="hu">Lejátszás indítása a kijelölt sorrendben</span></td></tr>
-              <tr><td><span class="en">q in the browser</span><span class="hu">q a böngészőben</span></td><td><span class="en">Go up one level</span><span class="hu">Egy szinttel feljebb</span></td></tr>
-              <tr><td><span class="en">q at the top level</span><span class="hu">q a legfelső szinten</span></td><td><b><span class="en">Shuts the machine down</span><span class="hu">A gép leáll</span></b></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p><span class="en">During playback:</span><span class="hu">Lejátszás közben:</span></p>
+        <h3 class="mh" id="g-4"><span class="mno">4</span><span class="en">First boot and playback</span><span class="hu">Első indítás és lejátszás</span></h3>
+        <p><span class="en">The stick boots straight into a normal desktop, with automatic login; no password to type. A "bpplay" icon sits on the desktop, labeled "drag a music file or album here". Open a file manager window (already on the desktop/taskbar), navigate to your music &mdash; on a connected USB drive, or already copied onto the stick &mdash; and drag a track or a whole album folder onto the bpplay icon.</span><span class="hu">A kulcs egyenesen egy normál asztali környezetbe bootol, automatikus bejelentkezéssel; nincs jelszó, amit be kellene írni. Az asztalon egy "bpplay" ikon található, "húzz ide egy zenefájlt vagy albumot" felirattal. Meg kell nyitni egy fájlkezelő-ablakot (már az asztalon/tálcán elérhető), meg kell keresni a zenét &mdash; egy csatlakoztatott USB-meghajtón, vagy már a kulcsra másolva &mdash; és rá kell húzni egy számot vagy egy egész album-mappát a bpplay ikonra.</span></p>
+        <p><span class="en">This opens a small terminal window showing bpplay's own format check and playback controls:</span><span class="hu">Ez megnyit egy kis terminálablakot, benne a bpplay saját formátumellenőrzésével és lejátszás-vezérlésével:</span></p>
         <div class="table-wrap">
           <table class="tbl">
             <thead><tr><th scope="col"><span class="en">Key</span><span class="hu">Billentyű</span></th><th scope="col"><span class="en">Function</span><span class="hu">Funkció</span></th></tr></thead>
@@ -1233,14 +1102,15 @@ footer.ft {
               <tr><td>n</td><td><span class="en">Next track</span><span class="hu">Következő track</span></td></tr>
               <tr><td>b</td><td><span class="en">Previous track</span><span class="hu">Előző track</span></td></tr>
               <tr><td>Space</td><td><span class="en">Pause / resume</span><span class="hu">Szünet / folytatás</span></td></tr>
-              <tr><td>q</td><td><span class="en">Stop playback, back to the browser</span><span class="hu">Lejátszás leállítása, vissza a böngészőbe</span></td></tr>
+              <tr><td>q</td><td><span class="en">Stop playback; closes the window</span><span class="hu">Lejátszás leállítása; bezárja az ablakot</span></td></tr>
             </tbody>
           </table>
         </div>
+        <p><span class="en">Dropping a new file or folder onto the icon while something is already playing starts a fresh playback window; the previous one keeps running until you stop it or close it, so avoid overlapping playback unintentionally.</span><span class="hu">Ha lejátszás közben egy újabb fájlt vagy mappát húzol az ikonra, egy új lejátszó-ablak indul; az előző tovább fut, amíg le nem állítod vagy be nem zárod, tehát érdemes elkerülni a véletlen egymásra futást.</span></p>
 
         <h3 class="mh" id="g-5"><span class="mno">5</span><span class="en">What runs in the background</span><span class="hu">Mi fut a háttérben</span></h3>
-        <p><span class="en">The bptune tuning layer runs automatically at boot: CPU governor set to "performance", Turbo Boost/Precision Boost disabled. <i>Important difference from the developer's reference machine:</i> kernel-level CPU-core isolation and DAC IRQ affinity are <b>not</b> included in this trial; they can't be safely preset on unknown, unfamiliar hardware (would require a machine-specific <code>isolcpus</code> kernel parameter and a reboot). This trial build therefore doesn't give the maximally tuned reference experience; its goal is a risk-free way to try the player itself.</span><span class="hu">A bptune hangoló-réteg automatikusan fut induláskor: CPU-kormányzó "performance" módra állítva, Turbo Boost/Precision Boost kikapcsolva. <i>Fontos különbség a fejlesztői referenciagéphez képest:</i> a kernel-szintű CPU-mag-izoláció és a DAC IRQ-affinitás <b>nincs</b> ebben a próbaváltozatban; az ismeretlen, idegen hardveren nem lehet biztonságosan előre beállítani (géptől függő <code>isolcpus</code> kernel-paramétert igényelne, újraindítással). Ez a próbaverzió tehát nem a maximálisan hangolt referencia-élményt adja, hanem azt, hogy kockázatmentesen ki tudd próbálni a lejátszót.</span></p>
-        <p><span class="en"><b>Lockdown:</b> no terminal emulator is installed in the system at all, the other virtual consoles (Ctrl+Alt+F2, etc.) are disabled, and the login shell IS the music browser; if it ever crashes, it just restarts, it never falls back to a raw command line.</span><span class="hu"><b>Zárolás:</b> nincs telepítve semmilyen terminál-emulátor a rendszerben, a többi virtuális konzol (Ctrl+Alt+F2 stb.) le van tiltva, és a bejelentkezési shell maga a zeneválasztó; összeomlás esetén is csak újraindul, sosem esik vissza egy nyers parancssorra.</span></p>
+        <p><span class="en">Each time you start playback, bptune disables Turbo Boost/Precision Boost for that session. <i>Important difference from the developer's reference machine:</i> kernel-level CPU-core isolation and DAC IRQ affinity are <b>not</b> included in this trial; they can't be safely preset on unknown, unfamiliar hardware (would require a machine-specific <code>isolcpus</code> kernel parameter and a reboot). This trial build therefore doesn't give the maximally tuned reference experience; its goal is a risk-free way to try the player itself.</span><span class="hu">Minden lejátszás-indításkor a bptune kikapcsolja a Turbo Boost/Precision Boost-ot arra a munkamenetre. <i>Fontos különbség a fejlesztői referenciagéphez képest:</i> a kernel-szintű CPU-mag-izoláció és a DAC IRQ-affinitás <b>nincs</b> ebben a próbaváltozatban; az ismeretlen, idegen hardveren nem lehet biztonságosan előre beállítani (géptől függő <code>isolcpus</code> kernel-paramétert igényelne, újraindítással). Ez a próbaverzió tehát nem a maximálisan hangolt referencia-élményt adja, hanem azt, hogy kockázatmentesen ki tudd próbálni a lejátszót.</span></p>
+        <p><span class="en"><b>Not locked down:</b> unlike the kiosk edition, this is a normal, usable desktop &mdash; a terminal, file manager and other applications are available, and the machine doesn't shut itself down when you close a playback window. The tradeoff for that convenience is the smaller jitter improvement described above.</span><span class="hu"><b>Nincs zárolva:</b> a kiosk kiadással ellentétben ez egy normál, használható asztali környezet &mdash; elérhető terminál, fájlkezelő és más alkalmazások is, és a gép nem áll le magától egy lejátszó-ablak bezárásakor. Ennek a kényelemnek az ára a fentebb leírt, kisebb időzítés-javulás.</span></p>
 
         <h3 class="mh" id="g-6"><span class="mno">6</span><span class="en">Trial period: 15 days</span><span class="hu">Próbaidő: 15 nap</span></h3>
         <p><span class="en">This is a time-limited trial, valid for 15 days from your first real boot. The countdown is tied to the USB stick itself (not the machine you boot it on); so if you try it on several machines, the remaining time carries over.</span><span class="hu">Ez egy időkorlátos próbaváltozat, 15 napra az első valódi bootolástól. A számláló magához az USB-kulcshoz van kötve (nem a géphez, amin bootolják); tehát ha több gépen is kipróbálják, a hátralévő idő ugyanonnan folytatódik.</span></p>
@@ -1267,10 +1137,8 @@ footer.ft {
             <thead><tr><th scope="col"><span class="en">Symptom</span><span class="hu">Tünet</span></th><th scope="col"><span class="en">Solution</span><span class="hu">Megoldás</span></th></tr></thead>
             <tbody>
               <tr><td><span class="en">Nothing happens, blank/black screen</span><span class="hu">Nem indul semmi, üres/fekete képernyő</span></td><td><span class="en">Wait ~30 seconds; first boot can take a bit longer; if still blank, re-write the stick</span><span class="hu">Várj kb. 30 másodpercet; az első boot tovább tarthat; ha ennél is tovább üres marad, írd újra a kulcsot</span></td></tr>
-              <tr><td><span class="en">Can't connect via SSH / don't know the IP</span><span class="hu">Nem sikerül az SSH-kapcsolódás / nem ismerem az IP-t</span></td><td><span class="en">Check the machine has a wired Ethernet cable plugged in (Wi-Fi is disabled by design); try <code>ssh kiosk@bpplay-kiosk-en.local</code> (<code>-hu.local</code> for the Hungarian image) first, works even without a router/DHCP; if <code>.local</code> names don't resolve, temporarily connect a monitor to read the IP address shown on screen right after boot</span><span class="hu">Ellenőrizhető, hogy be van-e dugva a vezetékes Ethernet-kábel (a Wi-Fi szándékosan ki van kapcsolva); érdemes előbb a <code>ssh kiosk@bpplay-kiosk-hu.local</code> címet kipróbálni (angol image esetén <code>-en.local</code>), ez router/DHCP nélkül is működik; ha a <code>.local</code> nevek nem oldódnak fel, ideiglenesen csatlakoztatható egy monitor, hogy leolvasható legyen a boot után kiírt IP-cím</span></td></tr>
-              <tr><td><span class="en">"REMOTE HOST IDENTIFICATION HAS CHANGED" warning</span><span class="hu">"REMOTE HOST IDENTIFICATION HAS CHANGED" figyelmeztetés</span></td><td><span class="en">Expected if you're connecting to a <em>different</em> physical stick of the same language, or re-flashed your own stick with a new image; each stick has its own SSH identity. In a terminal on your own device (not the stick!), run <code>ssh-keygen -R bpplay-kiosk-en.local</code> (or <code>-hu.local</code>) to clear the old one, then reconnect. On mobile SSH apps (Termius, JuiceSSH, etc.), look for a "forget host" option in the app's settings instead</span><span class="hu">Ez várható, ha egy <em>másik</em>, ugyanolyan nyelvű fizikai kulcshoz történik a kapcsolódás, vagy a saját kulcsot írták újra egy frissebb image-dzsel; minden kulcsnak saját SSH-azonosítója van. Egy saját eszköz terminálján (nem a kulcson!) futtatandó: <code>ssh-keygen -R bpplay-kiosk-hu.local</code> (vagy <code>-en.local</code>), majd újra lehet kapcsolódni. Mobil SSH-appoknál (Termius, JuiceSSH stb.) ehelyett általában az app beállításaiban van egy "elfelejtés"/"forget host" opció</span></td></tr>
-              <tr><td><span class="en">No sound during playback</span><span class="hu">Nem hallok semmit lejátszáskor</span></td><td><span class="en">Check the DAC/sound card is connected; the <code>m</code> key or selecting a different drive may help</span><span class="hu">Ellenőrizd, hogy a DAC/hangkártya csatlakoztatva van-e; az <code>m</code> billentyű vagy másik meghajtó választása segíthet</span></td></tr>
-              <tr><td><span class="en">Can't find my network share</span><span class="hu">Nem találom a hálózati megosztásomat</span></td><td><span class="en">Check same network as the NAS, and address format (NFS: server:/path, SMB: //server/share)</span><span class="hu">Ellenőrizd, hogy ugyanazon a hálózaton van-e, mint a NAS, és a cím formátumát (NFS: szerver:/út, SMB: //szerver/share)</span></td></tr>
+              <tr><td><span class="en">Nothing happens when dropping a file</span><span class="hu">Semmi nem történik, amikor ráhúzol egy fájlt</span></td><td><span class="en">Check the file is a supported format (WAV, FLAC, ALAC/M4A, AIFF/AIFC, DSF)</span><span class="hu">Ellenőrizd, hogy a fájl támogatott formátumú-e (WAV, FLAC, ALAC/M4A, AIFF/AIFC, DSF)</span></td></tr>
+              <tr><td><span class="en">No sound during playback</span><span class="hu">Nem hallok semmit lejátszáskor</span></td><td><span class="en">Check the DAC/sound card is connected and try a different USB port</span><span class="hu">Ellenőrizd, hogy a DAC/hangkártya csatlakoztatva van-e, és próbálj egy másik USB-portot</span></td></tr>
               <tr><td><span class="en">Mac won't offer USB boot</span><span class="hu">A Mac nem ajánlja fel a USB-bootot</span></td><td><span class="en">See the Startup Security Utility note in section 3</span><span class="hu">Lásd a 3. szakasz "Startup Security Utility" részét</span></td></tr>
               <tr><td><span class="en">Windows won't offer USB boot</span><span class="hu">A Windows nem ajánlja fel a USB-bootot</span></td><td><span class="en">See the Secure Boot / Legacy-CSM note in section 3</span><span class="hu">Lásd a 3. szakasz Secure Boot/Legacy-CSM megjegyzését</span></td></tr>
               <tr><td><span class="en">Machine shuts down after a short message</span><span class="hu">Rövid üzenet után a gép leáll</span></td><td><span class="en">The 15-day trial has expired; contact whoever gave you the stick</span><span class="hu">A 15 napos próbaidő lejárt; érdemes felvenni a kapcsolatot azzal, akitől a kulcs származik</span></td></tr>
@@ -1280,7 +1148,7 @@ footer.ft {
         <p><span class="en">If anything doesn't work as described, please send: which machine you tried it on (Mac/Windows, model), the exact error message (if any), and what you were doing when it happened.</span><span class="hu">Ha bármi nem működik, vagy másképp viselkedik, mint amit ez a leírás ígér, kérünk, küldd el: milyen gépen próbáltad (Mac/Windows, típus), a pontos hibaüzenetet (ha volt), mit csináltál, amikor a hiba történt.</span></p>
 
         <h3 class="mh" id="g-disc"><span class="mno">§</span><span class="en">Disclaimer</span><span class="hu">Jogi nyilatkozat</span></h3>
-        <p><span class="en">The bpplay and bptune software, as well as the music selector serving this stick (<code>zenevalaszto.py</code>), is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose.</span><span class="hu">A bpplay és bptune szoftver, valamint a kulcsot kiszolgáló zeneválasztó (<code>zenevalaszto.py</code>) „ahogy van" alapú, bármilyen kifejezett vagy vélelmezett garancia nélkül, beleértve de nem kizárólagosan az eladhatóságra vagy egy adott célra való alkalmasságra vonatkozó garanciákat.</span></p>
+        <p><span class="en">The bpplay and bptune software, as well as the drag-and-drop launcher serving this stick (<code>bpplay_drop.sh</code>), is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose.</span><span class="hu">A bpplay és bptune szoftver, valamint a kulcsot kiszolgáló drag-and-drop indító (<code>bpplay_drop.sh</code>) „ahogy van" alapú, bármilyen kifejezett vagy vélelmezett garancia nélkül, beleértve de nem kizárólagosan az eladhatóságra vagy egy adott célra való alkalmasságra vonatkozó garanciákat.</span></p>
         <p><span class="en">The developer accepts no liability for direct or indirect damages arising from the use, malfunction or failure of the software or the stick, including possible damage to connected audio equipment (DAC, amplifier, speakers), loss of data, or any damage resulting from use other than the intended purpose.</span><span class="hu">A fejlesztő nem vállal felelősséget a szoftver vagy a kulcs használata, hibás működése vagy meghibásodása miatt bekövetkező közvetlen vagy közvetett károkért, ideértve a csatlakoztatott audioberendezések (DAC, erősítő, hangfalak) esetleges sérülését, adatvesztést, illetve a rendeltetéstől eltérő használatból eredő bármilyen kárt.</span></p>
         <p><span class="en">This edition of bpplay and bptune is licensed separately from the open-source macOS edition and is not open source. All rights to the software are reserved; copying, reverse engineering or passing it to third parties may only take place with the prior written permission of the developer.</span><span class="hu">A bpplay és bptune ezen kiadása a nyílt forráskódú macOS-es kiadástól külön licencelt, nem nyílt forráskódú. A szoftverre vonatkozóan minden jog fenntartva; másolása, visszafejtése vagy harmadik félnek történő átadása kizárólag a fejlesztő előzetes írásbeli engedélyével történhet.</span></p>
 
@@ -1295,17 +1163,16 @@ footer.ft {
   <div class="wrap-wide">
     <div class="ft-grid">
       <div>
-        <div class="brandline">bpplay<span style="color:var(--gold)">+</span>bptune <span style="color:var(--silver-dimmer)">· x86_64 Live-USB kiosk edition</span></div>
+        <div class="brandline">bpplay<span style="color:var(--gold)">+</span>bptune <span style="color:var(--silver-dimmer)">· x86_64 Live-USB desktop edition</span></div>
         <p class="dev"><span class="en">Developed by Koscso Media Engineering Kft. Bit-perfect playback and system tuning, on a USB stick that leaves your computer untouched.</span><span class="hu">Fejlesztette a Koscso Media Engineering Kft. Bithelyes lejátszás és rendszerhangolás, egy USB-kulcson, ami érintetlenül hagyja a gépet.</span></p>
         <div class="happy-foot">Happy listening!</div>
       </div>
       <div>
         <h4><span class="en">Project</span><span class="hu">Projekt</span></h4>
         <ul>
-          <li><a class="en" href="https://drive.google.com/file/d/1-xx-mXRtoZqlQTIblYUC2_zZezKAotZv/view?usp=sharing">Download the image (EN)</a><a class="hu" href="https://drive.google.com/file/d/1_zq5m5T-k0EMWXxDIvITraocY8B7cxfi/view?usp=sharing">Image letöltése (HU)</a></li>
-          <li><a class="en" href="assets/bpplay_bptune_user_manual_x64_v2.0_EN.pdf">User manual v2.0 (PDF, EN)</a><a class="hu" href="assets/bpplay_bptune_user_manual_x64_v2.0_HU.pdf">Felhasználói kézikönyv v2.0 (PDF, HU)</a></li>
+          <li><a class="en" href="REPLACE_WITH_DRIVE_LINK_EN">Download the image (EN)</a><a class="hu" href="REPLACE_WITH_DRIVE_LINK_HU">Image letöltése (HU)</a></li>
+          <li><a href="../x64/"><span class="en">x86_64 kiosk (SSH) edition</span><span class="hu">x86_64 kiosk (SSH) kiadás</span></a></li>
           <li><a href="https://github.com/ferenckoscso/bpplay">GitHub; bpplay</a></li>
-          <li><a href="../x64-desktop/"><span class="en">x86_64 desktop edition</span><span class="hu">x86_64 desktop kiadás</span></a></li>
           <li><a href="../pi/"><span class="en">Raspberry Pi appliance edition</span><span class="hu">Raspberry Pi készüléki kiadás</span></a></li>
           <li><a href="https://ferenckoscso.github.io/bpplay/"><span class="en">bpplay for macOS</span><span class="hu">bpplay macOS-re</span></a></li>
           <li><a href="https://forms.gle/kuYU5TuvE6HMZJJe6"><span class="en">Contact / trial extension</span><span class="hu">Kapcsolat / próbaidő-hosszabbítás</span></a></li>
@@ -1313,7 +1180,7 @@ footer.ft {
         </ul>
       </div>
     </div>
-    <p class="fineprint"><span class="en">The macOS edition of bpplay is open source under GPL-3.0-or-later (separate repository). This x86_64 Live-USB kiosk edition of bpplay, bptune, and the music selector are licensed separately and are not open source. The software is provided "as is", without warranty of any kind; see the full disclaimer in the guide above. All rights reserved © <span class="yr">2026</span> Koscso Media Engineering Kft. No usage data is collected, transmitted, or stored by this site or the software; no analytics, telemetry, or tracking software runs in the background, on the site or in the software itself.</span><span class="hu">A bpplay macOS-es kiadása nyílt forráskódú, GPL-3.0-or-later licenc alatt (külön repóban). Ennek az x86_64 Live-USB kiosk kiadásnak a bpplay-je, a bptune és a zeneválasztó külön licencelt, nem nyílt forráskódú. A szoftver „ahogy van" alapú, bármilyen garancia nélkül; ld. a teljes jogi nyilatkozatot a fenti útmutatóban. Minden jog fenntartva © <span class="yr">2026</span> Koscso Media Engineering Kft. Az oldal és a szoftver semmilyen használati adatot nem gyűjt, nem továbbít és nem tárol; a háttérben sem az oldalon, sem magában a szoftverben nem fut semmilyen analitikai, telemetriai vagy nyomkövető eszköz.</span></p>
+    <p class="fineprint"><span class="en">The macOS edition of bpplay is open source under GPL-3.0-or-later (separate repository). This x86_64 Live-USB desktop edition of bpplay and bptune is licensed separately and is not open source. The software is provided "as is", without warranty of any kind; see the full disclaimer in the guide above. All rights reserved © <span class="yr">2026</span> Koscso Media Engineering Kft. No usage data is collected, transmitted, or stored by this site or the software; no analytics, telemetry, or tracking software runs in the background, on the site or in the software itself.</span><span class="hu">A bpplay macOS-es kiadása nyílt forráskódú, GPL-3.0-or-later licenc alatt (külön repóban). Ennek az x86_64 Live-USB desktop kiadásnak a bpplay-je és a bptune külön licencelt, nem nyílt forráskódú. A szoftver „ahogy van" alapú, bármilyen garancia nélkül; ld. a teljes jogi nyilatkozatot a fenti útmutatóban. Minden jog fenntartva © <span class="yr">2026</span> Koscso Media Engineering Kft. Az oldal és a szoftver semmilyen használati adatot nem gyűjt, nem továbbít és nem tárol; a háttérben sem az oldalon, sem magában a szoftverben nem fut semmilyen analitikai, telemetriai vagy nyomkövető eszköz.</span></p>
   </div>
 </footer>
 
