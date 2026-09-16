@@ -866,10 +866,10 @@ footer.ft {
     <!-- STEP mac -->
     <div class="quiz-step" data-step="mac">
       <button class="quiz-back" data-back="1">← <span class="en">Back</span><span class="hu">Vissza</span></button>
-      <div class="quiz-q"><span class="en">Use it as a normal app on your own Mac, or turn it into a separate, headless machine controlled over SSH (e.g. on a shelf)?</span><span class="hu">A saját Mac-eden, normál asztali programként szeretnéd használni, vagy inkább egy külön, fejnélküli géppé alakítanád, SSH-val vezérelve (pl. polcra téve)?</span></div>
+      <div class="quiz-q"><span class="en">Use it as a normal app on your own Mac, or turn it into a separate, headless machine controlled over SSH (e.g. on a shelf)?</span><span class="hu">A saját Mac-eden, normál asztali programként szeretnéd használni, vagy inkább egy külön, monitor és billentyűzet nélküli géppé alakítanád, SSH-val vezérelve (pl. polcra téve)?</span></div>
       <div class="quiz-options">
         <button class="quiz-opt" data-next="result-macos-core"><span class="en">Normal use, on my Mac's own screen</span><span class="hu">Normál használat, a Mac saját kijelzőjén</span></button>
-        <button class="quiz-opt" data-next="result-macos-ssh"><span class="en">Headless, controlled over SSH</span><span class="hu">Fejnélküli, SSH-val vezérelve</span></button>
+        <button class="quiz-opt" data-next="result-macos-ssh"><span class="en">Headless, controlled over SSH</span><span class="hu">Monitor és billentyűzet nélkül, SSH-val vezérelve</span></button>
       </div>
     </div>
 
@@ -921,8 +921,8 @@ footer.ft {
       <button class="quiz-back" data-back="mac">← <span class="en">Back</span><span class="hu">Vissza</span></button>
       <div class="quiz-result soon">
         <div class="r-badge"><span class="en">MACOS · SSH HEADLESS · COMING SOON</span><span class="hu">MACOS · SSH FEJNÉLKÜLI · HAMAROSAN</span></div>
-        <h3><span class="en">macOS as a headless, SSH-controlled kiosk</span><span class="hu">macOS fejnélküli, SSH-vezérelt kioszkként</span></h3>
-        <p><span class="en">A dedicated Mac (e.g. a Mac mini), always on and headless, controlled the same way as the x64/Pi kiosk editions. Currently being set up and tested; expected within a couple of days.</span><span class="hu">Egy dedikált Mac (pl. Mac mini), mindig bekapcsolva és fejnélkül, ugyanúgy vezérelve, mint az x64/Pi kiosk kiadások. Jelenleg készül és tesztelés alatt; várhatóan pár napon belül elérhető.</span></p>
+        <h3><span class="en">macOS as a headless, SSH-controlled kiosk</span><span class="hu">macOS monitor és billentyűzet nélkül, SSH-vezérelt kioszkként</span></h3>
+        <p><span class="en">A dedicated Mac (e.g. a Mac mini), always on and headless, controlled the same way as the x64/Pi kiosk editions. Currently being set up and tested; expected within a couple of days.</span><span class="hu">Egy dedikált Mac (pl. Mac mini), mindig bekapcsolva, monitor és billentyűzet nélkül, ugyanúgy vezérelve, mint az x64/Pi kiosk kiadások. Jelenleg készül és tesztelés alatt; várhatóan pár napon belül elérhető.</span></p>
         <div class="r-note"><span class="en">Not downloadable yet — check back soon, or watch the GitHub repo.</span><span class="hu">Egyelőre nem letölthető — nézz vissza hamarosan, vagy kövesd a GitHub repót.</span></div>
         <div class="r-actions">
           <a class="btn btn-ghost" href="https://github.com/ferenckoscso/bpplay">GitHub ↗</a>
@@ -1119,34 +1119,72 @@ footer.ft {
   /* ---------- quiz navigation ---------- */
   (function () {
     var steps = document.querySelectorAll(".quiz-step");
-    var progress = document.getElementById("qprogress");
     var stepnum = document.getElementById("qstepnum");
-    var history = ["1"];
+    var validSteps = {};
+    steps.forEach(function (s) { validSteps[s.getAttribute("data-step")] = true; });
 
-    function show(id) {
+    /* Depth for the "Step N" indicator — fixed per step, independent of
+       how the user navigated there (so going back and forward again
+       doesn't inflate the count). */
+    var depth = {
+      "1": 1, "mac": 2, "pc": 2, "pi-have": 2,
+      "pc2": 3,
+      "result-macos-core": null, "result-macos-ssh": null,
+      "result-x64-desktop": null, "result-x64-kiosk": null,
+      "result-pi": null, "result-pi3": null, "result-recommend": null
+    };
+
+    function render(id, scroll) {
       steps.forEach(function (s) {
         s.classList.toggle("active", s.getAttribute("data-step") === id);
       });
-      var isResult = id.indexOf("result-") === 0;
-      stepnum.textContent = isResult ? "✓" : String(history.length);
-      window.scrollTo({ top: document.getElementById("quiz").offsetTop - 80, behavior: "smooth" });
+      var d = depth[id];
+      stepnum.textContent = d === null || d === undefined ? "✓" : String(d);
+      if (scroll) {
+        var quizEl = document.getElementById("quiz");
+        window.scrollTo({ top: quizEl.offsetTop - 80, behavior: "smooth" });
+      }
+    }
+
+    /* Every step change is a REAL browser-history entry (via pushState +
+       a URL hash), so the actual back/forward buttons — not just our own
+       "Vissza"/"Back" button — step back through the quiz instead of
+       leaving the page entirely. (Named "goTo", not "history" — a local
+       variable literally named "history" would have shadowed the real
+       window.history object, which is exactly the bug this replaces.) */
+    function goTo(id) {
+      if (!validSteps[id]) id = "1";
+      window.history.pushState({ qstep: id }, "", "#" + id);
+      render(id, true);
     }
 
     document.querySelectorAll(".quiz-opt[data-next]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var next = btn.getAttribute("data-next");
-        history.push(next);
-        show(next);
+        goTo(btn.getAttribute("data-next"));
       });
     });
 
     document.querySelectorAll(".quiz-back[data-back]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var back = btn.getAttribute("data-back");
-        history.push(back);
-        show(back);
+        goTo(btn.getAttribute("data-back"));
       });
     });
+
+    window.addEventListener("popstate", function (e) {
+      var id = (e.state && e.state.qstep) || (location.hash ? location.hash.slice(1) : "1");
+      if (!validSteps[id]) id = "1";
+      render(id, true);
+    });
+
+    /* Land on the step named in the URL hash, if any (makes each step
+       shareable/bookmarkable); otherwise start at step 1. Uses
+       replaceState (not pushState) so the initial load doesn't itself
+       consume a back-button press. No scroll on initial load — the page
+       should open at the top (hero), not jump straight to the quiz. */
+    var initial = location.hash ? location.hash.slice(1) : "1";
+    if (!validSteps[initial]) initial = "1";
+    window.history.replaceState({ qstep: initial }, "", "#" + initial);
+    render(initial, false);
   })();
 </script>
 </body>
