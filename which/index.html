@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bpplay: which edition is right for you?</title>
+<meta name="description" content="Answer a few quick questions and get pointed straight at the right bpplay edition — macOS, Raspberry Pi, or x86_64 kiosk/desktop.">
+<meta property="og:title" content="bpplay: which edition is right for you?">
+<meta property="og:description" content="A short guide to picking the right bpplay edition for your machine.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a09'/%3E%3Ctext x='14' y='46' font-family='Arial' font-size='38' font-weight='bold' fill='%23eeeeec'%3Eb%3C/text%3E%3Cpath d='M36 22 L54 32 L36 42 Z' fill='%23df8d20'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=PT+Mono:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* == style.css inlined so this page works as a single file == */
+/* ============================================================
+   bpplay; which edition selector
+   Design language: matched to ferenckoscso.github.io/bpplay
+   ============================================================ */
+/* == style.css inlined so this page works as a single file == */
+/* ============================================================
+   bpplay + bptune; x86_64 Live-USB kiosk edition
+   Design language: matched to ferenckoscso.github.io/bpplay
+   ============================================================ */
+
+:root {
+  --bg: #0a0a09;
+  --bg-raised: #131311;
+  --bg-raised-2: #1c1c19;
+  --silver: #eeeeec;
+  --silver-dim: #948f83;
+  --silver-dimmer: #59564c;
+  --gold: #df8d20;
+  --gold-bright: #f3a53d;
+  --gold-dim: #7a5420;
+  --green: #58a55c;
+  --green-bright: #7fc584;
+  --red: #e5534b;
+  --hairline: rgba(238,238,236,0.09);
+  --hairline-strong: rgba(238,238,236,0.16);
+  --radius: 2px;
+  --measure: 62ch;
+  --display: "Barlow Condensed", "DIN Cond", "Arial Narrow", sans-serif;
+  --body: "Charter", "Bitstream Charter", "PT Serif", Georgia, serif;
+  --mono: "PT Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --nav-h: 60px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--silver);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--gold); color: #0a0a09; }
+
+a { color: var(--gold-bright); text-decoration: none; }
+a:hover { color: var(--silver); text-decoration: underline; text-underline-offset: 3px; }
+
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 28px; }
+.wrap-wide { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+
+section { position: relative; padding: 96px 0; border-top: 1px solid var(--hairline); }
+[id] { scroll-margin-top: calc(var(--nav-h) + 18px); }
+
+h1, h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  color: var(--silver);
+  text-wrap: balance;
+  margin: 0;
+}
+h2 { font-size: clamp(32px, 4.4vw, 46px); line-height: 1.05; margin-bottom: 18px; }
+h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 20px;
+  color: var(--silver);
+  text-wrap: balance;
+  margin: 0 0 10px;
+}
+
+p { margin: 0 0 16px; max-width: var(--measure); }
+.lede { font-size: 19px; color: var(--silver-dim); max-width: 58ch; }
+
+code {
+  font-family: var(--mono);
+  color: var(--silver);
+  background: var(--bg-raised-2);
+  padding: 1px 5px;
+  border-radius: var(--radius);
+  font-size: 13px;
+}
+kbd {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver);
+  background: var(--bg-raised-2);
+  border: 1px solid var(--hairline-strong);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.overline {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 14px;
+}
+.overline .sep { color: var(--silver-dimmer); margin: 0 6px; }
+
+.sec-head { margin-bottom: 44px; }
+.sec-head .lede { margin-bottom: 0; }
+
+/* ---------- language switching ---------- */
+[data-lang="en"] .hu { display: none !important; }
+[data-lang="hu"] .en { display: none !important; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 9px 16px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.btn:hover { text-decoration: none; }
+.btn-gold { background: var(--gold); color: #0a0a09; }
+.btn-gold:hover { background: var(--gold-bright); color: #0a0a09; }
+.btn-ghost { border-color: var(--hairline-strong); color: var(--silver); }
+.btn-ghost:hover { border-color: var(--silver-dim); color: var(--gold-bright); }
+
+/* ---------- header / nav ---------- */
+header.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10,10,9,0.86);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: var(--nav-h);
+  max-width: 1160px;
+}
+.brand {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--silver);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand:hover { color: var(--gold-bright); text-decoration: none; }
+.brand .plus { color: var(--gold); }
+.brand .ed { color: var(--silver-dimmer); font-weight: 400; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--silver-dim);
+  padding: 7px 9px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--silver); background: var(--bg-raised-2); text-decoration: none; }
+.nav-links a.active { color: var(--gold-bright); }
+
+.nav-tools { display: flex; align-items: center; gap: 10px; }
+
+.lang-switch {
+  display: inline-flex;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.lang-switch button {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: transparent;
+  color: var(--silver-dim);
+  border: 0;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.lang-switch button.on { background: var(--gold); color: #0a0a09; }
+.lang-switch button:not(.on):hover { color: var(--silver); }
+
+.nav-burger {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  color: var(--silver);
+  font-family: var(--mono);
+  font-size: 14px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+/* ---------- hero ---------- */
+.hero { padding-top: 84px; padding-bottom: 72px; border-top: none; }
+.hero .wrap-wide { max-width: 1160px; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+}
+.hero h1 {
+  font-size: clamp(44px, 6.2vw, 82px);
+  line-height: 0.98;
+  margin: 14px 0 24px;
+  max-width: 17ch;
+}
+.hero h1 .gold { color: var(--gold); }
+.hero .sub { font-size: 18px; color: var(--silver-dim); max-width: 46ch; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 14px; }
+.hero-note { font-family: var(--mono); font-size: 12px; color: var(--silver-dimmer); letter-spacing: 0.04em; }
+.hero-note a { color: var(--silver-dim); text-decoration: underline; text-underline-offset: 3px; }
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 64px;
+}
+.stat {
+  background: var(--bg);
+  padding: 18px 20px;
+}
+.stat b {
+  display: block;
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold-bright);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.stat span {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--silver-dim);
+  letter-spacing: 0.05em;
+}
+
+/* ---------- cards ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 26px 26px 20px;
+}
+.card h3 { color: var(--gold-bright); }
+.card p { color: var(--silver-dim); margin-bottom: 0; font-size: 15.5px; }
+.card .c-ico {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold-dim);
+  letter-spacing: 0.14em;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* ---------- quick start steps ---------- */
+.step {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 28px;
+  padding: 48px 0;
+  border-top: 1px solid var(--hairline);
+  align-items: start;
+}
+.step:first-of-type { border-top: 0; padding-top: 8px; }
+.step-num {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 54px;
+  line-height: 0.9;
+  color: var(--gold);
+  opacity: 0.92;
+}
+.step h3 { font-size: 24px; }
+.step .s-body { color: var(--silver-dim); font-size: 16px; }
+.step-media { min-width: 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+.chip {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--silver-dim);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 20px;
+  padding: 4px 12px;
+  letter-spacing: 0.02em;
+}
+.chip b { color: var(--gold-bright); font-weight: 700; }
+
+/* ---------- terminal mockup ---------- */
+.term {
+  background: #0d0d0b;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 100%;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 4px 14px rgba(0,0,0,0.4);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.term + .figure-cap, .term-pair + .figure-cap { margin-top: 10px; }
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #161613;
+  border-bottom: 1px solid var(--hairline);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
+.term-title {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--silver-dim);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.term-body {
+  padding: 14px 16px;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--silver-dim);
+}
+.term-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  background: #2e7d32;
+  color: #eaffe9;
+  padding: 3px 12px;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+/* terminal text colours */
+.tl-dim { color: #948f83; }
+.tl-white { color: #eeeeec; }
+.tl-gold { color: #f3a53d; }
+.tl-green { color: #8fd694; }
+.tl-red { color: #e5534b; }
+.tl-hl { background: rgba(223,141,32,0.16); color: #f3a53d; display: inline-block; width: 100%; }
+.tl-count { color: #8fd694; }
+.tl-count-red { color: #e5534b; }
+.t-bar {
+  display: block;
+  background: #1c1c19;
+  color: #eeeeec;
+  padding: 2px 8px;
+  margin: -4px -8px 10px;
+  border-left: 3px solid var(--gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cursor {
+  display: inline-block;
+  width: 7px;
+  background: #eeeeec;
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.term-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+
+.figure-cap {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--silver-dimmer);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+/* ---------- note boxes ---------- */
+.note {
+  background: rgba(223,141,32,0.07);
+  border: 1px solid rgba(223,141,32,0.25);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin: 18px 0;
+  font-size: 15px;
+  color: var(--silver-dim);
+  max-width: 72ch;
+}
+.note b, .note strong { color: var(--gold-bright); }
+.warn {
+  background: rgba(229,83,75,0.06);
+  border-color: rgba(229,83,75,0.3);
+  border-left-color: var(--red);
+}
+.warn b, .warn strong { color: #f08a84; }
+
+/* ---------- keys table ---------- */
+.keys-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 40px;
+  counter-reset: keyrow;
+}
+.key-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.key-row .k { text-align: left; }
+.key-row .f { font-size: 15px; color: var(--silver-dim); }
+.key-row .f em { color: var(--silver); font-style: normal; }
+
+/* ---------- tables ---------- */
+.table-wrap { overflow-x: auto; margin-top: 28px; border: 1px solid var(--hairline); border-radius: var(--radius); }
+table.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  min-width: 560px;
+}
+table.tbl th {
+  text-align: left;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--bg-raised);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--hairline-strong);
+  white-space: nowrap;
+}
+table.tbl td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--silver-dim);
+  vertical-align: top;
+}
+table.tbl tr:last-child td { border-bottom: 0; }
+table.tbl td:first-child { color: var(--silver); white-space: nowrap; }
+table.tbl.tbl-troubleshoot { table-layout: fixed; }
+table.tbl.tbl-troubleshoot td:first-child, table.tbl.tbl-troubleshoot th:first-child { width: 34%; white-space: normal; }
+table.tbl.tbl-troubleshoot td:last-child, table.tbl.tbl-troubleshoot th:last-child { width: 66%; }
+.yes { color: var(--green-bright); font-weight: 700; }
+.no { color: var(--red); font-weight: 700; }
+.small-note { font-size: 12px; line-height: 1.5; }
+
+/* ---------- trial + faq ---------- */
+.trial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 34px 0; }
+.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 34px; }
+.faq { background: var(--bg-raised); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 22px 24px; }
+.faq h3 { font-size: 17px; color: var(--silver); }
+.faq h3::before { content: "Q "; color: var(--gold); font-family: var(--mono); }
+.faq p { color: var(--silver-dim); font-size: 15px; margin: 8px 0 0; }
+.faq p .a { color: var(--gold-bright); font-family: var(--mono); font-size: 12px; margin-right: 6px; }
+
+/* ---------- manual ---------- */
+.manual-top { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 26px 0 8px; }
+.manual-grid {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  gap: 48px;
+  margin-top: 40px;
+}
+.mtoc { position: sticky; top: calc(var(--nav-h) + 24px); align-self: start; }
+.mtoc-mobile { display: none; border: 1px solid var(--hairline-strong); border-radius: var(--radius); background: var(--bg-raised); padding: 0; }
+.mtoc-mobile summary {
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 13px 16px;
+  list-style: none;
+}
+.mtoc-mobile summary::before { content: "▸ "; }
+.mtoc-mobile[open] summary::before { content: "▾ "; }
+.mtoc-mobile ul { list-style: none; margin: 0; padding: 0 8px 10px; }
+.mtoc-mobile li a { display: block; font-family: var(--mono); font-size: 12.5px; color: var(--silver-dim); padding: 9px 10px; border-top: 1px solid var(--hairline); }
+.mtoc-mobile li a:hover { color: var(--gold-bright); text-decoration: none; }
+.mtoc-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--silver-dimmer);
+  margin-bottom: 12px;
+}
+.mtoc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--hairline); }
+.mtoc li a {
+  display: block;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver-dim);
+  padding: 7px 14px;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  line-height: 1.45;
+}
+.mtoc li a:hover { color: var(--silver); text-decoration: none; background: var(--bg-raised); }
+.mtoc li a.active { color: var(--gold-bright); border-left-color: var(--gold); }
+
+.manual-body { font-size: 16px; max-width: 74ch; }
+.manual-body p { max-width: none; color: #d8d5cd; }
+.manual-body ul { color: #d8d5cd; padding-left: 22px; margin: 0 0 18px; }
+.manual-body li { margin-bottom: 8px; }
+.manual-body h3.mh {
+  font-size: 26px;
+  color: var(--silver);
+  margin: 52px 0 6px;
+  padding-top: 34px;
+  border-top: 1px solid var(--hairline);
+}
+.manual-body h3.mh:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+.manual-body h3.mh .mno { color: var(--gold); margin-right: 12px; }
+.manual-body h4 {
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 19px;
+  color: var(--gold-bright);
+  margin: 34px 0 10px;
+}
+.manual-body .figure-cap { margin: 8px 0 22px; }
+.manual-body .note { margin: 22px 0; }
+.manual-body table.tbl td, .manual-body table.tbl th { font-size: 12.5px; }
+.manual-body table.tbl { min-width: 520px; }
+.happy {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  text-align: center;
+  font-size: 22px;
+  margin: 60px 0 10px;
+}
+
+/* ---------- footer ---------- */
+footer.ft {
+  border-top: 1px solid var(--hairline);
+  padding: 64px 0 40px;
+  background: #080807;
+}
+.ft-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; }
+.ft h4 {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--silver-dimmer);
+  margin: 0 0 14px;
+}
+.ft ul { list-style: none; margin: 0; padding: 0; }
+.ft li { margin-bottom: 9px; }
+.ft li a { font-family: var(--mono); font-size: 12.5px; color: var(--silver-dim); }
+.ft li a:hover { color: var(--gold-bright); }
+.ft .brandline { font-family: var(--mono); font-size: 14px; color: var(--silver); margin-bottom: 12px; }
+.ft .dev { font-size: 14px; color: var(--silver-dim); max-width: 42ch; }
+.ft .fineprint {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--silver-dimmer);
+  line-height: 1.7;
+  margin-top: 34px;
+  border-top: 1px solid var(--hairline);
+  padding-top: 22px;
+  max-width: none;
+}
+.happy-foot { font-family: var(--display); font-weight: 700; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-top: 18px; font-size: 13px; }
+
+/* ---------- demo video ---------- */
+.video-frame {
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+  margin-top: 36px;
+}
+.video-frame video { width: 100%; aspect-ratio: 16 / 9; background: #000; }
+.video-caption {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver-dimmer);
+}
+
+/* ---------- reveal animation ---------- */
+.rv { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rv { opacity: 1; transform: none; transition: none; }
+  .cursor { animation: none; }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1080px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .hero h1 { max-width: none; }
+  .step { grid-template-columns: 56px minmax(0, 1fr); }
+  .step-media { grid-column: 2; min-width: 0; }
+}
+@media (max-width: 900px) {
+  .cards, .faq-grid, .keys-grid { grid-template-columns: minmax(0, 1fr); }
+  .trial-grid { grid-template-columns: minmax(0, 1fr); }
+  .term-pair { grid-template-columns: minmax(0, 1fr); }
+  .manual-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .mtoc { position: static; }
+  .mtoc-desktop { display: none; }
+  .mtoc-mobile { display: block; margin: 0 0 26px; }
+  .ft-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1220px) {
+  .nav-burger { display: block; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgba(10,10,9,0.97);
+    border-bottom: 1px solid var(--hairline-strong);
+    padding: 10px 20px 16px;
+    gap: 2px;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 11px 10px; font-size: 14px; border-bottom: 1px solid var(--hairline); white-space: normal; }
+  .nav-links li:last-child a { border-bottom: 0; }
+  .nav-cta-desktop { display: none; }
+}
+@media (max-width: 640px) {
+  section { padding: 68px 0; }
+  .wrap, .wrap-wide { padding: 0 20px; }
+  .hero { padding-top: 56px; }
+  .step { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 36px 0; }
+  .step-media { grid-column: 1; }
+  .term-body { font-size: 11px; padding: 12px; }
+  .key-row { grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
+}
+
+/* ---------- quiz ---------- */
+.quiz-wrap { max-width: 720px; margin: 0 auto; }
+.quiz-step { display: none; }
+.quiz-step.active { display: block; }
+.quiz-progress {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver-dimmer);
+  letter-spacing: 0.05em;
+  margin-bottom: 18px;
+}
+.quiz-q {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(24px, 3.4vw, 32px);
+  line-height: 1.15;
+  color: var(--silver);
+  margin-bottom: 28px;
+  text-wrap: balance;
+}
+.quiz-options {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.quiz-opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  color: var(--silver);
+  font-family: var(--body);
+  font-size: 16.5px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+.quiz-opt:hover { border-color: var(--gold); background: var(--bg-raised-2); }
+.quiz-opt:active { transform: scale(0.995); }
+.quiz-opt .sub { display: block; font-size: 13.5px; color: var(--silver-dim); margin-top: 4px; }
+.quiz-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--silver-dimmer);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+}
+.quiz-back:hover { color: var(--gold-bright); }
+.quiz-result {
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  padding: 32px;
+}
+.quiz-result .r-badge {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.quiz-result h3 {
+  font-size: clamp(26px, 3.6vw, 34px);
+  margin-bottom: 14px;
+}
+.quiz-result p { color: var(--silver-dim); }
+.quiz-result .r-actions { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 12px; }
+.quiz-result.soon { border-color: var(--gold-dim); }
+.quiz-result .r-note {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-left: 2px solid var(--gold-dim);
+  background: rgba(223,141,32,0.06);
+  font-size: 14.5px;
+  color: var(--silver-dim);
+}
+.quiz-result .r-warn {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-left: 2px solid var(--red);
+  background: rgba(229,83,75,0.08);
+  font-size: 14.5px;
+  color: var(--silver-dim);
+}
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">bpplay<span class="plus">+</span>bptune<span class="ed"> · <span class="en">which edition?</span><span class="hu">melyik verzió?</span></span></a>
+
+    <ul class="nav-links">
+      <li><a href="../"><span class="en">macOS Core</span><span class="hu">macOS Core</span></a></li>
+      <li><a href="../pi/"><span class="en">Raspberry Pi</span><span class="hu">Raspberry Pi</span></a></li>
+      <li><a href="../x64/"><span class="en">x64 Kiosk</span><span class="hu">x64 Kiosk</span></a></li>
+      <li><a href="../x64-desktop/"><span class="en">x64 Desktop</span><span class="hu">x64 Desktop</span></a></li>
+      <li><a href="../press/"><span class="en">Press &amp; Reviews</span><span class="hu">Sajtó &amp; vélemények</span></a></li>
+      <li><a href="https://github.com/ferenckoscso/bpplay">GitHub ↗</a></li>
+    </ul>
+
+    <div class="nav-tools">
+      <div class="lang-switch" role="group" aria-label="Language / Nyelv">
+        <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-btn="hu" aria-pressed="false">HU</button>
+      </div>
+      <button class="nav-burger" type="button" aria-expanded="false" aria-controls="navlinks">≡</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top" style="padding-bottom:20px;">
+  <div class="wrap">
+    <p class="overline"><span class="en">FIND YOUR EDITION</span><span class="hu">MELYIK VÁLTOZAT ILLIK HOZZÁD</span></p>
+    <h1><span class="en">Which bpplay is <span class="gold">right for you?</span></span><span class="hu">Melyik bpplay <span class="gold">neked való?</span></span></h1>
+    <p class="sub"><span class="en">Answer two or three quick questions; we'll point you straight at the right download.</span><span class="hu">Válaszolj két-három rövid kérdésre; egyenesen a megfelelő letöltéshez irányítunk.</span></p>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section id="quiz" style="padding-top:20px;">
+  <div class="wrap quiz-wrap">
+
+    <div class="quiz-progress" id="qprogress"><span class="en">Step</span><span class="hu">Lépés</span> <span id="qstepnum">1</span></div>
+
+    <!-- STEP 1 -->
+    <div class="quiz-step active" data-step="1">
+      <div class="quiz-q"><span class="en">What machine do you want to use it on?</span><span class="hu">Milyen gépen szeretnéd használni?</span></div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-next="mac"><span class="en">A Mac</span><span class="hu">Egy Mac-en</span></button>
+        <button class="quiz-opt" data-next="pc"><span class="en">A Windows or Linux PC (or any x86_64 machine I can dedicate to this)</span><span class="hu">Egy Windows vagy Linux PC-n (vagy bármilyen x86_64 gépen, amit erre szánnék)</span></button>
+        <button class="quiz-opt" data-next="pi-have"><span class="en">I already have a Raspberry Pi</span><span class="hu">Már van egy Raspberry Pi-m</span></button>
+        <button class="quiz-opt" data-next="result-recommend"><span class="en">I don't have a machine yet — what do you recommend?</span><span class="hu">Nincs még gépem — mit ajánlasz?</span></button>
+      </div>
+    </div>
+
+    <!-- STEP mac -->
+    <div class="quiz-step" data-step="mac">
+      <button class="quiz-back" data-back="1">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-q"><span class="en">Use it as a normal app on your own Mac, or turn it into a separate, headless machine controlled over SSH (e.g. on a shelf)?</span><span class="hu">A saját Mac-eden, normál asztali programként szeretnéd használni, vagy inkább egy külön, fejnélküli géppé alakítanád, SSH-val vezérelve (pl. polcra téve)?</span></div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-next="result-macos-core"><span class="en">Normal use, on my Mac's own screen</span><span class="hu">Normál használat, a Mac saját kijelzőjén</span></button>
+        <button class="quiz-opt" data-next="result-macos-ssh"><span class="en">Headless, controlled over SSH</span><span class="hu">Fejnélküli, SSH-val vezérelve</span></button>
+      </div>
+    </div>
+
+    <!-- STEP pc -->
+    <div class="quiz-step" data-step="pc">
+      <button class="quiz-back" data-back="1">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-q"><span class="en">Does the machine have a screen you can't disconnect (e.g. a laptop's built-in display)?</span><span class="hu">Van a gépnek olyan kijelzője, amit nem lehet leválasztani (pl. egy laptop beépített képernyője)?</span></div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-next="result-x64-desktop"><span class="en">Yes, it's a laptop (or similar)</span><span class="hu">Igen, ez egy laptop (vagy hasonló)</span></button>
+        <button class="quiz-opt" data-next="pc2"><span class="en">No, it's a desktop machine / has an external monitor</span><span class="hu">Nem, asztali gép / külső monitor van rajta</span></button>
+      </div>
+    </div>
+
+    <!-- STEP pc2 -->
+    <div class="quiz-step" data-step="pc2">
+      <button class="quiz-back" data-back="pc">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-q"><span class="en">Would you rather put it on a shelf, with no monitor or keyboard, controlled from your phone or another computer over SSH?</span><span class="hu">Szívesebben tennéd polcra, monitor és billentyűzet nélkül, telefonról vagy másik gépről SSH-n vezérelve?</span></div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-next="result-x64-kiosk"><span class="en">Yes, headless on a shelf</span><span class="hu">Igen, fejnélkül, polcon</span></button>
+        <button class="quiz-opt" data-next="result-x64-desktop"><span class="en">No, I'd like to see a normal desktop</span><span class="hu">Nem, látnám a saját, normál asztalomat</span></button>
+      </div>
+    </div>
+
+    <!-- STEP pi-have -->
+    <div class="quiz-step" data-step="pi-have">
+      <button class="quiz-back" data-back="1">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-q"><span class="en">Which Raspberry Pi model?</span><span class="hu">Melyik Raspberry Pi modelled van?</span></div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-next="result-pi"><span class="en">Pi 4 or Pi 5</span><span class="hu">Pi 4 vagy Pi 5</span></button>
+        <button class="quiz-opt" data-next="result-pi3"><span class="en">Pi 3</span><span class="hu">Pi 3</span></button>
+      </div>
+    </div>
+
+    <!-- ============ RESULTS ============ -->
+
+    <div class="quiz-step" data-step="result-macos-core">
+      <button class="quiz-back" data-back="mac">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-result">
+        <div class="r-badge">macOS CORE</div>
+        <h3><span class="en">bpplay for macOS</span><span class="hu">bpplay macOS-re</span></h3>
+        <p><span class="en">The free, open-source app for your own Mac. Bit-perfect playback, no install beyond dragging it to Applications.</span><span class="hu">Az ingyenes, nyílt forráskódú app a saját Mac-edre. Bithelyes lejátszás, nincs más telepítés, mint az Applications mappába húzás.</span></p>
+        <div class="r-actions">
+          <a class="btn btn-gold" href="../"><span class="en">Go to the macOS page →</span><span class="hu">Ugrás a macOS oldalra →</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="result-macos-ssh">
+      <button class="quiz-back" data-back="mac">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-result soon">
+        <div class="r-badge"><span class="en">MACOS · SSH HEADLESS · COMING SOON</span><span class="hu">MACOS · SSH FEJNÉLKÜLI · HAMAROSAN</span></div>
+        <h3><span class="en">macOS as a headless, SSH-controlled kiosk</span><span class="hu">macOS fejnélküli, SSH-vezérelt kioszkként</span></h3>
+        <p><span class="en">A dedicated Mac (e.g. a Mac mini), always on and headless, controlled the same way as the x64/Pi kiosk editions. Currently being set up and tested; expected within a couple of days.</span><span class="hu">Egy dedikált Mac (pl. Mac mini), mindig bekapcsolva és fejnélkül, ugyanúgy vezérelve, mint az x64/Pi kiosk kiadások. Jelenleg készül és tesztelés alatt; várhatóan pár napon belül elérhető.</span></p>
+        <div class="r-note"><span class="en">Not downloadable yet — check back soon, or watch the GitHub repo.</span><span class="hu">Egyelőre nem letölthető — nézz vissza hamarosan, vagy kövesd a GitHub repót.</span></div>
+        <div class="r-actions">
+          <a class="btn btn-ghost" href="https://github.com/ferenckoscso/bpplay">GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="result-x64-desktop">
+      <button class="quiz-back" data-back="1">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-result">
+        <div class="r-badge">X86_64 · DESKTOP</div>
+        <h3><span class="en">bpplay x64 desktop edition</span><span class="hu">bpplay x64 desktop kiadás</span></h3>
+        <p><span class="en">Boots into a normal desktop, on the machine's own screen and keyboard. Drag a file or album onto the bpplay icon to play it — no SSH, no second device needed.</span><span class="hu">Egy normál asztali környezetbe bootol, a gép saját kijelzőjén és billentyűzetén. Húzz rá egy fájlt vagy albumot a bpplay ikonra — nincs szükség SSH-ra vagy második eszközre.</span></p>
+        <div class="r-actions">
+          <a class="btn btn-gold" href="../x64-desktop/"><span class="en">Go to the x64 desktop page →</span><span class="hu">Ugrás az x64 desktop oldalra →</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="result-x64-kiosk">
+      <button class="quiz-back" data-back="pc2">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-result">
+        <div class="r-badge">X86_64 · KIOSK</div>
+        <h3><span class="en">bpplay x64 kiosk edition</span><span class="hu">bpplay x64 kiosk kiadás</span></h3>
+        <p><span class="en">Boots straight into the music selector, no monitor or keyboard needed on the machine itself; you connect and control it over SSH from your own device.</span><span class="hu">Egyenesen a zeneválasztóba bootol, magán a gépen nincs szükség monitorra vagy billentyűzetre; egy saját eszközről SSH-n keresztül kapcsolódsz és vezérled.</span></p>
+        <div class="r-actions">
+          <a class="btn btn-gold" href="../x64/"><span class="en">Go to the x64 kiosk page →</span><span class="hu">Ugrás az x64 kiosk oldalra →</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="result-pi">
+      <button class="quiz-back" data-back="pi-have">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-result">
+        <div class="r-badge">RASPBERRY PI 4/5</div>
+        <h3><span class="en">bpplay for Raspberry Pi</span><span class="hu">bpplay Raspberry Pi-re</span></h3>
+        <p><span class="en">The sealed appliance edition, purpose-built for the Pi 4/5. Small, quiet, headless, controlled over SSH.</span><span class="hu">A lezárt készülék-kiadás, kifejezetten a Pi 4/5-höz. Kicsi, csendes, fejnélküli, SSH-n vezérelhető.</span></p>
+        <div class="r-actions">
+          <a class="btn btn-gold" href="../pi/"><span class="en">Go to the Pi page →</span><span class="hu">Ugrás a Pi oldalra →</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="result-pi3">
+      <button class="quiz-back" data-back="pi-have">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-result">
+        <div class="r-badge">RASPBERRY PI 3</div>
+        <h3><span class="en">The Pi 3 isn't supported</span><span class="hu">A Pi 3 nem támogatott</span></h3>
+        <div class="r-warn"><span class="en">The bpplay Pi appliance edition only runs on the <b>Raspberry Pi 4 or 5</b>; the Pi 3 isn't supported and won't work.</span><span class="hu">A bpplay Pi készülék-kiadás csak <b>Raspberry Pi 4-en vagy 5-ön</b> fut; a Pi 3 nem támogatott, azon nem fog működni.</span></div>
+        <p><span class="en">If you have a spare Windows/Linux PC lying around instead, the x64 editions might be a good alternative.</span><span class="hu">Ha van egy fölösleges Windows/Linux PC-d, az x64 kiadások jó alternatívát jelenthetnek helyette.</span></p>
+        <div class="r-actions">
+          <a class="btn btn-ghost" href="../x64/"><span class="en">x64 kiosk edition →</span><span class="hu">x64 kiosk kiadás →</span></a>
+          <a class="btn btn-ghost" href="../x64-desktop/"><span class="en">x64 desktop edition →</span><span class="hu">x64 desktop kiadás →</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-step" data-step="result-recommend">
+      <button class="quiz-back" data-back="1">← <span class="en">Back</span><span class="hu">Vissza</span></button>
+      <div class="quiz-result">
+        <div class="r-badge"><span class="en">OUR RECOMMENDATION</span><span class="hu">AJÁNLÁSUNK</span></div>
+        <h3><span class="en">Get a Raspberry Pi 4 or 5</span><span class="hu">Szerezz egy Raspberry Pi 4-et vagy 5-öt</span></h3>
+        <p><span class="en">It's the simplest, cheapest, purpose-built way to try bpplay: small, quiet, and headless by design. If you'd rather repurpose a spare PC instead, or want more storage/performance, the x64 kiosk edition is a strong alternative.</span><span class="hu">Ez a legegyszerűbb, legolcsóbb, kifejezetten erre szánt módja a bpplay kipróbálásának: kicsi, csendes, eleve fejnélküli. Ha inkább egy fölösleges PC-t hasznosítanál újra, vagy nagyobb tárhely/teljesítmény kellene, az x64 kiosk kiadás is jó alternatíva.</span></p>
+        <div class="r-actions">
+          <a class="btn btn-gold" href="../pi/"><span class="en">Go to the Pi page →</span><span class="hu">Ugrás a Pi oldalra →</span></a>
+          <a class="btn btn-ghost" href="../x64/"><span class="en">x64 kiosk edition →</span><span class="hu">x64 kiosk kiadás →</span></a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="ft">
+  <div class="wrap-wide">
+    <div class="ft-grid">
+      <div>
+        <div class="brandline">bpplay<span style="color:var(--gold)">+</span>bptune</div>
+        <p class="dev"><span class="en">Developed by Koscso Media Engineering Kft.</span><span class="hu">Fejlesztette a Koscso Media Engineering Kft.</span></p>
+      </div>
+      <div>
+        <h4><span class="en">Editions</span><span class="hu">Kiadások</span></h4>
+        <ul>
+          <li><a href="../"><span class="en">macOS Core</span><span class="hu">macOS Core</span></a></li>
+          <li><a href="../pi/"><span class="en">Raspberry Pi appliance</span><span class="hu">Raspberry Pi készülék</span></a></li>
+          <li><a href="../x64/"><span class="en">x86_64 kiosk edition</span><span class="hu">x86_64 kiosk kiadás</span></a></li>
+          <li><a href="../x64-desktop/"><span class="en">x86_64 desktop edition</span><span class="hu">x86_64 desktop kiadás</span></a></li>
+          <li><a href="#top"><span class="en">Back to top ↑</span><span class="hu">Vissza az oldal tetejére ↑</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="fineprint">© <span class="yr">2026</span> Koscsó Ferenc.</p>
+  </div>
+</footer>
+
+<script>
+/* == script.js inlined so this page works as a single file == */
+/* bpplay + bptune; x86_64 kiosk edition
+   language switch · scrollspy · mobile nav · reveal-on-scroll */
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+
+  /* ---------- language ---------- */
+  function setLang(lang, persist) {
+    lang = lang === "hu" ? "hu" : "en";
+    root.setAttribute("data-lang", lang);
+    root.setAttribute("lang", lang);
+    document.querySelectorAll(".lang-switch button").forEach(function (b) {
+      var on = b.getAttribute("data-lang-btn") === lang;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (persist) {
+      try { localStorage.setItem("bpx64-lang", lang); } catch (e) {}
+    }
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem("bpx64-lang"); } catch (e) {}
+  if (saved === "hu" || saved === "en") {
+    setLang(saved, false);
+  } else if ((navigator.language || "").toLowerCase().indexOf("hu") === 0) {
+    setLang("hu", false);
+  } else {
+    setLang("en", false);
+  }
+
+  document.querySelectorAll(".lang-switch button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      setLang(b.getAttribute("data-lang-btn"), true);
+    });
+  });
+
+  /* ---------- mobile nav ---------- */
+  var burger = document.querySelector(".nav-burger");
+  var links = document.querySelector(".nav-links");
+  if (burger && links) {
+    burger.addEventListener("click", function () {
+      var open = links.classList.toggle("open");
+      burger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    links.addEventListener("click", function (e) {
+      if (e.target.tagName === "A") links.classList.remove("open");
+    });
+  }
+
+  /* ---------- scrollspy ---------- */
+  var spyTargets = [];
+  document.querySelectorAll(".nav-links a[href^='#']").forEach(function (a) {
+    var id = a.getAttribute("href").slice(1);
+    var el = document.getElementById(id);
+    if (el) spyTargets.push({ link: a, el: el });
+  });
+  function spy() {
+    var pos = window.scrollY + (window.innerHeight * 0.28);
+    var current = null;
+    spyTargets.forEach(function (t) {
+      if (t.el.offsetTop <= pos) current = t;
+    });
+    spyTargets.forEach(function (t) {
+      t.link.classList.toggle("active", current === t);
+    });
+  }
+  window.addEventListener("scroll", spy, { passive: true });
+  spy();
+
+  /* ---------- reveal on scroll ---------- */
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var rv = document.querySelectorAll(".rv");
+  if (!reduce && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add("in");
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    rv.forEach(function (el) { io.observe(el); });
+  } else {
+    rv.forEach(function (el) { el.classList.add("in"); });
+  }
+
+  /* ---------- footer year ---------- */
+  document.querySelectorAll(".yr").forEach(function (el) {
+    el.textContent = String(new Date().getFullYear());
+  });
+})();
+
+
+  /* ---------- quiz navigation ---------- */
+  (function () {
+    var steps = document.querySelectorAll(".quiz-step");
+    var progress = document.getElementById("qprogress");
+    var stepnum = document.getElementById("qstepnum");
+    var history = ["1"];
+
+    function show(id) {
+      steps.forEach(function (s) {
+        s.classList.toggle("active", s.getAttribute("data-step") === id);
+      });
+      var isResult = id.indexOf("result-") === 0;
+      stepnum.textContent = isResult ? "✓" : String(history.length);
+      window.scrollTo({ top: document.getElementById("quiz").offsetTop - 80, behavior: "smooth" });
+    }
+
+    document.querySelectorAll(".quiz-opt[data-next]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var next = btn.getAttribute("data-next");
+        history.push(next);
+        show(next);
+      });
+    });
+
+    document.querySelectorAll(".quiz-back[data-back]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var back = btn.getAttribute("data-back");
+        history.push(back);
+        show(back);
+      });
+    });
+  })();
+</script>
+</body>
+</html>
