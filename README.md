@@ -56,6 +56,12 @@ Both are separately licensed trial editions (not GPL); see the linked pages for 
 | AIFF / AIFC | 16 / 24 / 32-bit, uncompressed only (`NONE` / `sowt`) |
 | DSF (DSD) | DSD64 – DSD256 via DoP (the architecture scales to DSD512) |
 
+Checked and explicitly **not** supported (so this doesn't have to be rediscovered
+by silence, the way the `zenevalaszto.py` browser missing `.m4a` once was):
+`.mp4` (same container as `.m4a`, but the extension itself isn't recognised —
+rename to `.m4a` for now), WavPack (`.wv`), Monkey's Audio (`.ape`) — no decoder
+in bpplay — and Ogg/Opus, which are always lossy and out of scope by design.
+
 ## Building
 
 Zero external build dependencies — the Xcode command line tools are all you need:

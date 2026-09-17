@@ -3,6 +3,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [0.9.8] — 2026-09-17
+
+### Fixed
+- **Old-Mac compatibility: bpplay would not launch at all on macOS 10.12 (Sierra) and likely
+  other pre-Big-Sur systems**, failing with `dyld: cannot load 'bpplay' (load command 0x80000034
+  is unknown)`. Root cause: `src/Makefile` never set `-mmacosx-version-min`, so `clang` defaulted
+  the deployment target to the build machine's own SDK version — the resulting binary declared a
+  minimum OS matching whatever the build machine happened to run, and the linker emitted
+  `LC_DYLD_CHAINED_FIXUPS` (a modern load-command format introduced around Big Sur) that older
+  `dyld` versions don't understand at all. `bpplay.c` already carried an `AvailabilityMacros`
+  fallback for the pre-12.0 `kAudioObjectPropertyElementMaster`/`Main` rename, so the actual fix
+  was just adding the missing build flag (`-mmacosx-version-min=10.12`) to `src/Makefile` — no
+  source changes needed.
+- **If you're on an older Mac (macOS 10.12–10.15, or bpplay previously failed to launch at all
+  with a `dyld`/"load command" error), this is the version to use.** Everyone else can update at
+  their convenience — this release contains no other behavior changes.
+
 ## [0.9.7] — 2026-08-16
 
 ### Added
