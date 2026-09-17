@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&ldquo;Hallelujah for the Machine!&rdquo; &mdash; a bpplay review</title>
+<meta name="description" content="An independent listener review of bpplay, republished in English with the author's permission.">
+<meta property="og:title" content="&ldquo;Hallelujah for the Machine!&rdquo; &mdash; a bpplay review">
+<meta property="og:description" content="An independent listener review of bpplay, republished in English with the author's permission.">
+<meta property="og:type" content="article">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a09'/%3E%3Ctext x='14' y='46' font-family='Arial' font-size='38' font-weight='bold' fill='%23eeeeec'%3Eb%3C/text%3E%3Cpath d='M36 22 L54 32 L36 42 Z' fill='%23df8d20'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=PT+Mono:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a09;
+  --bg-raised: #131311;
+  --bg-raised-2: #1c1c19;
+  --silver: #eeeeec;
+  --silver-dim: #948f83;
+  --silver-dimmer: #59564c;
+  --gold: #df8d20;
+  --gold-bright: #f3a53d;
+  --gold-dim: #7a5420;
+  --hairline: rgba(238,238,236,0.09);
+  --hairline-strong: rgba(238,238,236,0.16);
+  --radius: 2px;
+  --measure: 62ch;
+  --display: "Barlow Condensed", "DIN Cond", "Arial Narrow", sans-serif;
+  --body: "Charter", "Bitstream Charter", "PT Serif", Georgia, serif;
+  --mono: "PT Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --nav-h: 60px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--silver);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+::selection { background: var(--gold); color: #0a0a09; }
+a { color: var(--gold-bright); text-decoration: none; }
+a:hover { color: var(--silver); text-decoration: underline; text-underline-offset: 3px; }
+.wrap { max-width: 700px; margin: 0 auto; padding: 0 28px; }
+.wrap-wide { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+section { position: relative; padding: 48px 0; }
+h1, h2, h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  color: var(--silver);
+  text-wrap: balance;
+  margin: 0;
+}
+p { margin: 0 0 20px; }
+[data-lang="en"] .hu { display: none !important; }
+[data-lang="hu"] .en { display: none !important; }
+
+header.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10,10,9,0.86);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: var(--nav-h); max-width: 1160px; }
+.brand { font-family: var(--mono); font-weight: 700; font-size: 15px; letter-spacing: 0.02em; color: var(--silver); text-decoration: none; white-space: nowrap; }
+.brand:hover { color: var(--gold-bright); text-decoration: none; }
+.brand .plus { color: var(--gold); }
+.brand .ed { color: var(--silver-dimmer); font-weight: 400; }
+
+.overline { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin: 0 0 14px; }
+.title { font-size: clamp(30px, 5vw, 44px); line-height: 1.08; margin-bottom: 18px; text-transform: none; }
+.byline { font-family: var(--mono); font-size: 13px; color: var(--silver-dim); border-bottom: 1px solid var(--hairline); padding-bottom: 28px; margin-bottom: 8px; }
+.byline b { color: var(--silver); }
+article { font-size: 18px; }
+article p:first-of-type { font-size: 20px; color: var(--silver); }
+blockquote.pull {
+  border-left: 3px solid var(--gold);
+  margin: 32px 0;
+  padding: 4px 0 4px 22px;
+  font-style: italic;
+  color: var(--gold-bright);
+  font-size: 20px;
+}
+.note {
+  margin-top: 40px;
+  padding: 18px 22px;
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  font-size: 14.5px;
+  color: var(--silver-dim);
+}
+.note p:last-child { margin-bottom: 0; }
+.back { display: inline-block; margin-top: 40px; font-family: var(--mono); font-size: 13px; }
+
+footer.ft { border-top: 1px solid var(--hairline); padding: 40px 0 32px; background: #080807; margin-top: 20px; }
+.ft p { color: var(--silver-dimmer); font-size: 12.5px; margin: 0; }
+.ft a { color: var(--silver-dim); }
+
+@media (max-width: 700px) {
+  article { font-size: 16.5px; }
+  .title { font-size: clamp(26px, 7vw, 34px); }
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap wrap-wide">
+    <a class="brand" href="../../"><span class="en">bpplay</span><span class="hu">bpplay</span><span class="plus">+</span>bptune<span class="ed"> · press</span></a>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <p class="overline">INDEPENDENT REVIEW &middot; TRANSLATED FROM HUNGARIAN</p>
+    <h1 class="title">&ldquo;Hallelujah for the Machine!&rdquo;</h1>
+    <p class="byline">
+      <b>wasiliy888</b> &middot; AVX Forum (Hungary) &middot; Sep 15, 2026
+      &middot; <a href="https://avxforum.hu/forum/viewtopic.php?p=3032130#p3032130">original Hungarian post ↗</a>
+    </p>
+
+    <article>
+        <p>In digital playback, the computer matters. It is one of the source components in a hi-fi system, and the hardware itself counts: power supplies, clocks, inputs and outputs, isolation from vibration, shielding, one box or two, galvanic isolation, cables, and a hundred other details that reward attention. Player software and operating systems and their tuning shape the final sound just as much. At least that is what we thought until now.</p>
+
+        <p>Then Kaef2, that is, Ferenc Koscsó, found the Achilles heel of file based playback and took the flaw out of the system.</p>
+
+        <p>What follows is about a player called bpplay, seen through my own eyes, so some of what I write applies only to me and only to my system. The name could stand for Budapest player, but it really comes from bit perfect. It loads the music into the computer's memory, bit accurate, after a single conversion, and passes it to the DAC from there with minimal use of resources, while shutting out everything else the machine might otherwise get up to.</p>
+
+        <p>When Feri first wrote here on the AVX forum about the idea he was still shaping, it sounded interesting. Later there was news of a testable version running on Apple hardware and macOS. At that point it started to look serious. And now there is a version that boots from a USB stick and runs on x86 machines. By that stage I had already asked the developer whether there might be an edition that works with a streaming service. Sadly, no. The way the software works rules it out. There was an article Feri linked, some foreign audio site's impressions of what they heard, and I deliberately did not read it so that it would not colour my own. To be honest, I thought I would give it a try, maybe hear some difference, but nothing dramatic.</p>
+
+        <p>After all, as you can see in my signature, I run a two box system and stream from Tidal inside Roon. The player is a dedicated machine, with an audio switch, galvanic isolation and an optimised operating system. So I listen with some care. I barely have any music in local files. There is something on one of the SATA SSDs in the audio PC, an older machine, but I had even pulled the cables off it so it would not interfere. Only the system SSD was running in there.</p>
+
+        <p>So I started by taking it apart. Data SSD reconnected, all good. I made the bootable USB stick following Feri's instructions. One note: I needed a keyboard, because the machine stopped during startup and would only continue when I pressed the right key. Possibly the old motherboard BIOS. Everything came together and worked on the first attempt. My laptop, which normally serves as the Roon server, became the client I used to drive the kiosk machine, the audio PC. On that machine I found some music I knew well, and a lot I did not. I had bought it all together about four years ago.</p>
+
+        <p>Only hours later did I notice, because the music had absorbed me completely, that the laptop was entirely unnecessary, and that I was walking over to start new tracks when I could do it from the armchair with an SSH app on my phone (ConnectBot).</p>
+
+        <p>And now a few words about bpplay itself.</p>
+
+        <p>The negatives first. The looks, the appearance of the interface, are what they are in the service of efficient operation. You have to get past that. Feri, the extent to which you are unacquainted with the concept of user friendly is painful. Really. I found myself missing the PC years of three and a half decades ago, when I carved my way through directory trees with Norton Commander. And that, more or less, is all there is that is not good.</p>
+
+        <p>About everything else I can only speak with heavy bias and, of course, superlatives. The program is rock solid. I put it through about eight hours today. It did not stop, did not stutter, did not skip, did not click, and produced no playback error of any kind. It even tolerated having two clients on it at once, while I tested that I could control it from my phone.</p>
+
+        <p>The sound. The first thing you hear is the almost limitless energy and dynamics. The soundstage is larger than I am used to, both in depth and in width. Everything comes through with remarkable clarity, free of any distortion, completely detached from the speakers.</p>
+
+        <p>These are only first impressions. On music I know well I am hearing small details I have never heard before, and I had thought I had already wrung the last drop out of my system. Not even close, as it turns out. The bass goes deeper still, the treble is just as lovely, and the instrumental solos, the singers' phrasing, the trombones in a full orchestra, every sound that appears is more natural, more complex, more layered, with more body and a more believable scale. The performance feels more lifelike than anything I am used to. I could list adjectives for hours, because it does not feel like listening at home. It feels like listening at someone else's place, in a system that beats mine in every respect. An enormous experience.</p>
+
+        <p>Thank you, Feri.</p>
+
+        <p>And hallelujah for the machine that helped you create this fine thing. Though of course it took you, and your ideas.</p>
+
+        <p>If you have a music collection of any size in files, this is compulsory. If you do not have one, as I did not, start building it. Because listening with bpplay is a new experience for anyone who tries it. The difference is night and day. It lifts a hi-fi system a whole class.</p>
+
+        <p>I know, it does not do anything. It just plays the music the way it is.</p>
+
+        <p>Which reminds me of something I read about Toscanini long ago. Somebody asked him: &ldquo;Maestro, how is it possible that you conduct Beethoven's symphonies so perfectly?&rdquo; And he said: &ldquo;Oh, I do nothing special. I just do what is written in the score.&rdquo;</p>
+
+        <div class="note">
+          <p><b>Editor's note.</b> This review first appeared on the Hungarian AVX audio forum and is republished here with the author's permission. &ldquo;Kaef2&rdquo; and &ldquo;Feri&rdquo; both refer to Ferenc Koscsó, the creator and developer of bpplay, who is also the editor of this translation.</p>
+          <p>One piece of context that the author's forum signature would have supplied, and an international reader cannot see: he came to bpplay from a carefully optimised two box system, streaming from Tidal inside Roon, with a dedicated player machine, an audio switch, galvanic isolation and a tuned operating system. He kept almost no music in local files. To run the test at all, he had to reconnect a data SSD whose cables he had deliberately pulled off.</p>
+        </div>
+    </article>
+
+    <a class="back" href="../">&larr; Back to Press &amp; Reviews</a>
+  </div>
+</section>
+
+<footer class="ft">
+  <div class="wrap">
+    <p><span class="en">Republished with the author's permission. See the <a href="../">Press &amp; Reviews</a> page for more, or the <a href="../../">bpplay</a> site itself.</span><span class="hu">A szerző engedélyével közölve. Lásd a <a href="../">Sajtó &amp; vélemények</a> oldalt további írásokért, vagy magát a <a href="../../">bpplay</a> oldalt.</span></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  function setLang(lang) {
+    lang = lang === "hu" ? "hu" : "en";
+    root.setAttribute("data-lang", lang);
+    root.setAttribute("lang", lang);
+  }
+  var savedLang = null;
+  try { savedLang = localStorage.getItem("bpdemo-lang"); } catch (e) {}
+  if (savedLang === "hu" || savedLang === "en") { setLang(savedLang); }
+  else if ((navigator.language || "").toLowerCase().indexOf("hu") === 0) { setLang("hu"); }
+  else { setLang("en"); }
+})();
+</script>
+</body>
+</html>
