@@ -855,13 +855,40 @@ footer.ft {
   <div class="wrap">
     <div class="sec-head rv">
       <p class="overline"><span class="en">QUICK START</span><span class="hu">GYORSINDÍTÁS</span></p>
-      <h2><span class="en">From box to music in five steps.</span><span class="hu">Öt lépés a doboztól a zenéig.</span></h2>
+      <h2><span class="en">From download to music in six steps.</span><span class="hu">Hat lépés a letöltéstől a zenéig.</span></h2>
       <p class="lede"><span class="en">No technical knowledge is required for any of this; which is exactly why the appliance (kiosk) mode does not offer administrator privileges.</span><span class="hu">Egyik lépéshez sem kell technikai tudás; épp ezért a kiosk mód adminisztrátori jogokat nem is kínál.</span></p>
     </div>
 
     <!-- STEP 1 -->
     <div class="step rv" id="qs1">
       <div class="step-num">1</div>
+      <div class="s-body">
+        <h3><span class="en">Write the image to a microSD card</span><span class="hu">Írd meg az image-et egy microSD-kártyára</span></h3>
+        <p><span class="en">The download is a complete disk image, <b>not</b> a file to copy onto the card: if you just copy it, the Pi will not boot. It has to be <b>written</b> to the card with a dedicated tool, which erases everything on the card. You'll need a microSD card of at least 16 GB (good quality; the unpacked image is about 7.4 GB) and a card reader. Download <a href="https://etcher.balena.io">Balena Etcher</a> (free, identical on Mac and Windows), open it, choose "Flash from file" and select the downloaded <code>.img.gz</code>; Etcher decompresses it automatically while writing, no manual unzip needed. Then "Select target" → your microSD card (double-check the name and size: the selected drive is erased completely) → "Flash!". When it says "Flash Complete!", put the card into the Pi.</span><span class="hu">A letöltött fájl egy teljes lemezkép (image), <b>nem</b> egy sima fájl, amit át kell másolni a kártyára: ha egyszerűen átmásolod, a Pi nem fog elindulni. Egy erre való programmal kell a kártyára <b>megírni</b>, ami a kártya teljes tartalmát törli. Kell egy legalább 16 GB-os, jó minőségű microSD-kártya (a kicsomagolt image kb. 7,4 GB) és egy kártyaolvasó. Letölthető a <a href="https://etcher.balena.io">Balena Etcher</a> (ingyenes, Mac-en és Windowson egyforma); megnyitás után a "Flash from file" választható, majd kijelölhető a letöltött <code>.img.gz</code> fájl; az Etcher írás közben automatikusan kicsomagolja, nincs szükség kézi kitömörítésre. Utána "Select target" → a microSD-kártya (érdemes ellenőrizni a nevét és a méretét: a kiválasztott meghajtó teljes tartalma törlődik) → "Flash!". Amikor a "Flash Complete!" üzenet megjelenik, a kártya mehet a Pi-be.</span></p>
+        <div class="chips">
+          <span class="chip"><span class="en"><b>microSD</b> 16 GB or larger</span><span class="hu"><b>microSD</b> 16 GB vagy nagyobb</span></span>
+          <span class="chip"><span class="en">Do <b>not</b> just copy the file</span><span class="hu">A fájlt <b>ne</b> csak másold át</span></span>
+          <span class="chip"><span class="en">Alternative: Raspberry Pi Imager</span><span class="hu">Alternatíva: Raspberry Pi Imager</span></span>
+        </div>
+        <div class="note"><span class="en"><b>Check:</b> after a successful write the card shows a small volume called <code>bootfs</code> with <code>config.txt</code> and <code>cmdline.txt</code>. If the card looks empty, or contains only the <code>.img.gz</code> file, the image was not written: repeat the procedure. If the computer offers to format the card, do <b>not</b> format it. Raspberry Pi Imager works too ("Choose OS" → "Use custom"); if it offers "OS customisation", choose <b>No</b>: the device is preconfigured.</span><span class="hu"><b>Ellenőrzés:</b> sikeres írás után a kártyán egy kis <code>bootfs</code> nevű lemez látszik, benne <code>config.txt</code> és <code>cmdline.txt</code> fájlokkal. Ha a kártya üresnek látszik, vagy csak a <code>.img.gz</code> fájl van rajta, az image nem lett megírva: ismételd meg. Ha a számítógép formázást kínál fel, <b>ne</b> formázd meg. A Raspberry Pi Imager is használható ("Choose OS" → "Use custom"); ha az "OS customisation" beállításokat kínálja, válaszd a <b>Nem</b> lehetőséget: a készülék előre be van állítva.</span></div>
+        <div class="warn note"><span class="en"><b>If the Pi shows only the Raspberry Pi logo and boot text</b> (for example <code>Failed to open device: 'sdcard'</code> or <code>part: 0 mbr [0x00…]</code>), the card holds no bootable system: the image was not written, or the card is faulty (counterfeit or worn cards are a common cause). Write it again, or try another card and card reader.</span><span class="hu"><b>Ha a Pi csak a Raspberry Pi logót és bootloader-szövegeket mutat</b> (például <code>Failed to open device: 'sdcard'</code> vagy <code>part: 0 mbr [0x00…]</code>), a kártyán nincs indítható rendszer: az image nem lett megírva, vagy a kártya hibás (hamis vagy kopott kártyák gyakori okok). Írd meg újra, vagy próbálj másik kártyát és kártyaolvasót.</span></div>
+      </div>
+      <div class="step-media">
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Balena Etcher</span></div>
+          <div class="term-body"><span class="tl-white">1.</span> <span class="tl-gold">Flash from file</span> <span class="tl-dim">→ the downloaded .img.gz</span>
+<span class="tl-white">2.</span> <span class="tl-gold">Select target</span> <span class="tl-dim">→ your microSD card</span>
+<span class="tl-white">3.</span> <span class="tl-hl">Flash!</span>
+<span class="tl-dim">Etcher decompresses .gz automatically while writing.</span>
+<span class="cursor">&nbsp;</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">Etcher writes and verifies in one step; a few minutes, depending on the card's speed.</span><span class="hu">Az Etcher egy lépésben ír és ellenőriz; pár perc, a kártya sebességétől függően.</span></p>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step rv" id="qs2">
+      <div class="step-num">2</div>
       <div class="s-body">
         <h3><span class="en">Connect &amp; power on</span><span class="hu">Bekötés és bekapcsolás</span></h3>
         <p><span class="en">Connect the DAC to a USB 2.0 port of the Pi (usually one of the two outermost connectors), then power. Switch the DAC on first, then the Pi; the device starts by itself. No monitor, no keyboard, no login: wait about half to one minute.</span><span class="hu">A DAC-ot a Pi USB 2.0 portjára kell kötni (tipikusan a két szélső csatlakozó egyike), majd áramra. Először a DAC-ot kell bekapcsolni, aztán a Pi-t; a készülék magától elindul. Monitor, billentyűzet, bejelentkezés nélkül: fél-egy percet érdemes várni.</span></p>
@@ -886,9 +913,9 @@ footer.ft {
       </div>
     </div>
 
-    <!-- STEP 2 -->
-    <div class="step rv" id="qs2">
-      <div class="step-num">2</div>
+    <!-- STEP 3 -->
+    <div class="step rv" id="qs3">
+      <div class="step-num">3</div>
       <div class="s-body">
         <h3><span class="en">Connect over SSH</span><span class="hu">Kapcsolódás SSH-n</span></h3>
         <p><span class="en">From your own device open an SSH app; the same way as with any other app; and connect to the machine name or IP address you received (typically <code>kiosk@raspberrypi.local</code>). Enter the password if prompted (see 3.1.1); the music selector screen then appears, with no further commands to type.</span><span class="hu">Egy saját eszközről megnyitható egy SSH-alkalmazás; ugyanúgy, mint bármely más alkalmazás, és kapcsolódni lehet a kapott gépnévhez vagy IP-címhez (tipikusan <code>kiosk@raspberrypi.local</code>). Meg kell adni a jelszót, ha kéri (ld. 3.1.1); ekkor megjelenik a zeneválasztó képernyője, további parancsot nem kell beírni.</span></p>
@@ -914,9 +941,9 @@ footer.ft {
       </div>
     </div>
 
-    <!-- STEP 3 -->
-    <div class="step rv" id="qs3">
-      <div class="step-num">3</div>
+    <!-- STEP 4 -->
+    <div class="step rv" id="qs4">
+      <div class="step-num">4</div>
       <div class="s-body">
         <h3><span class="en">Select storage</span><span class="hu">Tároló kiválasztása</span></h3>
         <p><span class="en">If more than one drive is present, the storage selector appears (reopen any time with <code>m</code>). Choosing a drive that is not yet mounted? The system mounts it automatically; no password. Your NAS can be reached too: enter its share address (e.g. <code>192.168.1.10:/zene</code> for NFS or <code>//192.168.1.10/zene</code> for SMB) and the selector recognizes the type from its form.</span><span class="hu">Ha több meghajtó van, megjelenik a tárolóválasztó (bármikor újranyitható az <code>m</code> billentyűvel). Ha egy még nem csatolt meghajtó kerül kiválasztásra, a rendszer automatikusan csatolja; jelszó nélkül. A NAS is elérhető: megadható a megosztás címe (pl. <code>192.168.1.10:/zene</code> NFS-hez vagy <code>//192.168.1.10/zene</code> SMB-hez), a választó a címből felismeri a típust.</span></p>
@@ -943,9 +970,9 @@ footer.ft {
       </div>
     </div>
 
-    <!-- STEP 4 -->
-    <div class="step rv" id="qs4">
-      <div class="step-num">4</div>
+    <!-- STEP 5 -->
+    <div class="step rv" id="qs5">
+      <div class="step-num">5</div>
       <div class="s-body">
         <h3><span class="en">Select the audio output</span><span class="hu">Hangkimenet kiválasztása</span></h3>
         <p><span class="en">With several outputs connected (the Pi's built-in output <em>and</em> an external USB DAC), the selector offers a choice: arrows, <code>Enter</code>. One output only? This step is skipped too.</span><span class="hu">Több kimenet esetén (a Pi beépített kimenete <em>és</em> külső USB DAC együtt) a választó kínálja a lehetőségeket: nyilak, <code>Enter</code>. Csak egy kimenet van? Ez a lépés is kimarad.</span></p>
@@ -966,9 +993,9 @@ feltüntetve (nem a beépített hangkártyát).</span>
       </div>
     </div>
 
-    <!-- STEP 5 -->
-    <div class="step rv" id="qs5">
-      <div class="step-num">5</div>
+    <!-- STEP 6 -->
+    <div class="step rv" id="qs6">
+      <div class="step-num">6</div>
       <div class="s-body">
         <h3><span class="en">Browse, select, play</span><span class="hu">Válogatás és lejátszás</span></h3>
         <p><span class="en"><code>Enter</code> opens an album, <code>Esc</code> steps back. <code>Space</code> marks tracks; the counter at the bottom tracks how much RAM your selection needs, and turns red above 70% as a warning. Then press <code>p</code>: the tracks load into memory one by one, and playback starts; gapless.</span><span class="hu">Az <code>Enter</code> belép egy albumba, az <code>Esc</code> visszalép. A <code>Space</code> jelöli a számokat; az alsó számláló mutatja, mennyi RAM kell a kijelöléshez, és 70% felett pirosra vált figyelmeztetésképpen. Ezután a <code>p</code> megnyomása indítja a lejátszást: a számok egyenként a memóriába töltődnek; gapless.</span></p>
@@ -1250,6 +1277,23 @@ feltüntetve (nem a beépített hangkártyát).</span>
           <li><span class="en">Network connection (Ethernet or Wi-Fi); required: the music selector is reached over an SSH connection to the device (see 3.1.1); without it, the end user cannot select and play music.</span><span class="hu">Hálózati kapcsolat (Ethernet vagy Wi-Fi); szükséges: a zeneválasztó a készülékhez SSH-kapcsolaton keresztül érhető el (ld. 3.1.1); enélkül a végfelhasználó nem tud zenét választani és lejátszani.</span></li>
         </ul>
 
+        <h4><span class="en">2.1 Writing the microSD card (installing the image)</span><span class="hu">2.1 A microSD-kártya megírása (az image telepítése)</span></h4>
+        <p><span class="en">The downloaded <code>.img.gz</code> file is a complete disk image, <b>not</b> an ordinary file to copy onto the card. If you simply copy it, the Pi will not boot. The image must be <b>written</b> to the card with a dedicated tool; this erases everything on the card.</span><span class="hu">A letöltött <code>.img.gz</code> fájl egy teljes lemezkép (image), <b>nem</b> egy sima fájl, amit át kell másolni a kártyára. Ha egyszerűen átmásolod, a Pi nem fog elindulni. Az image-et egy erre való programmal kell a kártyára <b>megírni</b>; ez a kártya teljes korábbi tartalmát törli.</span></p>
+        <p><span class="en">You need:</span><span class="hu">Ami kell hozzá:</span></p>
+        <ul>
+          <li><span class="en">a microSD card of at least 16 GB, good quality (Class 10 / A1 or better), and a card reader;</span><span class="hu">legalább 16 GB-os, jó minőségű (Class 10 / A1 vagy jobb) microSD-kártya és kártyaolvasó;</span></li>
+          <li><span class="en">Balena Etcher (free, identical on Mac and Windows: <a href="https://etcher.balena.io">etcher.balena.io</a>);</span><span class="hu">a Balena Etcher (ingyenes, Mac-en és Windowson is ugyanaz: <a href="https://etcher.balena.io">etcher.balena.io</a>);</span></li>
+          <li><span class="en">the downloaded <code>.img.gz</code> file (no need to unpack it).</span><span class="hu">a letöltött <code>.img.gz</code> fájl (nem kell kicsomagolni).</span></li>
+        </ul>
+        <ul>
+          <li><span class="en">Open Balena Etcher, choose "Flash from file", then the downloaded <code>.img.gz</code>.</span><span class="hu">Nyisd meg a Balena Etchert, és válaszd a "Flash from file" gombot, majd a letöltött <code>.img.gz</code> fájlt.</span></li>
+          <li><span class="en">"Select target": choose the microSD card. <b>Double-check its name and size; the selected drive is erased completely.</b></span><span class="hu">"Select target": válaszd ki a microSD-kártyát. <b>Ellenőrizd a nevét és a méretét, mert a kiválasztott meghajtó teljes tartalma törlődik.</b></span></li>
+          <li><span class="en">Click "Flash!". Etcher writes and verifies the card (a few minutes). If it reports an error, repeat it or try another card/reader.</span><span class="hu">Kattints a "Flash!" gombra. Az Etcher megírja és ellenőrzi a kártyát (pár perc). Ha hibát jelez, ismételd meg, vagy próbálj másik kártyát/olvasót.</span></li>
+          <li><span class="en">After "Flash Complete!", remove the card and put it into the Pi. If the computer offers to format it, <b>do not format it</b>.</span><span class="hu">"Flash Complete!" után vedd ki a kártyát, és tedd a Pi-be. Ha a számítógép formázást kínál fel, <b>ne formázd meg</b>.</span></li>
+        </ul>
+        <p><span class="en"><b>Check:</b> after a successful write the card shows a small volume called <code>bootfs</code> containing <code>config.txt</code> and <code>cmdline.txt</code>. If the card looks empty, or contains only an <code>.img.gz</code> file, the image was not written: repeat the procedure.</span><span class="hu"><b>Ellenőrzés:</b> sikeres írás után a kártyán egy kis <code>bootfs</code> nevű lemez látszik <code>config.txt</code> és <code>cmdline.txt</code> fájlokkal. Ha a kártya üres, vagy csak egy <code>.img.gz</code> fájl van rajta, az image nem lett megírva: ismételd meg.</span></p>
+        <p><span class="en"><b>Alternative:</b> Raspberry Pi Imager can be used as well ("Choose OS" → "Use custom"). If it offers "OS customisation" settings, choose <b>No</b>: the device is preconfigured.</span><span class="hu"><b>Alternatíva:</b> a Raspberry Pi Imager is használható ("Choose OS" → "Use custom"). Ha az "OS customisation" beállításokat kínálja, válaszd a <b>Nem</b> lehetőséget: a készülék előre be van állítva.</span></p>
+
         <h3 class="mh" id="m-3"><span class="mno">3</span><span class="en">Using the device</span><span class="hu">A készülék használata</span></h3>
         <p><span class="en">No technical knowledge is required for use; which is exactly why the appliance (kiosk) mode does not offer administrator privileges.</span><span class="hu">A használat nem igényel technikai tudást; épp ezért a készüléki (kiosk) mód adminisztrátori jogosultságokat nem kínál.</span></p>
 
@@ -1341,6 +1385,7 @@ feltüntetve (nem a beépített hangkártyát).</span>
           <li><b><span class="en">No sound:</span><span class="hu">Nincs hang:</span></b> <span class="en">check that you selected the right audio output (3.3) and that the DAC is switched on and connected.</span><span class="hu">érdemes ellenőrizni, hogy a megfelelő hangkimenet van-e kiválasztva (3.3), és hogy a DAC be van-e kapcsolva, csatlakoztatva van-e.</span></li>
           <li><b><span class="en">You can't see your music:</span><span class="hu">Nem látszik a zene:</span></b> <span class="en">open the storage selector (<code>m</code>, 3.2) and choose the correct drive.</span><span class="hu">a tárolóválasztó megnyitható (<code>m</code>, 3.2), ott kiválasztható a helyes meghajtó.</span></li>
           <li><b><span class="en">The device does not start, only shows a message, then switches off:</span><span class="hu">A készülék nem indul, csak üzenetet mutat, majd kikapcsol:</span></b> <span class="en">the trial period has expired (1.5); contact the developer.</span><span class="hu">a próbaidő lejárt (1.5); érdemes felvenni a kapcsolatot a fejlesztővel.</span></li>
+          <li><b><span class="en">The monitor shows only the Raspberry Pi logo and boot text</span><span class="hu">A monitoron csak a Raspberry Pi logó és bootloader-szövegek látszanak</span></b> <span class="en">(e.g. <code>Failed to open device: 'sdcard'</code>, <code>part: 0 mbr [0x00…]</code>): the card holds no bootable system. The image was not written or the card is faulty; write it again as in 2.1, or try another card.</span><span class="hu">(pl. <code>Failed to open device: 'sdcard'</code>, <code>part: 0 mbr [0x00…]</code>): a kártyán nincs indítható rendszer. Az image nem lett megírva vagy a kártya hibás; írd meg újra a 2.1 szerint, vagy próbálj másik kártyát.</span></li>
           <li><b><span class="en">Anything else unusual:</span><span class="hu">Bármi más szokatlan:</span></b> <span class="en">there is nothing for you to do; the machine can be maintained remotely; just let the developer know.</span><span class="hu">nincs teendő; a gép távolról karbantartható; a fejlesztőnek elég szólni.</span></li>
         </ul>
 
@@ -1348,7 +1393,7 @@ feltüntetve (nem a beépített hangkártyát).</span>
         <h4><span class="en">4.1 Board/computer</span><span class="hu">4.1 Alaplap/számítógép</span></h4>
         <p><span class="en">Validated exclusively on Raspberry Pi 4 (CM4 module in the case of Holo Red) and Pi 5, in any RAM variant. Not tested, not guaranteed on earlier Pi models (Pi 3 and older).</span><span class="hu">Kizárólag Raspberry Pi 4 (Holo Red esetén CM4 modul) és Pi 5 alatt validálva, bármely RAM-változatban. Korábbi Pi modelleken (Pi 3 és régebbi) nem tesztelt, nem garantált.</span></p>
         <h4><span class="en">4.2 Boot medium</span><span class="hu">4.2 Boot adathordozó</span></h4>
-        <p><span class="en">The appliance edition boots from a microSD card.</span><span class="hu">A készüléki kiadás microSD kártyáról bootol.</span></p>
+        <p><span class="en">The appliance edition boots from a microSD card. Use a good-quality card of at least 16 GB; counterfeit or worn cards are a frequent cause of boot problems.</span><span class="hu">A készüléki kiadás microSD kártyáról bootol. Legalább 16 GB-os, márkás kártyát használj; a hamis vagy kopott kártyák gyakori okai az indítási hibáknak.</span></p>
         <h4><span class="en">4.3 Tested USB DACs and receivers</span><span class="hu">4.3 Tesztelt USB DAC-ok és receiver-ek</span></h4>
         <div class="table-wrap">
           <table class="tbl">
