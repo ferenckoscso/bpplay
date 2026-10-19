@@ -1198,14 +1198,24 @@ footer.ft {
       b.classList.toggle("on", on);
       b.setAttribute("aria-pressed", on ? "true" : "false");
     });
+    document.querySelectorAll('a[href^="../"]').forEach(function (a) {
+      var base = a.getAttribute("href").split("?")[0];
+      if (/^\.\.\/(pi|x64|x64-desktop|which)?\/?$/.test(base)) {
+        a.setAttribute("href", base + "?lang=" + lang);
+      }
+    });
     if (persist) {
       try { localStorage.setItem("bpx64-lang", lang); } catch (e) {}
     }
   }
 
+  var fromUrl = null;
+  try { fromUrl = new URLSearchParams(window.location.search).get("lang"); } catch (e) {}
   var saved = null;
   try { saved = localStorage.getItem("bpx64-lang"); } catch (e) {}
-  if (saved === "hu" || saved === "en") {
+  if (fromUrl === "hu" || fromUrl === "en") {
+    setLang(fromUrl, true);
+  } else if (saved === "hu" || saved === "en") {
     setLang(saved, false);
   } else if ((navigator.language || "").toLowerCase().indexOf("hu") === 0) {
     setLang("hu", false);

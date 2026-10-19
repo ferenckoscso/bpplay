@@ -1184,7 +1184,7 @@ footer {
       "hero.x64DesktopBanner": "…or as an x86_64 Live-USB desktop edition (no SSH needed), also RAM-boot",
       "hero.eyebrow": "macOS · Core edition · v0.9.8 · GPL-3.0",
       "hero.h1": 'The shortest<br>deterministic path<br>from <span class="accent">file</span> to <span class="accent">DAC</span>.',
-      "hero.sub": "bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched; no resampling, no software volume, no mixing. It's also available as ready-to-boot <a href="x64/">x86_64</a> and <a href="pi/">Raspberry Pi</a> editions that run entirely from RAM — no installation on your own machine.",
+      "hero.sub": "bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched; no resampling, no software volume, no mixing. It's also available as ready-to-boot <a href=\"x64/\">x86_64</a> and <a href=\"pi/\">Raspberry Pi</a> editions that run entirely from RAM — no installation on your own machine.",
       "hero.downloadBtn": "↓ Download for macOS",
       "hero.demoBtn": "Watch the 80-second demo",
       "hero.pathLabel1": "FILE",
@@ -1347,7 +1347,7 @@ footer {
       "nav.press": "Sajtó és vélemények",
       "hero.eyebrow": "macOS · Core edition · v0.9.8 · GPL-3.0",
       "hero.h1": 'A legrövidebb<br>determinisztikus út<br><span class="accent">fájltól</span> a <span class="accent">DAC-ig</span>.',
-      "hero.sub": "A bpplay egy minimalista, bithelyes zenelejátszó macOS-re. Egyetlen C fájl, kb. kétezer sor, külső függőség nélkül. Egyetlen feladata van: a zenei fájl mintáit érintetlenül eljuttatni a DAC-hoz; nincs újramintavétel, nincs szoftveres hangerő, nincs keverés. Elérhető készen bootolható <a href="x64/">x86_64</a> és <a href="pi/">Raspberry Pi</a> kiadásként is, amelyek teljesen RAM-ból futnak — nincs telepítés a saját gépedre.",
+      "hero.sub": "A bpplay egy minimalista, bithelyes zenelejátszó macOS-re. Egyetlen C fájl, kb. kétezer sor, külső függőség nélkül. Egyetlen feladata van: a zenei fájl mintáit érintetlenül eljuttatni a DAC-hoz; nincs újramintavétel, nincs szoftveres hangerő, nincs keverés. Elérhető készen bootolható <a href=\"x64/\">x86_64</a> és <a href=\"pi/\">Raspberry Pi</a> kiadásként is, amelyek teljesen RAM-ból futnak — nincs telepítés a saját gépedre.",
       "hero.downloadBtn": "↓ Letöltés macOS-hez",
       "hero.demoBtn": "Nézd meg a 80 másodperces demót",
       "hero.pathLabel1": "FÁJL",
@@ -1500,6 +1500,9 @@ footer {
   var supported = ['en', 'hu'];
 
   function detectDefault() {
+    var fromUrl = null;
+    try { fromUrl = new URLSearchParams(window.location.search).get('lang'); } catch (e) {}
+    if (fromUrl && supported.indexOf(fromUrl) !== -1) return fromUrl;
     var stored = window.localStorage.getItem(STORAGE_KEY);
     if (stored && supported.indexOf(stored) !== -1) return stored;
     return 'en';
@@ -1526,6 +1529,11 @@ footer {
 
     document.querySelectorAll('#langToggle .lang-opt').forEach(function(opt){
       opt.classList.toggle('active', opt.getAttribute('data-lang-opt') === lang);
+    });
+
+    document.querySelectorAll('a[href^="pi/"], a[href^="x64/"], a[href^="x64-desktop/"], a[href^="which/"]').forEach(function(a){
+      var base = a.getAttribute('href').split('?')[0];
+      a.setAttribute('href', base + '?lang=' + lang);
     });
 
     window.localStorage.setItem(STORAGE_KEY, lang);
