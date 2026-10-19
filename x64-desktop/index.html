@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>bpplay + bptune: x86_64 Live-USB desktop edition</title>
+<meta name="description" content="A path to perfect silence: the file decodes once into locked memory, and nothing else runs while it plays. Boot a normal desktop from a USB stick, drag a file onto the bpplay icon, and listen — risk-free, your computer stays untouched.">
+<meta property="og:title" content="bpplay + bptune: x86_64 Live-USB desktop edition">
+<meta property="og:description" content="Path to perfect silence: the computer disappears from computer audio playback. No SSH, no install — a normal desktop with a drag-and-drop player.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0a09'/%3E%3Ctext x='14' y='46' font-family='Arial' font-size='38' font-weight='bold' fill='%23eeeeec'%3Eb%3C/text%3E%3Cpath d='M36 22 L54 32 L36 42 Z' fill='%23df8d20'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=PT+Mono:wght@400;700&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* == style.css inlined so this page works as a single file == */
+/* ============================================================
+   bpplay + bptune; x86_64 Live-USB desktop edition
+   Design language: matched to ferenckoscso.github.io/bpplay
+   ============================================================ */
+
+:root {
+  --bg: #0a0a09;
+  --bg-raised: #131311;
+  --bg-raised-2: #1c1c19;
+  --silver: #eeeeec;
+  --silver-dim: #948f83;
+  --silver-dimmer: #59564c;
+  --gold: #df8d20;
+  --gold-bright: #f3a53d;
+  --gold-dim: #7a5420;
+  --green: #58a55c;
+  --green-bright: #7fc584;
+  --red: #e5534b;
+  --hairline: rgba(238,238,236,0.09);
+  --hairline-strong: rgba(238,238,236,0.16);
+  --radius: 2px;
+  --measure: 62ch;
+  --display: "Barlow Condensed", "DIN Cond", "Arial Narrow", sans-serif;
+  --body: "Charter", "Bitstream Charter", "PT Serif", Georgia, serif;
+  --mono: "PT Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --nav-h: 60px;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--silver);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--gold); color: #0a0a09; }
+
+a { color: var(--gold-bright); text-decoration: none; }
+a:hover { color: var(--silver); text-decoration: underline; text-underline-offset: 3px; }
+
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 28px; }
+.wrap-wide { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+
+section { position: relative; padding: 96px 0; border-top: 1px solid var(--hairline); }
+[id] { scroll-margin-top: calc(var(--nav-h) + 18px); }
+
+h1, h2 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.005em;
+  color: var(--silver);
+  text-wrap: balance;
+  margin: 0;
+}
+h2 { font-size: clamp(32px, 4.4vw, 46px); line-height: 1.05; margin-bottom: 18px; }
+h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 20px;
+  color: var(--silver);
+  text-wrap: balance;
+  margin: 0 0 10px;
+}
+
+p { margin: 0 0 16px; max-width: var(--measure); }
+.lede { font-size: 19px; color: var(--silver-dim); max-width: 58ch; }
+
+code {
+  font-family: var(--mono);
+  color: var(--silver);
+  background: var(--bg-raised-2);
+  padding: 1px 5px;
+  border-radius: var(--radius);
+  font-size: 13px;
+}
+kbd {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver);
+  background: var(--bg-raised-2);
+  border: 1px solid var(--hairline-strong);
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.overline {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 14px;
+}
+.overline .sep { color: var(--silver-dimmer); margin: 0 6px; }
+
+.sec-head { margin-bottom: 44px; }
+.sec-head .lede { margin-bottom: 0; }
+
+/* ---------- language switching ---------- */
+[data-lang="en"] .hu { display: none !important; }
+[data-lang="hu"] .en { display: none !important; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 9px 16px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.btn:hover { text-decoration: none; }
+.btn-gold { background: var(--gold); color: #0a0a09; }
+.btn-gold:hover { background: var(--gold-bright); color: #0a0a09; }
+.btn-ghost { border-color: var(--hairline-strong); color: var(--silver); }
+.btn-ghost:hover { border-color: var(--silver-dim); color: var(--gold-bright); }
+
+/* ---------- header / nav ---------- */
+header.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(10,10,9,0.86);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: var(--nav-h);
+  max-width: 1160px;
+}
+.brand {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--silver);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.brand:hover { color: var(--gold-bright); text-decoration: none; }
+.brand .plus { color: var(--gold); }
+.brand .ed { color: var(--silver-dimmer); font-weight: 400; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  color: var(--silver-dim);
+  padding: 7px 9px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--silver); background: var(--bg-raised-2); text-decoration: none; }
+.nav-links a.active { color: var(--gold-bright); }
+
+.nav-tools { display: flex; align-items: center; gap: 10px; }
+
+.lang-switch {
+  display: inline-flex;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.lang-switch button {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  background: transparent;
+  color: var(--silver-dim);
+  border: 0;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.lang-switch button.on { background: var(--gold); color: #0a0a09; }
+.lang-switch button:not(.on):hover { color: var(--silver); }
+
+.nav-burger {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  color: var(--silver);
+  font-family: var(--mono);
+  font-size: 14px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+/* ---------- hero ---------- */
+.hero { padding-top: 84px; padding-bottom: 72px; border-top: none; }
+.hero .wrap-wide { max-width: 1160px; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 48px;
+  align-items: center;
+}
+.hero h1 {
+  font-size: clamp(44px, 6.2vw, 82px);
+  line-height: 0.98;
+  margin: 14px 0 24px;
+  max-width: 17ch;
+}
+.hero h1 .gold { color: var(--gold); }
+.hero .sub { font-size: 18px; color: var(--silver-dim); max-width: 46ch; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0 14px; }
+.hero-note { font-family: var(--mono); font-size: 12px; color: var(--silver-dimmer); letter-spacing: 0.04em; }
+.hero-note a { color: var(--silver-dim); text-decoration: underline; text-underline-offset: 3px; }
+
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: var(--hairline);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 64px;
+}
+.stat {
+  background: var(--bg);
+  padding: 18px 20px;
+}
+.stat b {
+  display: block;
+  font-family: var(--display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold-bright);
+  line-height: 1.1;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.stat span {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--silver-dim);
+  letter-spacing: 0.05em;
+}
+
+/* ---------- cards ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: 26px 26px 20px;
+}
+.card h3 { color: var(--gold-bright); }
+.card p { color: var(--silver-dim); margin-bottom: 0; font-size: 15.5px; }
+.card .c-ico {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--gold-dim);
+  letter-spacing: 0.14em;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* ---------- quick start steps ---------- */
+.step {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 28px;
+  padding: 48px 0;
+  border-top: 1px solid var(--hairline);
+  align-items: start;
+}
+.step:first-of-type { border-top: 0; padding-top: 8px; }
+.step-num {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 54px;
+  line-height: 0.9;
+  color: var(--gold);
+  opacity: 0.92;
+}
+.step h3 { font-size: 24px; }
+.step .s-body { color: var(--silver-dim); font-size: 16px; }
+.step-media { min-width: 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+.chip {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--silver-dim);
+  border: 1px solid var(--hairline-strong);
+  border-radius: 20px;
+  padding: 4px 12px;
+  letter-spacing: 0.02em;
+}
+.chip b { color: var(--gold-bright); font-weight: 700; }
+
+/* ---------- terminal mockup ---------- */
+.term {
+  background: #0d0d0b;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 100%;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.55), 0 4px 14px rgba(0,0,0,0.4);
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+}
+.term + .figure-cap, .term-pair + .figure-cap { margin-top: 10px; }
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #161613;
+  border-bottom: 1px solid var(--hairline);
+}
+.dot { width: 10px; height: 10px; border-radius: 50%; flex: 0 0 auto; }
+.dot.r { background: #ff5f56; } .dot.y { background: #ffbd2e; } .dot.g { background: #27c93f; }
+.term-title {
+  margin-left: 8px;
+  font-size: 11px;
+  color: var(--silver-dim);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.term-body {
+  padding: 14px 16px;
+  overflow-x: auto;
+  white-space: pre;
+  color: var(--silver-dim);
+}
+.term-status {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  background: #2e7d32;
+  color: #eaffe9;
+  padding: 3px 12px;
+  font-size: 11.5px;
+  letter-spacing: 0.02em;
+}
+
+/* terminal text colours */
+.tl-dim { color: #948f83; }
+.tl-white { color: #eeeeec; }
+.tl-gold { color: #f3a53d; }
+.tl-green { color: #8fd694; }
+.tl-red { color: #e5534b; }
+.tl-hl { background: rgba(223,141,32,0.16); color: #f3a53d; display: inline-block; width: 100%; }
+.tl-count { color: #8fd694; }
+.tl-count-red { color: #e5534b; }
+.t-bar {
+  display: block;
+  background: #1c1c19;
+  color: #eeeeec;
+  padding: 2px 8px;
+  margin: -4px -8px 10px;
+  border-left: 3px solid var(--gold);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cursor {
+  display: inline-block;
+  width: 7px;
+  background: #eeeeec;
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+.term-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+
+.figure-cap {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--silver-dimmer);
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+/* ---------- note boxes ---------- */
+.note {
+  background: rgba(223,141,32,0.07);
+  border: 1px solid rgba(223,141,32,0.25);
+  border-left: 3px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  margin: 18px 0;
+  font-size: 15px;
+  color: var(--silver-dim);
+  max-width: 72ch;
+}
+.note b, .note strong { color: var(--gold-bright); }
+.warn {
+  background: rgba(229,83,75,0.06);
+  border-color: rgba(229,83,75,0.3);
+  border-left-color: var(--red);
+}
+.warn b, .warn strong { color: #f08a84; }
+
+/* ---------- keys table ---------- */
+.keys-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0 40px;
+  counter-reset: keyrow;
+}
+.key-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+}
+.key-row .k { text-align: left; }
+.key-row .f { font-size: 15px; color: var(--silver-dim); }
+.key-row .f em { color: var(--silver); font-style: normal; }
+
+/* ---------- tables ---------- */
+.table-wrap { overflow-x: auto; margin-top: 28px; border: 1px solid var(--hairline); border-radius: var(--radius); }
+table.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  min-width: 560px;
+}
+table.tbl th {
+  text-align: left;
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: var(--bg-raised);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--hairline-strong);
+  white-space: nowrap;
+}
+table.tbl td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--hairline);
+  color: var(--silver-dim);
+  vertical-align: top;
+}
+table.tbl tr:last-child td { border-bottom: 0; }
+table.tbl td:first-child { color: var(--silver); white-space: nowrap; }
+table.tbl.tbl-troubleshoot { table-layout: fixed; }
+table.tbl.tbl-troubleshoot td:first-child, table.tbl.tbl-troubleshoot th:first-child { width: 34%; white-space: normal; }
+table.tbl.tbl-troubleshoot td:last-child, table.tbl.tbl-troubleshoot th:last-child { width: 66%; }
+.yes { color: var(--green-bright); font-weight: 700; }
+.no { color: var(--red); font-weight: 700; }
+.small-note { font-size: 12px; line-height: 1.5; }
+
+/* ---------- trial + faq ---------- */
+.trial-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 34px 0; }
+.faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 34px; }
+.faq { background: var(--bg-raised); border: 1px solid var(--hairline); border-radius: var(--radius); padding: 22px 24px; }
+.faq h3 { font-size: 17px; color: var(--silver); }
+.faq h3::before { content: "Q "; color: var(--gold); font-family: var(--mono); }
+.faq p { color: var(--silver-dim); font-size: 15px; margin: 8px 0 0; }
+.faq p .a { color: var(--gold-bright); font-family: var(--mono); font-size: 12px; margin-right: 6px; }
+
+/* ---------- manual ---------- */
+.manual-top { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 26px 0 8px; }
+.manual-grid {
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  gap: 48px;
+  margin-top: 40px;
+}
+.mtoc { position: sticky; top: calc(var(--nav-h) + 24px); align-self: start; }
+.mtoc-mobile { display: none; border: 1px solid var(--hairline-strong); border-radius: var(--radius); background: var(--bg-raised); padding: 0; }
+.mtoc-mobile summary {
+  cursor: pointer;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 13px 16px;
+  list-style: none;
+}
+.mtoc-mobile summary::before { content: "▸ "; }
+.mtoc-mobile[open] summary::before { content: "▾ "; }
+.mtoc-mobile ul { list-style: none; margin: 0; padding: 0 8px 10px; }
+.mtoc-mobile li a { display: block; font-family: var(--mono); font-size: 12.5px; color: var(--silver-dim); padding: 9px 10px; border-top: 1px solid var(--hairline); }
+.mtoc-mobile li a:hover { color: var(--gold-bright); text-decoration: none; }
+.mtoc-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--silver-dimmer);
+  margin-bottom: 12px;
+}
+.mtoc ul { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--hairline); }
+.mtoc li a {
+  display: block;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver-dim);
+  padding: 7px 14px;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  line-height: 1.45;
+}
+.mtoc li a:hover { color: var(--silver); text-decoration: none; background: var(--bg-raised); }
+.mtoc li a.active { color: var(--gold-bright); border-left-color: var(--gold); }
+
+.manual-body { font-size: 16px; max-width: 74ch; }
+.manual-body p { max-width: none; color: #d8d5cd; }
+.manual-body ul { color: #d8d5cd; padding-left: 22px; margin: 0 0 18px; }
+.manual-body li { margin-bottom: 8px; }
+.manual-body h3.mh {
+  font-size: 26px;
+  color: var(--silver);
+  margin: 52px 0 6px;
+  padding-top: 34px;
+  border-top: 1px solid var(--hairline);
+}
+.manual-body h3.mh:first-child { border-top: 0; margin-top: 0; padding-top: 0; }
+.manual-body h3.mh .mno { color: var(--gold); margin-right: 12px; }
+.manual-body h4 {
+  font-family: var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-size: 19px;
+  color: var(--gold-bright);
+  margin: 34px 0 10px;
+}
+.manual-body .figure-cap { margin: 8px 0 22px; }
+.manual-body .note { margin: 22px 0; }
+.manual-body table.tbl td, .manual-body table.tbl th { font-size: 12.5px; }
+.manual-body table.tbl { min-width: 520px; }
+.happy {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  text-align: center;
+  font-size: 22px;
+  margin: 60px 0 10px;
+}
+
+/* ---------- footer ---------- */
+footer.ft {
+  border-top: 1px solid var(--hairline);
+  padding: 64px 0 40px;
+  background: #080807;
+}
+.ft-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 40px; }
+.ft h4 {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--silver-dimmer);
+  margin: 0 0 14px;
+}
+.ft ul { list-style: none; margin: 0; padding: 0; }
+.ft li { margin-bottom: 9px; }
+.ft li a { font-family: var(--mono); font-size: 12.5px; color: var(--silver-dim); }
+.ft li a:hover { color: var(--gold-bright); }
+.ft .brandline { font-family: var(--mono); font-size: 14px; color: var(--silver); margin-bottom: 12px; }
+.ft .dev { font-size: 14px; color: var(--silver-dim); max-width: 42ch; }
+.ft .fineprint {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--silver-dimmer);
+  line-height: 1.7;
+  margin-top: 34px;
+  border-top: 1px solid var(--hairline);
+  padding-top: 22px;
+  max-width: none;
+}
+.happy-foot { font-family: var(--display); font-weight: 700; letter-spacing: 0.2em; color: var(--gold-dim); text-transform: uppercase; margin-top: 18px; font-size: 13px; }
+
+/* ---------- demo video ---------- */
+.video-frame {
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #000;
+  margin-top: 36px;
+}
+.video-frame video { width: 100%; aspect-ratio: 16 / 9; background: #000; }
+.video-caption {
+  margin-top: 14px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--silver-dimmer);
+}
+
+/* ---------- reveal animation ---------- */
+.rv { opacity: 0; transform: translateY(14px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rv { opacity: 1; transform: none; transition: none; }
+  .cursor { animation: none; }
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1080px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+  .hero h1 { max-width: none; }
+  .step { grid-template-columns: 56px minmax(0, 1fr); }
+  .step-media { grid-column: 2; min-width: 0; }
+}
+@media (max-width: 900px) {
+  .cards, .faq-grid, .keys-grid { grid-template-columns: minmax(0, 1fr); }
+  .trial-grid { grid-template-columns: minmax(0, 1fr); }
+  .term-pair { grid-template-columns: minmax(0, 1fr); }
+  .manual-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .mtoc { position: static; }
+  .mtoc-desktop { display: none; }
+  .mtoc-mobile { display: block; margin: 0 0 26px; }
+  .ft-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 1220px) {
+  .nav-burger { display: block; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    background: rgba(10,10,9,0.97);
+    border-bottom: 1px solid var(--hairline-strong);
+    padding: 10px 20px 16px;
+    gap: 2px;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 11px 10px; font-size: 14px; border-bottom: 1px solid var(--hairline); white-space: normal; }
+  .nav-links li:last-child a { border-bottom: 0; }
+  .nav-cta-desktop { display: none; }
+}
+@media (max-width: 640px) {
+  section { padding: 68px 0; }
+  .wrap, .wrap-wide { padding: 0 20px; }
+  .hero { padding-top: 56px; }
+  .step { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 36px 0; }
+  .step-media { grid-column: 1; }
+  .term-body { font-size: 11px; padding: 12px; }
+  .key-row { grid-template-columns: 92px minmax(0, 1fr); gap: 10px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">bpplay<span class="plus">+</span>bptune<span class="ed"> · x64 desktop</span></a>
+
+    <ul class="nav-links">
+      <li><a href="#device"><span class="en">Device</span><span class="hu">Készülék</span></a></li>
+      <li><a href="#quickstart"><span class="en">Quick start</span><span class="hu">Gyorsindítás</span></a></li>
+      <li><a href="#hardware"><span class="en">Hardware</span><span class="hu">Hardver</span></a></li>
+      <li><a href="#trial"><span class="en">Trial &amp; FAQ</span><span class="hu">Próba &amp; GYIK</span></a></li>
+      <li><a href="#guide"><span class="en">Guide</span><span class="hu">Útmutató</span></a></li>
+      <li><a href="../x64/"><span class="en">Kiosk (SSH) edition ↗</span><span class="hu">Kiosk (SSH) kiadás ↗</span></a></li>
+      <li><a href="../which/"><span class="en">Which edition? ↗</span><span class="hu">Melyik kiadás? ↗</span></a></li>
+      <li><a href="../press/"><span class="en">Press &amp; Reviews</span><span class="hu">Sajtó &amp; vélemények</span></a></li>
+      <li><a href="https://github.com/ferenckoscso/bpplay">GitHub ↗</a></li>
+    </ul>
+
+    <div class="nav-tools">
+      <div class="lang-switch" role="group" aria-label="Language / Nyelv">
+        <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-btn="hu" aria-pressed="false">HU</button>
+      </div>
+      <a class="btn btn-gold nav-cta-desktop en" href="https://drive.google.com/file/d/1lA2VNIKz0rJGo_RzR_34kczv3QR4cFdE/view?usp=sharing">Download (EN)</a>
+      <a class="btn btn-gold nav-cta-desktop hu" href="https://drive.google.com/file/d/1f65QSJQ3iRyaf1WK64yJYlRYFoaEgLPx/view?usp=sharing">Letöltés (HU)</a>
+      <button class="nav-burger" type="button" aria-expanded="false" aria-controls="navlinks">≡</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="wrap-wide">
+    <div class="hero-grid">
+      <div>
+        <p class="overline"><span class="en">LINUX x86_64<span class="sep">·</span>LIVE USB<span class="sep">·</span>DESKTOP EDITION</span><span class="hu">LINUX x86_64<span class="sep">·</span>LIVE USB<span class="sep">·</span>DESKTOP KIADÁS</span></p>
+        <h1><span class="en">Path to perfect <span class="gold">silence</span>.</span><span class="hu">Út a tökéletes <span class="gold">csend</span> felé.</span></h1>
+        <p class="sub"><span class="en">Boots into a normal desktop, on your own screen and keyboard. Drag a file or an album folder onto the bpplay icon; it decodes once into locked memory, and nothing else runs while it plays.</span><span class="hu">Egy normál asztali környezetbe bootol, a saját kijelződön és billentyűzeteden. Húzz rá egy fájlt vagy egy album-mappát a bpplay ikonra; a fájl egyszer dekódolódik és zárolt memóriába kerül, lejátszás közben semmilyen más folyamat nem fut.</span></p>
+        <div class="hero-cta">
+          <a class="btn btn-gold en" href="https://drive.google.com/file/d/1lA2VNIKz0rJGo_RzR_34kczv3QR4cFdE/view?usp=sharing">↓ Download the image (EN)</a>
+          <a class="btn btn-gold hu" href="https://drive.google.com/file/d/1f65QSJQ3iRyaf1WK64yJYlRYFoaEgLPx/view?usp=sharing">↓ Image letöltése (HU)</a>
+          <a class="btn btn-ghost" href="#guide"><span class="en">Read the guide</span><span class="hu">Útmutató elolvasása</span></a>
+          <a class="btn btn-ghost" href="https://github.com/ferenckoscso/bpplay">GitHub</a>
+        </div>
+        <p class="hero-note"><span class="en">Want to run it headless, controlled over SSH (e.g. on a shelf, no monitor)? <a href="../x64/">bpplay x64 kiosk edition →</a> · Looking for the sealed Raspberry Pi appliance? <a href="../pi/">bpplay for Pi →</a> · Looking for the native computer version? <a href="https://ferenckoscso.github.io/bpplay/">bpplay for macOS →</a></span><span class="hu">Fejnélküli, SSH-n vezérelt lejátszót keresel (pl. polcra, monitor nélkül)? <a href="../x64/">bpplay x64 kiosk kiadás →</a> · A lezárt Raspberry Pi készüléket keresed? <a href="../pi/">bpplay Pi-re →</a> · A natív számítógépes verziót keresed? <a href="https://ferenckoscso.github.io/bpplay/">bpplay macOS-re →</a></span></p>
+      </div>
+
+      <div class="rv">
+        <div class="term" role="img" aria-label="Illustration of the desktop playback terminal">
+          <div class="term-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="term-title">bpplay; drag &amp; drop</span>
+          </div>
+          <div class="term-body"><span class="tl-white">Lejátszás indul, 9 track:</span>
+<span class="tl-dim">-- 01 - Sunny.flac</span>
+<span class="tl-dim">-- 02 - Daddy Cool.flac …</span>
+<span class="tl-white">Device: USB Audio DAC (hw:1,0)</span>
+<span class="tl-white">Loading 9 file(s) into RAM…</span>
+<span class="tl-white">Physical format: 32-bit integer.</span>
+<span class="tl-gold">Virtual format: integer, 32-bit, 8 B/frame</span>
+<span class="tl-gold">» INTEGER MODE ACTIVE, signal path truly conversion-free</span>
+<span class="tl-white">Playing…  [n] next  [b] prev  [space] pause  [q] quit</span>
+<span class="cursor">&nbsp;</span></div>
+          <div class="term-status"><span>bpplay_drop.sh</span><span>"bpplay-desktop" 12:41 29-Aug-26</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">The window that opens after dropping a file onto the desktop icon; illustration redrawn from the actual terminal output.</span><span class="hu">Az ablak, ami egy fájl asztali ikonra húzása után nyílik; a valódi terminál-kimenet alapján újrarajzolt illusztráció.</span></p>
+      </div>
+    </div>
+
+    <div class="stat-strip rv">
+      <div class="stat"><b><span class="en">3 steps</span><span class="hu">3 lépés</span></b><span><span class="en">from stick to music</span><span class="hu">kulcstól a zenéig</span></span></div>
+      <div class="stat"><b>15</b><span><span class="en">days of trial</span><span class="hu">nap próbaidő</span></span></div>
+      <div class="stat"><b>DSD</b><span><span class="en">native + DoP</span><span class="hu">natív + DoP</span></span></div>
+      <div class="stat"><b><span class="en">0 install</span><span class="hu">0 telepítés</span></b><span><span class="en">your computer stays untouched</span><span class="hu">a gép érintetlen marad</span></span></div>
+      <div class="stat"><b>4 GB</b><span><span class="en">RAM, practical minimum — the OS now boots into memory too</span><span class="hu">RAM, gyakorlati minimum — mostantól az OS is memóriába tölt</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DEVICE ================= -->
+<section id="device">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">WHAT YOU GET</span><span class="hu">AMIT KAPSZ</span></p>
+      <h2><span class="en">A risk-free way to listen, on your own PC</span><span class="hu">Kockázatmentes meghallgatás, a saját gépen</span></h2>
+      <p class="lede"><span class="en">The live-USB edition turns any x86_64 PC or Intel Mac into a temporary listening machine: boot it, listen, shut it down, and your computer is exactly as it was.</span><span class="hu">A live-USB kiadás bármely x86_64 PC-t vagy Intel Mac-et ideiglenes zenehallgatási géppé alakít: be lehet bootolni, meg lehet hallgatni a zenét, ki lehet kapcsolni, és a gép utána pontosan olyan marad, mint volt.</span></p>
+      <p class="lede" style="margin-top:10px; font-size:15px;"><span class="en">Plays WAV, FLAC, ALAC (M4A), AIFF/AIFC, DSD (DSF/DFF) and SACD ISO (stereo layer, DST-compressed or uncompressed) — bit-perfect, decoded on the machine itself.</span><span class="hu">WAV, FLAC, ALAC (M4A), AIFF/AIFC, DSD (DSF/DFF) és SACD ISO (sztereó réteg, DST-tömörített vagy tömörítetlen) lejátszása — bit-helyesen, magán a gépen dekódolva.</span></p>
+      <div class="note rv" style="margin-top:14px;"><span class="en"><b>The OS itself now boots into RAM.</b> This isn't just a live filesystem on the stick any more — the whole operating system loads into memory at boot, the way the music itself always has. The practical minimum is <b>4 GB of RAM</b>; the stick is only needed again if you reboot.</span><span class="hu"><b>Mostantól maga az operációs rendszer is RAM-ba bootol.</b> Ez már nem csak egy élő fájlrendszer a kulcson — a teljes rendszer betöltődik a memóriába induláskor, ugyanúgy, ahogy eddig is csak a zene. A gyakorlati minimum <b>4 GB RAM</b>; a kulcsra csak újraindításkor van megint szükség.</span></div>
+    </div>
+
+    <div class="cards">
+      <div class="card rv">
+        <span class="c-ico">01 · DESKTOP</span>
+        <h3><span class="en">A real desktop, no SSH needed</span><span class="hu">Valódi asztali környezet, SSH nélkül</span></h3>
+        <p><span class="en">The stick boots into a normal desktop, on the machine's own screen, keyboard and mouse; no second device, no terminal typing. Drag a music file or an entire album folder onto the bpplay icon to play it.</span><span class="hu">A kulcs egy normál asztali környezetbe bootol, a gép saját kijelzőjén, billentyűzetén és egerén; nincs szükség második eszközre, nem kell parancsot begépelni. Egy zenefájlt vagy egy teljes album-mappát ráhúzva a bpplay ikonra elindul a lejátszás.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">02 · INTEGER</span>
+        <h3><span class="en">Bit-perfect, by contract</span><span class="hu">Szigorúan bithelyes</span></h3>
+        <p><span class="en">Integer mode whenever the DAC allows it: the samples in the file reach the sound card without a single bit shift.</span><span class="hu">Integer mode, amint a DAC engedi: a minták az USB-interfész órajelével vezérelve, precízen követik egymást.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">03 · DSD</span>
+        <h3><span class="en">Native DSD and DoP</span><span class="hu">Natív DSD és DoP</span></h3>
+        <p><span class="en">DSD data goes to the DAC unpackaged when the chip supports it. Support depends entirely on the DAC you plug in, not on the PC; bring your own USB DAC to find out.</span><span class="hu">A DSD adat csomagolatlanul megy a DAC-hoz, ha a chip támogatja. A támogatás teljes egészében a csatlakoztatott DAC-on múlik, nem a PC-n; érdemes egy saját USB DAC-ot kipróbálni, hogy kiderüljön.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">04 · BPTUNE</span>
+        <h3><span class="en">bptune runs, but conservatively</span><span class="hu">A zajos háttér elnémul</span></h3>
+        <p><span class="en">Turbo Boost/Precision Boost is disabled automatically each time you start playback. Kernel-level CPU-core isolation and DAC IRQ affinity are deliberately <b>not</b> included here; they can't be safely preset on unknown hardware, and this edition keeps the rest of the desktop usable between listening sessions. This trial favors a risk-free try-out over the maximally tuned experience.</span><span class="hu">A Turbo Boost/Precision Boost minden lejátszás-indításkor automatikusan kikapcsol. A kernel-szintű CPU-mag-izoláció és a DAC IRQ-affinitás szándékosan <b>nincs</b> ebben benne; ismeretlen hardveren ezt nem lehet biztonságosan előre beállítani, és ez a kiadás a hallgatási munkamenetek között is használható asztali környezetet hagy. Ez a próbaverzió a kockázatmentes kipróbálást részesíti előnyben a maximálisan hangolt élménnyel szemben.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUICK START ================= -->
+<section id="quickstart">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">QUICK START</span><span class="hu">GYORSINDÍTÁS</span></p>
+      <h2><span class="en">From USB stick to music in three steps</span><span class="hu">Három lépés a USB-kulcstól a zenéig</span></h2>
+      <p class="lede"><span class="en">No technical knowledge is required for any of this; Balena Etcher handles the writing, and the desktop does the rest.</span><span class="hu">Egyik lépéshez sem kell technikai tudás; a Balena Etcher elvégzi az írást, a többit az asztali környezet csinálja.</span></p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step rv" id="qs1">
+      <div class="step-num">1</div>
+      <div class="s-body">
+        <h3><span class="en">Get a USB stick and write the image</span><span class="hu">Szerezz egy USB-kulcsot és írd rá az image-et</span></h3>
+        <p><span class="en">You'll need a USB stick of at least 8 GB (its current contents will be erased). This edition now boots entirely into RAM — the stick is only needed again at the next reboot. Download <a href="https://etcher.balena.io">Balena Etcher</a> (free, identical on Mac and Windows), open it, choose "Flash from file" and select the downloaded <code>.img.gz</code>; Etcher decompresses it automatically while writing, no manual unzip needed. Then "Select target" → your USB stick (double-check the size if several drives are connected) → "Flash!".</span><span class="hu">Kell egy legalább 8 GB-os USB-kulcs (a jelenlegi tartalma törlődik). Ez a kiadás mostantól teljesen RAM-ba bootol — a kulcsra csak a következő újraindításkor lesz megint szükség. Letölthető a <a href="https://etcher.balena.io">Balena Etcher</a> (ingyenes, Mac-en és Windowson egyforma); megnyitás után a "Flash from file" választható, majd kijelölhető a letöltött <code>.img.gz</code> fájl; az Etcher írás közben automatikusan kicsomagolja, nincs szükség kézi kitömörítésre. Utána "Select target" → az USB-kulcs (ha több meghajtó is csatlakozik, érdemes ellenőrizni a méretet) → "Flash!".</span></p>
+        <div class="chips">
+          <span class="chip"><span class="en">Download is <b>~1.8 GB</b>, stick <b>8 GB or larger</b></span><span class="hu">A letöltés <b>~1,7 GB</b>, kulcs <b>8 GB vagy nagyobb</b></span></span>
+          <span class="chip"><span class="en">Advanced: <code>dd</code> works too (Linux/Mac)</span><span class="hu">Haladóknak: <code>dd</code> is működik (Linux/Mac)</span></span>
+        </div>
+        <p style="margin-top:10px; font-size:13px;">
+          <a class="btn btn-ghost en" href="https://drive.google.com/file/d/1RedTPt8g6yH4S1FkS1fvGHQsz6ytnIKY/view?usp=sharing">README (EN)</a><a class="btn btn-ghost hu" href="https://drive.google.com/file/d/1hanl4WIrFtNbVk-qct0tABODg90jjWyn/view?usp=sharing">README (HU)</a>
+        </p>
+        <div class="warn note"><span class="en"><b>If using <code>dd</code> instead of Etcher:</b> it irreversibly overwrites the target device. Always double-check the device name (<code>diskutil list</code> / <code>lsblk</code>) before pressing Enter; the wrong device means data loss.</span><span class="hu"><b>Ha az Etcher helyett <code>dd</code> használatos:</b> visszafordíthatatlanul felülírja a megadott eszközt. Az eszköznevet (<code>diskutil list</code> / <code>lsblk</code>) mindig érdemes kétszer ellenőrizni Enter lenyomása előtt; a rossz eszköz adatvesztést okoz.</span></div>
+      </div>
+      <div class="step-media">
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Balena Etcher</span></div>
+          <div class="term-body"><span class="tl-white">1.</span> <span class="tl-gold">Flash from file</span> <span class="tl-dim">→ bpplay-desktop-x86_64.img.gz</span>
+<span class="tl-white">2.</span> <span class="tl-gold">Select target</span> <span class="tl-dim">→ your USB stick</span>
+<span class="tl-white">3.</span> <span class="tl-hl">Flash!</span>
+<span class="tl-dim">Etcher decompresses .gz automatically while writing.</span>
+<span class="cursor">&nbsp;</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">Etcher writes and verifies in one step; a few minutes, depending on the stick's speed.</span><span class="hu">Az Etcher egy lépésben ír és ellenőriz; pár perc, a kulcs sebességétől függően.</span></p>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step rv" id="qs2">
+      <div class="step-num">2</div>
+      <div class="s-body">
+        <h3><span class="en">Boot from the USB stick</span><span class="hu">Bootolás a USB-kulcsról</span></h3>
+        <p><span class="en"><b>Mac (Intel):</b> fully shut down (not sleep), then as it powers on, immediately press and hold <kbd>Option</kbd> (⌥) and pick the stick from the boot menu (usually "EFI Boot"). <b>Windows:</b> fully shut down, then repeatedly press the boot-menu key while powering on (commonly <kbd>F12</kbd>, <kbd>F2</kbd>, <kbd>Esc</kbd> or <kbd>Del</kbd> depending on the manufacturer), and pick the stick.</span><span class="hu"><b>Mac (Intel):</b> ki kell kapcsolni teljesen (nem csak alvó állapotba), majd bekapcsoláskor azonnal le kell nyomni és tartani az <kbd>Option</kbd> (⌥) billentyűt, és ki kell választani a kulcsot a boot-menüből (általában "EFI Boot" néven). <b>Windows:</b> ki kell kapcsolni teljesen, majd bekapcsoláskor nyomogatni kell a boot-menü billentyűt (leggyakrabban <kbd>F12</kbd>, <kbd>F2</kbd>, <kbd>Esc</kbd> vagy <kbd>Del</kbd>, gyártótól függően), és ki kell választani a kulcsot.</span></p>
+        <div class="note"><span class="en"><b>USB boot not offered?</b> On Intel Macs, Startup Security Utility set to "Full Security" can block it; hold ⌘+R to enter Recovery, then allow booting from external media. On Windows, disable Secure Boot or enable Legacy/CSM in the BIOS/UEFI.</span><span class="hu"><b>Nem ajánlja fel az USB-bootot?</b> Intel Mac-eken a Startup Security Utility "Full Security" beállítása blokkolhatja; ⌘+R-rel Recovery módba lépve engedélyezhető a külső médiáról bootolás. Windows alatt kikapcsolható a Secure Boot, vagy engedélyezhető a Legacy/CSM a BIOS/UEFI-ben.</span></div>
+        <div class="note"><span class="en"><b>First boot only.</b> The system spends 1–2 minutes measuring the machine to select the ideal CPU core for playback; this is normal. The result is saved to the stick's storage area, so it does not run again on later boots.</span><span class="hu"><b>Csak az első indításkor.</b> A rendszer 1–2 percig méri a gépet, hogy kiválassza a lejátszáshoz ideális CPU-magot; ez normális. Az eredmény a pendrive tárolórészére kerül, ezért a következő indításkor már nem fut újra.</span></div>
+      </div>
+      <div class="step-media">
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title"><span class="en">boot menu (typical)</span><span class="hu">boot-menü (jellemző)</span></span></div>
+          <div class="term-body"><span class="tl-dim">┌──────────────────────────────────────────┐</span>
+<span class="tl-dim">│</span>  <span class="tl-white">Macintosh HD</span>
+<span class="tl-dim">│</span>  <span class="tl-hl">EFI Boot</span>  <span class="tl-dim">← bpplay-desktop USB stick</span>
+<span class="tl-dim">│</span>
+<span class="tl-dim">│</span>  <span class="tl-gold">↑↓ select · Enter boot</span>
+<span class="tl-dim">└──────────────────────────────────────────┘</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">Mac: hold Option at power-on. Windows: press the boot-menu key repeatedly.</span><span class="hu">Mac: az Optiont bekapcsoláskor nyomva kell tartani. Windows: a boot-menü billentyűt kell nyomogatni.</span></p>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step rv" id="qs3">
+      <div class="step-num">3</div>
+      <div class="s-body">
+        <h3><span class="en">Drag, drop, play</span><span class="hu">Húzd, ejtsd, hallgasd</span></h3>
+        <p><span class="en">The stick boots straight into a normal desktop, no login needed. Find your music (a connected drive, or a folder already on the stick), then drag a track or an entire album folder onto the <b>bpplay</b> icon on the desktop. A small window opens showing the format check and playback controls: <code>n</code>/<code>b</code> next/previous track, <code>Space</code> pause/resume, <code>q</code> stops playback.</span><span class="hu">A kulcs egyenesen, bejelentkezés nélkül egy normál asztali környezetbe bootol. Meg kell keresni a zenét (egy csatlakoztatott meghajtón, vagy egy már a kulcson lévő mappában), majd egy számot vagy egy teljes album-mappát rá kell húzni a <b>bpplay</b> asztali ikonra. Egy kis ablak nyílik, benne a formátumellenőrzéssel és a lejátszás-vezérléssel: <code>n</code>/<code>b</code> következő/előző track, <code>Space</code> szünet/folytatás, <code>q</code> leállítja a lejátszást.</span></p>
+        <div class="chips">
+          <span class="chip"><span class="en"><b>Auto-login</b>, no password</span><span class="hu"><b>Automatikus belépés</b>, jelszó nélkül</span></span>
+          <span class="chip"><span class="en">Wait <b>~30 s</b> on first boot</span><span class="hu">Várj <b>~30 mp-et</b> az első bootnál</span></span>
+          <span class="chip"><span class="en">Works with local drives, USB sticks, or shares mounted via the file manager</span><span class="hu">Helyi meghajtókkal, USB-kulcsokkal, vagy a fájlkezelőn keresztül csatolt megosztásokkal is működik</span></span>
+        </div>
+      </div>
+      <div class="step-media">
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">bpplay_drop.sh</span></div>
+          <div class="term-body"><span class="tl-white">Lejátszás indul, 9 track:</span>
+<span class="tl-dim">-- 01 - Sunny.flac</span>
+<span class="tl-dim">-- 02 - Daddy Cool.flac …</span>
+<span class="tl-white">Device: USB Audio DAC (hw:1,0)</span>
+<span class="tl-white">Loading 9 file(s) into RAM…</span>
+<span class="tl-white">Physical format: 32-bit integer.</span>
+<span class="tl-gold">Virtual format: integer, 32-bit, 8 B/frame</span>
+<span class="tl-gold">» INTEGER MODE ACTIVE, signal path truly conversion-free</span>
+<span class="cursor">&nbsp;</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">Same format check and honest feedback as every other bpplay edition.</span><span class="hu">Ugyanaz a formátumellenőrzés és őszinte visszajelzés, mint minden más bpplay-kiadásban.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HARDWARE ================= -->
+<section id="hardware">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">HARDWARE</span><span class="hu">HARDVER</span></p>
+      <h2><span class="en">Any x86_64 PC. Bring your own DAC</span><span class="hu">Bármelyik x86_64 PC. Hozd a saját DAC-odat</span></h2>
+      <p class="lede"><span class="en">Unlike the sealed Pi appliance, this trial runs on unknown, unfamiliar hardware; so DSD/DoP support and tuning depend on what you plug in.</span><span class="hu">A lezárt Pi készülékkel ellentétben ez a próbaverzió ismeretlen hardveren fut; így a DSD/DoP-támogatás és a hangolás azon múlik, mit csatlakoztatsz.</span></p>
+    </div>
+
+    <div class="chips rv">
+      <span class="chip"><span class="en"><b>Machine</b> Any x86_64 PC, or Intel Mac</span><span class="hu"><b>Gép</b> Bármely x86_64 PC, vagy Intel Mac</span></span>
+      <span class="chip"><span class="en"><b>Boot</b> UEFI/BIOS boot from USB</span><span class="hu"><b>Boot</b> UEFI/BIOS bootolás USB-ről</span></span>
+      <span class="chip"><span class="en"><b>OS</b> Debian 13 "trixie", console only</span><span class="hu"><b>OS</b> Debian 13 „trixie", csak konzol</span></span>
+      <span class="chip"><span class="en"><b>Storage</b> USB stick, 8 GB minimum</span><span class="hu"><b>Tárolás</b> USB-kulcs, minimum 8 GB</span></span>
+      <span class="chip"><span class="en"><b>RAM</b> 4 GB practical minimum — the OS boots into memory</span><span class="hu"><b>RAM</b> 4 GB gyakorlati minimum — az OS memóriába bootol</span></span>
+      <span class="chip"><span class="en"><b>DAC</b> ALSA-compatible USB DAC, or built-in audio</span><span class="hu"><b>DAC</b> ALSA-kompatibilis USB DAC, vagy beépített hang</span></span>
+      <span class="chip"><span class="en"><b>Network</b> not required for playback itself</span><span class="hu"><b>Hálózat</b> magához a lejátszáshoz nem szükséges</span></span>
+    </div>
+
+    <div class="note rv" style="margin-top:28px;"><span class="en"><b>What's stored on the stick.</b> Since the OS now runs entirely from RAM, the stick only holds a small settings area (player settings, network settings, the first-boot measurement result) — there is no large persistent partition to grow any more. Your music itself is never stored on the stick; drag it in from a connected drive or network share.</span><span class="hu"><b>Mi kerül a kulcsra.</b> Mivel az OS mostantól teljesen RAM-ból fut, a kulcson csak egy kis beállítás-terület marad (lejátszó-beállítások, hálózati beállítások, az első indításkori mérés eredménye) — nincs többé nagy, perzisztens partíció, amit növelni kellene. Maga a zene sosem kerül a kulcsra; egy csatlakoztatott meghajtóról vagy hálózati megosztásról húzható rá.</span></div>
+  </div>
+</section>
+
+<!-- ================= TRIAL + FAQ ================= -->
+<section id="trial">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">TRIAL PERIOD &amp; FAQ</span><span class="hu">PRÓBAIDŐ &amp; GYIK</span></p>
+      <h2><span class="en">Fifteen days, start to finish</span><span class="hu">Tizenöt nap, elejétől a végéig</span></h2>
+      <p class="lede"><span class="en">The stick is issued as a trial unit. The point is simple: listen to it properly, then decide.</span><span class="hu">A kulcs próbapéldányként kerül kiadásra. A lényeg egyszerű: érdemes rendesen meghallgatni, aztán eldönteni.</span></p>
+    </div>
+
+    <div class="trial-grid">
+      <div class="card rv">
+        <span class="c-ico">15 DAYS</span>
+        <h3><span class="en">From your first boot</span><span class="hu">Az első bootolástól</span></h3>
+        <p><span class="en">The trial starts counting from the first time you actually boot the stick; not from whenever it was written, so it doesn't matter how long the download link sat unopened.</span><span class="hu">A próbaidő attól a pillanattól számít, amikor a kulcs ténylegesen elindul; nem attól, amikor felírták, tehát nem számít, mennyi ideig hevert a letöltési link megnyitatlanul.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico"><span class="en">NEW TRIAL</span><span class="hu">ÚJ PRÓBAIDŐ</span></span>
+        <h3><span class="en">A flat 15 days, no extension</span><span class="hu">Fix 15 nap, hosszabbítás nélkül</span></h3>
+        <p><span class="en">The trial period is not extendable. Once it expires, trying the next version only takes writing a fresh image to the stick (or a new one); get in touch for the current download link.</span><span class="hu">A próbaidő nem hosszabbítható meg. Lejárat után a következő próbához csak egy friss image felírása kell a kulcsra (vagy egy újra); az aktuális letöltési linkért érdemes jelezni.</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico">EXPIRY</span>
+        <h3><span class="en">A clean, explained shutdown</span><span class="hu">Tiszta, magyarázott leállás</span></h3>
+        <p><span class="en">After expiry the machine shuts down automatically after a short message; this isn't a bug, it's the trial's intended end (the same thing happens if you press <code>q</code> at the top level).</span><span class="hu">Lejárat után a gép egy rövid üzenet után automatikusan leáll; ez nem hiba, hanem a próbaidő szándékos vége (ugyanezt kapod, ha a legfelső szinten <code>q</code>-t nyomsz).</span></p>
+      </div>
+      <div class="card rv">
+        <span class="c-ico"><span class="en">1 STICK</span><span class="hu">1 KULCS</span></span>
+        <h3><span class="en">Tied to the stick, not the PC</span><span class="hu">A kulcshoz kötve, nem a PC-hez</span></h3>
+        <p><span class="en">The trial state lives on the USB stick's own persistent partition, not on the computer you boot it on; try it on as many different machines as you like, the remaining days carry over unchanged.</span><span class="hu">A próbaidő állapota az USB-kulcs saját perzisztens partícióján él, nem azon a gépen, amin bootolják; kipróbálható akárhány gépen, a hátralévő napok változatlanul folytatódnak.</span></p>
+      </div>
+    </div>
+
+    <div class="faq-grid">
+      <div class="faq rv">
+        <h3><span class="en">No sound?</span><span class="hu">Nincs hang?</span></h3>
+        <p><span class="hu"><span class="a">A</span>Ellenőrizd, hogy a DAC/hangkártya csatlakoztatva van-e, és próbálj egy másik USB-portot; a lejátszó a beépített hangkártyát is használja, ha nincs mást talál.</span><span class="en"><span class="a">A</span>Check the DAC/sound card is connected, and try a different USB port; the player falls back to the built-in audio if it finds nothing else.</span></p>
+      </div>
+      <div class="faq rv">
+        <h3><span class="en">Nothing happens when you drop a file?</span><span class="hu">Semmi nem történik, amikor ráhúzol egy fájlt?</span></h3>
+        <p><span class="hu"><span class="a">A</span>Ellenőrizd, hogy a fájl támogatott formátumú-e (WAV, FLAC, ALAC/M4A, AIFF/AIFC, DSF); más formátumot a lejátszó csendben elutasít.</span><span class="en"><span class="a">A</span>Check the file is a supported format (WAV, FLAC, ALAC/M4A, AIFF/AIFC, DSF); other formats are silently rejected.</span></p>
+      </div>
+      <div class="faq rv">
+        <h3><span class="en">USB boot not offered?</span><span class="hu">Nem ajánlja fel a USB-bootot?</span></h3>
+        <p><span class="hu"><span class="a">A</span>Mac: Startup Security Utility → engedélyezhető a külső médiáról bootolás. Windows: kikapcsolható a Secure Boot vagy engedélyezhető a Legacy/CSM a BIOS/UEFI-ben.</span><span class="en"><span class="a">A</span>Mac: Startup Security Utility → allow booting from external media. Windows: disable Secure Boot or enable Legacy/CSM in the BIOS/UEFI.</span></p>
+      </div>
+      <div class="faq rv">
+        <h3><span class="en">Machine shows a message, then shuts off?</span><span class="hu">A gép üzenetet mutat, majd kikapcsol?</span></h3>
+        <p><span class="hu"><span class="a">A</span>A próbaidő lejárt; érdemes felvenni a kapcsolatot azzal, akitől az USB-kulcs származik.</span><span class="en"><span class="a">A</span>The trial period has expired; contact whoever gave you the USB stick.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GUIDE ================= -->
+<section id="guide">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="overline"><span class="en">DOCUMENTATION</span><span class="hu">DOKUMENTÁCIÓ</span></p>
+      <h2><span class="en">The complete setup guide, in the page</span><span class="hu">A teljes telepítési útmutató, az oldalon</span></h2>
+      <p class="lede"><span class="en">Everything above in short form, spelled out in full detail here; including the parts most people won't need.</span><span class="hu">Minden, ami fentebb röviden szerepelt, itt részletesen kifejtve; beleértve azt is, amire a legtöbb embernek nem lesz szüksége.</span></p>
+      <div class="manual-top">
+        <a class="btn btn-gold en" href="https://drive.google.com/file/d/1lA2VNIKz0rJGo_RzR_34kczv3QR4cFdE/view?usp=sharing">↓ Download the image (EN)</a>
+        <a class="btn btn-gold hu" href="https://drive.google.com/file/d/1f65QSJQ3iRyaf1WK64yJYlRYFoaEgLPx/view?usp=sharing">↓ Image letöltése (HU)</a>
+        <a class="btn btn-ghost" href="../x64/"><span class="en">bpplay x64 kiosk edition →</span><span class="hu">bpplay x64 kiosk kiadás →</span></a>
+        <a class="btn btn-ghost" href="../pi/"><span class="en">bpplay for Pi →</span><span class="hu">bpplay Pi-re →</span></a>
+        <a class="btn btn-ghost" href="https://ferenckoscso.github.io/bpplay/"><span class="en">bpplay for macOS →</span><span class="hu">bpplay macOS-re →</span></a>
+      </div>
+    </div>
+
+    <details class="mtoc-mobile">
+      <summary><span class="en">Guide contents</span><span class="hu">Az útmutató tartalma</span></summary>
+      <ul>
+        <li><a href="#g-1"><span class="en">1 · What you'll need</span><span class="hu">1 · Amire szükség van</span></a></li>
+        <li><a href="#g-2"><span class="en">2 · Writing the image</span><span class="hu">2 · Az image felírása</span></a></li>
+        <li><a href="#g-3"><span class="en">3 · Booting from the USB stick</span><span class="hu">3 · Bootolás a USB-kulcsról</span></a></li>
+        <li><a href="#g-4"><span class="en">4 · First boot and navigation</span><span class="hu">4 · Első indítás és navigáció</span></a></li>
+        <li><a href="#g-5"><span class="en">5 · What runs in the background</span><span class="hu">5 · Mi fut a háttérben</span></a></li>
+        <li><a href="#g-6"><span class="en">6 · Trial period</span><span class="hu">6 · Próbaidő</span></a></li>
+        <li><a href="#g-7"><span class="en">7 · Troubleshooting</span><span class="hu">7 · Hibaelhárítás</span></a></li>
+        <li><a href="#g-disc"><span class="en">Disclaimer</span><span class="hu">Jogi nyilatkozat</span></a></li>
+      </ul>
+    </details>
+
+    <div class="manual-grid">
+      <aside class="mtoc mtoc-desktop" aria-label="Guide table of contents">
+        <div class="mtoc-title"><span class="en">Contents</span><span class="hu">Tartalom</span></div>
+        <ul>
+          <li><a href="#g-1"><span class="en">1 · What you'll need</span><span class="hu">1 · Amire szükség van</span></a></li>
+          <li><a href="#g-2"><span class="en">2 · Writing the image</span><span class="hu">2 · Az image felírása</span></a></li>
+          <li><a href="#g-3"><span class="en">3 · Booting from the USB stick</span><span class="hu">3 · Bootolás a USB-kulcsról</span></a></li>
+          <li><a href="#g-4"><span class="en">4 · First boot and playback</span><span class="hu">4 · Első indítás és lejátszás</span></a></li>
+          <li><a href="#g-5"><span class="en">5 · What runs in the background</span><span class="hu">5 · Mi fut a háttérben</span></a></li>
+          <li><a href="#g-6"><span class="en">6 · Trial period</span><span class="hu">6 · Próbaidő</span></a></li>
+          <li><a href="#g-7"><span class="en">7 · Troubleshooting</span><span class="hu">7 · Hibaelhárítás</span></a></li>
+          <li><a href="#g-disc"><span class="en">Disclaimer</span><span class="hu">Jogi nyilatkozat</span></a></li>
+        </ul>
+      </aside>
+
+      <div class="manual-body">
+        <h3 class="mh" id="g-1"><span class="mno">1</span><span class="en">What you'll need</span><span class="hu">Amire szükség van</span></h3>
+        <ul>
+          <li><span class="en">A USB stick, at least 8 GB (its current contents will be erased).</span><span class="hu">Egy USB-kulcs, legalább 8 GB (a meglévő tartalma törlődik).</span></li>
+          <li><span class="en"><a href="https://etcher.balena.io">Balena Etcher</a> (recommended, free, identical on Mac and Windows).</span><span class="hu"><a href="https://etcher.balena.io">Balena Etcher</a> (ajánlott, ingyenes, azonos Mac-en és Windowson).</span></li>
+          <li><span class="en">The <code>bpplay-desktop-x86_64.img.gz</code> file (Google Drive link).</span><span class="hu">A <code>bpplay-desktop-x86_64.img.gz</code> fájl (Google Drive-linken).</span></li>
+          <li><span class="en">A monitor, keyboard and mouse on the machine itself; this edition needs no second device and no network connection to play music.</span><span class="hu">Monitor, billentyűzet és egér a gépen; ehhez a kiadáshoz nincs szükség második eszközre, és a zenehallgatáshoz hálózati kapcsolat sem kell.</span></li>
+        </ul>
+        <p><span class="en">The downloaded <code>.gz</code> file is about 1.8 GB. Unlike earlier disk-mode images, this edition boots entirely into RAM: the stick only holds a small settings area (your preferences and the trial countdown live there), not a large persistent partition.</span><span class="hu">A letöltött <code>.gz</code> fájl kb. 1,8 GB. A korábbi, lemez-módú image-ekkel ellentétben ez a kiadás teljesen RAM-ba bootol: a kulcson csak egy kis beállítás-terület marad (ide kerülnek a beállításaid és a próbaidő-számláló is), nincs nagy, perzisztens partíció.</span></p>
+
+        <h3 class="mh" id="g-2"><span class="mno">2</span><span class="en">Writing the image to the USB stick</span><span class="hu">Az image felírása a USB-kulcsra</span></h3>
+        <h4><span class="en">A) Balena Etcher: recommended for everyone</span><span class="hu">A) Balena Etcher: ajánlott mindenkinek</span></h4>
+        <ul>
+          <li><span class="en">Download and install Balena Etcher, plug in the stick.</span><span class="hu">Balena Etcher letöltése és telepítése; a kulcs bedugása.</span></li>
+          <li><span class="en">Open Etcher → "Flash from file" → select the downloaded <code>.img.gz</code> (Etcher decompresses it automatically while writing).</span><span class="hu">Az Etcher megnyitható → "Flash from file" → kiválasztható a letöltött <code>.img.gz</code> (az Etcher írás közben automatikusan kicsomagolja).</span></li>
+          <li><span class="en">"Select target" → the USB stick; double-check the size (GB) if several drives are connected.</span><span class="hu">"Select target" → a USB-kulcs; érdemes ellenőrizni a méretet (GB), ha több meghajtó is csatlakozik.</span></li>
+          <li><span class="en">"Flash!"; erases the stick and writes the image, a few minutes.</span><span class="hu">"Flash!"; törli a kulcsot és felírja az image-et, néhány percig tart.</span></li>
+        </ul>
+        <h4><span class="en">B) <code>dd</code>: for advanced Linux/Mac users</span><span class="hu">B) <code>dd</code>: haladó felhasználóknak, Linuxon és Mac-en</span></h4>
+        <div class="warn note"><span class="en"><b>Important safety warning:</b> <code>dd</code> irreversibly overwrites the target device. If you specify the wrong device, you will lose data. Always double-check the device name before pressing Enter.</span><span class="hu"><b>Fontos biztonsági figyelmeztetés:</b> a <code>dd</code> parancs a megadott eszközt teljesen felülírja, visszafordíthatatlanul. Az eszköznevet mindig érdemes kétszer ellenőrizni Enter lenyomása előtt.</span></div>
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Linux / macOS</span></div>
+          <div class="term-body"><span class="tl-dim"># Linux:</span>
+<span class="tl-white">lsblk</span>
+<span class="tl-dim"># after plugging in, identify the NEW entry:</span>
+<span class="tl-white">lsblk</span>
+<span class="tl-gold">gunzip -c bpplay-desktop-x86_64.img.gz | sudo dd of=/dev/sdX bs=4M status=progress</span>
+<span class="tl-white">sync</span>
+
+<span class="tl-dim"># macOS:</span>
+<span class="tl-white">diskutil list</span>
+<span class="tl-dim"># after plugging in, identify the new device (e.g. /dev/disk4):</span>
+<span class="tl-white">diskutil list</span>
+<span class="tl-white">diskutil unmountDisk /dev/diskN</span>
+<span class="tl-gold">gunzip -c bpplay-desktop-x86_64.img.gz | sudo dd of=/dev/rdiskN bs=4m</span>
+<span class="tl-white">sync</span>
+<span class="tl-white">diskutil eject /dev/diskN</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">(<code>dd</code> is not available on Windows; Etcher is the only recommended path there.)</span><span class="hu">(Windowson a <code>dd</code> nem elérhető; ott az Etcher az egyetlen ajánlott út.)</span></p>
+
+        <h3 class="mh" id="g-3"><span class="mno">3</span><span class="en">Booting from the USB stick</span><span class="hu">Bootolás a USB-ről</span></h3>
+        <h4><span class="en">Mac (Intel)</span><span class="hu">Mac (Intel)</span></h4>
+        <ol>
+          <li><span class="en">Fully shut down the machine (not sleep).</span><span class="hu">Kapcsold ki a gépet teljesen (ne csak alvó állapot).</span></li>
+          <li><span class="en">As it powers on, immediately press and hold Option (⌥).</span><span class="hu">Bekapcsoláskor azonnal le kell nyomni és tartani az Option (⌥) billentyűt.</span></li>
+          <li><span class="en">Select the USB stick from the boot menu (usually labeled "EFI Boot").</span><span class="hu">Válaszd ki a USB-kulcsot a boot-menüből ("EFI Boot" vagy hasonló néven).</span></li>
+        </ol>
+        <p><span class="en"><i>If the Mac doesn't offer the USB as a boot option:</i> on Intel Macs, the Startup Security Utility may be set to "Full Security", which blocks external boot. Restart holding ⌘+R to enter Recovery, then select "No Security" or "Medium Security" and enable "Allow booting from external media".</span><span class="hu"><i>Ha a Mac nem ajánlja fel az USB-t:</i> Intel Mac-eken a Startup Security Utility "Full Security" beállítása blokkolhatja a külső indítást. ⌘+R-rel Recovery módba lépve, a Startup Security Utility-ben kiválasztható a "No Security" vagy "Medium Security" + "Allow booting from external media" opció.</span></p>
+        <h4><span class="en">Windows</span><span class="hu">Windows</span></h4>
+        <ol>
+          <li><span class="en">Fully shut down the machine.</span><span class="hu">Kapcsold ki a gépet teljesen.</span></li>
+          <li><span class="en">As it powers on, repeatedly press the boot-menu key; commonly F12, F2, Esc or Del depending on the manufacturer.</span><span class="hu">Bekapcsoláskor nyomogasd a boot-menü billentyűt (gyártónként eltérő: leggyakrabban F12, F2, Esc vagy Del).</span></li>
+          <li><span class="en">Select the USB stick from the list.</span><span class="hu">Válaszd ki a USB-kulcsot a listából.</span></li>
+        </ol>
+        <p><span class="en"><i>If Windows won't boot the USB:</i> you may need to disable Secure Boot in the BIOS/UEFI, or enable Legacy/CSM / "boot from removable media".</span><span class="hu"><i>Ha a Windows nem indítja a USB-t:</i> a BIOS/UEFI-ben lehet, hogy ki kell kapcsolni a Secure Bootot, vagy be kell kapcsolni a Legacy/CSM vagy "boot from removable media" opciót.</span></p>
+
+        <h3 class="mh" id="g-4"><span class="mno">4</span><span class="en">First boot and playback</span><span class="hu">Első indítás és lejátszás</span></h3>
+        <p><span class="en">The stick boots straight into a normal desktop, with automatic login; no password to type. A "bpplay" icon sits on the desktop, labeled "drag a music file or album here". Open a file manager window (already on the desktop/taskbar), navigate to your music &mdash; on a connected USB drive, or already copied onto the stick &mdash; and drag a track or a whole album folder onto the bpplay icon.</span><span class="hu">A kulcs egyenesen egy normál asztali környezetbe bootol, automatikus bejelentkezéssel; nincs jelszó, amit be kellene írni. Az asztalon egy "bpplay" ikon található, "húzz ide egy zenefájlt vagy albumot" felirattal. Meg kell nyitni egy fájlkezelő-ablakot (már az asztalon/tálcán elérhető), meg kell keresni a zenét &mdash; egy csatlakoztatott USB-meghajtón, vagy már a kulcsra másolva &mdash; és rá kell húzni egy számot vagy egy egész album-mappát a bpplay ikonra.</span></p>
+        <p><span class="en">This opens a small terminal window showing bpplay's own format check and playback controls:</span><span class="hu">Ez megnyit egy kis terminálablakot, benne a bpplay saját formátumellenőrzésével és lejátszás-vezérlésével:</span></p>
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th scope="col"><span class="en">Key</span><span class="hu">Billentyű</span></th><th scope="col"><span class="en">Function</span><span class="hu">Funkció</span></th></tr></thead>
+            <tbody>
+              <tr><td>n</td><td><span class="en">Next track</span><span class="hu">Következő track</span></td></tr>
+              <tr><td>b</td><td><span class="en">Previous track</span><span class="hu">Előző track</span></td></tr>
+              <tr><td>Space</td><td><span class="en">Pause / resume</span><span class="hu">Szünet / folytatás</span></td></tr>
+              <tr><td>q</td><td><span class="en">Stop playback; closes the window</span><span class="hu">Lejátszás leállítása; bezárja az ablakot</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><span class="en">Dropping a new file or folder onto the icon while something is already playing starts a fresh playback window; the previous one keeps running until you stop it or close it, so avoid overlapping playback unintentionally.</span><span class="hu">Ha lejátszás közben egy újabb fájlt vagy mappát húzol az ikonra, egy új lejátszó-ablak indul; az előző tovább fut, amíg le nem állítod vagy be nem zárod, tehát érdemes elkerülni a véletlen egymásra futást.</span></p>
+
+        <h3 class="mh" id="g-5"><span class="mno">5</span><span class="en">What runs in the background</span><span class="hu">Mi fut a háttérben</span></h3>
+        <p><span class="en">Each time you start playback, bptune disables Turbo Boost/Precision Boost for that session. <i>Important difference from the developer's reference machine:</i> kernel-level CPU-core isolation and DAC IRQ affinity are <b>not</b> included in this trial; they can't be safely preset on unknown, unfamiliar hardware (would require a machine-specific <code>isolcpus</code> kernel parameter and a reboot). This trial build therefore doesn't give the maximally tuned reference experience; its goal is a risk-free way to try the player itself.</span><span class="hu">Minden lejátszás-indításkor a bptune kikapcsolja a Turbo Boost/Precision Boost-ot arra a munkamenetre. <i>Fontos különbség a fejlesztői referenciagéphez képest:</i> a kernel-szintű CPU-mag-izoláció és a DAC IRQ-affinitás <b>nincs</b> ebben a próbaváltozatban; az ismeretlen, idegen hardveren nem lehet biztonságosan előre beállítani (géptől függő <code>isolcpus</code> kernel-paramétert igényelne, újraindítással). Ez a próbaverzió tehát nem a maximálisan hangolt referencia-élményt adja, hanem azt, hogy kockázatmentesen ki tudd próbálni a lejátszót.</span></p>
+        <p><span class="en"><b>Not locked down:</b> unlike the kiosk edition, this is a normal, usable desktop &mdash; a terminal, file manager and other applications are available, and the machine doesn't shut itself down when you close a playback window. The tradeoff for that convenience is the smaller jitter improvement described above.</span><span class="hu"><b>Nincs zárolva:</b> a kiosk kiadással ellentétben ez egy normál, használható asztali környezet &mdash; elérhető terminál, fájlkezelő és más alkalmazások is, és a gép nem áll le magától egy lejátszó-ablak bezárásakor. Ennek a kényelemnek az ára a fentebb leírt, kisebb időzítés-javulás.</span></p>
+
+        <h3 class="mh" id="g-6"><span class="mno">6</span><span class="en">Trial period: 15 days</span><span class="hu">Próbaidő: 15 nap</span></h3>
+        <p><span class="en">This is a time-limited trial, valid for 15 days from your first real boot. The countdown is tied to the USB stick itself (not the machine you boot it on); so if you try it on several machines, the remaining time carries over.</span><span class="hu">Ez egy időkorlátos próbaváltozat, 15 napra az első valódi bootolástól. A számláló magához az USB-kulcshoz van kötve (nem a géphez, amin bootolják); tehát ha több gépen is kipróbálják, a hátralévő idő ugyanonnan folytatódik.</span></p>
+        <ul>
+          <li><span class="en">Turning back the clock does not extend the trial (the system detects this).</span><span class="hu">Az óra visszaforgatása nem hosszabbítja meg a próbaidőt (a rendszer ezt észreveszi).</span></li>
+          <li><span class="en">On expiry, the machine shuts down automatically after a short message; this isn't a bug, it's the trial's intended end (the same thing happens if you press <code>q</code> at the top level).</span><span class="hu">Lejáratkor a gép egy rövid üzenet után automatikusan leáll; ez nem hiba, hanem a próbaidő szándékos vége (ugyanezt kapod, ha a legfelső szinten <code>q</code>-t nyomsz).</span></li>
+          <li><span class="en">The trial is not extendable; to try it again after it expires, get in touch with whoever gave you the USB stick for a fresh image.</span><span class="hu">A próbaidő nem hosszabbítható meg; lejárat után az újbóli kipróbáláshoz érdemes felvenni a kapcsolatot azzal, akitől az USB-kulcs származik, egy friss image-ért.</span></li>
+        </ul>
+
+        <h3 class="mh" id="g-7"><span class="mno">7</span><span class="en">Troubleshooting</span><span class="hu">Hibaelhárítás</span></h3>
+        <div class="table-wrap">
+          <table class="tbl tbl-troubleshoot">
+            <thead><tr><th scope="col"><span class="en">Symptom</span><span class="hu">Tünet</span></th><th scope="col"><span class="en">Solution</span><span class="hu">Megoldás</span></th></tr></thead>
+            <tbody>
+              <tr><td><span class="en">Nothing happens, blank/black screen</span><span class="hu">Nem indul semmi, üres/fekete képernyő</span></td><td><span class="en">Wait ~30 seconds; first boot can take a bit longer; if still blank, re-write the stick</span><span class="hu">Várj kb. 30 másodpercet; az első boot tovább tarthat; ha ennél is tovább üres marad, írd újra a kulcsot</span></td></tr>
+              <tr><td><span class="en">Nothing happens when dropping a file</span><span class="hu">Semmi nem történik, amikor ráhúzol egy fájlt</span></td><td><span class="en">Check the file is a supported format (WAV, FLAC, ALAC/M4A, AIFF/AIFC, DSF)</span><span class="hu">Ellenőrizd, hogy a fájl támogatott formátumú-e (WAV, FLAC, ALAC/M4A, AIFF/AIFC, DSF)</span></td></tr>
+              <tr><td><span class="en">No sound during playback</span><span class="hu">Nem hallok semmit lejátszáskor</span></td><td><span class="en">Check the DAC/sound card is connected and try a different USB port</span><span class="hu">Ellenőrizd, hogy a DAC/hangkártya csatlakoztatva van-e, és próbálj egy másik USB-portot</span></td></tr>
+              <tr><td><span class="en">Mac won't offer USB boot</span><span class="hu">A Mac nem ajánlja fel a USB-bootot</span></td><td><span class="en">See the Startup Security Utility note in section 3</span><span class="hu">Lásd a 3. szakasz "Startup Security Utility" részét</span></td></tr>
+              <tr><td><span class="en">Windows won't offer USB boot</span><span class="hu">A Windows nem ajánlja fel a USB-bootot</span></td><td><span class="en">See the Secure Boot / Legacy-CSM note in section 3</span><span class="hu">Lásd a 3. szakasz Secure Boot/Legacy-CSM megjegyzését</span></td></tr>
+              <tr><td><span class="en">Machine shuts down after a short message</span><span class="hu">Rövid üzenet után a gép leáll</span></td><td><span class="en">The 15-day trial has expired; contact whoever gave you the stick</span><span class="hu">A 15 napos próbaidő lejárt; érdemes felvenni a kapcsolatot azzal, akitől a kulcs származik</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><span class="en">If anything doesn't work as described, please send: which machine you tried it on (Mac/Windows, model), the exact error message (if any), and what you were doing when it happened.</span><span class="hu">Ha bármi nem működik, vagy másképp viselkedik, mint amit ez a leírás ígér, kérünk, küldd el: milyen gépen próbáltad (Mac/Windows, típus), a pontos hibaüzenetet (ha volt), mit csináltál, amikor a hiba történt.</span></p>
+
+        <h3 class="mh" id="g-disc"><span class="mno">§</span><span class="en">Disclaimer</span><span class="hu">Jogi nyilatkozat</span></h3>
+        <p><span class="en">The bpplay and bptune software, as well as the drag-and-drop launcher serving this stick (<code>bpplay_drop.sh</code>), is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability or fitness for a particular purpose.</span><span class="hu">A bpplay és bptune szoftver, valamint a kulcsot kiszolgáló drag-and-drop indító (<code>bpplay_drop.sh</code>) „ahogy van" alapú, bármilyen kifejezett vagy vélelmezett garancia nélkül, beleértve de nem kizárólagosan az eladhatóságra vagy egy adott célra való alkalmasságra vonatkozó garanciákat.</span></p>
+        <p><span class="en">The developer accepts no liability for direct or indirect damages arising from the use, malfunction or failure of the software or the stick, including possible damage to connected audio equipment (DAC, amplifier, speakers), loss of data, or any damage resulting from use other than the intended purpose.</span><span class="hu">A fejlesztő nem vállal felelősséget a szoftver vagy a kulcs használata, hibás működése vagy meghibásodása miatt bekövetkező közvetlen vagy közvetett károkért, ideértve a csatlakoztatott audioberendezések (DAC, erősítő, hangfalak) esetleges sérülését, adatvesztést, illetve a rendeltetéstől eltérő használatból eredő bármilyen kárt.</span></p>
+        <p><span class="en">This edition of bpplay and bptune is licensed separately from the open-source macOS edition and is not open source. All rights to the software are reserved; copying, reverse engineering or passing it to third parties may only take place with the prior written permission of the developer.</span><span class="hu">A bpplay és bptune ezen kiadása a nyílt forráskódú macOS-es kiadástól külön licencelt, nem nyílt forráskódú. A szoftverre vonatkozóan minden jog fenntartva; másolása, visszafejtése vagy harmadik félnek történő átadása kizárólag a fejlesztő előzetes írásbeli engedélyével történhet.</span></p>
+
+        <p class="happy">Happy listening!</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="ft">
+  <div class="wrap-wide">
+    <div class="ft-grid">
+      <div>
+        <div class="brandline">bpplay<span style="color:var(--gold)">+</span>bptune <span style="color:var(--silver-dimmer)">· x86_64 Live-USB desktop edition</span></div>
+        <p class="dev"><span class="en">Developed by Koscso Media Engineering Kft. Bit-perfect playback and system tuning, on a USB stick that leaves your computer untouched.</span><span class="hu">Fejlesztette a Koscso Media Engineering Kft. Bithelyes lejátszás és rendszerhangolás, egy USB-kulcson, ami érintetlenül hagyja a gépet.</span></p>
+        <div class="happy-foot">Happy listening!</div>
+      </div>
+      <div>
+        <h4><span class="en">Project</span><span class="hu">Projekt</span></h4>
+        <ul>
+          <li><a class="en" href="https://drive.google.com/file/d/1lA2VNIKz0rJGo_RzR_34kczv3QR4cFdE/view?usp=sharing">Download the image (EN)</a><a class="hu" href="https://drive.google.com/file/d/1f65QSJQ3iRyaf1WK64yJYlRYFoaEgLPx/view?usp=sharing">Image letöltése (HU)</a></li>
+          <li><a href="../x64/"><span class="en">x86_64 kiosk (SSH) edition</span><span class="hu">x86_64 kiosk (SSH) kiadás</span></a></li>
+          <li><a href="https://github.com/ferenckoscso/bpplay">GitHub; bpplay</a></li>
+          <li><a href="../pi/"><span class="en">Raspberry Pi appliance edition</span><span class="hu">Raspberry Pi készüléki kiadás</span></a></li>
+          <li><a href="https://ferenckoscso.github.io/bpplay/"><span class="en">bpplay for macOS</span><span class="hu">bpplay macOS-re</span></a></li>
+          <li><a href="https://forms.gle/kuYU5TuvE6HMZJJe6"><span class="en">Contact</span><span class="hu">Kapcsolat</span></a></li>
+          <li><a href="#top"><span class="en">Back to top ↑</span><span class="hu">Vissza az oldal tetejére ↑</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="fineprint"><span class="en">The macOS edition of bpplay is open source under GPL-3.0-or-later (separate repository). This x86_64 Live-USB desktop edition of bpplay and bptune is licensed separately and is not open source. The software is provided "as is", without warranty of any kind; see the full disclaimer in the guide above. All rights reserved © <span class="yr">2026</span> Koscso Media Engineering Kft. No usage data is collected, transmitted, or stored by this site or the software; no analytics, telemetry, or tracking software runs in the background, on the site or in the software itself.</span><span class="hu">A bpplay macOS-es kiadása nyílt forráskódú, GPL-3.0-or-later licenc alatt (külön repóban). Ennek az x86_64 Live-USB desktop kiadásnak a bpplay-je és a bptune külön licencelt, nem nyílt forráskódú. A szoftver „ahogy van" alapú, bármilyen garancia nélkül; ld. a teljes jogi nyilatkozatot a fenti útmutatóban. Minden jog fenntartva © <span class="yr">2026</span> Koscso Media Engineering Kft. Az oldal és a szoftver semmilyen használati adatot nem gyűjt, nem továbbít és nem tárol; a háttérben sem az oldalon, sem magában a szoftverben nem fut semmilyen analitikai, telemetriai vagy nyomkövető eszköz.</span></p>
+  </div>
+</footer>
+
+<script>
+/* == script.js inlined so this page works as a single file == */
+/* bpplay + bptune; x86_64 kiosk edition
+   language switch · scrollspy · mobile nav · reveal-on-scroll */
+(function () {
+  "use strict";
+
+  var root = document.documentElement;
+
+  /* ---------- language ---------- */
+  function setLang(lang, persist) {
+    lang = lang === "hu" ? "hu" : "en";
+    root.setAttribute("data-lang", lang);
+    root.setAttribute("lang", lang);
+    document.querySelectorAll(".lang-switch button").forEach(function (b) {
+      var on = b.getAttribute("data-lang-btn") === lang;
+      b.classList.toggle("on", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+    if (persist) {
+      try { localStorage.setItem("bpx64-lang", lang); } catch (e) {}
+    }
+  }
+
+  var saved = null;
+  try { saved = localStorage.getItem("bpx64-lang"); } catch (e) {}
+  if (saved === "hu" || saved === "en") {
+    setLang(saved, false);
+  } else if ((navigator.language || "").toLowerCase().indexOf("hu") === 0) {
+    setLang("hu", false);
+  } else {
+    setLang("en", false);
+  }
+
+  document.querySelectorAll(".lang-switch button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      setLang(b.getAttribute("data-lang-btn"), true);
+    });
+  });
+
+  /* ---------- mobile nav ---------- */
+  var burger = document.querySelector(".nav-burger");
+  var links = document.querySelector(".nav-links");
+  if (burger && links) {
+    burger.addEventListener("click", function () {
+      var open = links.classList.toggle("open");
+      burger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    links.addEventListener("click", function (e) {
+      if (e.target.tagName === "A") links.classList.remove("open");
+    });
+  }
+
+  /* ---------- scrollspy ---------- */
+  var spyTargets = [];
+  document.querySelectorAll(".nav-links a[href^='#']").forEach(function (a) {
+    var id = a.getAttribute("href").slice(1);
+    var el = document.getElementById(id);
+    if (el) spyTargets.push({ link: a, el: el });
+  });
+  function spy() {
+    var pos = window.scrollY + (window.innerHeight * 0.28);
+    var current = null;
+    spyTargets.forEach(function (t) {
+      if (t.el.offsetTop <= pos) current = t;
+    });
+    spyTargets.forEach(function (t) {
+      t.link.classList.toggle("active", current === t);
+    });
+  }
+  window.addEventListener("scroll", spy, { passive: true });
+  spy();
+
+  /* ---------- reveal on scroll ---------- */
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var rv = document.querySelectorAll(".rv");
+  if (!reduce && "IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add("in");
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    rv.forEach(function (el) { io.observe(el); });
+  } else {
+    rv.forEach(function (el) { el.classList.add("in"); });
+  }
+
+  /* ---------- footer year ---------- */
+  document.querySelectorAll(".yr").forEach(function (el) {
+    el.textContent = String(new Date().getFullYear());
+  });
+})();
+
+</script>
+</body>
+</html>

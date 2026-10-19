@@ -728,6 +728,7 @@ footer.ft {
       <li><a href="#trial"><span class="en">Trial &amp; FAQ</span><span class="hu">Próba &amp; GYIK</span></a></li>
       <li><a href="#manual"><span class="en">Manual</span><span class="hu">Kézikönyv</span></a></li>
       <li><a href="../press/"><span class="en">Press &amp; Reviews</span><span class="hu">Sajtó &amp; vélemények</span></a></li>
+      <li><a href="../which/"><span class="en">Which edition? ↗</span><span class="hu">Melyik kiadás? ↗</span></a></li>
       <li><a href="https://github.com/ferenckoscso/bpplay">GitHub ↗</a></li>
     </ul>
 
@@ -738,8 +739,8 @@ footer.ft {
       </div>
       <a class="btn btn-gold nav-cta-desktop en" href="https://drive.google.com/file/d/1AT-Pe-0aLaRnUZLr6B5tvbXNRXhEeZMe/view?usp=sharing">Download (EN)</a>
       <a class="btn btn-gold nav-cta-desktop hu" href="https://drive.google.com/file/d/18KQRkrWfG6Ekx-KwYCnTkqOVNif3NCnE/view?usp=sharing">Letöltés (HU)</a>
-      <a class="btn btn-ghost nav-cta-desktop en" href="assets/bpplay_bptune_user_manual_v2.0_EN.pdf">Manual PDF</a>
-      <a class="btn btn-ghost nav-cta-desktop hu" href="assets/bpplay_bptune_user_manual_v2.0_HU.pdf">Kézikönyv PDF</a>
+      <a class="btn btn-ghost nav-cta-desktop en" href="assets/bpplay_bptune_user_manual_v2.1_EN.pdf">Manual PDF</a>
+      <a class="btn btn-ghost nav-cta-desktop hu" href="assets/bpplay_bptune_user_manual_v2.1_HU.pdf">Kézikönyv PDF</a>
       <button class="nav-burger" type="button" aria-expanded="false" aria-controls="navlinks">≡</button>
     </div>
   </div>
@@ -750,15 +751,15 @@ footer.ft {
   <div class="wrap-wide">
     <div class="hero-grid">
       <div>
-        <p class="overline"><span class="en">LINUX ARM64<span class="sep">·</span>RASPBERRY PI 4 / 5<span class="sep">·</span>APPLIANCE EDITION v2.0</span><span class="hu">LINUX ARM64<span class="sep">·</span>RASPBERRY PI 4 / 5<span class="sep">·</span>KÉSZÜLÉKI KIADÁS v2.0</span></p>
+        <p class="overline"><span class="en">LINUX ARM64<span class="sep">·</span>RASPBERRY PI 4 / 5<span class="sep">·</span>APPLIANCE EDITION v2.1</span><span class="hu">LINUX ARM64<span class="sep">·</span>RASPBERRY PI 4 / 5<span class="sep">·</span>KÉSZÜLÉKI KIADÁS v2.1</span></p>
         <h1><span class="en">Path to perfect <span class="gold">silence</span>.</span><span class="hu">Út a tökéletes <span class="gold">csend</span> felé.</span></h1>
         <p class="sub"><span class="en">The entire file decodes once, at load time, into locked memory. During playback, no other process runs. The computer disappears from computer audio playback.</span><span class="hu">A teljes fájl egyszer, betöltéskor dekódolódik és zárolt memóriába kerül, lejátszás közben semmilyen más folyamat nem fut. Eltűnik a számítógép a számítógépes lejátszásból.</span></p>
         <div class="hero-cta">
           <a class="btn btn-gold en" href="https://drive.google.com/file/d/1AT-Pe-0aLaRnUZLr6B5tvbXNRXhEeZMe/view?usp=sharing">↓ Download the image (EN)</a>
           <a class="btn btn-gold hu" href="https://drive.google.com/file/d/18KQRkrWfG6Ekx-KwYCnTkqOVNif3NCnE/view?usp=sharing">↓ Image letöltése (HU)</a>
           <a class="btn btn-ghost" href="#manual"><span class="en">Read the manual</span><span class="hu">Kézikönyv elolvasása</span></a>
-          <a class="btn btn-ghost en" href="assets/bpplay_bptune_user_manual_v2.0_EN.pdf">↓ PDF (v2.0, EN)</a>
-          <a class="btn btn-ghost hu" href="assets/bpplay_bptune_user_manual_v2.0_HU.pdf">↓ PDF (v2.0, HU)</a>
+          <a class="btn btn-ghost en" href="assets/bpplay_bptune_user_manual_v2.1_EN.pdf">↓ PDF (v2.1, EN)</a>
+          <a class="btn btn-ghost hu" href="assets/bpplay_bptune_user_manual_v2.1_HU.pdf">↓ PDF (v2.1, HU)</a>
           <a class="btn btn-ghost" href="https://github.com/ferenckoscso/bpplay">GitHub</a>
         </div>
         <p class="hero-note"><span class="en">Looking for the computer version? <a href="https://ferenckoscso.github.io/bpplay/">bpplay for macOS →</a></span><span class="hu">A számítógépes verziót keresed? <a href="https://ferenckoscso.github.io/bpplay/">bpplay macOS-re →</a></span></p>
@@ -862,13 +863,40 @@ footer.ft {
   <div class="wrap">
     <div class="sec-head rv">
       <p class="overline"><span class="en">QUICK START</span><span class="hu">GYORSINDÍTÁS</span></p>
-      <h2><span class="en">From box to music in five steps</span><span class="hu">Öt lépés a doboztól a zenéig</span></h2>
+      <h2><span class="en">From download to music in six steps</span><span class="hu">Hat lépés a letöltéstől a zenéig</span></h2>
       <p class="lede"><span class="en">No technical knowledge is required for any of this; which is exactly why the appliance (kiosk) mode does not offer administrator privileges.</span><span class="hu">Egyik lépéshez sem kell technikai tudás; épp ezért a kiosk mód adminisztrátori jogokat nem is kínál.</span></p>
     </div>
 
     <!-- STEP 1 -->
     <div class="step rv" id="qs1">
       <div class="step-num">1</div>
+      <div class="s-body">
+        <h3><span class="en">Write the image to a microSD card</span><span class="hu">Írd meg az image-et egy microSD-kártyára</span></h3>
+        <p><span class="en">The download (around 970 MB) is a complete disk image, <b>not</b> a file to copy onto the card: if you just copy it, the Pi will not boot. It has to be <b>written</b> to the card with a dedicated tool, which erases everything on the card. You'll need a microSD card of at least 8 GB (good quality) and a card reader. Download <a href="https://etcher.balena.io">Balena Etcher</a> (free, identical on Mac and Windows), open it, choose "Flash from file" and select the downloaded <code>.img.gz</code>; Etcher decompresses it automatically while writing, no manual unzip needed. Then "Select target" → your microSD card (double-check the name and size: the selected drive is erased completely) → "Flash!". When it says "Flash Complete!", put the card into the Pi.</span><span class="hu">A letöltött fájl (kb. 970 MB) egy teljes lemezkép (image), <b>nem</b> egy sima fájl, amit át kell másolni a kártyára: ha egyszerűen átmásolod, a Pi nem fog elindulni. Egy erre való programmal kell a kártyára <b>megírni</b>, ami a kártya teljes tartalmát törli. Kell egy legalább 8 GB-os, jó minőségű microSD-kártya és egy kártyaolvasó. Letölthető a <a href="https://etcher.balena.io">Balena Etcher</a> (ingyenes, Mac-en és Windowson egyforma); megnyitás után a "Flash from file" választható, majd kijelölhető a letöltött <code>.img.gz</code> fájl; az Etcher írás közben automatikusan kicsomagolja, nincs szükség kézi kitömörítésre. Utána "Select target" → a microSD-kártya (érdemes ellenőrizni a nevét és a méretét: a kiválasztott meghajtó teljes tartalma törlődik) → "Flash!". Amikor a "Flash Complete!" üzenet megjelenik, a kártya mehet a Pi-be.</span></p>
+        <div class="chips">
+          <span class="chip"><span class="en"><b>microSD</b> 8 GB or larger</span><span class="hu"><b>microSD</b> 8 GB vagy nagyobb</span></span>
+          <span class="chip"><span class="en">Do <b>not</b> just copy the file</span><span class="hu">A fájlt <b>ne</b> csak másold át</span></span>
+          <span class="chip"><span class="en">Alternative: Raspberry Pi Imager</span><span class="hu">Alternatíva: Raspberry Pi Imager</span></span>
+        </div>
+        <div class="note"><span class="en"><b>Check:</b> after a successful write the card shows a small volume called <code>bootfs</code> with <code>config.txt</code> and <code>cmdline.txt</code>. If the card looks empty, or contains only the <code>.img.gz</code> file, the image was not written: repeat the procedure. If the computer offers to format the card, do <b>not</b> format it. Raspberry Pi Imager works too ("Choose OS" → "Use custom"); if it offers "OS customisation", choose <b>No</b>: the device is preconfigured.</span><span class="hu"><b>Ellenőrzés:</b> sikeres írás után a kártyán egy kis <code>bootfs</code> nevű lemez látszik, benne <code>config.txt</code> és <code>cmdline.txt</code> fájlokkal. Ha a kártya üresnek látszik, vagy csak a <code>.img.gz</code> fájl van rajta, az image nem lett megírva: ismételd meg. Ha a számítógép formázást kínál fel, <b>ne</b> formázd meg. A Raspberry Pi Imager is használható ("Choose OS" → "Use custom"); ha az "OS customisation" beállításokat kínálja, válaszd a <b>Nem</b> lehetőséget: a készülék előre be van állítva.</span></div>
+        <div class="warn note"><span class="en"><b>If the Pi shows only the Raspberry Pi logo and boot text</b> (for example <code>Failed to open device: 'sdcard'</code> or <code>part: 0 mbr [0x00…]</code>), the card holds no bootable system: the image was not written, or the card is faulty (counterfeit or worn cards are a common cause). Write it again, or try another card and card reader.</span><span class="hu"><b>Ha a Pi csak a Raspberry Pi logót és bootloader-szövegeket mutat</b> (például <code>Failed to open device: 'sdcard'</code> vagy <code>part: 0 mbr [0x00…]</code>), a kártyán nincs indítható rendszer: az image nem lett megírva, vagy a kártya hibás (hamis vagy kopott kártyák gyakori okok). Írd meg újra, vagy próbálj másik kártyát és kártyaolvasót.</span></div>
+      </div>
+      <div class="step-media">
+        <div class="term">
+          <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="term-title">Balena Etcher</span></div>
+          <div class="term-body"><span class="tl-white">1.</span> <span class="tl-gold">Flash from file</span> <span class="tl-dim">→ the downloaded .img.gz</span>
+<span class="tl-white">2.</span> <span class="tl-gold">Select target</span> <span class="tl-dim">→ your microSD card</span>
+<span class="tl-white">3.</span> <span class="tl-hl">Flash!</span>
+<span class="tl-dim">Etcher decompresses .gz automatically while writing.</span>
+<span class="cursor">&nbsp;</span></div>
+        </div>
+        <p class="figure-cap"><span class="en">Etcher writes and verifies in one step; a few minutes, depending on the card's speed.</span><span class="hu">Az Etcher egy lépésben ír és ellenőriz; pár perc, a kártya sebességétől függően.</span></p>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step rv" id="qs2">
+      <div class="step-num">2</div>
       <div class="s-body">
         <h3><span class="en">Connect &amp; power on</span><span class="hu">Bekötés és bekapcsolás</span></h3>
         <p><span class="en">Connect the DAC to a USB 2.0 port of the Pi (usually one of the two outermost connectors), then power. Switch the DAC on first, then the Pi; the device starts by itself. No monitor, no keyboard, no login: wait about half to one minute.</span><span class="hu">A DAC-ot a Pi USB 2.0 portjára kell kötni (tipikusan a két szélső csatlakozó egyike), majd áramra. Először a DAC-ot kell bekapcsolni, aztán a Pi-t; a készülék magától elindul. Monitor, billentyűzet, bejelentkezés nélkül: fél-egy percet érdemes várni.</span></p>
@@ -894,9 +922,9 @@ footer.ft {
       </div>
     </div>
 
-    <!-- STEP 2 -->
-    <div class="step rv" id="qs2">
-      <div class="step-num">2</div>
+    <!-- STEP 3 -->
+    <div class="step rv" id="qs3">
+      <div class="step-num">3</div>
       <div class="s-body">
         <h3><span class="en">Connect over SSH</span><span class="hu">Kapcsolódás SSH-n</span></h3>
         <p><span class="en">From your own device open an SSH app; the same way as with any other app; and connect to the machine name or IP address you received (typically <code>kiosk@bpplay-kiosk-en-XXXX.local</code> — <code>hu</code> instead of <code>en</code> for the Hungarian image — where <code>XXXX</code> is the last four hex digits of the device's network card MAC address). Enter the password if prompted (see 3.1.1); the music selector screen then appears, with no further commands to type.</span><span class="hu">Egy saját eszközről megnyitható egy SSH-alkalmazás; ugyanúgy, mint bármely más alkalmazás, és kapcsolódni lehet a kapott gépnévhez vagy IP-címhez (tipikusan <code>kiosk@bpplay-kiosk-hu-XXXX.local</code> — angol image esetén <code>en</code> az <code>hu</code> helyett —, ahol az <code>XXXX</code> a készülék hálózati kártyája MAC-címének utolsó négy hexajegye). Meg kell adni a jelszót, ha kéri (ld. 3.1.1); ekkor megjelenik a zeneválasztó képernyője, további parancsot nem kell beírni.</span></p>
@@ -922,9 +950,9 @@ footer.ft {
       </div>
     </div>
 
-    <!-- STEP 3 -->
-    <div class="step rv" id="qs3">
-      <div class="step-num">3</div>
+    <!-- STEP 4 -->
+    <div class="step rv" id="qs4">
+      <div class="step-num">4</div>
       <div class="s-body">
         <h3><span class="en">Select storage</span><span class="hu">Tároló kiválasztása</span></h3>
         <p><span class="en">If more than one drive is present, the storage selector appears (reopen any time with <code>m</code>). Choosing a drive that is not yet mounted? The system mounts it automatically; no password. Your NAS can be reached too: enter its share address (e.g. <code>192.168.1.10:/zene</code> for NFS or <code>//192.168.1.10/zene</code> for SMB) and the selector recognizes the type from its form.</span><span class="hu">Ha több meghajtó van, megjelenik a tárolóválasztó (bármikor újranyitható az <code>m</code> billentyűvel). Ha egy még nem csatolt meghajtó kerül kiválasztásra, a rendszer automatikusan csatolja; jelszó nélkül. A NAS is elérhető: megadható a megosztás címe (pl. <code>192.168.1.10:/zene</code> NFS-hez vagy <code>//192.168.1.10/zene</code> SMB-hez), a választó a címből felismeri a típust.</span></p>
@@ -951,9 +979,9 @@ footer.ft {
       </div>
     </div>
 
-    <!-- STEP 4 -->
-    <div class="step rv" id="qs4">
-      <div class="step-num">4</div>
+    <!-- STEP 5 -->
+    <div class="step rv" id="qs5">
+      <div class="step-num">5</div>
       <div class="s-body">
         <h3><span class="en">Select the audio output</span><span class="hu">Hangkimenet kiválasztása</span></h3>
         <p><span class="en">With several outputs connected (the Pi's built-in output <em>and</em> an external USB DAC), the selector offers a choice: arrows, <code>Enter</code>. One output only? This step is skipped too.</span><span class="hu">Több kimenet esetén (a Pi beépített kimenete <em>és</em> külső USB DAC együtt) a választó kínálja a lehetőségeket: nyilak, <code>Enter</code>. Csak egy kimenet van? Ez a lépés is kimarad.</span></p>
@@ -974,9 +1002,9 @@ feltüntetve (nem a beépített hangkártyát).</span>
       </div>
     </div>
 
-    <!-- STEP 5 -->
-    <div class="step rv" id="qs5">
-      <div class="step-num">5</div>
+    <!-- STEP 6 -->
+    <div class="step rv" id="qs6">
+      <div class="step-num">6</div>
       <div class="s-body">
         <h3><span class="en">Browse, select, play</span><span class="hu">Válogatás és lejátszás</span></h3>
         <p><span class="en"><code>Enter</code> opens an album, <code>Esc</code> steps back. <code>Space</code> marks tracks; the counter at the bottom tracks how much RAM your selection needs, and turns red above 70% as a warning. Then press <code>p</code>: the tracks load into memory one by one, and playback starts; gapless.</span><span class="hu">Az <code>Enter</code> belép egy albumba, az <code>Esc</code> visszalép. A <code>Space</code> jelöli a számokat; az alsó számláló mutatja, mennyi RAM kell a kijelöléshez, és 70% felett pirosra vált figyelmeztetésképpen. Ezután a <code>p</code> megnyomása indítja a lejátszást: a számok egyenként a memóriába töltődnek; gapless.</span></p>
@@ -1177,15 +1205,15 @@ feltüntetve (nem a beépített hangkártyát).</span>
   <div class="wrap">
     <div class="sec-head rv">
       <p class="overline"><span class="en">DOCUMENTATION</span><span class="hu">DOKUMENTÁCIÓ</span></p>
-      <h2><span class="en">The complete v2.0 manual, in the page</span><span class="hu">A teljes v2.0 kézikönyv, az oldalon</span></h2>
+      <h2><span class="en">The complete v2.1 manual, in the page</span><span class="hu">A teljes v2.1 kézikönyv, az oldalon</span></h2>
       <p class="lede"><span class="en">The full end-user edition of the manual; the same text as the PDF, readable right here. The PDF remains the authoritative offline copy.</span><span class="hu">A kézikönyv teljes végfelhasználói kiadása; ugyanaz a szöveg, mint a PDF-ben, itt olvashatóan. A PDF továbbra is a mérvadó offline példány.</span></p>
       <div class="manual-top">
         <a class="btn btn-gold en" href="https://drive.google.com/file/d/1AT-Pe-0aLaRnUZLr6B5tvbXNRXhEeZMe/view?usp=sharing">↓ Download the image (EN)</a>
         <a class="btn btn-gold hu" href="https://drive.google.com/file/d/18KQRkrWfG6Ekx-KwYCnTkqOVNif3NCnE/view?usp=sharing">↓ Image letöltése (HU)</a>
         <a class="btn btn-ghost en" href="https://drive.google.com/file/d/1aAbAA3iL-UQQY0M7KOqohemfcCSpbFHV/view?usp=sharing">↓ README (EN)</a>
         <a class="btn btn-ghost hu" href="https://drive.google.com/file/d/1-wTsd2tBUCR_s7wqfYgwtuLSUWF3W4Sm/view?usp=sharing">↓ README (HU)</a>
-        <a class="btn btn-ghost en" href="assets/bpplay_bptune_user_manual_v2.0_EN.pdf">↓ PDF (v2.0, EN)</a>
-        <a class="btn btn-ghost hu" href="assets/bpplay_bptune_user_manual_v2.0_HU.pdf">↓ PDF (v2.0, HU)</a>
+        <a class="btn btn-ghost en" href="assets/bpplay_bptune_user_manual_v2.1_EN.pdf">↓ PDF (v2.1, EN)</a>
+        <a class="btn btn-ghost hu" href="assets/bpplay_bptune_user_manual_v2.1_HU.pdf">↓ PDF (v2.1, HU)</a>
         <a class="btn btn-ghost" href="https://ferenckoscso.github.io/bpplay/"><span class="en">bpplay for macOS →</span><span class="hu">bpplay macOS-re →</span></a>
       </div>
     </div>
@@ -1219,7 +1247,7 @@ feltüntetve (nem a beépített hangkártyát).</span>
 
       <div class="manual-body">
         <h3 class="mh" id="m-about"><span class="mno">§</span><span class="en">About this edition</span><span class="hu">Erről a kiadásról</span></h3>
-        <p><span class="en">This end-user edition is derived from the full v2.0 manual of the bpplay/bptune appliance edition: a condensed version that describes only what you need to know for everyday use of the device. The installation, developer and administrator chapters are deliberately omitted.</span><span class="hu">Ez a végfelhasználói kiadás a bpplay/bptune készüléki kiadás teljes v2.0-s kézikönyvéből készült: tömörített változat, amely csak azt írja le, amit a készülék mindennapi használatához tudnod kell. A telepítési, fejlesztői és adminisztrátori fejezeteket szándékosan elhagytuk.</span></p>
+        <p><span class="en">This end-user edition is derived from the full v2.1 manual of the bpplay/bptune appliance edition: a condensed version that describes only what you need to know for everyday use of the device. The installation, developer and administrator chapters are deliberately omitted.</span><span class="hu">Ez a végfelhasználói kiadás a bpplay/bptune készüléki kiadás teljes v2.1-es kézikönyvéből készült: tömörített változat, amely csak azt írja le, amit a készülék mindennapi használatához tudnod kell. A telepítési, fejlesztői és adminisztrátori fejezeteket szándékosan elhagytuk.</span></p>
         <p><span class="en">The device boots straight into the music selector, with no login; you simply connect to it over SSH (see 3.1.1). You never see a command line, terminal or login prompt during use; a few keys are enough for navigation: arrow keys, <code>Enter</code>, <code>Space</code>, <code>Esc</code>.</span><span class="hu">A készülék bejelentkezés nélkül, egyenesen a zeneválasztóba bootol; egyszerűen SSH-n lehet hozzá kapcsolódni (ld. 3.1.1). Használat közben parancssor, terminál vagy bejelentkezési prompt soha nem jelenik meg; a navigációhoz néhány billentyű elég: nyilak, <code>Enter</code>, <code>Space</code>, <code>Esc</code>.</span></p>
 
         <h3 class="mh" id="m-1"><span class="mno">1</span><span class="en">Introduction</span><span class="hu">Bevezetés</span></h3>
@@ -1261,6 +1289,23 @@ feltüntetve (nem a beépített hangkártyát).</span>
           <li><span class="en">Network connection (Ethernet or Wi-Fi); required: the music selector is reached over an SSH connection to the device (see 3.1.1); without it, the end user cannot select and play music.</span><span class="hu">Hálózati kapcsolat (Ethernet vagy Wi-Fi); szükséges: a zeneválasztó a készülékhez SSH-kapcsolaton keresztül érhető el (ld. 3.1.1); enélkül a végfelhasználó nem tud zenét választani és lejátszani.</span></li>
         </ul>
 
+        <h4><span class="en">2.1 Writing the microSD card (installing the image)</span><span class="hu">2.1 A microSD-kártya megírása (az image telepítése)</span></h4>
+        <p><span class="en">The downloaded <code>.img.gz</code> file is a complete disk image, <b>not</b> an ordinary file to copy onto the card. If you simply copy it, the Pi will not boot. The image must be <b>written</b> to the card with a dedicated tool; this erases everything on the card.</span><span class="hu">A letöltött <code>.img.gz</code> fájl egy teljes lemezkép (image), <b>nem</b> egy sima fájl, amit át kell másolni a kártyára. Ha egyszerűen átmásolod, a Pi nem fog elindulni. Az image-et egy erre való programmal kell a kártyára <b>megírni</b>; ez a kártya teljes korábbi tartalmát törli.</span></p>
+        <p><span class="en">You need:</span><span class="hu">Ami kell hozzá:</span></p>
+        <ul>
+          <li><span class="en">a microSD card of at least 8 GB, good quality (Class 10 / A1 or better), and a card reader;</span><span class="hu">legalább 8 GB-os, jó minőségű (Class 10 / A1 vagy jobb) microSD-kártya és kártyaolvasó;</span></li>
+          <li><span class="en">Balena Etcher (free, identical on Mac and Windows: <a href="https://etcher.balena.io">etcher.balena.io</a>);</span><span class="hu">a Balena Etcher (ingyenes, Mac-en és Windowson is ugyanaz: <a href="https://etcher.balena.io">etcher.balena.io</a>);</span></li>
+          <li><span class="en">the downloaded <code>.img.gz</code> file (no need to unpack it).</span><span class="hu">a letöltött <code>.img.gz</code> fájl (nem kell kicsomagolni).</span></li>
+        </ul>
+        <ul>
+          <li><span class="en">Open Balena Etcher, choose "Flash from file", then the downloaded <code>.img.gz</code>.</span><span class="hu">Nyisd meg a Balena Etchert, és válaszd a "Flash from file" gombot, majd a letöltött <code>.img.gz</code> fájlt.</span></li>
+          <li><span class="en">"Select target": choose the microSD card. <b>Double-check its name and size; the selected drive is erased completely.</b></span><span class="hu">"Select target": válaszd ki a microSD-kártyát. <b>Ellenőrizd a nevét és a méretét, mert a kiválasztott meghajtó teljes tartalma törlődik.</b></span></li>
+          <li><span class="en">Click "Flash!". Etcher writes and verifies the card (a few minutes). If it reports an error, repeat it or try another card/reader.</span><span class="hu">Kattints a "Flash!" gombra. Az Etcher megírja és ellenőrzi a kártyát (pár perc). Ha hibát jelez, ismételd meg, vagy próbálj másik kártyát/olvasót.</span></li>
+          <li><span class="en">After "Flash Complete!", remove the card and put it into the Pi. If the computer offers to format it, <b>do not format it</b>.</span><span class="hu">"Flash Complete!" után vedd ki a kártyát, és tedd a Pi-be. Ha a számítógép formázást kínál fel, <b>ne formázd meg</b>.</span></li>
+        </ul>
+        <p><span class="en"><b>Check:</b> after a successful write the card shows a small volume called <code>bootfs</code> containing <code>config.txt</code> and <code>cmdline.txt</code>. If the card looks empty, or contains only an <code>.img.gz</code> file, the image was not written: repeat the procedure.</span><span class="hu"><b>Ellenőrzés:</b> sikeres írás után a kártyán egy kis <code>bootfs</code> nevű lemez látszik <code>config.txt</code> és <code>cmdline.txt</code> fájlokkal. Ha a kártya üres, vagy csak egy <code>.img.gz</code> fájl van rajta, az image nem lett megírva: ismételd meg.</span></p>
+        <p><span class="en"><b>Alternative:</b> Raspberry Pi Imager can be used as well ("Choose OS" → "Use custom"). If it offers "OS customisation" settings, choose <b>No</b>: the device is preconfigured.</span><span class="hu"><b>Alternatíva:</b> a Raspberry Pi Imager is használható ("Choose OS" → "Use custom"). Ha az "OS customisation" beállításokat kínálja, válaszd a <b>Nem</b> lehetőséget: a készülék előre be van állítva.</span></p>
+
         <h3 class="mh" id="m-3"><span class="mno">3</span><span class="en">Using the device</span><span class="hu">A készülék használata</span></h3>
         <p><span class="en">No technical knowledge is required for use; which is exactly why the appliance (kiosk) mode does not offer administrator privileges.</span><span class="hu">A használat nem igényel technikai tudást; épp ezért a készüléki (kiosk) mód adminisztrátori jogosultságokat nem kínál.</span></p>
 
@@ -1286,7 +1331,7 @@ feltüntetve (nem a beépített hangkártyát).</span>
         </ul>
 
         <h4><span class="en">3.1.2 If the device can't be found</span><span class="hu">3.1.2 Ha az eszköz nem található</span></h4>
-        <p><span class="en">This device intentionally uses only a wired Ethernet connection; Wi-Fi is deliberately disabled, for determinism and sound quality reasons. If no Ethernet cable is connected, the device will never get an IP address and no finder tool will locate it.</span><span class="hu">Ez a készülék szándékosan csak vezetékes Ethernet-kapcsolatot használ, a Wi-Fi a determinizmus és a hangminőség érdekében tudatosan ki van kapcsolva. Ha nincs Ethernet-kábel bedugva, a gép sosem fog kapni IP-címet, és semmilyen eszközkereső nem fogja megtalálni.</span></p>
+        <p><span class="en">Out of the box the device connects to your network over wired Ethernet; no Wi-Fi network is set up on the image. If no Ethernet cable is connected, the device will not get an IP address and no finder tool will locate it.</span><span class="hu">A készülék kiszállításkor vezetékes Ethernet-kapcsolaton csatlakozik a hálózatra; a képen nincs beállítva Wi-Fi hálózat. Ha nincs Ethernet-kábel bedugva, a gép nem kap IP-címet, és semmilyen eszközkereső nem fogja megtalálni.</span></p>
         <p><span class="en">If <code>kiosk@bpplay-kiosk-&lt;lang&gt;-XXXX.local</code> is not reachable, check the following, in order:</span><span class="hu">Ha a <code>kiosk@bpplay-kiosk-&lt;nyelv&gt;-XXXX.local</code> nem érhető el, sorban érdemes ellenőrizni a következőket:</span></p>
         <ol>
           <li><span class="en">Confirm an Ethernet cable is actually connected between the device and your router or switch.</span><span class="hu">Ellenőrizd, hogy tényleg van-e Ethernet-kábel bedugva a készülék és a router/switch között.</span></li>
@@ -1352,6 +1397,36 @@ feltüntetve (nem a beépített hangkártyát).</span>
           <li><b><span class="en">No sound:</span><span class="hu">Nincs hang:</span></b> <span class="en">check that you selected the right audio output (3.3) and that the DAC is switched on and connected.</span><span class="hu">érdemes ellenőrizni, hogy a megfelelő hangkimenet van-e kiválasztva (3.3), és hogy a DAC be van-e kapcsolva, csatlakoztatva van-e.</span></li>
           <li><b><span class="en">You can't see your music:</span><span class="hu">Nem látszik a zene:</span></b> <span class="en">open the storage selector (<code>m</code>, 3.2) and choose the correct drive.</span><span class="hu">a tárolóválasztó megnyitható (<code>m</code>, 3.2), ott kiválasztható a helyes meghajtó.</span></li>
           <li><b><span class="en">The device does not start, only shows a message, then switches off:</span><span class="hu">A készülék nem indul, csak üzenetet mutat, majd kikapcsol:</span></b> <span class="en">the trial period has expired (1.5); contact the developer.</span><span class="hu">a próbaidő lejárt (1.5); érdemes felvenni a kapcsolatot a fejlesztővel.</span></li>
+          <li><b><span class="en">The monitor shows only the Raspberry Pi logo and boot text</span><span class="hu">A monitoron csak a Raspberry Pi logó és bootloader-szövegek látszanak</span></b> <span class="en">(e.g. <code>Failed to open device: 'sdcard'</code>, <code>part: 0 mbr [0x00…]</code>): the card holds no bootable system. The image was not written or the card is faulty; write it again as in 2.1, or try another card.</span><span class="hu">(pl. <code>Failed to open device: 'sdcard'</code>, <code>part: 0 mbr [0x00…]</code>): a kártyán nincs indítható rendszer. Az image nem lett megírva vagy a kártya hibás; írd meg újra a 2.1 szerint, vagy próbálj másik kártyát.</span></li>
+          <li><b><span class="en">If the volume seems unusually quiet:</span><span class="hu">Ha a hangerő szokatlanul halknak tűnik:</span></b> <span class="en">bpplay is intentionally designed to never touch any volume control; playback is always bit-perfect, meaning the source file reaches the sound card without modification. This means that if the DAC (or sound card) has its own firmware-level volume control, and that was previously set to a low level (for example by a different playback program), that setting will persist under bpplay too; the player neither can nor will override it. This is not a bug, but a necessary consequence of bit-perfect operation: for the same reason, bpplay never distorts, mixes, or silences any source on its own judgment.</span><span class="hu">A bpplay szándékosan soha nem nyúl semmilyen hangerőszabályzóhoz; a lejátszás mindig bit-pontos, vagyis a forrásfájl változtatás nélkül jut el a hangkártyáig. Ez azt jelenti, hogy ha a DAC-nak (vagy a hangkártyának) saját, firmware-szintű hangerőszabályzója van, és azt korábban alacsonyra állították (például egy másik lejátszóprogrammal), akkor az a beállítás a bpplay alatt is megmarad; a lejátszó ezt nem tudja és nem is akarja felülírni. Ez nem hiba, hanem a bit-pontos működés szükségszerű következménye: ugyanezért a bpplay soha nem torzít, nem kever, és nem némít el semmilyen forrást a saját belátása szerint.</span></li>
+          <li><b><span class="en">What to do if this happens:</span><span class="hu">Mit tegyél, ha ez előfordul:</span></b> <span class="en">it is worth checking the following even before installing the Pi image:</span><span class="hu">érdemes ezeket még a Pi image telepítése előtt is ellenőrizni:</span>
+            <ul>
+              <li><span class="en">Check your operating system's audio mixer / ALSA controls (on Linux, for example <code>alsamixer</code> or <code>amixer</code>), and set the DAC's own volume control to maximum (0 dB).</span><span class="hu">Nézd meg az operációs rendszered hangkeverőjét / ALSA-vezérlőit (Linuxon például <code>alsamixer</code> vagy <code>amixer</code>), és állítsd a DAC saját hangerőszabályzóját a maximumra (0 dB).</span></li>
+              <li><span class="en">If the DAC (or its USB interface) has multiple, independent volume controls, which occurs on some unusual, multi-channel USB interfaces, make sure all of them are set to maximum. If you are unsure, contact whoever gave you the system; for common, known DAC models, this setting can also be applied automatically at startup in advance.</span><span class="hu">Ha a DAC-nak (vagy USB-interfészének) több, egymástól független hangerőszabályzója van, ami néhány szokatlan, többcsatornás USB-interfésznél előfordul, mindegyiket állítsd a maximumra. Ha bizonytalan vagy, keresd azt, akitől a rendszert kaptad; a gyakori, ismert DAC-modelleknél ez a beállítás előre, indításkor automatikusan is elvégezhető.</span></li>
+            </ul>
+            <p><span class="en">This phenomenon is not a random quirk of any particular chip vendor, but a design choice. Reference-grade devices intended purely as an audiophile "digital-to-analog bridge" (XMOS, Amanero) typically deliberately omit any software volume control, while general-purpose USB audio bridge chips aimed at playback and recording, or at the consumer sound card/headset market, often do include one by default.</span><span class="hu">Ez a jelenség nem egy adott chipgyártó szeszélye, hanem tervezési döntés. A tisztán audiofil "digitális-analóg interface"-nak szánt, referencia-kategóriás eszközök (XMOS, Amanero) jellemzően szándékosan kihagyják a szoftveres hangerőszabályzót, míg a lejátszásra és felvételre, vagy a fogyasztói hangkártya-/headset-piacra szánt általános célú USB audio interface chipek gyakran alapból tartalmaznak ilyet.</span></p>
+          </li>
+          <li><b><span class="en">Known general-purpose chip families worth checking in advance</span><span class="hu">Előre érdemes ellenőrizni az alábbi, általános célú chipcsaládokat</span></b> <span class="en">(we have not empirically tested these ourselves; the risk is inferred from the general design pattern, not confirmed case by case):</span><span class="hu">(ezeket mi magunk nem teszteltük; a kockázat az általános tervezési mintából következik, nem esetenkénti megerősítésből):</span>
+            <ul>
+              <li>C-Media CM6631A / CM6632A</li>
+              <li>Savitech SA9018 / SA9023 / SA9027 / SA9227 / SA9228</li>
+              <li>Texas Instruments/Burr-Brown PCM2704 / PCM2706 / PCM2707</li>
+              <li>Tenor TE7022 / TE8802</li>
+              <li><span class="en">Any consumer-oriented "USB sound card/headset" style chip in the C-Media CM106/108/119 family</span><span class="hu">Bármely fogyasztói, "USB hangkártya/headset" jellegű chip a C-Media CM106/108/119 családból</span></li>
+            </ul>
+            <p><span class="en"><b>Rule of thumb:</b> the more a DAC/interface resembles a general-purpose USB sound card (playback plus microphone, headset compatibility), the more likely it is to have a software-adjustable volume control; the more it resembles a purely audiophile, playback-only bridge, the less likely.</span><span class="hu"><b>Ökölszabály:</b> minél jobban hasonlít egy DAC/interfész egy általános célú USB hangkártyára (lejátszás plusz mikrofon, headset-kompatibilitás), annál valószínűbb, hogy van szoftveresen állítható hangerőszabályzója; minél inkább tisztán audiofil, csak lejátszásra szánt interface, annál kevésbé.</span></p>
+          </li>
+          <li><b><span class="en">If the device cannot be found on the network:</span><span class="hu">Ha a készülék nem található meg a hálózaton:</span></b> <span class="en">before anything else: out of the box the target device connects to your network over wired Ethernet; no Wi-Fi network is set up on the image. If no Ethernet cable is physically connected between the device and your router or switch, it will not get an IP address, and no device finder tool will locate it. If <code>kiosk@bpplay-kiosk-&lt;lang&gt;-XXXX.local</code> or <code>kiosk@IP address</code> is not reachable, check the following in order:</span><span class="hu">mindenekelőtt: a célkészülék kiszállításkor vezetékes Ethernet-kapcsolaton csatlakozik a hálózatra; a képen nincs beállítva Wi-Fi hálózat. Ha a készülék és a router/switch között nincs fizikailag Ethernet-kábel bedugva, a gép nem kap IP-címet, és semmilyen eszközkereső nem fogja megtalálni. Ha a <code>kiosk@bpplay-kiosk-&lt;nyelv&gt;-XXXX.local</code> vagy a <code>kiosk@IP-cím</code> nem érhető el, sorban ellenőrizd a következőket:</span>
+            <ol>
+              <li><span class="en">Confirm an Ethernet cable is actually connected to the Pi and to your router. This is the most common cause.</span><span class="hu">Ellenőrizd, hogy tényleg van-e Ethernet-kábel bedugva a Pi és a router között. Ez a leggyakoribb ok.</span></li>
+              <li><span class="en">Give it enough time. Especially on a freshly written SD card, first boot can take one to two minutes before the system is fully up and on the network; do not judge too quickly.</span><span class="hu">Adj neki elég időt. Főleg frissen írt SD-kártyánál az első indulás egy-két percig is eltarthat, mire a rendszer teljesen feláll és felkerül a hálózatra; ne ítélkezz túl gyorsan.</span></li>
+              <li><span class="en">Check your router's own admin page for connected devices (DHCP clients), rather than relying only on a separate network scanner. This is more reliable, since it does not depend on mDNS (.local name resolution), which can be blocked on certain routers or VLANs.</span><span class="hu">Nézd meg a router saját admin oldalán a csatlakozott eszközöket (DHCP-kliensek), ne csak egy különálló hálózatkereső programra hagyatkozz. Ez megbízhatóbb, mert nem függ az mDNS-től (.local névfeloldás), amit egyes routerek vagy VLAN-ok blokkolhatnak.</span></li>
+              <li><span class="en">Confirm you are on the same network. If your computer is on Wi-Fi on a guest network while the Pi is wired to the main network, you may not see each other even though both are working.</span><span class="hu">Győződj meg róla, hogy ugyanazon a hálózaton vagy. Ha a számítógéped egy vendéghálózat Wi-Fi-jén van, míg a Pi a fő hálózatra van kötve, előfordulhat, hogy nem látjátok egymást, pedig mindkettő működik.</span></li>
+              <li><span class="en">Watch the SD card activity LED at power-on. If it blinks green for a while, then turns solid red around the 30 second mark, that is a known, documented failure with a known fix; do not keep trying on your own, ask for help instead.</span><span class="hu">Figyeld az SD-kártya aktivitás-LED-jét bekapcsoláskor. Ha egy ideig zölden villog, majd kb. 30 másodpercnél folyamatosan pirosra vált, az egy ismert, dokumentált hiba, aminek megvan a megoldása; ne próbálkozz tovább egyedül, kérj segítséget.</span></li>
+              <li><span class="en">Try re-writing the SD card. A partial or corrupted write can cause exactly this symptom.</span><span class="hu">Próbáld meg újraírni az SD-kártyát. Egy félbeszakadt vagy hibás írás pontosan ezt a tünetet okozhatja.</span></li>
+              <li><span class="en">If nothing else helps, the most reliable diagnostic is to connect a monitor (HDMI) and keyboard (USB) directly to the Pi and read what appears on screen at boot. That will immediately show whether the device is even reaching network initialization.</span><span class="hu">Ha semmi más nem segít, a legmegbízhatóbb diagnosztika: csatlakoztass a Pi-re közvetlenül egy monitort (HDMI) és egy billentyűzetet (USB), és olvasd le, mi jelenik meg a képernyőn induláskor. Ebből azonnal kiderül, hogy a készülék egyáltalán eljut-e a hálózat-inicializálásig.</span></li>
+            </ol>
+          </li>
           <li><b><span class="en">Anything else unusual:</span><span class="hu">Bármi más szokatlan:</span></b> <span class="en">there is nothing for you to do; the machine can be maintained remotely; just let the developer know.</span><span class="hu">nincs teendő; a gép távolról karbantartható; a fejlesztőnek elég szólni.</span></li>
         </ul>
 
@@ -1359,7 +1434,7 @@ feltüntetve (nem a beépített hangkártyát).</span>
         <h4><span class="en">4.1 Board/computer</span><span class="hu">4.1 Alaplap/számítógép</span></h4>
         <p><span class="en">Validated exclusively on Raspberry Pi 4 (CM4 module in the case of Holo Red) and Pi 5, with at least 4 GB RAM. Not tested, not guaranteed on earlier Pi models (Pi 3 and older) or on 2 GB boards.</span><span class="hu">Kizárólag Raspberry Pi 4 (Holo Red esetén CM4 modul) és Pi 5 alatt validálva, legalább 4 GB RAM-mal. Korábbi Pi modelleken (Pi 3 és régebbi) és a 2 GB-os változaton nem tesztelt, nem garantált.</span></p>
         <h4><span class="en">4.2 Boot medium</span><span class="hu">4.2 Boot adathordozó</span></h4>
-        <p><span class="en">The appliance edition boots from a microSD card.</span><span class="hu">A készüléki kiadás microSD kártyáról bootol.</span></p>
+        <p><span class="en">The appliance edition boots from a microSD card. Use a good-quality card of at least 8 GB; counterfeit or worn cards are a frequent cause of boot problems.</span><span class="hu">A készüléki kiadás microSD kártyáról bootol. Legalább 8 GB-os, márkás kártyát használj; a hamis vagy kopott kártyák gyakori okai az indítási hibáknak.</span></p>
         <h4><span class="en">4.3 Tested USB DACs and receivers</span><span class="hu">4.3 Tesztelt USB DAC-ok és receiver-ek</span></h4>
         <div class="table-wrap">
           <table class="tbl">
@@ -1431,7 +1506,7 @@ feltüntetve (nem a beépített hangkártyát).</span>
           <li><a href="https://github.com/ferenckoscso/bpplay">GitHub; bpplay</a></li>
           <li><a href="https://ferenckoscso.github.io/bpplay/"><span class="en">bpplay for macOS</span><span class="hu">bpplay macOS-re</span></a></li>
           <li><a class="en" href="https://drive.google.com/file/d/1AT-Pe-0aLaRnUZLr6B5tvbXNRXhEeZMe/view?usp=sharing">Download the image (EN)</a><a class="hu" href="https://drive.google.com/file/d/18KQRkrWfG6Ekx-KwYCnTkqOVNif3NCnE/view?usp=sharing">Image letöltése (HU)</a></li>
-          <li><a class="en" href="assets/bpplay_bptune_user_manual_v2.0_EN.pdf">User manual v2.0 (PDF, EN)</a><a class="hu" href="assets/bpplay_bptune_user_manual_v2.0_HU.pdf">Felhasználói kézikönyv v2.0 (PDF, HU)</a></li>
+          <li><a class="en" href="assets/bpplay_bptune_user_manual_v2.1_EN.pdf">User manual v2.1 (PDF, EN)</a><a class="hu" href="assets/bpplay_bptune_user_manual_v2.1_HU.pdf">Felhasználói kézikönyv v2.1 (PDF, HU)</a></li>
           <li><a href="https://forms.gle/kuYU5TuvE6HMZJJe6"><span class="en">Contact</span><span class="hu">Kapcsolat</span></a></li>
           <li><a href="#top"><span class="en">Back to top ↑</span><span class="hu">Vissza az oldal tetejére ↑</span></a></li>
         </ul>

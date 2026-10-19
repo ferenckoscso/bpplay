@@ -742,10 +742,12 @@ footer {
 <section class="hero" id="top">
   <div class="wrap">
     <div class="banner-row">
+      <a class="pi-banner" href="which/" style="border-color:var(--gold); color:var(--gold-bright);"><span data-i18n="hero.whichBanner">Not sure which edition? Take the 3-question guide</span><span class="arrow">&nbsp;&rarr;</span></a>
       <a class="pi-banner" href="pi/"><span data-i18n="hero.piBanner">Also available as a sealed Raspberry Pi 4/5 appliance</span><span class="arrow">&nbsp;&rarr;</span></a>
       <a class="pi-banner" href="x64/"><span data-i18n="hero.x64Banner">Also available as an x86_64 Live-USB kiosk edition</span><span class="arrow">&nbsp;&rarr;</span></a>
+      <a class="pi-banner" href="x64-desktop/"><span data-i18n="hero.x64DesktopBanner">…or as an x86_64 Live-USB desktop edition (no SSH needed)</span><span class="arrow">&nbsp;&rarr;</span></a>
     </div>
-    <div class="eyebrow" data-i18n="hero.eyebrow">macOS · Core edition · v0.9.7 · GPL-3.0</div>
+    <div class="eyebrow" data-i18n="hero.eyebrow">macOS · Core edition · v0.9.8 · GPL-3.0</div>
     <h1 data-i18n="hero.h1">The shortest<br>deterministic path<br>from <span class="accent">file</span> to <span class="accent">DAC</span>.</h1>
     <p class="hero-sub" data-i18n="hero.sub">bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched; no resampling, no software volume, no mixing.</p>
     <div class="hero-actions">
@@ -1031,6 +1033,8 @@ footer {
         <div class="footer-h" data-i18n="footer.project">Project</div>
         <a href="pi/" data-i18n="footer.piLink">Raspberry Pi appliance edition</a>
         <a href="x64/" data-i18n="footer.x64Link">x86_64 Live-USB kiosk edition</a>
+        <a href="x64-desktop/" data-i18n="footer.x64DesktopLink">x86_64 Live-USB desktop edition</a>
+        <a href="which/" data-i18n="footer.whichLink">Which edition is right for you?</a>
         <a href="https://github.com/ferenckoscso/bpplay" data-i18n="footer.repo">GitHub repository</a>
         <a href="https://github.com/ferenckoscso/bpplay/releases/latest" data-i18n="footer.latest">Latest release</a>
         <a href="https://github.com/ferenckoscso/bpplay/blob/main/CHANGELOG.md" data-i18n="footer.changelog">Changelog</a>
@@ -1174,9 +1178,11 @@ footer {
       "nav.x64": "x64",
       "nav.download": "Download",
       "nav.press": "Press &amp; Reviews",
+      "hero.whichBanner": "Not sure which edition? Take the 3-question guide",
       "hero.piBanner": "Also available as a sealed Raspberry Pi 4/5 appliance",
       "hero.x64Banner": "Also available as an x86_64 Live-USB kiosk edition",
-      "hero.eyebrow": "macOS · Core edition · v0.9.7 · GPL-3.0",
+      "hero.x64DesktopBanner": "…or as an x86_64 Live-USB desktop edition (no SSH needed)",
+      "hero.eyebrow": "macOS · Core edition · v0.9.8 · GPL-3.0",
       "hero.h1": 'The shortest<br>deterministic path<br>from <span class="accent">file</span> to <span class="accent">DAC</span>.',
       "hero.sub": "bpplay is a minimalist, bit-perfect music player for macOS. One C file, about two thousand lines, no external dependencies. It has a single job: deliver the samples of a music file to your DAC untouched; no resampling, no software volume, no mixing.",
       "hero.downloadBtn": "↓ Download for macOS",
@@ -1295,6 +1301,8 @@ footer {
       "footer.project": "Project",
       "footer.piLink": "Raspberry Pi appliance edition",
       "footer.x64Link": "x86_64 Live-USB kiosk edition",
+      "footer.x64DesktopLink": "x86_64 Live-USB desktop edition",
+      "footer.whichLink": "Which edition is right for you?",
       "footer.repo": "GitHub repository",
       "footer.latest": "Latest release",
       "footer.changelog": "Changelog",
@@ -1332,10 +1340,12 @@ footer {
       "nav.pi": "Pi",
       "nav.x64": "x64",
       "nav.download": "Letöltés",
+      "hero.whichBanner": "Nem tudod, melyik kiadás kell? 3 kérdéses útmutató",
       "hero.piBanner": "Zárt Raspberry Pi 4/5 készülékként is elérhető",
       "hero.x64Banner": "x86_64 Live-USB kioszk kiadásként is elérhető",
+      "hero.x64DesktopBanner": "…vagy x86_64 Live-USB desktop kiadásként, SSH nélkül",
       "nav.press": "Sajtó és vélemények",
-      "hero.eyebrow": "macOS · Core edition · v0.9.7 · GPL-3.0",
+      "hero.eyebrow": "macOS · Core edition · v0.9.8 · GPL-3.0",
       "hero.h1": 'A legrövidebb<br>determinisztikus út<br><span class="accent">fájltól</span> a <span class="accent">DAC-ig</span>.',
       "hero.sub": "A bpplay egy minimalista, bithelyes zenelejátszó macOS-re. Egyetlen C fájl, kb. kétezer sor, külső függőség nélkül. Egyetlen feladata van: a zenei fájl mintáit érintetlenül eljuttatni a DAC-hoz; nincs újramintavétel, nincs szoftveres hangerő, nincs keverés.",
       "hero.downloadBtn": "↓ Letöltés macOS-hez",
@@ -1454,6 +1464,8 @@ footer {
       "footer.project": "Projekt",
       "footer.piLink": "Raspberry Pi készüléki kiadás",
       "footer.x64Link": "x86_64 Live-USB kiosk kiadás",
+      "footer.x64DesktopLink": "x86_64 Live-USB desktop kiadás",
+      "footer.whichLink": "Melyik kiadás a neked való?",
       "footer.repo": "GitHub repó",
       "footer.latest": "Legfrissebb kiadás",
       "footer.changelog": "Changelog",
