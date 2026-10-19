@@ -1544,12 +1544,12 @@ feltüntetve (nem a beépített hangkártyát).</span>
       b.setAttribute("aria-pressed", on ? "true" : "false");
     });
     if (persist) {
-      try { localStorage.setItem("bppi-lang", lang); } catch (e) {}
+      try { localStorage.setItem("bpx64-lang", lang); } catch (e) {}
     }
   }
 
   var saved = null;
-  try { saved = localStorage.getItem("bppi-lang"); } catch (e) {}
+  try { saved = localStorage.getItem("bpx64-lang"); } catch (e) {}
   if (saved === "hu" || saved === "en") {
     setLang(saved, false);
   } else if ((navigator.language || "").toLowerCase().indexOf("hu") === 0) {
