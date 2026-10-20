@@ -530,6 +530,17 @@ table.tbl.tbl-troubleshoot td:last-child, table.tbl.tbl-troubleshoot th:last-chi
 
 /* ---------- manual ---------- */
 .manual-top { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 26px 0 8px; }
+.manual-search { position: relative; margin: 18px 0 8px; }
+.manual-search-input { width: 100%; padding: 11px 14px; border-radius: 8px; border: 1px solid var(--hairline-strong); background: var(--bg-raised); color: var(--silver); font-size: 14px; font-family: inherit; }
+.manual-search-input:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+.manual-search-results { position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: var(--bg-raised); border: 1px solid var(--hairline-strong); border-radius: 8px; max-height: 360px; overflow-y: auto; z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+.manual-search-results a { display: block; padding: 10px 14px; border-top: 1px solid var(--hairline); color: var(--silver); text-decoration: none; font-size: 13.5px; }
+.manual-search-results a:first-child { border-top: 0; }
+.manual-search-results a:hover { background: var(--bg); color: var(--gold-bright); }
+.manual-search-results .msr-h { font-weight: 600; color: var(--gold-bright); display: block; margin-bottom: 2px; }
+.manual-search-results .msr-snip { color: var(--silver-dim); font-size: 12.5px; }
+.manual-search-results .msr-empty { padding: 14px; color: var(--silver-dim); font-size: 13px; }
+.manual-search-results mark { background: var(--gold); color: #1a1712; border-radius: 2px; padding: 0 1px; }
 .manual-grid {
   display: grid;
   grid-template-columns: 264px minmax(0, 1fr);
@@ -1150,10 +1161,12 @@ footer.ft {
       <div class="manual-top">
         <a class="btn btn-gold en" href="https://drive.google.com/file/d/1bJ28SEQGP0zxFRgB1vtQlWJmy9-zyO1S/view?usp=sharing">↓ Download the image (EN)</a>
         <a class="btn btn-gold hu" href="https://drive.google.com/file/d/1xSfgLjm3z_Ty9Hz_UDmq1X9V_ehS3Hkf/view?usp=drive_link">↓ Image letöltése (HU)</a>
-        <a class="btn btn-ghost en" href="assets/bpplay_bptune_user_manual_x64_v2.0_EN.pdf">↓ PDF manual (v2.0, EN)</a>
-        <a class="btn btn-ghost hu" href="assets/bpplay_bptune_user_manual_x64_v2.0_HU.pdf">↓ PDF kézikönyv (v2.0, HU)</a>
         <a class="btn btn-ghost" href="../pi/"><span class="en">bpplay for Pi →</span><span class="hu">bpplay Pi-re →</span></a>
         <a class="btn btn-ghost" href="https://ferenckoscso.github.io/bpplay/"><span class="en">bpplay for macOS →</span><span class="hu">bpplay macOS-re →</span></a>
+      </div>
+      <div class="manual-search">
+        <input type="search" id="manSearch" class="manual-search-input" placeholder="Search the manual…" autocomplete="off">
+        <div id="manSearchResults" class="manual-search-results" hidden></div>
       </div>
     </div>
 
@@ -1195,8 +1208,10 @@ footer.ft {
           <li><span class="en">A wired Ethernet connection for the machine (Wi-Fi is deliberately disabled); required, since the music selector is reached over an SSH connection to the machine (see 3), without it you cannot select or play anything.</span><span class="hu">Vezetékes Ethernet-kapcsolat a gépnek (a Wi-Fi szándékosan ki van kapcsolva); szükséges, mert a zeneválasztó SSH-kapcsolaton keresztül érhető el (ld. 3.), enélkül nem tudsz zenét választani vagy lejátszani.</span></li>
           <li><span class="en">An SSH app on your own computer, tablet or phone (see 3); no monitor or keyboard is needed on the machine itself.</span><span class="hu">Egy SSH-alkalmazás egy saját gépen, tableten vagy telefonon (ld. 3.); magán a gépen nincs szükség monitorra vagy billentyűzetre.</span></li>
           <li><span class="en"><b>4 GB of RAM, practical minimum</b> — this edition boots the whole OS into memory, not just the live filesystem.</span><span class="hu"><b>4 GB RAM, gyakorlati minimum</b> — ez a kiadás a teljes OS-t memóriába bootolja, nem csak az élő fájlrendszert.</span></li>
+          <li><span class="en">An ALSA-compatible USB DAC, or the machine's built-in audio output if none is connected. Connect the DAC directly to the machine, not through a USB hub; a hub can make the connection unreliable.</span><span class="hu">ALSA-kompatibilis USB DAC, vagy a gép beépített hangkimenete, ha nincs csatlakoztatva külső DAC. A DAC-ot közvetlenül a géphez csatlakoztasd, ne USB-hubon keresztül; egy hub megbízhatatlanná teheti a kapcsolatot.</span></li>
         </ul>
-        <p><span class="en">The downloaded <code>.gz</code> file is about 960 MB (877 MB for the Hungarian image). Once written, the stick holds only the boot system plus a small settings area (your player/network settings, SSH host key and the trial countdown live here) — there is no large persistent partition any more; the OS itself now runs from RAM.</span><span class="hu">A letöltött <code>.gz</code> fájl kb. 880 MB (az angol image kb. 960 MB). Kiírás után a kulcson csak a boot-rendszer és egy kis beállítás-terület van (ide kerülnek a lejátszó-/hálózati beállítások, az SSH azonosítókulcs és a próbaidő-számláló) — nincs többé nagy, perzisztens partíció; maga az OS mostantól RAM-ból fut.</span></p>
+        <p><b><span class="en">Supported file formats:</span><span class="hu">Támogatott fájlformátumok:</span></b> <span class="en">WAV, FLAC, ALAC (M4A), AIFF/AIFC, DSD (DSF/DFF, natively and via DoP), and SACD ISO (the disc's stereo layer, DST-compressed or uncompressed; see section 4).</span><span class="hu">WAV, FLAC, ALAC (M4A), AIFF/AIFC, DSD (DSF/DFF, natívan és DoP-on keresztül is), valamint SACD ISO (a lemez sztereó rétege, DST-tömörített vagy tömörítetlen formában; ld. 4. szakasz).</span></p>
+        <p><span class="en">The downloaded <code>.gz</code> file is about 960 MB (877 MB for the Hungarian image). Once written, the stick holds only the boot system plus a small settings area (your player/network settings, favorites, saved playlists, SSH host key and the trial countdown live here, and survive a reboot) — there is no large persistent partition any more; the OS itself now runs from RAM.</span><span class="hu">A letöltött <code>.gz</code> fájl kb. 880 MB (az angol image kb. 960 MB). Kiírás után a kulcson csak a boot-rendszer és egy kis beállítás-terület van (ide kerülnek a lejátszó-/hálózati beállítások, a kedvencek, a mentett playlistek, az SSH azonosítókulcs és a próbaidő-számláló, és újraindítás után is megmaradnak) — nincs többé nagy, perzisztens partíció; maga az OS mostantól RAM-ból fut.</span></p>
 
         <h3 class="mh" id="g-2"><span class="mno">2</span><span class="en">Writing the image to the USB stick</span><span class="hu">Az image felírása a USB-kulcsra</span></h3>
         <h4><span class="en">A) Balena Etcher: recommended for everyone</span><span class="hu">A) Balena Etcher: ajánlott mindenkinek</span></h4>
@@ -1282,10 +1297,12 @@ footer.ft {
               <tr><td>n</td><td><span class="en">Next track</span><span class="hu">Következő track</span></td></tr>
               <tr><td>b</td><td><span class="en">Previous track</span><span class="hu">Előző track</span></td></tr>
               <tr><td>Space</td><td><span class="en">Pause / resume</span><span class="hu">Szünet / folytatás</span></td></tr>
+              <tr><td>f <span class="en">(or <kbd>*</kbd>)</span><span class="hu">(vagy <kbd>*</kbd>)</span></td><td><span class="en">Add the currently playing track to the Favorites playlist; reachable again later via the "load a saved playlist" key in the browser, under the name "Kedvencek"/"Favorites"</span><span class="hu">Az éppen szóló track hozzáadása a Kedvencek playlisthez; később a böngésző "mentett playlist betöltése" billentyűjével érhető el újra, „Kedvencek" néven</span></td></tr>
               <tr><td>q</td><td><span class="en">Stop playback, back to the browser</span><span class="hu">Lejátszás leállítása, vissza a böngészőbe</span></td></tr>
             </tbody>
           </table>
         </div>
+        <p><b><span class="en">SACD ISO playback:</span><span class="hu">SACD ISO lejátszás:</span></b> <span class="en">opening a folder that contains an SACD disc image (<code>.iso</code>) is recognized automatically; the disc's stereo layer tracks appear as ordinary entries in the track list. Only the stereo layer is supported (DST-compressed or uncompressed); an uncompressed multichannel area cannot be played, and the music selector shows a clear message about this. During playback a second status line shows the track's album, artist and title (derived from the folder and file name, where this can be recognized).</span><span class="hu">ha egy SACD-lemezképet (<code>.iso</code>) tartalmazó mappát nyitsz meg, azt a zeneválasztó automatikusan felismeri; a lemez sztereó rétegének tracke önálló tételként jelennek meg a számlistában. Csak a sztereó réteg támogatott (DST-tömörített vagy tömörítetlen); a tömörítetlen többcsatornás terület nem játszható le, erről a zeneválasztó egyértelmű üzenetet ad. Lejátszás közben egy második állapotsor is megjelenik, ami a track albumát, előadóját és címét mutatja (a mappanév és a fájlnév alapján, ahol ez felismerhető).</span></p>
 
         <h3 class="mh" id="g-5"><span class="mno">5</span><span class="en">What runs in the background</span><span class="hu">Mi fut a háttérben</span></h3>
         <p><span class="en">The bptune tuning layer runs automatically at boot: CPU governor set to "performance", Turbo Boost/Precision Boost disabled. <i>Important difference from the developer's reference machine:</i> kernel-level CPU-core isolation and DAC IRQ affinity are <b>not</b> included in this trial; they can't be safely preset on unknown, unfamiliar hardware (would require a machine-specific <code>isolcpus</code> kernel parameter and a reboot). This trial build therefore doesn't give the maximally tuned reference experience; its goal is a risk-free way to try the player itself.</span><span class="hu">A bptune hangoló-réteg automatikusan fut induláskor: CPU-kormányzó "performance" módra állítva, Turbo Boost/Precision Boost kikapcsolva. <i>Fontos különbség a fejlesztői referenciagéphez képest:</i> a kernel-szintű CPU-mag-izoláció és a DAC IRQ-affinitás <b>nincs</b> ebben a próbaváltozatban; az ismeretlen, idegen hardveren nem lehet biztonságosan előre beállítani (géptől függő <code>isolcpus</code> kernel-paramétert igényelne, újraindítással). Ez a próbaverzió tehát nem a maximálisan hangolt referencia-élményt adja, hanem azt, hogy kockázatmentesen ki tudd próbálni a lejátszót.</span></p>
@@ -1341,7 +1358,7 @@ footer.ft {
         <h4><span class="en">Project</span><span class="hu">Projekt</span></h4>
         <ul>
           <li><a class="en" href="https://drive.google.com/file/d/1bJ28SEQGP0zxFRgB1vtQlWJmy9-zyO1S/view?usp=sharing">Download the image (EN)</a><a class="hu" href="https://drive.google.com/file/d/1xSfgLjm3z_Ty9Hz_UDmq1X9V_ehS3Hkf/view?usp=drive_link">Image letöltése (HU)</a></li>
-          <li><a class="en" href="assets/bpplay_bptune_user_manual_x64_v2.0_EN.pdf">User manual v2.0 (PDF, EN)</a><a class="hu" href="assets/bpplay_bptune_user_manual_x64_v2.0_HU.pdf">Felhasználói kézikönyv v2.0 (PDF, HU)</a></li>
+          <li><a href="#guide"><span class="en">User manual</span><span class="hu">Felhasználói kézikönyv</span></a></li>
           <li><a href="https://github.com/ferenckoscso/bpplay">GitHub; bpplay</a></li>
           <li><a href="../x64-desktop/"><span class="en">x86_64 desktop edition</span><span class="hu">x86_64 desktop kiadás</span></a></li>
           <li><a href="../pi/"><span class="en">Raspberry Pi appliance edition</span><span class="hu">Raspberry Pi készüléki kiadás</span></a></li>
@@ -1459,6 +1476,72 @@ footer.ft {
   document.querySelectorAll(".yr").forEach(function (el) {
     el.textContent = String(new Date().getFullYear());
   });
+})();
+
+/* ---------- manual search (client-side, no backend) ---------- */
+(function () {
+  var input = document.getElementById("manSearch");
+  var results = document.getElementById("manSearchResults");
+  var body = document.querySelector(".manual-body");
+  if (!input || !results || !body) return;
+
+  function lang() { return document.documentElement.getAttribute("data-lang") === "hu" ? "hu" : "en"; }
+  function esc(s) { return s.replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+  function pick(el) {
+    var en = el.querySelector(":scope > .en"), hu = el.querySelector(":scope > .hu");
+    if (en || hu) { var n = lang() === "hu" ? hu : en; return n ? n.textContent : ""; }
+    return el.textContent;
+  }
+  function placeholder() { input.placeholder = lang() === "hu" ? "Keresés a kézikönyvben…" : "Search the manual…"; }
+  placeholder();
+  new MutationObserver(placeholder).observe(document.documentElement, { attributes: true, attributeFilter: ["data-lang"] });
+
+  function buildIndex() {
+    var heads = Array.prototype.slice.call(body.querySelectorAll("h3.mh"));
+    return heads.map(function (h, i) {
+      var label = (pick(h) || h.textContent).trim();
+      var next = heads[i + 1];
+      var node = h.nextElementSibling, parts = [];
+      while (node && node !== next) {
+        parts.push(pick(node));
+        var subEls = node.querySelectorAll ? node.querySelectorAll("p, li, td, h4, th") : [];
+        for (var j = 0; j < subEls.length; j++) parts.push(pick(subEls[j]));
+        node = node.nextElementSibling;
+      }
+      return { id: h.id, label: label, text: parts.join(" ").replace(/\s+/g, " ").trim() };
+    });
+  }
+
+  function snippet(text, q) {
+    var i = text.toLowerCase().indexOf(q.toLowerCase());
+    if (i < 0) return "";
+    var s = Math.max(0, i - 40);
+    return (s > 0 ? "…" : "") + esc(text.slice(s, i)) + "<mark>" + esc(text.slice(i, i + q.length)) + "</mark>" + esc(text.slice(i + q.length, i + q.length + 50)) + "…";
+  }
+
+  function render(q) {
+    q = q.trim();
+    if (!q) { results.hidden = true; results.innerHTML = ""; return; }
+    var idx = buildIndex();
+    var ql = q.toLowerCase();
+    var matches = idx.filter(function (s) { return s.label.toLowerCase().indexOf(ql) > -1 || s.text.toLowerCase().indexOf(ql) > -1; }).slice(0, 8);
+    if (!matches.length) {
+      results.innerHTML = '<div class="msr-empty">' + (lang() === "hu" ? "Nincs találat." : "No results.") + "</div>";
+    } else {
+      results.innerHTML = matches.map(function (m) {
+        var snip = snippet(m.text, q);
+        return '<a href="#' + m.id + '"><span class="msr-h">' + esc(m.label) + "</span>" + (snip ? '<span class="msr-snip">' + snip + "</span>" : "") + "</a>";
+      }).join("");
+    }
+    results.hidden = false;
+  }
+
+  var deb;
+  input.addEventListener("input", function () { clearTimeout(deb); var v = input.value; deb = setTimeout(function () { render(v); }, 120); });
+  input.addEventListener("focus", function () { if (input.value.trim()) render(input.value); });
+  results.addEventListener("click", function (e) { if (e.target.closest("a")) { results.hidden = true; input.value = ""; } });
+  document.addEventListener("click", function (e) { if (!e.target.closest(".manual-search")) results.hidden = true; });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") { results.hidden = true; input.blur(); } });
 })();
 
 </script>
