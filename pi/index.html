@@ -172,6 +172,7 @@ header.nav {
   gap: 20px;
   height: var(--nav-h);
   max-width: 1160px;
+  position: relative;
 }
 .brand {
   font-family: var(--mono);
@@ -236,8 +237,9 @@ header.nav {
   border-radius: var(--radius);
   color: var(--silver);
   font-family: var(--mono);
-  font-size: 14px;
-  padding: 6px 10px;
+  font-size: 20px;
+  line-height: 1;
+  padding: 9px 14px;
   cursor: pointer;
 }
 
@@ -695,14 +697,17 @@ footer.ft {
   .nav-links {
     display: none;
     position: absolute;
-    top: var(--nav-h);
-    left: 0;
+    top: calc(var(--nav-h) + 8px);
     right: 0;
+    left: auto;
+    width: min(300px, calc(100vw - 40px));
     flex-direction: column;
     align-items: stretch;
     background: rgba(10,10,9,0.97);
-    border-bottom: 1px solid var(--hairline-strong);
-    padding: 10px 20px 16px;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.5);
+    padding: 10px 14px 14px;
     gap: 2px;
   }
   .nav-links.open { display: flex; }
@@ -740,6 +745,7 @@ footer.ft {
       <li><a href="#manual"><span class="en">Manual</span><span class="hu">Kézikönyv</span></a></li>
       <li><a href="../press/"><span class="en">Press &amp; Reviews</span><span class="hu">Sajtó &amp; vélemények</span></a></li>
       <li><a href="../which/"><span class="en">Which edition? ↗</span><span class="hu">Melyik kiadás? ↗</span></a></li>
+      <li><a href="../#ask"><span class="en">Ask</span><span class="hu">Kérdezz</span></a></li>
       <li><a href="https://github.com/ferenckoscso/bpplay">GitHub ↗</a></li>
     </ul>
 
