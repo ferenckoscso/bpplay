@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bpplay kézikönyv: x86_64 desktop</title>
+<meta name="description" content="Az x86_64 desktop kiadás kézikönyve: telepítés, első használat, csendprofil, próbaidő és hibaelhárítás.">
+<link rel="alternate" hreflang="en" href="https://bpplay.hu/x64-desktop/">
+<link rel="alternate" hreflang="hu" href="https://bpplay.hu/hu/x64-desktop/">
+<link rel="icon" href="/assets/site/logo.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+
+<style>
+  body { margin: 0; background: #f6f2ea; }
+  a { color: #a8661a; text-decoration: none; }
+  a:hover { color: #7a4a12; }
+  ::selection { background: #d9c79a; }
+  code { font-family: 'PT Mono', monospace; font-size: 0.88em; }
+  table.bp-table { border-collapse: collapse; width: 100%; font-family: 'EB Garamond', Georgia, serif; font-size: 15px; }
+  table.bp-table th, table.bp-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(33,31,26,0.14); vertical-align: top; }
+  table.bp-table th { font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #52504a; font-weight: 400; }
+  .bp-manual ul, .bp-manual ol { font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; padding-left: 22px; margin: 0 0 20px; }
+  .bp-manual li { margin-bottom: 8px; }
+  .bp-manual p { font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 20px; }
+  .bp-h3 { font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px; display: flex; align-items: baseline; gap: 12px; }
+  .bp-h3 span { font-family: 'PT Mono', monospace; font-size: 15px; color: #8a6a2f; }
+  .bp-h4 { font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin: 0 0 12px; }
+  .bp-note { background: #efe9d9; border-radius: 4px; padding: 18px 22px; font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.65; color: #35332d; margin: 0 0 20px; }
+  .bp-warn { background: #f3e4d4; border: 1px solid #d9a35c; border-radius: 4px; padding: 16px 20px; font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.6; color: #5c3f14; margin: 0 0 18px; }
+  .bp-term { background: #19170f; border-radius: 4px; overflow: hidden; margin-bottom: 18px; }
+  .bp-term-bar { padding: 8px 16px; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #9c988c; border-bottom: 1px solid rgba(243,240,232,0.12); }
+  .bp-term-body { padding: 16px 18px; font-family: 'PT Mono', monospace; font-size: 13px; line-height: 1.75; overflow-x: auto; }
+  .bp-chip { border: 1px solid rgba(33,31,26,0.2); border-radius: 20px; padding: 6px 14px; font-family: 'PT Mono', monospace; font-size: 12.5px; }
+  .bp-tbl-wrap { border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; overflow-x: auto; margin-bottom: 20px; background: #ffffff; }
+  html { scroll-padding-top: 93px; }
+  .bp-nav-links a, .bp-nav-right a { white-space: nowrap; }
+  @media (max-width: 1100px) { .bp-nav-links { display: none !important; } }
+  @media (max-width: 560px) {
+    .bp-logo-sub { display: none; }
+    .bp-nav-in { padding: 10px 16px !important; gap: 12px !important; }
+    .bp-nav-right { gap: 8px !important; }
+    .bp-nav-right a[href="#download"] { padding: 9px 12px !important; font-size: 11px !important; }
+  }
+</style>
+
+</head>
+<body>
+
+<div style="font-family: 'EB Garamond', Georgia, serif; color: #211f1a; background: #f6f2ea; width: 100%; max-width: 100%; box-sizing: border-box;">
+
+  <!-- NAV -->
+  <div style="border-bottom: 1px solid rgba(33,31,26,0.14); background: #f6f2ea; position: sticky; top: 0; z-index: 10;">
+    <div class="bp-nav-in" style="max-width: 980px; margin: 0 auto; padding: 12px 32px; min-height: 76px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: nowrap;">
+      <a href="/hu/" style="display: flex; align-items: center; gap: 10px; font-family: 'PT Mono', monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; color: #211f1a;">
+        <img src="/assets/site/logo.png" alt="" style="width: 32px; height: 32px; flex: none; object-fit: contain;">
+        bpplay <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400;">/ bptune</span> <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400; font-size: 14px;">&middot; x86_64 desktop</span>
+      </a>
+      <div class="bp-nav-links" style="display: flex; align-items: center; gap: 20px; flex-wrap: nowrap; font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: #52504a;">
+        <a href="/hu/" style="color: inherit;">&#8592; bpplay.hu</a>
+        <a href="/hu/#platforms" style="color: inherit;">Más kiadások</a>
+      </div>
+      <div class="bp-nav-right" style="display: flex; align-items: center; gap: 14px; flex: none;"><a href="/x64-desktop/" style="color: #a8661a; border: 1px solid rgba(33,31,26,0.25); border-radius: 3px; padding: 4px 9px;">EN</a></div></div>
+  </div>
+
+  <!-- FLOATING JUMP MENU -->
+  <button type="button" data-act="toggleJump" aria-label="Fejezetmenü megnyitása" aria-expanded="false" data-expanded style="position: fixed; right: 28px; bottom: 28px; width: 60px; height: 60px; border-radius: 50%; background: #19170f; color: #f3f0e8; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 28px rgba(0,0,0,0.32); cursor: pointer; z-index: 30;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="#f3f0e8" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div data-if="jump" hidden>
+    <div style="position: fixed; right: 28px; bottom: 100px; width: 260px; max-height: 70vh; overflow-y: auto; background: #ffffff; border: 1px solid rgba(33,31,26,0.18); border-radius: 8px; box-shadow: 0 16px 40px rgba(0,0,0,0.3); padding: 10px; z-index: 30; font-family: 'PT Mono', monospace; font-size: 12.5px;">
+      <a href="#g-1" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">1 &middot; Amire szükséged lesz</a>
+      <a href="#g-2" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">2 &middot; Az image kiírása</a>
+      <a href="#g-3" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">3 &middot; Indítás a kulcsról</a>
+      <a href="#g-4" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">4 &middot; Első indulás és lejátszás</a>
+      <a href="#g-5" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">5 &middot; Ami a háttérben fut</a>
+      <a href="#g-6" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">6 &middot; Próbaidő</a>
+      <a href="#g-7" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">7 &middot; Hibaelhárítás</a>
+      <a href="#g-8" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">8 &middot; Újdonságok</a>
+      <a href="#g-disc" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">&sect; &middot; Jogi nyilatkozat</a>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div style="max-width: 980px; margin: 0 auto; padding: 72px 32px 40px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Dokumentáció</div>
+    <h1 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 44px; line-height: 1.2; margin: 0 0 20px; max-width: 20ch;">bpplay kézikönyv: x86_64 desktop</h1>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; color: #45443e; max-width: 68ch; margin: 0 0 32px;">
+      Minden, ami a főoldalon röviden szerepel, itt teljes részletességgel kifejtve, beleértve azokat a részeket is, amire a legtöbb embernek nem lesz szüksége.
+    </p>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px;">
+      <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 14px 22px; border-radius: 3px; font-weight: 700;">Kérd el az image-et &#8599;</a>
+      <a href="/hu/x64/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">bpplay x64 kiosk kiadás &#8594;</a>
+      <a href="/hu/pi/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">bpplay Pi-hoz &#8594;</a>
+      <a href="/hu/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">bpplay macOS-hez &#8594;</a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px; max-width: 420px;">
+      <label for="manSearch" style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #8a867a; flex: none;">Keresés</label>
+      <input id="manSearch" type="search" placeholder="Keresés a kézikönyvben..." style="flex: 1; font-family: 'EB Garamond', Georgia, serif; font-size: 15px; padding: 10px 14px; border: 1px solid rgba(33,31,26,0.25); border-radius: 3px; background: #ffffff; color: #211f1a;">
+    </div>
+  </div>
+
+  <!-- TOC STRIP -->
+  <div style="border-top: 1px solid rgba(33,31,26,0.14); border-bottom: 1px solid rgba(33,31,26,0.14); background: #efe9d9;">
+    <div style="max-width: 980px; margin: 0 auto; padding: 20px 32px; display: flex; gap: 8px; flex-wrap: wrap;">
+      <a class="bp-chip" href="#g-1" style="color: #211f1a;">1 Amire szükséged lesz</a>
+      <a class="bp-chip" href="#g-2" style="color: #211f1a;">2 Image kiírása</a>
+      <a class="bp-chip" href="#g-3" style="color: #211f1a;">3 Indítás</a>
+      <a class="bp-chip" href="#g-4" style="color: #211f1a;">4 Első indulás</a>
+      <a class="bp-chip" href="#g-5" style="color: #211f1a;">5 Háttér</a>
+      <a class="bp-chip" href="#g-6" style="color: #211f1a;">6 Próbaidő</a>
+      <a class="bp-chip" href="#g-7" style="color: #211f1a;">7 Hibaelhárítás</a>
+      <a class="bp-chip" href="#g-8" style="color: #211f1a;">8 Újdonságok</a>
+      <a class="bp-chip" href="#g-disc" style="color: #211f1a;">&sect; Jogi nyilatkozat</a>
+    </div>
+  </div>
+
+  <!-- QUICK SPECS -->
+  <div style="max-width: 980px; margin: 0 auto; padding: 48px 32px 0;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #4b5a40; margin-bottom: 16px;">Hardver</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 28px; margin: 0 0 14px;">Bármilyen x86_64 PC. Hozd a saját DAC-odat</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16px; line-height: 1.6; color: #45443e; max-width: 70ch; margin: 0 0 20px;">A zárt Pi-eszközzel ellentétben ez a próbaverzió ismeretlen, nem egyedileg ismert hardveren fut; így a DSD/DoP-támogatás és a hangolás attól függ, mit csatlakoztatsz.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px;">
+      <span class="bp-chip"><b>Gép</b> Bármilyen x86_64 PC, vagy Intel Mac</span>
+      <span class="bp-chip"><b>Indítás</b> UEFI/BIOS boot USB-ről</span>
+      <span class="bp-chip"><b>OS</b> Debian 13 "trixie", csak konzol</span>
+      <span class="bp-chip"><b>Tárolás</b> USB-kulcs, minimum 8 GB</span>
+      <span class="bp-chip"><b>RAM</b> 4 GB gyakorlati minimum, az OS memóriába bootol</span>
+      <span class="bp-chip"><b>DAC</b> ALSA-kompatibilis USB DAC, vagy beépített hangkártya</span>
+      <span class="bp-chip"><b>Hálózat</b> magához a lejátszáshoz nem szükséges</span>
+    </div>
+    <div class="bp-note"><b>Mi kerül a kulcsra.</b> Mivel az operációs rendszer most már teljesen RAM-ból fut, a kulcs csak egy kis beállítási területet tartalmaz (lejátszási beállítások, hálózati beállítások, az első bootoláskori mérés eredménye); nincs már nagy, tovább növekvő tartós partíció. Maga a zene soha nem kerül a kulcsra; húzd be egy csatolt meghajtóról vagy hálózati megosztásról.</div>
+  </div>
+
+  <!-- MANUAL BODY -->
+  <div class="bp-manual" style="max-width: 980px; margin: 0 auto; padding: 40px 32px 100px;">
+
+    <div id="g-1" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>1</span>Amire szükséged lesz</h3>
+      <ul>
+        <li>Egy USB-kulcs, legalább 8 GB (a jelenlegi tartalma törlődik).</li>
+        <li><a href="https://etcher.balena.io">Balena Etcher</a> (ajánlott, ingyenes, Mac-en és Windowson egyforma).</li>
+        <li>A <code>bpplay-desktop-x86_64.img.gz</code> fájl (Google Drive link, fent).</li>
+        <li>Monitor, billentyűzet és egér a gépen magán; ehhez a kiadáshoz nincs szükség második eszközre vagy hálózati kapcsolatra a zenehallgatáshoz.</li>
+      </ul>
+      <p>A letöltött <code>.gz</code> fájl kb. 1,8 GB. A korábbi lemez-módú image-ekkel ellentétben ez a kiadás teljesen RAM-ba bootol: a kulcs csak egy kis beállítási területet tartalmaz (a beállításaid és a próbaidő-visszaszámlálás ott élnek), nem egy nagy, tartós partíciót.</p>
+    </div>
+
+    <div id="g-2" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>2</span>Az image kiírása az USB-kulcsra</h3>
+      <div class="bp-h4">A) Balena Etcher: mindenkinek ajánlott</div>
+      <ul>
+        <li>Töltsd le és telepítsd a Balena Etchert, dugd be a kulcsot.</li>
+        <li>Nyisd meg az Etchert, "Flash from file", válaszd ki a letöltött <code>.img.gz</code>-t (az Etcher írás közben automatikusan kicsomagolja).</li>
+        <li>"Select target": az USB-kulcs; ha több meghajtó is csatlakozik, ellenőrizd a méretet (GB).</li>
+        <li>"Flash!": törli a kulcsot és kiírja az image-et, néhány perc.</li>
+      </ul>
+      <div class="bp-h4">B) <code style="font-size: 1.1em;">dd</code>: haladó Linux/Mac felhasználóknak</div>
+      <div class="bp-warn"><b>Fontos biztonsági figyelmeztetés:</b> a <code>dd</code> visszafordíthatatlanul felülírja a célmeghajtót. Ha rossz eszközt adsz meg, adatot veszíthetsz. Mindig ellenőrizd kétszer az eszköznevet, mielőtt Entert nyomsz.</div>
+      <div class="bp-term">
+        <div class="bp-term-bar">Linux / macOS</div>
+        <div class="bp-term-body">
+          <div style="color: #8a867a;"># Linux, csatlakoztatás után azonosítsd az új bejegyzést:</div>
+          <div style="color: #e8e4d8;">lsblk</div>
+          <div style="color: #e3ab52;">gunzip -c bpplay-desktop-x86_64.img.gz | sudo dd of=/dev/sdX bs=4M status=progress</div>
+          <div style="color: #e8e4d8;">sync</div>
+          <div style="color: #8a867a; margin-top: 10px;"># macOS, csatlakoztatás után azonosítsd az új eszközt (pl. /dev/disk4):</div>
+          <div style="color: #e8e4d8;">diskutil list</div>
+          <div style="color: #e8e4d8;">diskutil unmountDisk /dev/diskN</div>
+          <div style="color: #e3ab52;">gunzip -c bpplay-desktop-x86_64.img.gz | sudo dd of=/dev/rdiskN bs=4m</div>
+          <div style="color: #e8e4d8;">sync</div>
+          <div style="color: #e8e4d8;">diskutil eject /dev/diskN</div>
+        </div>
+      </div>
+      <p style="font-size: 14px; color: #8a867a;">(a <code>dd</code> Windowson nem elérhető; ott az Etcher az egyetlen ajánlott út.)</p>
+    </div>
+
+    <div id="g-3" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>3</span>Indítás az USB-kulcsról</h3>
+      <div class="bp-h4">Mac (Intel)</div>
+      <ol>
+        <li>Teljesen kapcsold ki a gépet (ne alvó módba).</li>
+        <li>Bekapcsoláskor azonnal nyomd le és tartsd lenyomva az Option (&#8997;) billentyűt.</li>
+        <li>Válaszd ki az USB-kulcsot a boot-menüből (általában "EFI Boot" néven szerepel).</li>
+      </ol>
+      <p><i>Ha a Mac nem ajánlja fel az USB-t boot-opcióként:</i> Intel Macen a Startup Security Utility lehet "Full Security"-re állítva, ami blokkolja a külső bootolást. Indítsd újra &#8984;+R lenyomva tartásával, hogy belépj a Recovery módba, majd válaszd a "No Security" vagy "Medium Security" opciót, és engedélyezd az "Allow booting from external media" beállítást.</p>
+      <div class="bp-h4">Windows</div>
+      <ol>
+        <li>Teljesen kapcsold ki a gépet.</li>
+        <li>Bekapcsoláskor ismételten nyomd meg a boot-menü billentyűt; gyártótól függően gyakran F12, F2, Esc vagy Del.</li>
+        <li>Válaszd ki az USB-kulcsot a listából.</li>
+      </ol>
+      <p><i>Ha a Windows nem bootolja az USB-t:</i> lehet, hogy ki kell kapcsolnod a Secure Boot-ot a BIOS/UEFI-ben, vagy engedélyezned kell a Legacy/CSM módot vagy a "boot from removable media" opciót. A zökkenőmentes induláshoz UEFI BIOS ajánlott a legacy BIOS helyett. A gép saját meghajtóján lévő meglévő Windows-telepítésedhez nem nyúl; ez a kiadás teljesen az USB-kulcsról fut.</p>
+    </div>
+
+    <div id="g-4" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>4</span>Első indulás és lejátszás</h3>
+      <p>A kulcs egyenesen egy hétköznapi asztali felületbe bootol, automatikus bejelentkezéssel; nincs jelszó, amit be kellene gépelni. Az asztalon egy "bpplay" ikon ül, "húzz ide egy zenefájlt vagy albumot" felirattal. Nyiss meg egy fájlkezelő ablakot (már ott van az asztalon/tálcán), navigálj a zenédhez, akár egy csatlakoztatott USB-meghajtón, akár már a kulcsra másolva, és húzz egy számot vagy egy teljes albummappát a bpplay ikonra.</p>
+      <p>Ez megnyit egy kis terminálablakot, ami a bpplay saját formátum-ellenőrzését és lejátszás-vezérlőit mutatja:</p>
+      <div class="bp-tbl-wrap"><table class="bp-table"><thead><tr><th>Billentyű</th><th>Funkció</th></tr></thead><tbody>
+        <tr><td style="font-family: 'PT Mono', monospace;">n</td><td>Következő szám</td></tr>
+        <tr><td style="font-family: 'PT Mono', monospace;">b</td><td>Előző szám</td></tr>
+        <tr><td style="font-family: 'PT Mono', monospace;">Space</td><td>Szünet / folytatás</td></tr>
+        <tr><td style="font-family: 'PT Mono', monospace;">q</td><td>Lejátszás leállítása; bezárja az ablakot</td></tr>
+      </tbody></table></div>
+      <p>Ha egy másik fájlt vagy mappát húzol az ikonra, miközben már fut valami, az egy új lejátszási ablakot nyit; az előző tovább fut, amíg le nem állítod vagy be nem zárod, ezért kerüld a szándékolatlan átfedő lejátszást.</p>
+    </div>
+
+    <div id="g-5" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>5</span>Ami a háttérben fut</h3>
+      <p>Minden lejátszás indításakor a bptune kikapcsolja a Turbo Boost/Precision Boost funkciót arra a munkamenetre.</p>
+      <p><b>Nincs lezárva:</b> a kiosk kiadással ellentétben ez egy hétköznapi, használható asztali rendszer: terminál, fájlkezelő és egyéb alkalmazások is elérhetők, és a gép nem kapcsol ki magától, amikor bezársz egy lejátszási ablakot. A kényelemért cserébe a fent leírt kisebb jitter-javulás az ára.</p>
+      <div class="bp-h4" style="margin-top: 28px;">Csendprofil</div><p>Bekapcsolt csendprofil esetén a lejátszás idejére a következő háttérszolgáltatások állnak le: cron, avahi, rpcbind, polkit, udisks2, az időszakos karbantartási időzítők, az udev vezérlő-socketjei, a felhasználói munkamenet-kezelő, valamint a Wi-Fi supplicant szolgáltatások, ha nincs aktív Wi-Fi-kapcsolat. Ezek soha nem állnak le: journald, ssh, NetworkManager, dbus és logind. Ha a leállítás után ezek bármelyike nem fut, minden azonnal visszaáll. A profil a lejátszás végén újra kikapcsol. A desktop kiadásban a profil rövidebb listát állít le, hogy a grafikus munkamenet nyitva maradjon.</p>
+      <div class="bp-h4" style="margin-top: 28px;">Ami a zeneválasztóhoz tartozik</div><p>A Full Pure, a választható CPU-magkezelési mód (<code>c</code>), a globális keresés és a <code>g</code> jelentés a kiosk kiadások zeneválasztójához tartozik. A desktop kiadás a saját fájlkezelőjét használja. Egy asztali ikon a gépfelmérés jelentését (<code>bptune survey</code>) nyitja meg egy terminálban.</p>
+      <div class="bp-h4" style="margin-top: 28px;">Bootkori mérés</div><p>A bptune bootoláskor megméri a CPU-magokat, és kiválasztja a lejátszó magot.</p>
+      <div class="bp-h4" style="margin-top: 28px;">Nyelvi kiadások</div><p>A bpplay magyar (HU) és angol (EN) kiadásban jelenik meg. A nyelv az image-be van rögzítve: ez határozza meg a zeneválasztó és a bptune szövegeit, az alapértelmezett zenemappát (a HU kiadásban Zen&eacute;k, az EN kiadásban Music) és az időzónát (HU-ban Europe/Budapest, EN-ben UTC). A desktop kiadásban a billentyűzetkiosztás követi a nyelvet (hu vagy us).</p>
+    </div>
+
+    <div id="g-6" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>6</span>Próbaidő: 15 nap</h3>
+      <p>Ez egy időkorlátos próbaverzió, az első valódi bootolástól számított 15 napig érvényes. A visszaszámlálás magához az USB-kulcshoz van kötve, nem a géphez, amin bootolod; így ha több gépen is kipróbálod, a hátralévő idő átvihető.</p>
+      <p>Egy új image új próbaidőt jelent: ha az image újabb, mint a tárolt kezdet, a 15 nap az image-től számít. Az az image, amelyet az első indítása előtt több mint 90 nappal építettek, nem indul el. A desktop kiadásnak nincs zeneválasztója, ezért nincs visszaszámláló sor a képernyőn.</p>
+      <ul>
+        <li>Az óra visszaállítása nem hosszabbítja meg a próbaidőt; a rendszer ezt érzékeli.</li>
+        <li>Lejáratkor a gép egy rövid üzenet után automatikusan kikapcsol; ez nem hiba, ez a próbaidő szándékolt vége (ugyanez történik, ha a legfelső szinten <code>q</code>-t nyomsz).</li>
+        <li>A próbaidő nem hosszabbítható; ha lejárat után újra ki szeretnéd próbálni, kérj egy friss image-et attól, akitől az USB-kulcsot kaptad.</li>
+      </ul>
+    </div>
+
+    <div id="g-7" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>7</span>Hibaelhárítás</h3>
+      <div class="bp-tbl-wrap"><table class="bp-table"><thead><tr><th>Jelenség</th><th>Megoldás</th></tr></thead><tbody>
+        <tr><td>Semmi nem történik, üres/fekete képernyő</td><td>Várj kb. 30 másodpercet; az első bootolás kicsit tovább tarthat. Ha még mindig üres, írd újra a kulcsot.</td></tr>
+        <tr><td>Semmi nem történik fájl ráejtésekor</td><td>Ellenőrizd, hogy a fájl támogatott formátumú-e (WAV, FLAC, ALAC/M4A, AIFF/AIFC, DSF).</td></tr>
+        <tr><td>Nincs hang lejátszás közben</td><td>Ellenőrizd, hogy a DAC/hangkártya csatlakoztatva van-e, és próbálj másik USB-portot.</td></tr>
+        <tr><td>A lejátszás szokatlanul halknak tűnik</td><td>A bpplay szándékosan soha nem nyúl semmilyen hangerőszabályzóhoz (mindig bitre pontos); ha a DAC saját firmware-szintű hangereje korábban más szoftver által alacsonyra lett állítva, az a beállítás a bpplay alatt is megmarad. Ellenőrizd az OS hangkeverőjét, és állítsd a DAC saját hangerejét maximumra (0 dB). Jelenleg az XMOS és az Amanero USB-interfészek számítanak ebből a szempontból támogatottnak; más, általánosabb célú USB audio interfész chipeknek lehet szoftveres hangerőszabályzójuk, és érintettek lehetnek.</td></tr>
+        <tr><td>A Mac nem ajánlja fel az USB-bootot</td><td>Lásd a Startup Security Utility megjegyzést a 3. fejezetben.</td></tr>
+        <tr><td>A Windows nem ajánlja fel az USB-bootot</td><td>Lásd a Secure Boot / Legacy-CSM megjegyzést a 3. fejezetben.</td></tr>
+        <tr><td>A gép egy rövid üzenet után kikapcsol</td><td>Lejárt a 15 napos próbaidő; vedd fel a kapcsolatot azzal, akitől a kulcsot kaptad.</td></tr>
+      </tbody></table></div>
+      <p>Ha bármi nem a leírtak szerint működik, kérjük, küldd el: melyik gépen próbáltad (Mac/Windows, modell), a pontos hibaüzenetet (ha volt), és mit csináltál, amikor történt. Megkérdezheted a kísérleti bpplay csevegőasszisztenst is, amely több mint 100 bpplay/bptune dokumentumra és hivatkozásra épül (Google-bejelentkezés szükséges): <a href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" style="color: #a8661a;">nyisd meg a csevegőt</a>.</p>
+    </div>
+
+    <div id="g-8" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>8</span>Újdonságok: RC21 és RC22</h3>
+      <p><b>RC21</b></p><ul><li>Full Pure (<code>u</code> billentyű): a hálózat link-szinten ki van kapcsolva, amíg a zene szól.</li><li>Globális keresés az összes meghajtón a <code>/</code> billentyűvel, tárolt indexszel; a lejátszás csak az első indexelési menet után indul.</li><li>A <code>g</code> gépfelmérés: jelentésszövegek, a CPU-magkezelési mód képernyője, rövid összefoglaló az első indításkor, az Intel management engine futásidejű állapota, USB-vezérlők.</li><li>Próbaidő: a beállítási terület csak a boot-kulcson használatos, és egy új image új próbaidőt jelent. Egy új image első bootja nem veszi át egy másik image által hagyott beállítási területet, így a próbaidő az első boottól számít.</li><li>Egy keresési találat mögött eltűnt meghajtót üzenettel kezel a program; a rejtett és a <code>._</code> fájlokat nem indexeli.</li><li>A most játszott szám sora látható hagyja az előadót és a címet, ha az album neve hosszú; a mappa- vagy sorkorlát elérését jelzi a program (bpplay 1.5.8 és 1.5.9). Ha a bpplay kimenete csőbe van irányítva, a sor a terminál szélességéhez igazodik (bpplay 1.5.15).</li><li>Az ID3-címkék beolvasása AIFF és WAV fájlokból, számonkénti előadóval (bpplay 1.5.10 és 1.5.12).</li><li>A kimenetválasztó megszakítható a <code>q</code> vagy az <code>Esc</code> billentyűvel.</li><li>SACD ISO: megbízhatóbb számútvonalak és indexelés; a mappamód elfogadja a DFF fájlokat és az SACD ISO számokat (bpplay 1.5.13).</li><li>DSD fájlok: a fájl saját záró kitöltése már nem szólal meg hangként.</li><li>Az angol image nem tartalmaz magyar szöveget, az alapértelmezett zenemappa pedig követi az image nyelvét (EN-ben Music, HU-ban Zen&eacute;k).</li></ul><p><b>RC22</b></p><ul><li>A Full Pure és az ismétlő mód külön van kezelve: az ismétlés tiltja a Full Pure-t, és fordítva.</li><li>A kiválasztóban választott kimenetet megjegyzi a beállítási terület; rövid súgó az <code>a</code> és az <code>n</code> billentyűhöz; SSH-banner a Raspberry Pi-n; a HU desktop kiadás magyar billentyűzetkiosztást kap.</li><li>A magyar image helyi időben fut (Europe/Budapest); az angol image UTC-n marad.</li><li>A <code>g</code> jelentésnek DAC szakasza van: a DAC által hirdetett formátumok, a lejátszás közben használt formátum, valamint a keverő és a némítás állapota.</li><li>Desktop kiadás: a csendprofil rövidebb listát állít le, hogy a grafikus munkamenet nyitva maradjon.</li><li>bpplay 1.5.16: nincs lefagyás nem terminál jellegű, nyitott bemenettel, és tiszta leállás TERM, INT és HUP jelre. bpplay 1.5.17: egy nyílbillentyű escape-szekvenciája már nem vált ki lejátszóparancsot.</li><li>bpplay 1.5.18: a TEAC/Esoteric (0x0644) és Luxman (0x3255) DAC-okon a 16 és 24 bites forrásokat először a saját szélességükben küldi (S16 vagy S24 packed), 32 bit tartalékként; a többi DAC továbbra is a 32 bitet részesíti előnyben.</li><li>Raspberry Pi: a hátralévő próbaidő a zeneválasztó fejlécsorában látszik (<i>Trial: még N nap</i>).</li><li>A rövid összefoglaló már nincs megcsonkítva; az 5 perces NAS-újraellenőrzés megszűnt; az <code>R</code> billentyű megszűnt a meghajtóválasztóban, és egy már csatolt meghajtónál a program rákérdez, hogy ellenőrizze-e a változásokat.</li><li>Az <code>x</code> billentyű kizárólag a keresésből és az indexelésből zárja ki a meghajtót; a meghajtó a kiválasztóban marad a <i>(kizárva a keresésből)</i> jelöléssel, és ugyanaz a billentyű visszakapcsolja.</li><li>bptune 0.3.8: a Renesas-tipp csak működő eszköz nélkül jelenik meg, a Bay Trail TXE felismerésre kerül, és a 0.0.0.0 firmware-verzió ismeretlenként jelenik meg.</li></ul>
+    </div>
+
+    <div id="g-disc" style="margin-bottom: 20px;">
+      <h3 class="bp-h3"><span>&sect;</span>Jogi nyilatkozat</h3>
+      <p style="font-size: 14.5px; color: #55534c;">A bpplay és a bptune szoftver, valamint az ezt a kulcsot kiszolgáló húzd-és-ejtsd indító (<code>bpplay_drop.sh</code>) "ahogy van" kerül átadásra, mindenféle garancia nélkül, kifejezett vagy vélelmezett, beleértve, de nem kizárólagosan, a forgalmazhatóságra vagy egy adott célra való alkalmasságra vonatkozó garanciákat.</p>
+      <p style="font-size: 14.5px; color: #55534c;">A fejlesztő nem vállal felelősséget a szoftver vagy a kulcs használatából, hibás működéséből vagy meghibásodásából eredő közvetlen vagy közvetett károkért, beleértve a csatlakoztatott audioeszközökben (DAC, erősítő, hangfalak) keletkező esetleges károkat, adatvesztést, vagy a rendeltetéstől eltérő használatból eredő bármilyen kárt.</p>
+      <p style="font-size: 14.5px; color: #55534c;">A szoftverre vonatkozó minden jog fenntartva; másolása, visszafejtése vagy harmadik félnek történő átadása kizárólag a fejlesztő előzetes írásbeli engedélyével történhet.</p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 19px; margin-top: 32px;">Jó zenehallgatást!</p>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div style="border-top: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 980px; margin: 0 auto; padding: 28px 32px; text-align: center; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a;">
+      bpplay / bptune &middot; Class A Computing &middot; Koscso Media Engineering Kft. &middot; <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Kapcsolat</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var S={step:'1',jump:false};
+  function render(){
+    document.querySelectorAll('[data-if]').forEach(function(e){
+      var k=e.getAttribute('data-if'); e.hidden=!(k.indexOf('step:')===0 ? S.step===k.slice(5) : !!S[k]);
+    });
+    document.querySelectorAll('[data-expanded]').forEach(function(e){ e.setAttribute('aria-expanded',String(S.jump)); });
+  }
+  document.addEventListener('click',function(ev){
+    var t=ev.target.closest('[data-act],[data-go]'); if(!t) return;
+    if(t.getAttribute('data-go')){ S.step=t.getAttribute('data-go'); window.scrollTo(0,0); }
+    else if(t.getAttribute('data-act')==='toggleJump'){ S.jump=!S.jump; }
+    else if(t.getAttribute('data-act')==='closeJump'){ S.jump=false; }
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

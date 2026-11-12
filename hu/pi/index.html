@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bpplay kézikönyv: Raspberry Pi</title>
+<meta name="description" content="A Raspberry Pi kiadás kézikönyve: az SD-kártya írása, SSH-kapcsolat, Full Pure, keresés, próbaidő és technikai háttér.">
+<link rel="alternate" hreflang="en" href="https://bpplay.hu/pi/">
+<link rel="alternate" hreflang="hu" href="https://bpplay.hu/hu/pi/">
+<link rel="icon" href="/assets/site/logo.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+
+<style>
+  body { margin: 0; background: #f6f2ea; }
+  a { color: #a8661a; text-decoration: none; }
+  a:hover { color: #7a4a12; }
+  ::selection { background: #d9c79a; }
+  code { font-family: 'PT Mono', monospace; font-size: 0.88em; }
+  kbd { font-family: 'PT Mono', monospace; font-size: 0.85em; border: 1px solid rgba(33,31,26,0.3); border-radius: 3px; padding: 1px 6px; background: #efe9d9; }
+  table.bp-table { border-collapse: collapse; width: 100%; font-family: 'EB Garamond', Georgia, serif; font-size: 15px; }
+  table.bp-table th, table.bp-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(33,31,26,0.14); vertical-align: top; }
+  table.bp-table th { font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #52504a; font-weight: 400; }
+  td.bp-yes { color: #4b5a40; font-weight: 600; }
+  td.bp-no { color: #9c4a2f; }
+  .bp-manual ul, .bp-manual ol { font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; padding-left: 22px; margin: 0 0 20px; }
+  .bp-manual li { margin-bottom: 8px; }
+  .bp-manual p { font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 20px; }
+  .bp-h3 { font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px; display: flex; align-items: baseline; gap: 12px; }
+  .bp-h3 span { font-family: 'PT Mono', monospace; font-size: 15px; color: #8a6a2f; }
+  .bp-h4 { font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin: 28px 0 12px; }
+  .bp-note { background: #efe9d9; border-radius: 4px; padding: 18px 22px; font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.65; color: #35332d; margin: 0 0 20px; }
+  .bp-warn { background: #f3e4d4; border: 1px solid #d9a35c; border-radius: 4px; padding: 16px 20px; font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.6; color: #5c3f14; margin: 0 0 18px; }
+  .bp-term { background: #19170f; border-radius: 4px; overflow: hidden; margin-bottom: 18px; }
+  .bp-term-bar { padding: 8px 16px; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #9c988c; border-bottom: 1px solid rgba(243,240,232,0.12); }
+  .bp-term-body { padding: 16px 18px; font-family: 'PT Mono', monospace; font-size: 13px; line-height: 1.7; overflow-x: auto; color: #e8e4d8; }
+  .bp-chip { border: 1px solid rgba(33,31,26,0.2); border-radius: 20px; padding: 6px 14px; font-family: 'PT Mono', monospace; font-size: 12.5px; }
+  .bp-tbl-wrap { border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; overflow-x: auto; margin-bottom: 20px; background: #ffffff; }
+  html { scroll-padding-top: 93px; }
+  .bp-nav-links a, .bp-nav-right a { white-space: nowrap; }
+  @media (max-width: 1100px) { .bp-nav-links { display: none !important; } }
+  @media (max-width: 560px) {
+    .bp-logo-sub { display: none; }
+    .bp-nav-in { padding: 10px 16px !important; gap: 12px !important; }
+    .bp-nav-right { gap: 8px !important; }
+    .bp-nav-right a[href="#download"] { padding: 9px 12px !important; font-size: 11px !important; }
+  }
+</style>
+
+</head>
+<body>
+
+<div style="font-family: 'EB Garamond', Georgia, serif; color: #211f1a; background: #f6f2ea; width: 100%; max-width: 100%; box-sizing: border-box;">
+
+  <!-- NAV -->
+  <div style="border-bottom: 1px solid rgba(33,31,26,0.14); background: #f6f2ea; position: sticky; top: 0; z-index: 10;">
+    <div class="bp-nav-in" style="max-width: 980px; margin: 0 auto; padding: 12px 32px; min-height: 76px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: nowrap;">
+      <a href="/hu/" style="display: flex; align-items: center; gap: 10px; font-family: 'PT Mono', monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; color: #211f1a;">
+        <img src="/assets/site/logo.png" alt="" style="width: 32px; height: 32px; flex: none; object-fit: contain;">
+        bpplay <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400;">/ bptune</span> <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400; font-size: 14px;">&middot; Raspberry Pi</span>
+      </a>
+      <div class="bp-nav-links" style="display: flex; align-items: center; gap: 20px; flex-wrap: nowrap; font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: #52504a;">
+        <a href="/hu/" style="color: inherit;">&#8592; bpplay.hu</a>
+        <a href="/hu/#platforms" style="color: inherit;">Más kiadások</a>
+      </div>
+      <div class="bp-nav-right" style="display: flex; align-items: center; gap: 14px; flex: none;"><a href="/pi/" style="color: #a8661a; border: 1px solid rgba(33,31,26,0.25); border-radius: 3px; padding: 4px 9px;">EN</a></div></div>
+  </div>
+
+  <!-- FLOATING JUMP MENU -->
+  <button type="button" data-act="toggleJump" aria-label="Fejezetmenü megnyitása" aria-expanded="false" data-expanded style="position: fixed; right: 28px; bottom: 28px; width: 60px; height: 60px; border-radius: 50%; background: #19170f; color: #f3f0e8; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 28px rgba(0,0,0,0.32); cursor: pointer; z-index: 30;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="#f3f0e8" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div data-if="jump" hidden>
+    <div style="position: fixed; right: 28px; bottom: 100px; width: 260px; max-height: 70vh; overflow-y: auto; background: #ffffff; border: 1px solid rgba(33,31,26,0.18); border-radius: 8px; box-shadow: 0 16px 40px rgba(0,0,0,0.3); padding: 10px; z-index: 30; font-family: 'PT Mono', monospace; font-size: 12.5px;">
+      <a href="#m-about" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">&sect; A kiadásról</a>
+      <a href="#m-1" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">1 &middot; Bevezetés</a>
+      <a href="#m-2" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">2 &middot; Rendszerkövetelmények</a>
+      <a href="#m-3" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">3 &middot; Az eszköz használata</a>
+      <a href="#m-4" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">4 &middot; Hardver</a>
+      <a href="#m-5" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">5 &middot; Technikai háttér</a>
+      <a href="#m-6" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">6 &middot; Újdonságok</a>
+      <a href="#m-disc" data-act="closeJump" style="display: block; padding: 11px 12px; color: #211f1a; border-radius: 4px;">&sect; Jogi nyilatkozat</a>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div style="max-width: 980px; margin: 0 auto; padding: 72px 32px 40px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Dokumentáció</div>
+    <h1 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 44px; line-height: 1.2; margin: 0 0 20px; max-width: 20ch;">bpplay kézikönyv: Raspberry Pi</h1>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; color: #45443e; max-width: 68ch; margin: 0 0 32px;">
+      A kézikönyv teljes végfelhasználói kiadása, naprakészen tartva itt az oldalon.
+    </p>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px;">
+      <a href="https://drive.google.com/file/d/1P422Lk0y_o94xiYp4BolGg6-EjAiiy94/view?usp=sharing" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 14px 22px; border-radius: 3px; font-weight: 700;">&#8595; Image letöltése (HU)</a> <a href="https://drive.google.com/file/d/1ND4ZIOWHdtj1Ic2I5YSVUpVyYvIjqnfU/view?usp=sharing" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">&#8595; Image letöltése (EN)</a>
+      <a href="https://drive.google.com/file/d/1XposMhilX4o8U7sf_uCdukQ-GyTFEO1b/view?usp=sharing" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">&#8595; README (HU)</a>
+      <a href="/hu/x64/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">bpplay x64 kiosk kiadás &#8594;</a>
+      <a href="/hu/x64-desktop/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">bpplay x64 desktop kiadás &#8594;</a>
+      <a href="/hu/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">bpplay macOS-hez &#8594;</a>
+    </div>
+    <div style="font-family: 'PT Mono', monospace; font-size: 12px; line-height: 1.6; color: #35332d; word-break: break-all; margin: 0 0 22px;">Az RC22 képek SHA-256 ellenőrzőösszegei (.img.gz fájlok):<br>RC_bpplay-pi5-kiosk-v2.2.0-rc22-TRIAL-HU-4c23b0e.img.gz<br>da5a1a58af08a4379430522076481bec065a15048dbd5300064a9efa6442c56a<br>RC_bpplay-pi5-kiosk-v2.2.0-rc22-TRIAL-EN-4c23b0e.img.gz<br>05f4213e657056b8163539e670ce20070d51af3d334ccb71491ec58145159772</div>
+    <div style="display: flex; align-items: center; gap: 10px; max-width: 420px;">
+      <label for="manSearch" style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #8a867a; flex: none;">Keresés</label>
+      <input id="manSearch" type="search" placeholder="Keresés a kézikönyvben..." style="flex: 1; font-family: 'EB Garamond', Georgia, serif; font-size: 15px; padding: 10px 14px; border: 1px solid rgba(33,31,26,0.25); border-radius: 3px; background: #ffffff; color: #211f1a;">
+    </div>
+  </div>
+
+  <!-- TOC STRIP -->
+  <div style="border-top: 1px solid rgba(33,31,26,0.14); border-bottom: 1px solid rgba(33,31,26,0.14); background: #efe9d9;">
+    <div style="max-width: 980px; margin: 0 auto; padding: 20px 32px; display: flex; gap: 8px; flex-wrap: wrap;">
+      <a class="bp-chip" href="#m-about" style="color: #211f1a;">&sect; A kiadásról</a>
+      <a class="bp-chip" href="#m-1" style="color: #211f1a;">1 Bevezetés</a>
+      <a class="bp-chip" href="#m-2" style="color: #211f1a;">2 Követelmények</a>
+      <a class="bp-chip" href="#m-3" style="color: #211f1a;">3 Használat</a>
+      <a class="bp-chip" href="#m-4" style="color: #211f1a;">4 Hardver</a>
+      <a class="bp-chip" href="#m-5" style="color: #211f1a;">5 Technikai háttér</a>
+      <a class="bp-chip" href="#m-6" style="color: #211f1a;">6 Újdonságok</a>
+      <a class="bp-chip" href="#m-disc" style="color: #211f1a;">&sect; Jogi nyilatkozat</a>
+    </div>
+  </div>
+
+  <!-- QUICK SPECS -->
+  <div style="max-width: 980px; margin: 0 auto; padding: 48px 32px 0;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #4b5a40; margin-bottom: 16px;">Hardver</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 28px; margin: 0 0 14px;">Tesztelve ott, ahol számít: a kapcsolaton</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16px; line-height: 1.6; color: #45443e; max-width: 70ch; margin: 0 0 20px;">Az eszköz kizárólag Raspberry Pi 4-en (CM4 modul a Holo Red esetében) és Pi 5-ön igazolt, legalább 4 GB RAM mellett. Korábbi Pi modellek és 2 GB-os kártyák nem tesztelt, nem garantált.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <span class="bp-chip"><b>Kártya</b> Raspberry Pi 4 / 5</span>
+      <span class="bp-chip"><b>OS</b> Raspberry Pi OS 64-bit (arm64), Debian 13 „trixie”</span>
+      <span class="bp-chip"><b>Indítás</b> microSD kártya</span>
+      <span class="bp-chip"><b>Kernel</b> PREEMPT_RT (gyárilag telepítve)</span>
+      <span class="bp-chip"><b>DAC</b> ALSA-kompatibilis USB DAC, vagy beépített kimenet</span>
+      <span class="bp-chip"><b>Hálózat</b> Ethernet / Wi-Fi; szükséges a zeneválasztóhoz</span>
+    </div>
+  </div>
+
+  <!-- MANUAL BODY -->
+  <div class="bp-manual" style="max-width: 980px; margin: 0 auto; padding: 40px 32px 100px;">
+
+    <div id="m-about" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>&sect;</span>A kiadásról</h3>
+      <p>Ez a végfelhasználói kiadás a bpplay/bptune eszközkiadás teljes v2.2-es kézikönyvéből származik: egy tömörített változat, amely csak azt írja le, amit az eszköz mindennapi használatához tudnod kell. A telepítési, fejlesztői és adminisztrátori fejezetek szándékosan hiányoznak.</p>
+      <p>Az eszköz egyenesen a zeneválasztóba bootol, bejelentkezés nélkül; egyszerűen SSH-n csatlakozol hozzá (lásd 3.1.1). Használat közben soha nem látsz parancssort, terminált vagy bejelentkezési felszólítást; néhány billentyű elég a navigációhoz: nyílbillentyűk, <code>Enter</code>, <code>Space</code>, <code>Esc</code>.</p>
+    </div>
+
+    <div id="m-1" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>1</span>Bevezetés</h3>
+      <div class="bp-h4">1.1 Mi az a bpplay?</div>
+      <p>A bpplay egy parancssoros, bitre pontos zenefájl-lejátszó alkalmazás Linuxhoz és macOS-hez. Szándékosan nincs grafikus felülete, hangerőszabályzója, equalizere. A célja egyetlen dolog: a zenefájl tartalmát változatlanul, a lehető legrövidebb úton, a legkevesebb konverziós lépéssel eljuttatni a DAC-hoz (digitális-analóg átalakítóhoz).</p>
+      <p>Amikor lehetséges, a program ún. „integer módban” játszik le, ami azt jelenti, hogy a fájlban tárolt egész számok (integer minták) egyetlen bitléptetés vagy konverzió nélkül jutnak el a hangkártyához. Amikor ez nem lehetséges (például a forrás float formátumú, vagy a DAC nem támogatja a forrás pontos bitmélységét), a program ezt mindig egyértelműen jelzi; soha nem hallgat egy kényszerű kompromisszumról.</p>
+      <p>Az eszközkiadásban a végfelhasználó soha nem indítja közvetlenül ezt a programot; helyette a <code>zenevalaszto.py</code> Python-szkript hívja meg a háttérben a kiválasztott szám(ok)hoz (lásd 3. fejezet).</p>
+      <p><b>Támogatott fájlformátumok:</b> WAV, FLAC, ALAC (M4A), AIFF/AIFC, DSD (DSF/DFF, natívan és DoP-on keresztül), és SACD ISO (a lemez sztereó rétege, DST-tömörítve vagy tömörítetlenül; lásd 3.4).</p>
+      <div class="bp-h4">1.2 Nincs trükkös vagy rejtett konverzió a háttérben</div>
+      <p>Ez a bpplay legfontosabb tervezési elve. Ha a program bármilyen okból nem tudja pontosan elérni a fájl által megkövetelt mintavételi rátát, bitmélységet vagy formátumot:</p>
+      <ul>
+        <li>egyértelműen kijelzi a képernyőn, mi történt;</li>
+        <li>soha nem titkolja el csendben a formátumeltérést;</li>
+        <li>ha egy DAC nem pontosan a kért mintavételi rátát adja vissza, a program újrapróbálkozik, ahelyett hogy csendben elfogadná a rossz rátát.</li>
+      </ul>
+      <div class="bp-h4">1.3 Natív DSD és DoP</div>
+      <p>A DSD (Direct Stream Digital) egy nagy felbontású audioformátum, amit SACD-k és néhány letölthető/streamelt kiadás használ. Sok lejátszó a DSD-adatokat PCM-keretekbe csomagolja át (DoP, DSD over PCM), mielőtt elküldené a DAC-nak. A bpplay a DSD-adatokat közvetlenül, átcsomagolás nélkül tudja küldeni, ha a DAC ezt támogatja; ezt natív DSD-lejátszásnak nevezzük.</p>
+      <div class="bp-note"><b>Fontos, Pi-specifikus korlát.</b><br>A natív DSD- és DoP-támogatás teljes mértékben a csatlakoztatott DAC/USB-interfész chipjétől és a DAC tervezésétől függ, nem a Raspberry Pi-től. A tesztelt hardverek eltérő eredményt adtak; mielőtt DSD-lejátszást terveznél egy adott eszközzel, lásd a 4. fejezet hardvertáblázatát.</div>
+      <div class="bp-h4">1.4 Mi az a bptune?</div>
+      <p>A bptune egy önálló rendszerhangoló eszköz, amely optimalizálja a Linux kernel és a hardver beállításait az alacsony késleltetésű, zökkenőmentes hanglejátszáshoz, és kezeli azokat a háttérszolgáltatásokat is, amelyek zavarnák a lejátszást.</p>
+      <p>Az eszközkiadásban a gyári telepítő már beállította a bptune-t; végfelhasználóként ezzel nincs teendőd.</p>
+      <div class="bp-h4">1.5 Fontos: próbaidő</div>
+      <p>Ez az eszköz próbaegységként kerül kiadásra: attól a pillanattól számítva 15 napig használható, amikor ténylegesen először bekapcsolod, nem attól, amikor az SD-kártya íródott. A próbaidő egységesen 15 nap, hosszabbítás nélkül.</p>
+      <p>A zeneválasztó a fejléce alatti információs sorban a <i>Trial: még N nap</i> feliratot mutatja.</p>
+      <p>A próbaidő lejárta után az eszköz bekapcsoláskor automatikusan és teljesen kikapcsol; a zeneválasztó soha nem jelenik meg, csak egy rövid üzenet magyarázza el a kikapcsolás okát. Ez a korlátozás a rendszeróra visszaállításával nem kerülhető meg.</p>
+      <div class="bp-note"><b>Fontos.</b><br>Ez az SD-kártya géphez kötött: az első valódi bootoláskor a szoftver rögzíti annak a konkrét Raspberry Pi-nek a hardveres sorozatszámát, amelyben fut, és ettől kezdve csak azon a pontos eszközön indul el. Ha a kártyát egy másik Pi-be teszed, az egyáltalán nem fog bootolni. Ez nem hiba; ez egy szándékos védelmi mechanizmus.</div>
+    </div>
+
+    <div id="m-2" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>2</span>Rendszerkövetelmények</h3>
+      <p>Ez a kézikönyv egy Raspberry Pi 4-et vagy Pi 5-öt feltételez, Raspberry Pi OS-en (64-bit, Debian-alapú) futtatva. A leírt működés korábbi Pi modelleken nem garantált.</p>
+      <ul>
+        <li>Raspberry Pi 4 vagy 5, legalább 4 GB RAM-mal (maga az OS is memóriába bootol már, nem csak a zene); több RAM nagyobb lejátszási lista betöltését teszi lehetővé. A <code>zenevalaszto.py</code> induláskor megmutatja a kiválasztott lista becsült memóriaigényét is, ami tájékozódási pontként szolgálhat.</li>
+        <li>Raspberry Pi OS 64-bit (arm64), Debian 13-ra (trixie) alapozva.</li>
+        <li>Boot-médium: microSD kártya (ezt használja ez az eszközkiadás).</li>
+        <li>PREEMPT_RT kernel (a gyári telepítő automatikusan telepíti).</li>
+        <li>ALSA-kompatibilis USB DAC (lásd 4. fejezet a tesztelt hardverekhez), vagy a Pi beépített hangkimenete, ha nincs külső DAC csatlakoztatva. Csatlakoztasd a DAC-ot közvetlenül a Pi-hez, ne USB-hubon keresztül; egy hub megbízhatatlanná teheti a kapcsolatot.</li>
+        <li>Hálózati kapcsolat (Ethernet vagy Wi-Fi); szükséges, mivel a zeneválasztót egy SSH-kapcsolaton keresztül éred el (lásd 3.1.1); enélkül a végfelhasználó nem tud zenét választani és lejátszani.</li>
+      </ul>
+      <div class="bp-h4">2.1 A microSD kártya írása (az image telepítése)</div>
+      <p>A letöltött <code>.img.gz</code> fájl egy teljes lemezkép, <b>nem</b> egy hétköznapi fájl, amit rá kell másolni a kártyára. Ha egyszerűen rámásolod, a Pi nem fog bootolni. Az image-et egy erre szolgáló eszközzel kell <b>kiírni</b> a kártyára; ez törli a kártyán lévő mindent.</p>
+      <p>Szükséged lesz: egy legalább 8 GB-os, jó minőségű microSD kártyára (Class 10 / A1 vagy jobb), és egy kártyaolvasóra; a Balena Etcherre (ingyenes, Mac-en és Windowson egyforma: <a href="https://etcher.balena.io">etcher.balena.io</a>); a letöltött <code>.img.gz</code> fájlra (nem kell kicsomagolni).</p>
+      <ul>
+        <li>Nyisd meg a Balena Etchert, válaszd a „Flash from file”-t, majd a letöltött <code>.img.gz</code>-t.</li>
+        <li>„Select target”: válaszd ki a microSD kártyát. <b>Ellenőrizd kétszer a nevét és méretét; a kiválasztott meghajtó teljesen törlődik.</b></li>
+        <li>Kattints a „Flash!”-re. Az Etcher kiírja és ellenőrzi a kártyát (néhány perc). Ha hibát jelez, ismételd meg, vagy próbálj másik kártyát/olvasót.</li>
+        <li>A „Flash Complete!” után vedd ki a kártyát, és tedd a Pi-be. Ha a számítógép felajánlja a formázást, <b>ne formázd meg</b>.</li>
+      </ul>
+      <p><b>Ellenőrzés:</b> sikeres írás után a kártya egy kis, <code>bootfs</code> nevű kötetet mutat, amely a <code>config.txt</code>-t és a <code>cmdline.txt</code>-t tartalmazza. Ha a kártya üresnek tűnik, vagy csak egy <code>.img.gz</code> fájlt tartalmaz, az image nem íródott ki: ismételd meg az eljárást.</p>
+      <p><b>Alternatíva:</b> a Raspberry Pi Imager is használható („Choose OS” &rarr; „Use custom”). Ha felajánlja az „OS customisation” beállításokat, válaszd a <b>No</b>-t: az eszköz előre be van állítva.</p>
+    </div>
+
+    <div id="m-3" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>3</span>Az eszköz használata</h3>
+      <p>A használathoz nincs szükség technikai ismeretekre; pontosan ezért nem ad az eszköz (kiosk) mód adminisztrátori jogosultságokat.</p>
+      <div class="bp-h4">3.1 Bekapcsolás</div>
+      <p>Csatlakoztasd a Raspberry Pi-t a tápegységéhez (és ha van külön DAC-od, azt is csatlakoztasd a Pi USB-portjához). Ajánlott a DAC-ot USB 2.0-n keresztül csatlakoztatni USB 3.0 helyett; ezek általában a hátlap két legszélső csatlakozója. Először kapcsold be a DAC-ot, utána a Pi-t. Az eszköz magától elindul.</p>
+      <p>A használathoz nincs szükség monitorra vagy billentyűzetre: a zeneválasztó nem jelenik meg az eszközhöz csatlakoztatott képernyőn; a saját tabletedről, telefonodról vagy számítógépedről SSH-kapcsolaton éred el. Ha mégis van monitor csatlakoztatva a Pi-hez, a képernyője röviddel a bootolás után elsötétül, és a munkamenet hátralévő részében kikapcsolva marad; ez szándékos, nem hiba, nem fagyott le, egyszerűen ki van kapcsolva.</p>
+      <p>Bekapcsolás után várj kb. fél-egy percet, majd hozd létre az SSH-kapcsolatot az eszközzel (lásd 3.1.1), és ha kéri, add meg a jelszót; ezután megjelenik a zeneválasztó képernyő, nincs más begépelendő parancs.</p>
+      <p>Ha ehelyett egy rövid üzenetet látsz arról, hogy az eszköz tovább már nem használható, majd a gép kikapcsol: lejárt a próbaidő (lásd 1.5). Vedd fel a kapcsolatot azzal, akitől az eszközt kaptad.</p>
+      <p><b>Ami túlél egy újraindítást:</b> a kedvenceid, a mentett lejátszási listáid és néhány beállítás automatikusan elmentődnek az eszköz saját tárolójára, és túlélnek egy újraindítást. Nem marad meg: az éppen kijelölt (de még nem lejátszott) számok, és az utoljára nyitva volt mappa.</p>
+
+      <div class="bp-h4" id="m-3-1">3.1.1 Csatlakozás SSH-n keresztül</div>
+      <p>Ehhez sincs szükség technikai ismeretekre; csak egy egyszerű kapcsolódás egy alkalmazással, ugyanúgy, mint bármely más appnál. Az eszköz IP-címét vagy hálózati nevét attól kapod, akitől az eszközt kaptad. A kiosk gépek jellemzően itt érhetők el: <code>kiosk@bpplay-kiosk-hu-XXXX.local</code> (az angol image-nél <code>en</code> a <code>hu</code> helyett, <code>XXXX</code> a MAC-cím utolsó négy hexajegye), vagy <code>kiosk@IP-cím</code>. A szokásos jelszó, ha kérné: <code>bitperfectsound</code>. Mind a felhasználónév, mind a jelszó csak olyan karaktereket használ, amelyek ugyanazon a helyen vannak, Shift nélkül, a gyakori billentyűzetkiosztásokon (QWERTY, QWERTZ, AZERTY), így a bejelentkezés akkor is működik, ha a géped kiosztása eltér attól, amihez szoktál.</p>
+      <div class="bp-term">
+        <div class="bp-term-bar">macOS terminál (1. ábra)</div>
+        <div class="bp-term-body"><span style="color:#e8e4d8;">koscso1@Koscso-MacBook-Air-3 ~ %</span> <span style="color:#e3ab52;">ssh kiosk@bpplay-kiosk-hu-a1b2.local</span></div>
+      </div>
+      <p style="font-size: 13.5px; color: #8a867a; margin-top: -8px;">1. ábra: Csatlakozás SSH-n keresztül egy macOS terminálból.</p>
+      <div class="bp-note"><b>Fontos.</b><br>A hálózati kapcsolatnak (Wi-Fi vagy Ethernet) a teljes hallgatási munkamenet alatt fenn kell maradnia; az SSH-kapcsolat ezen keresztül tartja életben a zeneválasztó képernyőt. Ha a hálózat megszakad, a kapcsolat is megszakad, és újra kell csatlakoznod.</div>
+      <div style="display: flex; flex-direction: column; gap: 10px; font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; margin-bottom: 20px;">
+        <div><b>macOS / Linux:</b> beépített terminál + <code>ssh</code> parancs.</div>
+        <div><b>Windows:</b> Windows 10/11-en a beépített OpenSSH kliens PowerShellből vagy Windows Terminalból, vagy PuTTY.</div>
+        <div><b>Android:</b> Termux (teljes terminálemuláció), JuiceSSH vagy ConnectBot.</div>
+        <div><b>iOS / iPadOS:</b> Termius vagy Blink Shell.</div>
+      </div>
+
+      <div class="bp-h4">3.1.2 Ha az eszköz nem található</div>
+      <p>Az eszköz gyárilag vezetékes Etherneten keresztül csatlakozik a hálózatodhoz; az image-en nincs beállítva Wi-Fi hálózat. Ha nincs csatlakoztatva Ethernet-kábel, az eszköz nem kap IP-címet, és semmilyen keresőeszköz nem fogja megtalálni. Ha a <code>kiosk@bpplay-kiosk-&lt;nyelv&gt;-XXXX.local</code> nem érhető el, az alábbiakat ellenőrizd, sorban:</p>
+      <ol>
+        <li>Erősítsd meg, hogy tényleg be van dugva egy Ethernet-kábel az eszköz és a routered vagy switched között.</li>
+        <li>Adj neki elég időt; főleg egy friss SD-kártya-írás után az első bootolás egy-két percig is tarthat.</li>
+        <li>Nézd meg a routered saját admin oldalát a csatlakoztatott eszközökhöz, ne csak egy külön szkenner eszközre hagyatkozz; ez nem függ az mDNS-től (<code>.local</code> feloldás), ami néhány routeren vagy VLAN-on blokkolva lehet.</li>
+        <li>Erősítsd meg, hogy ugyanazon a hálózaton vagy; egy Wi-Fi-n, vendég hálózaton lévő laptop lehet, hogy nem látja a fővezetékes hálózathoz kötött Pi-t, pedig mindkettő működik.</li>
+        <li>Figyeld az SD-kártya aktivitás-LED-jét bekapcsoláskor; egy zöld villogás, amit kb. a 30. másodpercnél folyamatos piros fény követ, egy ismert, dokumentált hiba, ismert javítással.</li>
+        <li>Próbáld újraírni az SD-kártyát; egy részleges vagy sérült írás pontosan ezt a tünetet okozhatja.</li>
+        <li>Végső megoldásként csatlakoztass monitort és billentyűzetet közvetlenül a Pi-hez, és olvasd el a boot-konzolt; ez azonnal megmutatja, hogy az eszköz egyáltalán eljut-e a hálózat-inicializálásig.</li>
+      </ol>
+
+      <div class="bp-h4">3.2 Tárhely kiválasztása</div>
+      <p>Ha épp csatlakoztattál egy USB-meghajtót (pendrive, külső HDD/SSD) zenével az eszközhöz, a tárhely-választót bármikor újra megnyithatod a képernyőn az <code>m</code> billentyűvel:</p>
+      <ul>
+        <li>A választó felsorolja az elérhető, zenét tartalmazó (vagy tartalmazhat) meghajtókat; mind a már csatolt, mind a csatlakoztatott, de még nem csatolt meghajtókat.</li>
+        <li>Navigálj a fel/le nyilakkal, válassz <code>Enter</code>-rel.</li>
+        <li>Ha egy még nem csatolt meghajtót választasz, a rendszer automatikusan csatolja; ehhez nincs szükség jelszóra.</li>
+        <li>Néhány zeneválasztó-verzió egy „Hálózati megosztás csatolása (NFS/SMB)...” sort is felajánl a tárhely-választóban. Ezzel elérheted egy másik gépen (például a NAS-odon) lévő megosztott zenemappát, a címe megadásával (például <code>192.168.1.10:/zene</code> NFS-hez, <code>//192.168.1.10/zene</code> SMB-hez). A zeneválasztó a cím formájából automatikusan felismeri a típust. Magát a megosztást előre be kell állítani a NAS-on vagy a másik gépen; ez nem a bpplay/zeneválasztó feladata, ami csak egy már létező, elérhető megosztást csatol.</li>
+        <li>A hálózati tárhely elérése természetesen lassabb, mint a helyi tárhelyé, és erősen függ a hálózat állapotától. Az első indexelés terabájtonként kb. 5-6 percig tart, a tároló sebességétől függően.</li>
+        <li>Ha csak egyetlen tárhely érhető el, a képernyő automatikusan kihagyja ezt a lépést.</li>
+      </ul>
+
+      <div class="bp-h4">3.3 Hangkimenet kiválasztása</div>
+      <p>Ha több hangkimenet is csatlakozik az eszközhöz (például a Pi beépített kimenete ÉS egy külső USB DAC egyszerre), induláskor választást ajánl fel: fel/le nyilak, <code>Enter</code>. Ha csak egy kimenet van, ezt a lépést is automatikusan kihagyja.</p>
+      <p>A választó kurzora nem tud automatikusan egy beépített (onboard/HDA-típusú) hangkártyán landolni, ha a listában egy azonosítható külső DAC is szerepel; így véletlenül sem választhatod ki a rossz kimenetet.</p>
+
+      <div class="bp-h4">3.4 Böngészés és lejátszás</div>
+      <ul>
+        <li>Ha a zenéd mappákba (albumokba) van rendezve, először egy albumlistát látsz: az <code>Enter</code> megnyitja az adott album számlistáját, az <code>Esc</code> visszavisz.</li>
+        <li>Ha nincs mappa-szervezés (minden fájl egy helyen van), azonnal a számlista jelenik meg.</li>
+        <li>A számok kijelölése a <code>Space</code> billentyűvel történik. Bármelyik szám kijelölése az <code>n</code> billentyűvel eltávolítható.</li>
+        <li>Az ablak alján lévő memóriahasznosítás-számláló mutatja, mennyit tölt ki a kijelölésed a memóriából. 70%-os használatnál a számláló pirosra vált, figyelmeztetve a túltöltés kockázatára. Ha a kijelöléseddel mégis túltöltöd a memóriát, a lejátszás nem indul el.</li>
+        <li>Ha végeztél a kijelöléssel, a <code>p</code> megnyomása elindítja a lejátszási lista lejátszását, egyenként töltve be a számokat a memóriába. A lejátszás a betöltés befejezése után indul.</li>
+        <li>A betöltés sebessége a tárolóeszköztől, NAS esetén pedig a hálózat átviteli képességétől függ. Egy SSD-ről még a 96 kHz/24-bites FLAC-számok is azonnal, várakozás nélkül betöltődnek.</li>
+      </ul>
+      <p>Ha az összeállított lejátszási lista eltérő mintavételi rátájú fájlokat tartalmaz, a bpplay a réselés nélküli (gapless) lejátszás érdekében az azonos mintavételi rátájú számokat egy listába csoportosítja. Amikor az eredeti lista következő, eltérő mintavételi rátájú része indul, egy-két másodperces rövid szünet lesz hallható. Ez nem hiba; az átállás egyszerűen ennyi ideig tart. A kattanások elkerülése érdekében a bpplay szoftver néhány tized másodpercre elnémítja a kimenetet.</p>
+      <p><b>SACD ISO lejátszás:</b> egy olyan mappa megnyitása, amely SACD lemezképet (<code>.iso</code>) tartalmaz, automatikusan felismerésre kerül; a lemez sztereó rétegének számai hétköznapi tételekként jelennek meg a számlistában, ugyanúgy kijelölhetők és lejátszhatók, mint bármely más szám. Csak a sztereó réteg támogatott (DST-tömörítve vagy tömörítetlenül); a tömörítetlen többcsatornás terület nem játszható le, és a zeneválasztó erről egyértelmű üzenetet mutat.</p>
+      <p>Lejátszás közben egy második állapotsor is megjelenik, amely a szám albumát, előadóját és címét mutatja, a mappa- és fájlnévből levezetve, ahol ez felismerhető.</p>
+
+      <div class="bp-h4">3.5 Minden billentyű a használathoz</div>
+      <div class="bp-tbl-wrap"><table class="bp-table"><thead><tr><th>Billentyű</th><th>Funkció</th></tr></thead><tbody>
+        <tr><td><kbd>&uarr;</kbd>/<kbd>&darr;</kbd></td><td>Navigáció</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Belépés egy almappába; egy szám során szándékosan NEM csinál semmit (így véletlenül sem vonhat vissza egy <code>Space</code>-szel tett kijelölést)</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Vissza az előző (szülő) menüponthoz/mappához</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Szám kijelölése (számnézetben), vagy egy teljes album összes számának kijelölése egyszerre (albumnézetben)</td></tr>
+        <tr><td><kbd>a</kbd></td><td>Minden kijelölése (az éppen nyitott mappa alatt, rekurzívan)</td></tr>
+        <tr><td><kbd>n</kbd></td><td>Kijelölés törlése</td></tr>
+        <tr><td><kbd>r</kbd></td><td>Ismétlés mód be/ki; bekapcsolva a lejátszási lista a végén automatikusan újraindul az elejéről</td></tr>
+        <tr><td><kbd>s</kbd></td><td>A jelenlegi kijelölés mentése lejátszási listaként (nevet kér)</td></tr>
+        <tr><td><kbd>l</kbd></td><td>Korábban mentett lejátszási lista betöltése</td></tr>
+        <tr><td><kbd>o</kbd></td><td>A hangkimenet (DAC) kézi újraválasztása lejátszás közben; kiegészíti (nem helyettesíti) az automatikus újraellenőrzést minden lejátszás előtt</td></tr>
+        <tr><td><kbd>/</kbd></td><td>Keresés az összes meghajtón egyszerre (globális keresés; minden szónak szerepelnie kell a névben)</td></tr>
+        <tr><td><kbd>m</kbd></td><td>Meghajtó/tárhely váltása (ott az <kbd>x</kbd>: egy csatolt meghajtó kizárása a keresésből és az indexelésből, illetve visszavétele)</td></tr>
+        <tr><td><kbd>c</kbd></td><td>Magkezelési mód (A, B0, C0)</td></tr>
+        <tr><td><kbd>u</kbd></td><td>Full Pure be- vagy kikapcsolása</td></tr>
+        <tr><td><kbd>g</kbd></td><td>Gépfelmérés és DAC-diagnosztika (jelentés)</td></tr>
+        <tr><td><kbd>i</kbd></td><td>Lejátszási lista importálása (.m3u, .m3u8)</td></tr>
+        <tr><td><kbd>p</kbd></td><td>Lejátszás indítása a kijelölt sorrendben</td></tr>
+        <tr><td><kbd>q</kbd></td><td>Kilépés lejátszás nélkül (a képernyő ezután automatikusan újraindul, nem marad „kint”); kiosk módban a legfelső szinten ehelyett teljesen kikapcsolja az eszközt</td></tr>
+      </tbody></table></div>
+      <p><b>Lejátszás közben:</b> a fenti táblázat a böngésző/kijelölő képernyőre vonatkozik. Amint elindul a lejátszás, más billentyűk vesznek át, ügyelj rá, hogy a <code>Space</code> és az <code>n</code> itt mást jelent, mint böngészés közben.</p>
+      <div class="bp-tbl-wrap"><table class="bp-table"><thead><tr><th>Billentyű</th><th>Funkció</th></tr></thead><tbody>
+        <tr><td><kbd>n</kbd></td><td>Következő szám</td></tr>
+        <tr><td><kbd>b</kbd></td><td>Előző szám</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Szünet / folytatás</td></tr>
+        <tr><td><kbd>f</kbd> (vagy <kbd>*</kbd>)</td><td>Az éppen szóló szám hozzáadása a Kedvencek lejátszási listához; később elérhető az <code>l</code> billentyűvel (mentett lejátszási lista betöltése) a böngésző képernyőn, „Kedvencek” néven</td></tr>
+        <tr><td><kbd>q</kbd></td><td>Lejátszás leállítása, vissza a böngészőbe</td></tr>
+      </tbody></table></div>
+
+      <div class="bp-h4">3.6 Ha valami nem működik</div>
+      <ul>
+        <li><b>Nincs hang:</b> ellenőrizd, hogy a megfelelő hangkimenetet választottad-e (3.3), és hogy a DAC be van-e kapcsolva és csatlakoztatva.</li>
+        <li><b>Nem látod a zenédet:</b> nyisd meg a tárhely-választót (<code>m</code>, 3.2), és válaszd ki a megfelelő meghajtót.</li>
+        <li><b>Az eszköz nem indul, csak egy üzenetet mutat, majd kikapcsol:</b> lejárt a próbaidő (1.5); vedd fel a kapcsolatot a fejlesztővel.</li>
+        <li><b>A monitor csak a Raspberry Pi logót és boot-szöveget mutatja</b> (például <code>Failed to open device: 'sdcard'</code>): a kártyán nincs bootolható rendszer. Az image nem íródott ki, vagy a kártya hibás; írd ki újra a 2.1 szerint, vagy próbálj másik kártyát.</li>
+        <li><b>Ha a hangerő szokatlanul halknak tűnik:</b> a bpplay szándékosan úgy van tervezve, hogy soha ne nyúljon semmilyen hangerőszabályzóhoz; a lejátszás mindig bitre pontos, vagyis a forrásfájl módosítás nélkül jut el a hangkártyáig. Ha a DAC-nak (vagy hangkártyának) saját, firmware-szintű hangerőszabályzója van, és azt korábban egy másik lejátszóprogram alacsony szintre állította, az a beállítás a bpplay alatt is megmarad; a lejátszó sem nem tudja, sem nem akarja felülírni. Ez nem hiba, hanem a bitre pontos működés szükséges következménye.
+          <ul style="margin-top: 10px;">
+            <li>Ellenőrizd az operációs rendszered hangkeverőjét / ALSA-vezérlőit (Linuxon például <code>alsamixer</code> vagy <code>amixer</code>), és állítsd a DAC saját hangerőszabályzóját maximumra (0 dB).</li>
+            <li>Ha a DAC-nak (vagy USB-interfészének) több, egymástól független hangerőszabályzója van, ami néhány szokatlan, többcsatornás USB-interfésznél előfordul, győződj meg róla, hogy mindegyik maximumra van állítva. Ha bizonytalan vagy, vedd fel a kapcsolatot azzal, akitől a rendszert kaptad.</li>
+          </ul>
+          <p style="margin-top: 14px;">Ez a jelenség nem egy adott chipgyártó véletlenszerű sajátossága, hanem tervezési döntés. A kifejezetten audiofil digitális-analóg hídnak szánt, referenciaminőségű eszközök (XMOS, Amanero) jellemzően szándékosan elhagyják a szoftveres hangerőszabályzót, míg a lejátszásra és felvételre, vagy a fogyasztói hangkártya/headset piacra szánt, általános célú USB audio-híd chipek gyakran alapértelmezetten tartalmaznak egyet.</p>
+        </li>
+        <li><b>Ismert, előre érdemes ellenőrizni az általános célú chipcsaládokat</b> (általunk empirikusan nem tesztelt; a kockázat az általános tervezési mintából következtetett, nem esetenként megerősített):
+          <ul style="margin-top: 10px;">
+            <li>C-Media CM6631A / CM6632A</li>
+            <li>Savitech SA9018 / SA9023 / SA9027 / SA9227 / SA9228</li>
+            <li>Texas Instruments/Burr-Brown PCM2704 / PCM2706 / PCM2707</li>
+            <li>Tenor TE7022 / TE8802</li>
+            <li>Bármilyen fogyasztói célú „USB hangkártya/headset” stílusú chip a C-Media CM106/108/119 családból</li>
+          </ul>
+          <p style="margin-top: 14px;"><b>Ökölszabály:</b> minél inkább hasonlít egy DAC/interfész egy általános célú USB hangkártyára (lejátszás plusz mikrofon, headset-kompatibilitás), annál valószínűbb, hogy van szoftveresen állítható hangerőszabályzója; minél inkább hasonlít egy tisztán audiofil, csak lejátszásra szolgáló hídra, annál kevésbé valószínű.</p>
+        </li>
+        <li><b>Ha az eszköz nem található a hálózaton:</b> mindenekelőtt, a célgép gyárilag vezetékes Etherneten keresztül csatlakozik a hálózatodhoz; az image-en nincs beállítva Wi-Fi hálózat. Lásd a fenti 3.1.2-t a teljes diagnosztikai sorrendhez.</li>
+        <li><b>Bármi más szokatlan:</b> nincs teendőd; a gép távolról karbantartható; csak szólj a fejlesztőnek. Megkérdezheted a kísérleti bpplay csevegőasszisztenst is, amely több mint 100 bpplay/bptune dokumentumon és hivatkozáson alapul (Google-bejelentkezés szükséges): <a href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" style="color: #a8661a;">a csevegés megnyitása</a>.</li>
+      </ul>
+      <div class="bp-h4">3.7 Full Pure</div><p>A Full Pure a kiosk kiadások (x86_64 kiosk és Raspberry Pi) választható üzemmódja. Bekapcsolt állapotban a bpplay előbb a teljes kijelölést a RAM-ba tölti (vegyes mintavételezésű playlistnél a teljes szegmenst), utána linkszinten lekapcsolja a hálózati csatolót, és csak ezután indítja a lejátszást. Az SSH és a NetworkManager szolgáltatás tovább fut, de maga a link nem működik, így a gép a zene szólása közben el van vágva a hálózattól. A hardveres ellenőrzéseink során az x86_64 kiosknál a link LED kialszik, a Raspberry Pi-n pedig az Ethernet RJ45 LED-jei alszanak ki.</p><p>Mikor jön vissza a hálózat? A hálózat a lejátszás végén jön vissza; a Raspberry Pi-n a kapcsolat általában kb. egy percen belül ismét elérhető. A lejátszás hosszához adott 60 másodpercre állított biztonsági időzítő csak tartalék arra az esetre, ha a bpplay-t erőszakkal leállítják, hogy a gép ne maradjon elvágva.</p><p><b>Korlátok:</b></p><ul><li>Amíg a Full Pure aktív, nincs távirányítás: az SSH-munkamenet a lejátszás indulásakor megszakad, és a gép a hálózat visszatértekor érhető el újra.</li><li>A lejátszás távolról nem állítható le, amíg a Full Pure aktív, mert az SSH-munkamenet megszakad. Az eszközhöz csatlakoztatott billentyűzet nélkül a kijelölés végéig fut.</li><li>A Full Pure nem kombinálható az ismétlés móddal: bekapcsolt ismétlésnél a Full Pure nem kapcsolható be, és fordítva.</li><li>A hálózati meghajtók (NAS) nincsenek indexelve a kereséshez, amíg a Full Pure be van kapcsolva.</li><li>Olyan lejátszási listánál, amely mintavételi ráta vagy formátum váltását igényli, a hálózat a szakaszok között rövid időre visszajöhet, mert minden szakaszt a bpplay saját futása játszik le.</li><li>A Full Pure a zeneválasztóban a <code>u</code> billentyűvel kapcsolható be és ki. Alapértelmezetten ki van kapcsolva, és a beállítás megmarad.</li><li>Az x86_64 desktop kiadáson nem érhető el.</li></ul><div class="bp-h4">3.8 Magkezelési mód (választható)</div><p>A lejátszómag izolálása minden módban ugyanaz. A zeneválasztóban a <code>c</code> billentyűvel beállított mód azt dönti el, hogy mely további magok maradnak mindvégig ébren (0 &micro;s-os energiagazdálkodási késleltetés):</p><ul><li><b>A</b>: Minden mag ébren marad. A legnagyobb fogyasztás és hőtermelés, csak jól hűtött gépekhez.</li><li><b>B0</b>: Csak a lejátszómag marad ébren; a többi energiatakarékos állapotba léphet. Ez az alapértelmezés.</li><li><b>C0</b>: A lejátszómag és a megszakításokat kezelő 0. mag marad ébren; a többi energiatakarékos állapotba léphet.</li></ul><p>A változás a következő lejátszás indulásakor lép életbe, és a már futó lejátszást nem érinti. Csak két aktív maggal rendelkező gépen a C0 és az A egyenértékű.</p><div class="bp-h4">3.9 Zenegyűjtemény és keresés</div><p><b>Meghajtóválasztó.</b> Az <code>m</code> billentyű megnyitja a meghajtóválasztót. Felsorolja a csatolt meghajtókat, a csatlakoztatott, de még nem csatolt meghajtókat, és a hálózati megosztásokat (NFS vagy SMB, csak olvasásra csatolva); az öt legutóbbi megosztást megjegyzi. A helyi meghajtók csak olvasásra csatolódnak. Egy már csatolt meghajtó kiválasztásakor ezt kérdezi: <i>A meghajtó már csatolva van. Ellenőrizzem a változásokat? (i/N)</i>; az i válasz újraindexeli.</p><p><b>Globális keresés.</b> A <code>/</code> billentyű az összes meghajtón egyszerre keres. Minden begépelt szónak szerepelnie kell a névben, ékezetektől és kis- vagy nagybetűktől függetlenül. Az Enter megnyitja a találat mappáját, a kurzor a fájlon áll.</p><p><b>Index.</b> A keresési index mentésre kerül és visszaáll, így a keresés röviddel az indulás után használható. A rejtett fájlok és a macOS <code>._</code> fájlok kimaradnak. Amíg egy meghajtó indexelése tart, a lejátszás megvárja az első menet végét, az állapotsor pedig a haladást mutatja.</p><p><b>Meghajtó kizárása.</b> A meghajtóválasztóban az <code>x</code> billentyű kizár egy csatolt meghajtót a keresésből és az indexelésből: <i>(kizárva a keresésből)</i> jelölést kap, a választóban marad, és továbbra is böngészhető és lejátszható. Ugyanez a billentyű visszakapcsolja.</p><div class="bp-h4">3.10 Gépfelmérés és DAC-diagnosztika</div><p>A böngészőben a <code>g</code> billentyűvel a gépfelmérés és optimalizálási jelentés nyílik meg: gép és kernel, alaplap és BIOS, az izolált mag és a magkezelési mód, energiagazdálkodás és ütemezés, memória, a csendprofil és, ha van, az Intel management engine. Ezt követi a DAC-diagnosztika: a DAC által hirdetett formátumok, a lejátszás közben ténylegesen használt formátum, valamint a keverő és a némítás állapota. Az első indításkor egy rövid összefoglaló jelenik meg.</p>
+    <div class="bp-h4">3.11 Ismert korlátok</div><ul><li>Új meghajtó csatolása után várj kb. egy percet a lejátszás indítása előtt, hogy az első indexelési menet befejeződhessen.</li></ul>
+    </div>
+
+    <div id="m-4" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>4</span>Hardver</h3>
+      <div class="bp-h4">4.1 Kártya/gép</div>
+      <p>Kizárólag Raspberry Pi 4-en (CM4 modul a Holo Red esetében) és Pi 5-ön igazolt, legalább 4 GB RAM mellett. Korábbi Pi modelleken (Pi 3 és régebbi) vagy 2 GB-os kártyákon nem tesztelt, nem garantált.</p>
+      <div class="bp-h4">4.2 Boot-médium</div>
+      <p>Az eszközkiadás microSD kártyáról bootol. Használj legalább 8 GB-os, jó minőségű kártyát; a hamisított vagy elhasznált kártyák gyakori oka a bootolási problémáknak.</p>
+      <div class="bp-h4">4.3 Tesztelt USB DAC-ok és vevők</div>
+      <div class="bp-tbl-wrap"><table class="bp-table"><thead><tr><th>Eszköz</th><th>Chip/interfész</th><th>PCM</th><th>Natív DSD</th><th>DoP</th></tr></thead><tbody>
+        <tr><td>Gustard USB Audio 2.0</td><td>(közvetlen USB DAC)</td><td class="bp-yes">Igen</td><td class="bp-yes">Igen</td><td class="bp-yes">Igen</td></tr>
+        <tr><td>TT-DAC-2026 / TT-DAC-NV</td><td>Amanero Combo 384 és 768</td><td class="bp-yes">Igen</td><td class="bp-yes">Igen</td><td class="bp-yes">Igen</td></tr>
+        <tr><td>Audio-GD DDC &rarr; Gustard (I2S)</td><td>Amanero Combo384</td><td class="bp-yes">Igen</td><td class="bp-no">Nem: a 384 kHz-es mintavételirátaplafon miatt a DSD256 hardverszinten kizárt, natívan és DoP-on keresztül is</td><td class="bp-no">Nem: a chip DoP-felismerője firmware-szinten csak 24-bites kereteket ismer fel; a 32-bites DoP-próbálkozás mindkét bájtsorrendnél hallható zajt okozott, és a kijelző PCM-et mutatott DSD helyett</td></tr>
+      </tbody></table></div>
+    </div>
+
+    <div id="m-5" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>5</span>Függelék: technikai háttér</h3>
+      <div class="bp-h4">5.1 A jelút filozófiája</div>
+      <p>A bpplay tervezési célja, hogy a hang a fájl memóriába töltésétől a DAC-ig a lehető legkevesebb, legjobban dokumentált lépésen keresztül jusson el. Amikor egy egész szám alapú forrás egy egész szám alapú DAC-formátummal találkozik, ez nulla aritmetikai konverziót jelent.</p>
+      <div class="bp-h4">5.2 A hangdriver szerepe</div>
+      <p>A jelúti üzenetekben szereplő „a hangdriver végzi az utolsó lépést” kifejezés az alapul szolgáló operációs rendszer hangrendszerére utal (Linuxon ALSA); egy platformfüggetlen, pontos megfogalmazás.</p>
+      <div class="bp-h4">5.3 Bootkori mérés</div><p>A bptune bootoláskor megméri a CPU-magokat, és kiválasztja a lejátszó magot.</p>
+      <div class="bp-h4">5.4 Csendprofil</div><p>Bekapcsolt csendprofilnál a lejátszás idejére a következő háttérszolgáltatások leállnak: cron, avahi, rpcbind, polkit, udisks2, az időszakos karbantartási időzítők, az udev vezérlő-socketek, a felhasználói munkamenet-kezelő, valamint a Wi-Fi supplicant szolgáltatások, ha nincs aktív Wi-Fi kapcsolat. Ezek soha nem állnak le: journald, ssh, NetworkManager, dbus és logind. Ha a leállítás után bármelyikük nem fut, minden azonnal visszaáll. A profil a lejátszás végén ismét kikapcsol. A Raspberry Pi-n az SD- vagy MMC-kártya a lejátszás alatt ébren marad, nem alszik el.</p>
+      <div class="bp-h4">5.5 Nyelvi kiadások</div><p>A bpplay magyar (HU) és angol (EN) kiadásban jelenik meg. A nyelv az image-be van rögzítve: ez határozza meg a zeneválasztó és a bptune szövegeit, az alapértelmezett zenemappát (a HU kiadásban Zen&eacute;k, az EN kiadásban Music) és az időzónát (HU-ban Europe/Budapest, EN-ben UTC). A desktop kiadásban a billentyűzetkiosztás követi a nyelvet (hu vagy us).</p>
+
+      <p>Cikkek a medium.com-on a szoftver fejlesztéséről és a számítógépes hangrendszerek működéséről:</p>
+      <ul>
+        <li>1. rész: <a href="https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-5851d54e0ba3">bpplay: kompromisszumok nélküli számítógépes hangzás, architektúra és szoftverminimalizmus</a></li>
+        <li>2. rész: <a href="https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-9c01d1e59a24">bpplay: mi történik a motorháztető alatt?</a></li>
+        <li>3. rész: <a href="https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-4d8e4a3b23de">Bitre pontos, memóriaalapú zenefájl-lejátszás 2026-ban</a></li>
+        <li>4. rész: <a href="https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-for-high-end-audio-f00c11be0d19">Linux és Windows környezetek optimalizálási lehetőségei csúcsminőségű hanglejátszáshoz</a></li>
+        <li>5. rész: <a href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-2c6d70cb1b17">Bitre pontosság: mit jelent valójában, és mikor számít igazán</a></li>
+      </ul>
+    </div>
+
+    <div id="m-6" style="margin-bottom: 56px;">
+      <h3 class="bp-h3"><span>6</span>Újdonságok: RC21 és RC22</h3>
+      <p><b>RC21</b></p><ul><li>Full Pure (<code>u</code> billentyű): a zene szólása közben a hálózat linkszinten ki van kapcsolva.</li><li>Globális keresés az összes meghajtón a <code>/</code> billentyűvel, mentett indexszel; a lejátszás csak az első indexelési menet után indul.</li><li>A <code>g</code> gépfelmérés: jelentésszövegek, a magkezelési mód képernyő, rövid összefoglaló az első indításkor, az Intel management engine futásidejű állapota, USB-vezérlők.</li><li>Próbaidő: a beállítási terület csak a boot pendrive-on van használatban, és egy új image új próbaidőt jelent. Egy új image első indítása nem veszi át egy másik image által hagyott beállítási területet, így a próbaidő az első indítástól számít.</li><li>A keresési találat mögül eltűnt meghajtót a rendszer üzenettel kezeli; a rejtett és a <code>._</code> fájlok nincsenek indexelve.</li><li>Az éppen szóló számot mutató sor látható helyen tartja az előadót és a címet, ha az albumnév hosszú; a mappa- vagy sorkorlát elérését jelzi (bpplay 1.5.8 és 1.5.9). Ha a bpplay kimenete csővezetékbe van irányítva, a sor a terminál szélességéhez igazodik (bpplay 1.5.15).</li><li>Az ID3-címkék beolvasásra kerülnek az AIFF és WAV fájlokból, számonkénti előadóval (bpplay 1.5.10 és 1.5.12).</li><li>A kimenetválasztó a <code>q</code> vagy az <code>Esc</code> billentyűvel megszakítható.</li><li>SACD ISO: megbízhatóbb számútvonalak és indexelés; a mappa mód elfogadja a DFF fájlokat és az SACD ISO számokat (bpplay 1.5.13).</li><li>DSD fájlok: a fájl saját záró kitöltése már nem szól hangként.</li><li>Az angol image nem tartalmaz magyar szöveget, és az alapértelmezett zenemappa követi az image nyelvét (EN-ben Music, HU-ban Zen&eacute;k).</li></ul><p><b>RC22</b></p><ul><li>A Full Pure és az ismétlés mód el van választva egymástól: az ismétlés blokkolja a Full Pure-t, és fordítva.</li><li>A választóban kiválasztott kimenet megjegyződik a beállítási területen; rövid súgó az <code>a</code> és <code>n</code> billentyűhöz; SSH-banner a Raspberry Pi-n; a HU desktop kiadás magyar billentyűzetkiosztást kap.</li><li>A magyar image helyi időben fut (Europe/Budapest); az angol image UTC-n marad.</li><li>A <code>g</code> jelentésnek van DAC szakasza: a DAC által hirdetett formátumok, a lejátszás közben használt formátum, valamint a keverő és a némítás állapota.</li><li>Desktop kiadás: a csendprofil rövidebb listát állít le, hogy a grafikus munkamenet nyitva maradjon.</li><li>bpplay 1.5.16: nincs lefagyás nem terminál jellegű, nyitott bemenetnél, és tiszta leállás TERM, INT és HUP jelzésre. bpplay 1.5.17: egy nyílbillentyű escape-szekvenciája már nem vált ki lejátszóparancsot.</li><li>bpplay 1.5.18: TEAC/Esoteric (0x0644) és Luxman (0x3255) DAC-okon a 16 és 24 bites forrásokat először a saját szélességükben küldi (S16 vagy S24 packed), tartalékként 32 bittel; a többi DAC továbbra is a 32 bitet veszi előre.</li><li>Raspberry Pi: a hátralévő próbaidő a zeneválasztó fejlécsorában látható (<i>Trial: még N nap</i>).</li><li>A rövid összefoglaló már nincs csonkítva; az 5 perces NAS-újraellenőrzés megszűnt; az <code>R</code> billentyű megszűnt a meghajtóválasztóból, és egy már csatolt meghajtónál a rendszer rákérdez, hogy keressen-e változásokat.</li><li>Az <code>x</code> billentyű csak a keresésből és az indexelésből zár ki egy meghajtót; a meghajtó a választóban marad a <i>(kizárva a keresésből)</i> jelöléssel, és ugyanez a billentyű visszakapcsolja.</li><li>bptune 0.3.8: a Renesas-tipp csak működő eszköz nélkül jelenik meg, a Bay Trail TXE felismerésre kerül, és a 0.0.0.0 firmware-verzió ismeretlenként jelenik meg.</li></ul>
+    </div>
+
+    <div id="m-disc" style="margin-bottom: 20px;">
+      <h3 class="bp-h3"><span>&sect;</span>Jogi nyilatkozat</h3>
+      <p style="font-size: 14.5px; color: #55534c;">A bpplay és a bptune szoftver, valamint az ezt az eszközt kiszolgáló zeneválasztó (<code>zenevalaszto.py</code>) „ahogy van” kerül átadásra, mindenféle garancia nélkül, kifejezett vagy vélelmezett, beleértve, de nem kizárólagosan, a forgalmazhatóságra vagy egy adott célra való alkalmasságra vonatkozó garanciákat.</p>
+      <p style="font-size: 14.5px; color: #55534c;">A fejlesztő nem vállal felelősséget a szoftver vagy az eszköz használatából, hibás működéséből vagy meghibásodásából eredő közvetlen vagy közvetett károkért, beleértve a csatlakoztatott audioeszközökben (DAC, erősítő, hangfalak) keletkező esetleges károkat, adatvesztést, vagy a rendeltetéstől eltérő használatból eredő bármilyen kárt.</p>
+      <p style="font-size: 14.5px; color: #55534c;">Ez a kézikönyv törekszik a lehető legpontosabb, legfrissebb állapot leírására, de a fejlesztő nem garantálja a tartalom teljességét vagy hibamentességét, és fenntartja a jogot annak előzetes értesítés nélküli frissítésére. Az eszköz és a kézikönyv kizárólag az itt leírt végfelhasználói zenehallgatási célra készült; bármilyen más felhasználás saját felelősségre történik.</p>
+      <p style="font-size: 14.5px; color: #55534c;">A szoftverre és az eszközre vonatkozó minden jog fenntartva; másolásuk, visszafejtésük vagy harmadik félnek történő átadásuk kizárólag a fejlesztő előzetes írásbeli engedélyével történhet.</p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 19px; margin-top: 32px;">Jó zenehallgatást!</p>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div style="border-top: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 980px; margin: 0 auto; padding: 28px 32px; text-align: center; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a;">
+      bpplay / bptune &middot; Class A Computing &middot; Koscso Media Engineering Kft. &middot; <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Kapcsolat</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var S={step:'1',jump:false};
+  function render(){
+    document.querySelectorAll('[data-if]').forEach(function(e){
+      var k=e.getAttribute('data-if'); e.hidden=!(k.indexOf('step:')===0 ? S.step===k.slice(5) : !!S[k]);
+    });
+    document.querySelectorAll('[data-expanded]').forEach(function(e){ e.setAttribute('aria-expanded',String(S.jump)); });
+  }
+  document.addEventListener('click',function(ev){
+    var t=ev.target.closest('[data-act],[data-go]'); if(!t) return;
+    if(t.getAttribute('data-go')){ S.step=t.getAttribute('data-go'); window.scrollTo(0,0); }
+    else if(t.getAttribute('data-act')==='toggleJump'){ S.jump=!S.jump; }
+    else if(t.getAttribute('data-act')==='closeJump'){ S.jump=false; }
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

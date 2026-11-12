@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bpplay terminál demó, előnézet</title>
+<meta name="description" content="A bpplay terminálképernyőjének statikus előnézete. Az interaktív demó a bpplay.hu/demo/ címen van.">
+<link rel="alternate" hreflang="en" href="https://bpplay.hu/demo-preview/">
+<link rel="alternate" hreflang="hu" href="https://bpplay.hu/hu/demo-preview/">
+<link rel="icon" href="/assets/site/logo.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+
+<style>
+  body { margin: 0; background: #f6f2ea; }
+  a { color: #a8661a; text-decoration: none; }
+  a:hover { color: #7a4a12; }
+  ::selection { background: #d9c79a; }
+  html { scroll-padding-top: 93px; }
+  .bp-nav-links a, .bp-nav-right a { white-space: nowrap; }
+  @media (max-width: 1100px) { .bp-nav-links { display: none !important; } }
+  @media (max-width: 560px) {
+    .bp-logo-sub { display: none; }
+    .bp-nav-in { padding: 10px 16px !important; gap: 12px !important; }
+    .bp-nav-right { gap: 8px !important; }
+    .bp-nav-right a[href="#download"] { padding: 9px 12px !important; font-size: 11px !important; }
+  }
+</style>
+
+</head>
+<body>
+
+<div style="font-family: 'EB Garamond', Georgia, serif; color: #211f1a; background: #f6f2ea; width: 100%; max-width: 100%; box-sizing: border-box;">
+
+  <!-- NAV -->
+  <div style="border-bottom: 1px solid rgba(33,31,26,0.14); background: #f6f2ea;">
+    <div class="bp-nav-in" style="max-width: 860px; margin: 0 auto; padding: 12px 32px; min-height: 76px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: nowrap;">
+      <a href="/hu/" style="display: flex; align-items: center; gap: 10px; font-family: 'PT Mono', monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; color: #211f1a;">
+        <img src="/assets/site/logo.png" alt="" style="width: 32px; height: 32px; flex: none; object-fit: contain;">
+        bpplay <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400;">/ bptune</span>
+      </a>
+      <div class="bp-nav-links" style="display: flex; align-items: center; gap: 14px;">
+        <a href="/hu/" style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: #52504a;">&#8592; bpplay.hu</a>
+      </div>
+      <div class="bp-nav-right" style="display: flex; align-items: center; gap: 14px; flex: none;"><a href="/demo-preview/" style="font-family: 'PT Mono', monospace; font-size: 12px; color: #a8661a; border: 1px solid rgba(33,31,26,0.25); border-radius: 3px; padding: 4px 9px;">EN</a></div></div>
+  </div>
+
+  <!-- HERO -->
+  <div style="max-width: 860px; margin: 0 auto; padding: 72px 32px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Próbáld ki itt, letöltés nélkül</div>
+    <h1 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 42px; line-height: 1.2; margin: 0 0 20px;">A valódi zeneválasztó, a böngésződben.</h1>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; color: #45443e; margin: 0 0 24px;">
+      Ez a valódi <code style="font-family: 'PT Mono', monospace; font-size: 0.88em;">zenevalaszto.py</code> böngészési élmény, webre újraépítve: ugyanazok a billentyűk, ugyanazok a képernyők, egy rövid, valódi (licencelt) előnézeti részlet. Kattints a terminálba, és használd a billentyűzetedet, vagy mobilon a képernyőn megjelenő gombokat.
+    </p>
+    <div style="background: #efe9d9; border-radius: 4px; padding: 20px 24px; font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.6; color: #35332d;">
+      <b>Megjegyzés:</b> a böngészőben egyetlen hangút sem bitre pontos (sem a Web Audio, sem a HTML5 <code style="font-family: 'PT Mono', monospace; font-size: 0.88em;">&lt;audio&gt;</code>); minden böngésző átmintavételez a saját OS-szintű hangrendszerén keresztül. Ez a demó hűen mutatja be a <b>navigációs élményt</b>; a hangminőség önmagában nem egyezik meg a bpplay natív, bitre pontos jelútjával. A natív DSD-lejátszás egyáltalán nem lehetséges böngészőben; a DSD-formátumú demószámok itt PCM-re dekódolt formában jelennek meg. A kimeneti (DAC-) lista és az USB/NFS/SMB-csatolás itt kitalált adatokkal van szimulálva, pontosan úgy, ahogy a valódi képernyők viselkednek; a böngésződből sem valódi hardverhez, sem hálózathoz nem történik kapcsolódás.
+    </div>
+  </div>
+
+  <!-- TERMINÁL-ELŐNÉZET + INDÍTÁS -->
+  <div style="max-width: 860px; margin: 0 auto; padding: 0 32px 100px;">
+    <div style="background: #19170f; border-radius: 6px; overflow: hidden; box-shadow: 0 20px 48px rgba(0,0,0,0.25);">
+      <div style="padding: 12px 18px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid rgba(243,240,232,0.12);">
+        <span style="width: 11px; height: 11px; border-radius: 50%; background: #e5534b; display: inline-block;"></span>
+        <span style="width: 11px; height: 11px; border-radius: 50%; background: #e3ab52; display: inline-block;"></span>
+        <span style="width: 11px; height: 11px; border-radius: 50%; background: #58a55c; display: inline-block;"></span>
+        <span style="font-family: 'PT Mono', monospace; font-size: 12px; color: #9c988c; margin-left: 8px;">demo@bpplay: zenevalaszto</span>
+      </div>
+      <div style="padding: 48px 28px; font-family: 'PT Mono', monospace; font-size: 14px; line-height: 1.8; color: #d8d3c4;">
+        <div style="color: #e3ab52;">&uarr;&darr; | Enter=belép | Space=kijelöl | a=mappa kijelölése | n=kijelölés törlése | r=ismétlés | /=mindenhol | Esc=fel | m=meghajtó | o=kimenet | c=mag | u=fullpure | g=jelentés | p=lejátszás | q=kilépés</div>
+        <div style="margin-top: 14px;">&nbsp;&nbsp;[D] 2022_zenek</div>
+        <div>&nbsp;&nbsp;[D] DSD256 Archive</div>
+        <div>&nbsp;&nbsp;[D] French Cafe</div>
+        <div>&nbsp;&nbsp;[D] Live Session Recordings</div>
+        <div style="color: #f3f0e8; background: #2b2a22;">&nbsp;&nbsp;[D] MRC2020</div>
+        <div style="color: #8a867a; margin-top: 14px;">33Bowls_breathe_MQA.mqa.flac (1630.0 MB, 48kHz)</div>
+      </div>
+    </div>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 14px; color: #8a867a; margin: 14px 0 32px;">A terminálképernyő statikus előnézete. A valódi demó élő, és teljesen billentyűzettel vezérelhető. A demó a böngészést és a keresést mutatja; a hardverfüggő funkciókhoz, mint a Full Pure, a CPU-magkezelési mód (<code style="font-family: 'PT Mono', monospace; font-size: 0.88em;">c</code>) és a gépfelmérés (<code style="font-family: 'PT Mono', monospace; font-size: 0.88em;">g</code>), valódi gép kell.</p>
+
+    <div style="text-align: center; padding: 40px 32px; background: #efe9d9; border-radius: 4px;">
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; color: #35332d; margin: 0 0 20px;">A működő demó élő, és a böngésződben fut.</p>
+      <a href="/demo/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 16px 28px; border-radius: 3px; font-weight: 700; display: inline-block;">Élő demó indítása &#8599;</a>
+    </div>
+  </div>
+
+  <!-- LÁBLÉC -->
+  <div style="border-top: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 860px; margin: 0 auto; padding: 28px 32px; text-align: center; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a;">
+      bpplay / bptune &middot; Class A Computing &middot; Koscso Media Engineering Kft. &middot; <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Kapcsolat</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var S={step:'1',jump:false};
+  function render(){
+    document.querySelectorAll('[data-if]').forEach(function(e){
+      var k=e.getAttribute('data-if'); e.hidden=!(k.indexOf('step:')===0 ? S.step===k.slice(5) : !!S[k]);
+    });
+    document.querySelectorAll('[data-expanded]').forEach(function(e){ e.setAttribute('aria-expanded',String(S.jump)); });
+  }
+  document.addEventListener('click',function(ev){
+    var t=ev.target.closest('[data-act],[data-go]'); if(!t) return;
+    if(t.getAttribute('data-go')){ S.step=t.getAttribute('data-go'); window.scrollTo(0,0); }
+    else if(t.getAttribute('data-act')==='toggleJump'){ S.jump=!S.jump; }
+    else if(t.getAttribute('data-act')==='closeJump'){ S.jump=false; }
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Melyik bpplay kiadás való neked?</title>
+<meta name="description" content="Rövid útmutató a bpplay macOS alkalmazása, x86_64 kiosk, x86_64 desktop és Raspberry Pi kiadása közötti választáshoz.">
+<link rel="alternate" hreflang="en" href="https://bpplay.hu/which/">
+<link rel="alternate" hreflang="hu" href="https://bpplay.hu/hu/which/">
+<link rel="icon" href="/assets/site/logo.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+
+<style>
+  body { margin: 0; background: #f6f2ea; }
+  a { color: #a8661a; text-decoration: none; }
+  a:hover { color: #7a4a12; }
+  ::selection { background: #d9c79a; }
+  .q-opt { display: block; width: 100%; text-align: left; font-family: 'EB Garamond', Georgia, serif; font-size: 18px; color: #211f1a; background: #ffffff; border: 1px solid rgba(33,31,26,0.2); border-radius: 4px; padding: 18px 22px; cursor: pointer; margin-bottom: 12px; }
+  .q-opt:hover { border-color: #19170f; background: #efe9d9; }
+  .q-back { font-family: 'PT Mono', monospace; font-size: 12.5px; color: #8a867a; background: none; border: none; cursor: pointer; padding: 0; margin-bottom: 24px; }
+  html { scroll-padding-top: 93px; }
+  .bp-nav-links a, .bp-nav-right a { white-space: nowrap; }
+  @media (max-width: 1100px) { .bp-nav-links { display: none !important; } }
+  @media (max-width: 560px) {
+    .bp-logo-sub { display: none; }
+    .bp-nav-in { padding: 10px 16px !important; gap: 12px !important; }
+    .bp-nav-right { gap: 8px !important; }
+    .bp-nav-right a[href="#download"] { padding: 9px 12px !important; font-size: 11px !important; }
+  }
+</style>
+
+</head>
+<body>
+
+<div style="font-family: 'EB Garamond', Georgia, serif; color: #211f1a; background: #f6f2ea; width: 100%; max-width: 100%; box-sizing: border-box;">
+
+  <!-- NAV -->
+  <div style="border-bottom: 1px solid rgba(33,31,26,0.14); background: #f6f2ea;">
+    <div class="bp-nav-in" style="max-width: 760px; margin: 0 auto; padding: 12px 32px; min-height: 76px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: nowrap;">
+      <a href="/hu/" style="display: flex; align-items: center; gap: 10px; font-family: 'PT Mono', monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; color: #211f1a;">
+        <img src="/assets/site/logo.png" alt="" style="width: 32px; height: 32px; flex: none; object-fit: contain;">
+        bpplay <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400;">/ bptune</span>
+      </a>
+      <div class="bp-nav-links" style="display: flex; align-items: center; gap: 14px;">
+        <a href="/hu/" style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: #52504a;">&#8592; bpplay.hu</a>
+      </div>
+      <div class="bp-nav-right" style="display: flex; align-items: center; gap: 14px; flex: none;"><a href="/which/" style="font-family: 'PT Mono', monospace; font-size: 12px; color: #a8661a; border: 1px solid rgba(33,31,26,0.25); border-radius: 3px; padding: 4px 9px;">EN</a></div></div>
+  </div>
+
+  <!-- HERO -->
+  <div style="max-width: 760px; margin: 0 auto; padding: 72px 32px 24px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Találd meg a kiadásodat</div>
+    <h1 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 42px; line-height: 1.2; margin: 0 0 18px;">Melyik bpplay neked való?</h1>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; color: #45443e; margin: 0;">Válaszolj két-három rövid kérdésre; pontosan a megfelelő letöltéshez irányítunk.</p>
+  </div>
+
+  <!-- KVÍZ -->
+  <div style="max-width: 760px; margin: 0 auto; padding: 32px 32px 100px;">
+
+    <div data-if="step:1">
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 500; margin-bottom: 20px;">Milyen gépen szeretnéd használni?</div>
+      <button type="button" class="q-opt" data-go="mac">Egy Mac-en</button>
+      <button type="button" class="q-opt" data-go="pc">Egy Windows vagy Linux PC-n (vagy bármilyen x86_64 gépen, amit erre tudok szánni)</button>
+      <button type="button" class="q-opt" data-go="pi-have">Már van egy Raspberry Pi-m</button>
+      <button type="button" class="q-opt" data-go="result-recommend">Még nincs gépem, mit ajánlotok?</button>
+    </div>
+
+    <div data-if="step:mac" hidden>
+      <button type="button" class="q-back" data-go="1">&#8592; Vissza</button>
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 500; margin-bottom: 20px;">Hétköznapi alkalmazásként használnád a saját Mac-eden, vagy egy külön, fej nélküli, SSH-n vezérelt géppé alakítanád (pl. egy polcon)?</div>
+      <button type="button" class="q-opt" data-go="result-macos-core">Hétköznapi használat, a saját Mac-em képernyőjén</button>
+      <button type="button" class="q-opt" data-go="result-macos-ssh">Fej nélkül, SSH-n vezérelve</button>
+    </div>
+
+    <div data-if="step:pc" hidden>
+      <button type="button" class="q-back" data-go="1">&#8592; Vissza</button>
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 500; margin-bottom: 20px;">Van a gépnek olyan képernyője, amit nem lehet leválasztani (pl. egy laptop beépített kijelzője)?</div>
+      <button type="button" class="q-opt" data-go="result-x64-desktop">Igen, ez egy laptop (vagy hasonló)</button>
+      <button type="button" class="q-opt" data-go="pc2">Nem, ez egy asztali gép / külső monitorral rendelkezik</button>
+    </div>
+
+    <div data-if="step:pc2" hidden>
+      <button type="button" class="q-back" data-go="pc">&#8592; Vissza</button>
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 500; margin-bottom: 20px;">Inkább polcra tennéd, monitor és billentyűzet nélkül, a telefonodról vagy egy másik gépről, SSH-n vezérelve?</div>
+      <button type="button" class="q-opt" data-go="result-x64-kiosk">Igen, fej nélkül, egy polcon</button>
+      <button type="button" class="q-opt" data-go="result-x64-desktop">Nem, szeretnék egy hétköznapi asztali felületet látni</button>
+    </div>
+
+    <div data-if="step:pi-have" hidden>
+      <button type="button" class="q-back" data-go="1">&#8592; Vissza</button>
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 500; margin-bottom: 20px;">Melyik Raspberry Pi modell?</div>
+      <button type="button" class="q-opt" data-go="result-pi">Pi 4 vagy Pi 5</button>
+      <button type="button" class="q-opt" data-go="result-pi3">Pi 3</button>
+    </div>
+
+    <!-- EREDMÉNYEK -->
+    <div data-if="step:result-macos-core" hidden>
+      <button type="button" class="q-back" data-go="mac">&#8592; Vissza</button>
+      <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #4b5a40; margin-bottom: 10px;">macOS core</div>
+      <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 28px; font-weight: 500; margin: 0 0 14px;">bpplay macOS-hez</h3>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.6; color: #35332d; margin: 0 0 24px;">Az ingyenes, nyílt forráskódú alkalmazás a saját Mac-edhez. Bitre pontos lejátszás, nincs más telepítendő, csak a programot kell az Applications mappába húzni.</p>
+      <a href="/hu/" style="font-family: 'PT Mono', monospace; font-size: 13px; background: #d98f2a; color: #19170f; padding: 15px 26px; border-radius: 3px; font-weight: 700; display: inline-block;">A macOS oldalra &#8594;</a>
+    </div>
+
+    <div data-if="step:result-macos-ssh" hidden>
+      <button type="button" class="q-back" data-go="mac">&#8592; Vissza</button>
+      <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 10px;">macOS &middot; SSH, fej nélkül &middot; tervezett</div>
+      <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 28px; font-weight: 500; margin: 0 0 14px;">macOS fej nélküli, SSH-n vezérelt kioskként</h3>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.6; color: #35332d; margin: 0 0 16px;">Egy dedikált Mac (például egy Mac mini), mindig bekapcsolva és fej nélkül, ugyanúgy vezérelve, mint az x64/Pi kiosk kiadások. Jelenleg beállítás és tesztelés alatt.</p>
+      <div class="bp-note" style="background: #efe9d9; border-radius: 4px; padding: 14px 18px; font-size: 14.5px; color: #55534c; margin-bottom: 20px;">Még nem tölthető le; nézz vissza hamarosan, vagy kövesd a GitHub repót.</div>
+      <a href="https://github.com/ferenckoscso/bpplay" style="font-family: 'PT Mono', monospace; font-size: 13px; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px; display: inline-block;">GitHub &#8599;</a>
+    </div>
+
+    <div data-if="step:result-x64-desktop" hidden>
+      <button type="button" class="q-back" data-go="1">&#8592; Vissza</button>
+      <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 10px;">x86_64 &middot; desktop &middot; kérésre</div>
+      <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 28px; font-weight: 500; margin: 0 0 14px;">bpplay x64 desktop kiadás</h3>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.6; color: #35332d; margin: 0 0 24px;">Hétköznapi grafikus asztalba bootol, a gép saját képernyőjén és billentyűzetén. Húzz egy fájlt vagy albumot a bpplay ikonjára a lejátszáshoz; nincs szükség SSH-ra, sem második eszközre. A desktop kiadás csak kérésre érhető el.</p>
+      <a href="/hu/x64-desktop/" style="font-family: 'PT Mono', monospace; font-size: 13px; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;  display: inline-block;">Az x64 desktop kiadásról &#8594;</a>
+      <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="font-family: 'PT Mono', monospace; font-size: 13px; background: #d98f2a; color: #19170f; padding: 15px 26px; border-radius: 3px; font-weight: 700; display: inline-block; margin-left: 12px;">Kérd el &#8599;</a>
+    </div>
+
+    <div data-if="step:result-x64-kiosk" hidden>
+      <button type="button" class="q-back" data-go="pc2">&#8592; Vissza</button>
+      <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 10px;">x86_64 &middot; kiosk</div>
+      <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 28px; font-weight: 500; margin: 0 0 14px;">bpplay x64 kiosk kiadás</h3>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.6; color: #35332d; margin: 0 0 24px;">Egyenesen a zeneválasztóba bootol, a gépen magán nincs szükség monitorra vagy billentyűzetre; a saját eszközödről SSH-n csatlakozol és vezérled.</p>
+      <a href="/hu/x64/" style="font-family: 'PT Mono', monospace; font-size: 13px; background: #d98f2a; color: #19170f; padding: 15px 26px; border-radius: 3px; font-weight: 700; display: inline-block;">Az x64 kiosk oldalra &#8594;</a>
+    </div>
+
+    <div data-if="step:result-pi" hidden>
+      <button type="button" class="q-back" data-go="pi-have">&#8592; Vissza</button>
+      <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 10px;">Raspberry Pi 4/5</div>
+      <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 28px; font-weight: 500; margin: 0 0 14px;">bpplay Raspberry Pi-hoz</h3>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.6; color: #35332d; margin: 0 0 24px;">A zárt eszközös kiadás, kifejezetten a Pi 4/5-höz tervezve. Kicsi, csendes, fej nélküli, SSH-n vezérelve.</p>
+      <a href="/hu/pi/" style="font-family: 'PT Mono', monospace; font-size: 13px; background: #d98f2a; color: #19170f; padding: 15px 26px; border-radius: 3px; font-weight: 700; display: inline-block;">A Pi oldalra &#8594;</a>
+    </div>
+
+    <div data-if="step:result-pi3" hidden>
+      <button type="button" class="q-back" data-go="pi-have">&#8592; Vissza</button>
+      <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #9c4a2f; margin-bottom: 10px;">Raspberry Pi 3</div>
+      <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 28px; font-weight: 500; margin: 0 0 14px;">A Pi 3 nem támogatott</h3>
+      <div style="background: #f3e4d4; border: 1px solid #d9a35c; border-radius: 4px; padding: 16px 20px; font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.6; color: #5c3f14; margin-bottom: 18px;">A bpplay Pi-eszközkiadás kizárólag <b>Raspberry Pi 4-en vagy 5-ön</b> fut; a Pi 3 nem támogatott, és nem fog működni.</div>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.6; color: #35332d; margin: 0 0 20px;">Ha ehelyett van egy felesleges Windows/Linux PC-d, az x64 kiadások jó alternatívát jelenthetnek.</p>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+        <a href="/hu/x64/" style="font-family: 'PT Mono', monospace; font-size: 13px; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;">x64 kiosk kiadás &#8594;</a>
+        <a href="/hu/x64-desktop/" style="font-family: 'PT Mono', monospace; font-size: 13px; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;">x64 desktop kiadás &#8594;</a>
+      </div>
+    </div>
+
+    <div data-if="step:result-recommend" hidden>
+      <button type="button" class="q-back" data-go="1">&#8592; Vissza</button>
+      <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 10px;">Javaslatunk</div>
+      <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 28px; font-weight: 500; margin: 0 0 14px;">Szerezz egy Raspberry Pi 4-et vagy 5-öt</h3>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.6; color: #35332d; margin: 0 0 20px;">Ez a legegyszerűbb, legolcsóbb, kifejezetten erre épített módja a bpplay kipróbálásának: kicsi, csendes, és tervezésénél fogva fej nélküli. Ha inkább egy felesleges PC-t hasznosítanál újra, vagy több tárhelyet vagy teljesítményt szeretnél, az x64 kiosk kiadás erős alternatíva.</p>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 22px;">
+        <a href="/hu/pi/" style="font-family: 'PT Mono', monospace; font-size: 13px; background: #d98f2a; color: #19170f; padding: 15px 26px; border-radius: 3px; font-weight: 700;">A Pi oldalra &#8594;</a>
+        <a href="/hu/x64/" style="font-family: 'PT Mono', monospace; font-size: 13px; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;">x64 kiosk kiadás &#8594;</a>
+      </div>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; color: #6e6b61; margin: 0 0 14px;">Nem tudod, mit vegyél, vagy segítség kellene az összeállításhoz, beszerzéshez vagy telepítéshez? Tudunk segíteni.</p>
+      <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="font-family: 'PT Mono', monospace; font-size: 13px; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px; display: inline-block;">Kérj segítséget &#8599;</a>
+    </div>
+
+  </div>
+
+  <!-- LÁBLÉC -->
+  <div style="border-top: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 760px; margin: 0 auto; padding: 28px 32px; text-align: center; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a;">
+      bpplay / bptune &middot; Class A Computing &middot; Koscso Media Engineering Kft. &middot; <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Kapcsolat</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var S={step:'1',jump:false};
+  function render(){
+    document.querySelectorAll('[data-if]').forEach(function(e){
+      var k=e.getAttribute('data-if'); e.hidden=!(k.indexOf('step:')===0 ? S.step===k.slice(5) : !!S[k]);
+    });
+    document.querySelectorAll('[data-expanded]').forEach(function(e){ e.setAttribute('aria-expanded',String(S.jump)); });
+  }
+  document.addEventListener('click',function(ev){
+    var t=ev.target.closest('[data-act],[data-go]'); if(!t) return;
+    if(t.getAttribute('data-go')){ S.step=t.getAttribute('data-go'); window.scrollTo(0,0); }
+    else if(t.getAttribute('data-act')==='toggleJump'){ S.jump=!S.jump; }
+    else if(t.getAttribute('data-act')==='closeJump'){ S.jump=false; }
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

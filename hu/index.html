@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bpplay: a legrövidebb determinisztikus út a fájltól a DAC-ig</title>
+<meta name="description" content="A legrövidebb determinisztikus út a fájltól a DAC-ig: bitpontos, memóriából induló lejátszás, nulla szoftveres feldolgozás. macOS alkalmazás (ingyenes, nyílt forráskódú), valamint Raspberry Pi és x86_64 kiosk kiadás.">
+<link rel="alternate" hreflang="en" href="https://bpplay.hu/">
+<link rel="alternate" hreflang="hu" href="https://bpplay.hu/hu/">
+<link rel="icon" href="/assets/site/logo.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+
+<style>
+  body { margin: 0; background: #f6f2ea; }
+  a { color: #a8661a; text-decoration: none; }
+  a:hover { color: #7a4a12; }
+  ::selection { background: #d9c79a; }
+  table.bp-table { border-collapse: collapse; width: 100%; font-family: 'EB Garamond', Georgia, serif; }
+  table.bp-table th, table.bp-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid rgba(33,31,26,0.14); vertical-align: top; }
+  table.bp-table th { font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #52504a; font-weight: 400; }
+  html { scroll-padding-top: 93px; }
+  .bp-nav-links a, .bp-nav-right a { white-space: nowrap; }
+  @media (max-width: 1100px) { .bp-nav-links { display: none !important; } }
+  @media (max-width: 560px) {
+    .bp-logo-sub { display: none; }
+    .bp-nav-in { padding: 10px 16px !important; gap: 12px !important; }
+    .bp-nav-right { gap: 8px !important; }
+    .bp-nav-right a[href="#download"] { padding: 9px 12px !important; font-size: 11px !important; }
+  }
+</style>
+
+</head>
+<body>
+
+<div style="font-family: 'EB Garamond', Georgia, serif; color: #211f1a; background: #f6f2ea; width: 100%; max-width: 100%; box-sizing: border-box;">
+
+  <!-- NAV -->
+  <div style="border-bottom: 1px solid rgba(33,31,26,0.14); background: #f6f2ea; position: sticky; top: 0; z-index: 10;">
+    <div class="bp-nav-in" style="max-width: 1180px; margin: 0 auto; padding: 12px 32px; min-height: 76px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: nowrap;">
+      <a href="#top" style="display: flex; align-items: center; gap: 10px; font-family: 'PT Mono', monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; color: #211f1a;">
+        <img src="/assets/site/logo.png" alt="" style="width: 32px; height: 32px; flex: none; object-fit: contain;">
+        bpplay <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400;">/ bptune</span>
+      </a>
+      <div class="bp-nav-links" style="display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: #52504a;">
+        <a href="#classa" style="color: inherit;">Class A Computing</a>
+        <a href="#platforms" style="color: inherit;">Platformok</a>
+<a href="#manuals" style="color: inherit;">Kézikönyv</a>
+        <a href="#fullpure" style="color: inherit;">Full Pure</a>
+        <a href="#prices" style="color: inherit;">Árak</a>
+        <a href="#ask" style="color: inherit;">Kérdezz</a>
+        <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Kapcsolat</a>
+      </div>
+      <div class="bp-nav-right" style="display: flex; align-items: center; gap: 14px; flex: none;"><a href="/" style="color: #a8661a; border: 1px solid rgba(33,31,26,0.25); border-radius: 3px; padding: 4px 9px;">EN</a>
+        <a href="#download" style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; background: #d98f2a; color: #19170f; padding: 11px 20px; border-radius: 3px; font-weight: 700;">Letöltés</a></div>
+    </div>
+  </div>
+
+  <!-- FLOATING JUMP MENU: azoknak, akik nem akarnak görgetni -->
+  <button type="button" data-act="toggleJump" aria-label="Menü megnyitása" aria-expanded="false" data-expanded style="position: fixed; right: 28px; bottom: 28px; width: 60px; height: 60px; border-radius: 50%; background: #19170f; color: #f3f0e8; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 28px rgba(0,0,0,0.32); cursor: pointer; z-index: 30;">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="#f3f0e8" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div data-if="jump" hidden>
+    <div style="position: fixed; right: 28px; bottom: 100px; width: 250px; max-height: 70vh; overflow-y: auto; background: #ffffff; border: 1px solid rgba(33,31,26,0.18); border-radius: 8px; box-shadow: 0 16px 40px rgba(0,0,0,0.3); padding: 10px; z-index: 30; font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.03em; text-transform: uppercase;">
+      <a href="#top" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Tetejére</a>
+      <a href="#classa" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Class A Computing</a>
+      <a href="#platforms" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Platformok</a>
+<a href="#manuals" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Kézikönyv</a>
+      <a href="#path" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Architektúra</a>
+      <a href="#ram" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Teljes RAM-modell</a>
+      <a href="#dsd" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">DSD / DoP</a>
+      <a href="#quiet" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Csendprofil</a>
+      <a href="#fullpure" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Full Pure</a>
+      <a href="#formats" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Formátumok</a>
+      <a href="#library" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Zenegyűjtemény és keresés</a>
+      <a href="#compare" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Kiadások</a>
+      <a href="#prices" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Árak</a>
+      <a href="#whatsnew" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Újdonságok</a>
+      <a href="#demo" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Demó</a>
+      <a href="#validated" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Igazolva</a>
+      <a href="#press" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Sajtó</a>
+      <a href="#ask" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Kérdezz</a>
+      <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Kapcsolat</a>
+      <a href="#download" data-act="closeJump" style="display: block; padding: 12px 12px; color: #19170f; border-radius: 4px; font-weight: 700;">Letöltés</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div id="top" style="max-width: 1180px; margin: 0 auto; padding: 88px 32px 56px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 22px;"><a href="#classa" style="color: inherit;">Class A Computing</a></div>
+    <h1 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 64px; line-height: 1.12; margin: 0 0 32px; max-width: 18ch; letter-spacing: -0.005em;">
+      Hallgass zenét,<br><i style="font-style: italic; font-weight: 400;">ne számítógépet.</i>
+    </h1>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <a href="#platforms" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 15px 26px; border-radius: 3px; font-weight: 700;">Elérhető platformok</a>
+      <a href="#demo" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;">A 80 másodperces demó</a>
+    </div>
+  </div>
+
+  <!-- PHOTO -->
+  <div style="max-width: 1180px; margin: 0 auto 64px; padding: 0 32px;">
+    <img src="/assets/site/hero.jpg" alt="Meghallgatás az Audio Expo 2026-on" style="display: block; width: 100%; height: auto; aspect-ratio: 1828 / 844; object-fit: cover; border-radius: 4px; border: 1px solid rgba(33,31,26,0.16);">
+    <div style="font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 14px; color: #8a867a; margin-top: 10px;">Meghallgatás az Audio Expo 2026-on, a Sound Mania és a Core Audio jóvoltából</div>
+  </div>
+
+  <!-- INTRO: MI LENNE, HA -->
+  <div style="max-width: 1180px; margin: 0 auto; padding: 0 32px 56px;">
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; line-height: 1.6; color: #211f1a; max-width: 76ch; margin: 0 0 28px;">
+      Mi lenne, ha a számítógép a munka nehezét még a zene indulása előtt elvégezné? A bpplay és a bptune erre az ötletre épül. A zene előre dekódolva, zárolt memóriában vár. A dedikált rendszer RAM-ból fut. A nélkülözhető háttérfolyamatok leállnak, a hardver pedig úgy van beállítva, hogy lejátszás közben a lehető legkevesebb felesleges tevékenység történjen. A nulláról megírt környezet mindössze két külső, nyílt forráskódú komponenst használ, és a lejátszás alatt futó folyamatok számát száz fölöttről akár három-négyre csökkenti.
+    </p>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; line-height: 1.6; color: #211f1a; max-width: 76ch; margin: 0 0 28px;">
+      Ezt nevezzük <b>Class A Computingnak</b>. A gondolatot az A-osztályú erősítőktől kölcsönöztük: több energiát fogyasztunk, cserébe a rendszer állandó, kézben tartott állapotban működik. A cél, hogy a zenelejátszás alatt a lehető legkevesebb feldolgozás és rendszerszintű változás történjen. A determinisztikus működés és az egyenletes, kiszámítható terhelés kezdettől fogva a fejlesztés középpontjában állt. Hogy ezt igazolni tudjuk, saját mérési módszert dolgoztunk ki: több tucat mérés térképezi fel, hogyan dolgozik együtt a szoftver és a hardver az egyes célplatformokon.
+    </p>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; line-height: 1.6; color: #211f1a; max-width: 76ch; margin: 0 0 28px;">
+      Két beállítással még tovább lehet menni, az x86_64 kiosk és a Raspberry Pi kiadásokon. A <a href="#fullpure" style="color: inherit;"><b>Full Pure</b></a> a lejátszás idejére linkszinten lekapcsolja a hálózati csatolót. Amint a zene a RAM-ban van, a gép leválik a hálózatról, az Ethernet-csatlakozó LED-jei kialszanak, és a kapcsolat a lejátszás végén tér vissza. Nincs hálózati forgalom, nincs feldolgozandó csomag, kívülről semmi nem érkezik, amíg a zene szól.
+    </p>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; line-height: 1.6; color: #211f1a; max-width: 76ch; margin: 0 0 28px;">
+      A <a href="#isomode" style="color: inherit;"><b>választható CPU-izolációs mód</b></a> azt dönti el, hogyan viselkedik a processzor az izolált lejátszó mag körül. Az alapértelmezett <b>B0</b> módban csak a lejátszó mag marad végig ébren, a többi pihenhet. A <b>C0</b> a 0. magot is ébren tartja, amely a megszakításokat kezeli. Az <b>A</b> mód minden magot ébren tart: ez a legállandóbb állapot, cserébe nagyobb fogyasztással és hővel jár. Hallgasd meg, hasonlítsd össze, és válassz: a váltás egyetlen billentyű.
+    </p>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; line-height: 1.6; color: #211f1a; max-width: 76ch; margin: 0;">
+      Mindez a <a href="#quiet" style="color: inherit;"><b>csendprofilra</b></a> épül. A lejátszás idejére leállnak a nélkülözhető háttérszolgáltatások, a belső meghajtók pedig készenléti állapotba kapcsolnak. A Raspberry Pi-n ehelyett az SD-kártya marad ébren, mert ott nincs más, amit altatni lehetne. Amikor a zene véget ér, minden visszaáll. Ez magától történik, minden lejátszásnál.
+    </p>
+  </div>
+
+  <!-- HÁROM PILLÉR -->
+  <div style="max-width: 1180px; margin: 0 auto; padding: 0 32px 72px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 20px;">
+      <a href="#ram" style="display: block; background: #19170f; color: #f3f0e8; border-radius: 4px; padding: 30px 28px; text-decoration: none;">
+        <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #e3ab52; margin-bottom: 10px;">01</div>
+        <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin-bottom: 10px;">RAM</div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.55; color: #d8d3c4; margin: 0;">A teljes album vagy playlist betöltődik és zárolódik a memóriában, mielőtt egyetlen hang megszólalna.</p>
+      </a>
+      <a href="#classa" style="display: block; background: #19170f; color: #f3f0e8; border-radius: 4px; padding: 30px 28px; text-decoration: none;">
+        <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #e3ab52; margin-bottom: 10px;">02</div>
+        <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin-bottom: 10px;">Class A Computing</div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.55; color: #d8d3c4; margin: 0;">Állandó, kontrollált működési állapot, ugyanaz a kompromisszum, amit egy Class A erősítő is vállal.</p>
+      </a>
+      <a href="#quiet" style="display: block; background: #19170f; color: #f3f0e8; border-radius: 4px; padding: 30px 28px; text-decoration: none;">
+        <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #e3ab52; margin-bottom: 10px;">03</div>
+        <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin-bottom: 10px;">Csend</div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.55; color: #d8d3c4; margin: 0;">Kevesebb mozgó alkatrész, amíg a zene szól: a meghajtók alszanak, a háttérfolyamatok leállnak.</p>
+      </a>
+    </div>
+  </div>
+
+  <!-- PLATFORMOK -->
+  <div id="platforms" style="background: #efe9d9; border-top: 1px solid rgba(33,31,26,0.14); border-bottom: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+      <a href="/hu/which/" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #ffffff; border: 1px solid #d98f2a; border-radius: 4px; padding: 16px 22px; margin-bottom: 28px; color: #211f1a; text-decoration: none;">
+        <span style="font-family: 'EB Garamond', Georgia, serif; font-size: 16px;">Nem biztos, melyik kiadás kell neked? Töltsd ki a 3 kérdéses útmutatót</span>
+        <span style="font-family: 'PT Mono', monospace; font-size: 13px; color: #a8661a; flex: none;">&#8594;</span>
+      </a>
+      <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Elérhető ezekhez</div>
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 32px; max-width: 24ch;">Válaszd ki a platformodat</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 20px;">
+        <a href="/hu/x64/" style="display: block; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px; text-decoration: none; color: #211f1a;">
+          <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 10px;">Próbaidő, utána fizetős</div>
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 21px; font-weight: 500; margin-bottom: 8px;">x86_64 kiosk</div>
+          <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.55; color: #55534c; margin: 0 0 14px;">Élő USB-kulcs, teljesen RAM-ba bootol. SSH, menüvezérelt böngészés.</p>
+          <span style="font-family: 'PT Mono', monospace; font-size: 12px; color: #a8661a;">Kézikönyv &#8594;</span>
+        </a>
+        <a href="/hu/x64-desktop/" style="display: block; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px; text-decoration: none; color: #211f1a;">
+          <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 10px;">Kérésre</div>
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 21px; font-weight: 500; margin-bottom: 8px;">x86_64 desktop</div>
+          <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.55; color: #55534c; margin: 0 0 14px;">Élő USB-kulcs, nincs szükség SSH-ra. Grafikus asztal, fájlok húzása egy ikonra. Csak kérésre érhető el.</p>
+          <span style="font-family: 'PT Mono', monospace; font-size: 12px; color: #a8661a;">Kézikönyv &#8594;</span>
+        </a>
+        <a href="/hu/pi/" style="display: block; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px; text-decoration: none; color: #211f1a;">
+          <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 10px;">Próbaidő, utána fizetős</div>
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 21px; font-weight: 500; margin-bottom: 8px;">Raspberry Pi 4 / 5</div>
+          <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.55; color: #55534c; margin: 0 0 14px;">Zárt eszköz, dedikált SD-kártya, teljesen RAM-ba bootol.</p>
+          <span style="font-family: 'PT Mono', monospace; font-size: 12px; color: #a8661a;">Kézikönyv &#8594;</span>
+        </a>
+        <a href="https://github.com/ferenckoscso/bpplay/releases/latest" style="display: block; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px; text-decoration: none; color: #211f1a;">
+          <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #4b5a40; margin-bottom: 10px;">Ingyenes, nyílt forráskódú</div>
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 21px; font-weight: 500; margin-bottom: 8px;">macOS</div>
+          <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.55; color: #55534c; margin: 0 0 14px;">Core kiadás, a saját Mac-edre telepítve. Terminál, húzd-és-ejtsd, vagy Finder Quick Action.</p>
+          <span style="font-family: 'PT Mono', monospace; font-size: 12px; color: #a8661a;">Letöltés &#8594;</span>
+        </a>
+      </div>
+
+      <div style="margin-top: 28px; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px 28px; background: #ffffff;">
+        <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #4b5a40; margin-bottom: 10px;">Már van Windows a gépeden?</div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16px; line-height: 1.65; color: #35332d; max-width: 76ch; margin: 0;">
+          Az x86_64 kiosk és desktop kiadások teljesen egy USB-kulcsról bootolnak, közvetlenül RAM-ba. A meglévő Windows-telepítésedhez, annak lemezéhez és boot-konfigurációjához nem nyúlnak: húzd ki a kulcsot, és a gép pontosan úgy indul vissza Windowsba, mint korábban. A zökkenőmentes induláshoz UEFI BIOS ajánlott (nem a legacy BIOS/CSM mód).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- USER MANUAL -->
+<div id="manuals" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+<div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Kézikönyv</div>
+<h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 24ch;">bpplay kézikönyv</h2>
+<p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.7; color: #35332d; max-width: 74ch; margin: 0 0 28px;">Üzembe helyezés, első használat, vezérlés és hibaelhárítás, kiadásonként.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 20px;"><a href="/hu/x64/" style="display: block; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px; text-decoration: none; color: #211f1a;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 20px; font-weight: 500; margin-bottom: 10px;">x86_64 kiosk</div><span style="font-family: 'PT Mono', monospace; font-size: 12px; color: #a8661a;">Kézikönyv &#8594;</span></a><a href="/hu/pi/" style="display: block; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px; text-decoration: none; color: #211f1a;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 20px; font-weight: 500; margin-bottom: 10px;">Raspberry Pi</div><span style="font-family: 'PT Mono', monospace; font-size: 12px; color: #a8661a;">Kézikönyv &#8594;</span></a><a href="/hu/x64-desktop/" style="display: block; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px; text-decoration: none; color: #211f1a;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 20px; font-weight: 500; margin-bottom: 10px;">x86_64 desktop (kérésre)</div><span style="font-family: 'PT Mono', monospace; font-size: 12px; color: #a8661a;">Kézikönyv &#8594;</span></a></div>
+</div>
+
+<!-- PROBLÉMA: A KERÜLŐÚT -->
+  <div style="max-width: 1180px; margin: 0 auto; padding: 0 32px 80px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #4b5a40; margin-bottom: 18px;">A legtöbb lejátszó kerülőútja</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 22ch;">A szoftver a fájl és a DAC közé ékelődik</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.7; color: #35332d; max-width: 72ch; margin: 0 0 40px;">
+      Egy hétköznapi alkalmazásnál a hang nem közvetlenül jut el a DAC-hoz. Áthalad a rendszer keverőjén, ahol az átmintavételezés, a lebegőpontos keverés és a szoftveres hangerő mind csendben megváltoztathatják a jelet.
+    </p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 24px;">
+      <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 28px;">
+        <div style="font-family: 'PT Mono', monospace; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a; margin-bottom: 16px;">Tipikus lejátszó</div>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; color: #35332d;">
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'PT Mono', monospace; color: #8a867a;">1</span> Fájl dekódolása</div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'PT Mono', monospace; color: #8a867a;">2</span> Rendszerkeverő</div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'PT Mono', monospace; color: #8a867a;">3</span> Átmintavételezés a keverő rátájára</div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'PT Mono', monospace; color: #8a867a;">4</span> Float32 keverés és szoftveres hangerő</div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'PT Mono', monospace; color: #8a867a;">5</span> Pufferelés, újrapufferelés, dithering</div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'PT Mono', monospace; color: #8a867a;">6</span> DAC</div>
+        </div>
+      </div>
+      <div style="background: #efe9d9; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 28px;">
+        <div style="font-family: 'PT Mono', monospace; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 16px;">bpplay</div>
+        <div style="display: flex; flex-direction: column; gap: 12px; font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; color: #211f1a;">
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'PT Mono', monospace; color: #8a6a2f;">1</span> Fájl dekódolása, egyszer, lejátszás előtt</div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'PT Mono', monospace; color: #8a6a2f;">2</span> Kizárólagos DAC-hozzáférés (Linuxon: közvetlen ALSA <code style="font-family: 'PT Mono', monospace; font-size: 14px;">hw:</code> eszköz, mixer nélkül; macOS-en: hog mode)</div>
+          <div style="display: flex; gap: 12px;"><span style="font-family: 'PT Mono', monospace; color: #8a6a2f;">3</span> DAC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARCHITEKTÚRA: NÉGY LÉPÉS -->
+  <div id="path" style="background: #efe9d9; border-top: 1px solid rgba(33,31,26,0.14); border-bottom: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+      <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Architektúra</div>
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 28ch;">Megmérve, utána rögzítve: négy lépés, mielőtt egyetlen hang is megszólalna</h2>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.7; color: #35332d; max-width: 72ch; margin: 0 0 40px;">
+        Az x86_64 és a Raspberry Pi kiadásokon a bptune semmit nem feltételez a hardverről, amin fut; megméri. Minden, ami érintheti a jelet vagy a rendszer stabilitását, eldől még azelőtt, hogy a DAC elindulna.
+      </p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px; margin-bottom: 36px;">
+        <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 24px;">
+          <div style="font-family: 'PT Mono', monospace; font-size: 13px; color: #8a6a2f; margin-bottom: 10px;">01</div>
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Bootkori mérés</div>
+          <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.55; color: #55534c; margin: 0;">A bptune bootoláskor megméri a CPU-magokat, és kiválasztja a lejátszó magot.</p>
+        </div>
+        <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 24px;">
+          <div style="font-family: 'PT Mono', monospace; font-size: 13px; color: #8a6a2f; margin-bottom: 10px;">02</div>
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Izolált, rögzített mag</div>
+          <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.55; color: #55534c; margin: 0;">A kiválasztott mag kikerül az általános ütemezőből, a kormányzója rögzítve, a boost letiltva, a <code style="font-family: 'PT Mono', monospace; font-size: 13px;">/dev/cpu_dma_latency</code> pedig nyitva marad, hogy a processzor ne kerüljön mély alvó állapotba. A teljes rendszer valós idejű (PREEMPT_RT) kernelen fut.</p>
+        </div>
+        <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 24px;">
+          <div style="font-family: 'PT Mono', monospace; font-size: 13px; color: #8a6a2f; margin-bottom: 10px;">03</div>
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Betöltés és zárolás</div>
+          <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.55; color: #55534c; margin: 0;">A szám beolvasódik, dekódolódik, és a teljes puffer zárolódik a RAM-ban (mlock), mielőtt a lejátszás elindulna: ugyanaz az elv, mint a macOS core kiadásnál, itt operációsrendszer-szinten kikényszerítve.</p>
+        </div>
+        <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 24px;">
+          <div style="font-family: 'PT Mono', monospace; font-size: 13px; color: #8a6a2f; margin-bottom: 10px;">04</div>
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Csend, lejátszás közben</div>
+          <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.55; color: #55534c; margin: 0;">A nem nélkülözhetetlen háttérszolgáltatások leállnak. A belső meghajtók készenléti állapotba kapcsolnak (Raspberry Pi-n az SD/MMC-kártya marad ébren helyette). A DAC USB-megszakítása az izolált magra van rögzítve.</p>
+        </div>
+      </div>
+      <div style="background: #19170f; color: #f3f0e8; border-radius: 4px; padding: 26px 28px; font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.7; margin-bottom: 28px;">
+        Lejátszás közben az izolált mag pontosan egy dolgot csinál: táplálja a DAC-ot a zárolt RAM-ból, folyamatos, fix méretű átvitellel. Nincs háttér-ütemezés, nincs lemezaktivitás, semmi más nem versenyez azért a magért.
+      </div>
+      <div id="isomode" style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px 28px; background: #ffffff; margin-bottom: 28px;">
+        <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Választható magkezelési mód</div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; max-width: 76ch; margin: 0 0 14px;">A lejátszó mag izolálása minden módban ugyanaz. A mód, amelyet a zeneválasztóban a <code>c</code> billentyűvel állítasz be, azt dönti el, hogy mely más magok maradnak mindig ébren (0 &micro;s energiagazdálkodási késleltetéssel):</p>
+        <table class="bp-table" style="font-size: 15px;"><thead><tr><th>Mód</th><th>Lejátszás közben ébren tartott magok</th></tr></thead><tbody>
+          <tr><td style="font-family: 'PT Mono', monospace;">A</td><td>Minden mag ébren marad. A legnagyobb fogyasztás és hőtermelés, csak jól hűtött gépekhez.</td></tr>
+          <tr><td style="font-family: 'PT Mono', monospace;">B0</td><td>Csak a lejátszó mag marad ébren; a többi energiatakarékos állapotba léphet. Ez az alapértelmezés.</td></tr>
+          <tr><td style="font-family: 'PT Mono', monospace;">C0</td><td>A lejátszó mag és a megszakításokat kezelő 0. mag marad ébren; a többi energiatakarékos állapotba léphet.</td></tr>
+        </tbody></table>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16px; line-height: 1.7; color: #55534c; max-width: 76ch; margin: 14px 0 0;">A módosítás a következő lejátszás indulásakor lép érvénybe, a már futó lejátszást nem érinti. Csak két aktív maggal rendelkező gépen a C0 és az A egyenértékű. Magát a lejátszó magot a bootkori mérés választja ki.</p>
+      </div>
+      <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #f6f2ea;">
+        <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a; margin-bottom: 8px;">Emellett: a macOS core kiadás</div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.6; color: #55534c; margin: 0;">Ugyanaz az elv, más úton: a hog mode kizárólagos DAC-birtoklást ad a bpplaynek, az egész-szám hardveres formátumot egyeztet, a szám beolvasódik és zárolódik a RAM-ban, a valós idejű <code style="font-family: 'PT Mono', monospace; font-size: 13px;">IOProc</code> pedig lejátszás közben pontosan egy dolgot csinál: <b>memcpy</b>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLASS A FILOZÓFIA -->
+  <div id="classa" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #4b5a40; margin-bottom: 18px;">Tervezési filozófia</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 24ch;">Ezt nevezzük Class A Computingnak</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.7; color: #35332d; max-width: 74ch; margin: 0;">
+      A Class A erősítésből kölcsönzött tervezési filozófia: elfogadja a többlet energiafogyasztást egy állandó, kontrollált működési állapotért cserébe. Egy Class A erősítő csendben is készen áll a következő hangra. Ugyanez a logika érvényesül itt is: a fenti négy lépés a lejátszás indulása előtt végez a munkájával, tehát a cél nem az energiatakarékosság lejátszás közben, hanem hogy minimálisra csökkenjen a zenével együtt járó feldolgozás és rendszerváltozás. A determinisztikus működés és az egyenletes, kiszámítható terhelés a fejlesztés kezdete óta cél volt, saját, dedikált módszerrel mérve, minden célplatformon.
+    </p>
+  </div>
+
+  <!-- TELJES RAM-MODELL -->
+  <div id="ram" style="background: #efe9d9; border-top: 1px solid rgba(33,31,26,0.14); border-bottom: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+      <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">A teljes RAM-modell</div>
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 26ch;">A teljes album betöltődik, mielőtt egyetlen hang megszólalna</h2>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.7; color: #35332d; max-width: 74ch; margin: 0 0 20px;">
+        Nem csak a szám: a teljes kijelölés, egy egész album vagy egy teljes playlist a RAM-ba töltődik, mielőtt a lejátszás elindulna. A vegyes mintavételezésű playlist szegmensekben szól, és minden szegmens teljes egészében betöltődik, mielőtt megszólalna. Nincs menet közbeni pufferelés, nincs lemezolvasás lejátszás közben. A zene a RAM-ban ül, ott zárolva, és egyetlen memóriamásolással jut el a DAC-hoz. Ennek elektromos oka is van, nem csak jelúti. Egy hagyományos lejátszó folyamatosan olvas, dekódol és újrapufferel; minden egyes művelet rövid, tüskés terhelés a gép tápegységén. Egy modern NVMe SSD olvasási tüskéje mikroszekundumok alatt ugorhat 15mA-ről 2A-re, ami közel kétmillió amper per másodperces di/dt, valódi forrása a nagyfrekvenciás EMI-nek. Amint a zene teljesen a RAM-ban van, lejátszás közben ebből semmi nem történik; nincs már mi tüskézzen.
+      </p>
+    </div>
+    <div style="background: #19170f; color: #f3f0e8;">
+      <div style="max-width: 1180px; margin: 0 auto; padding: 48px 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 32px;">
+        <div style="text-align: center;">
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 38px; font-weight: 500; color: #e3ab52;">0</div>
+          <div style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: #b7b2a3; margin-top: 8px; text-align: center;">Lemezolvasás lejátszás közben</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 38px; font-weight: 500; color: #e3ab52;">15mA &#8594; 2A</div>
+          <div style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: #b7b2a3; margin-top: 8px; text-align: center;">Tipikus NVMe-olvasási tüske</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 38px; font-weight: 500; color: #e3ab52;">~2M A/s</div>
+          <div style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: #b7b2a3; margin-top: 8px; text-align: center;">E tüske di/dt-je</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 38px; font-weight: 500; color: #e3ab52;">1</div>
+          <div style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; color: #b7b2a3; margin-top: 8px; text-align: center;">Művelet a valós idejű jelúton</div>
+        </div>
+      </div>
+    </div>
+    <div style="max-width: 1180px; margin: 0 auto; padding: 40px 32px 72px;">
+      <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; font-family: 'EB Garamond', Georgia, serif; font-size: 18px; margin-bottom: 16px;">
+        <b>4 GB</b> DSD256 fájl &times; 1,5 <span style="color: #8a867a;">(DoP csomagolás)</span> &times; 1,333 <span style="color: #8a867a;">(float32 jelút)</span> = <b>~7,5 GB</b> a RAM-ban
+      </div>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.6; color: #55534c; max-width: 64ch; margin: 0;">
+        Egyik lépés sem veszteséges. A float32 mantissza 24 bites, tehát a 16/24-bites egész-szám tartomány pontosan beleférik; a plusz memória két veszteségmentes konverzió becsületes ára, nem pazarlás.
+      </p>
+    </div>
+  </div>
+
+  <!-- DSD / DoP -->
+  <div id="dsd" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #4b5a40; margin-bottom: 18px;">DoP és DSD</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 26ch;">DSD, PCM-be csomagolva, bitre pontosan</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.7; color: #35332d; max-width: 74ch; margin: 0 0 32px;">
+      A DSD256 1 bites mintákként tárolja a jelet, csatornánként 11,2896 MHz-en, ami túl sűrű ahhoz, hogy a USB audio közvetlenül továbbítsa. A bpplay a DoP (DSD over PCM v1.1) protokollal csomagolja PCM-be.
+    </p>
+    <div style="display: flex; gap: 0; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; overflow: hidden; margin-bottom: 14px;">
+      <div style="flex: 0 0 72px; background: #efe9d9; padding: 18px 14px; font-family: 'PT Mono', monospace; font-size: 12px; text-align: center; color: #8a6a2f; border-right: 1px solid rgba(33,31,26,0.16);">8 bit</div>
+      <div style="flex: 1; background: #ffffff; padding: 18px 20px; font-family: 'PT Mono', monospace; font-size: 12px; color: #211f1a;">16 bit nyers DSD, bitre pontosan megegyezik a .dsf fájllal</div>
+    </div>
+    <div style="display: flex; gap: 0; margin-bottom: 28px;">
+      <div style="flex: 0 0 72px; font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 13px; color: #8a867a; padding: 0 14px;">Jelölő: váltakozva 0x05 / 0xFA</div>
+      <div style="flex: 1; font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 13px; color: #8a867a; padding: 0 20px;">A DSD-tartalom: érintetlen</div>
+    </div>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16px; line-height: 1.7; color: #35332d; max-width: 74ch; margin: 0;">
+      A váltakozó jelölő egy önellenőrző kézfogás: egy DoP-ot értő DAC a biteket a saját DSD-dekóderébe csomagolja ki; amelyik nem, az egyszerű PCM-ként játssza le, és passzív marad. Mindkét esetben a DoP-keret csak a szállítóeszköz, soha nem a tartalom. <b>DSD256</b>-ig igazolt, az architektúra DSD512-re is skálázódik.
+    </p>
+  </div>
+
+  <!-- CSENDPROFIL -->
+  <div id="quiet" style="background: #19170f; color: #f3f0e8;">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+      <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #e3ab52; margin-bottom: 18px;">Csendprofil</div>
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 26ch; color: #f3f0e8;">Kevesebb mozgó alkatrész, amíg a zene szól</h2>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.75; color: #d8d3c4; max-width: 74ch; margin: 0 0 20px;">
+        Mivel a zene már a lejátszás indulása előtt betöltődik a memóriába, a gép belső merevlemezei, SSD-i és NVMe-meghajtói a lejátszás idejére alacsony fogyasztású készenléti állapotba kapcsolnak: csendesebb, hűvösebb működés, nulla hatással a hangra, hiszen úgysem olvasunk róluk semmit. Bármilyen későbbi hozzáférés, például a következő album kiválasztása, automatikusan felébreszti őket.
+      </p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.75; color: #d8d3c4; max-width: 74ch; margin: 0;">
+        A Raspberry Pi kiadáson a logika fordítva működik: nincs belső meghajtó, amit altatni lehetne, így a profil inkább az SD- vagy MMC-kártyát tartja ébren a lejátszás alatt végig.
+      </p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.75; color: #d8d3c4; max-width: 74ch; margin: 20px 0 0;">Ha a csendprofil be van kapcsolva, a következő háttérszolgáltatások állnak le a lejátszás idejére: cron, avahi, rpcbind, polkit, udisks2, az időszakos karbantartási időzítők, az udev vezérlő-socketek, a felhasználói munkamenet-kezelő, valamint a Wi-Fi supplicant szolgáltatások, ha nincs aktív Wi-Fi-kapcsolat. Ezek soha nem állnak le: journald, ssh, NetworkManager, dbus és logind. Ha a leállítás után bármelyikük nem fut, minden azonnal visszaáll. A profil a lejátszás végén újra kikapcsol. A desktop kiadáson a profil rövidebb listát állít le, hogy a grafikus munkamenet nyitva maradjon.</p>
+    </div>
+  </div>
+
+  <!-- FULL PURE -->
+  <div id="fullpure" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Full Pure</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 28ch;">A hálózat elnémul, amíg a zene szól</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.7; color: #35332d; max-width: 72ch; margin: 0 0 20px;">A Full Pure a kiosk kiadások (x86_64 kiosk és Raspberry Pi) választható üzemmódja. Bekapcsolva a bpplay előbb a teljes kijelölést a RAM-ba tölti (vegyes mintavételezésű playlistnél a teljes szegmenst), utána linkszinten lekapcsolja a hálózati csatolót, és csak ezután indítja a lejátszást. Az SSH és a NetworkManager szolgáltatás tovább fut, de maga a link nem él, így a gép a zene alatt le van választva a hálózatról. A hardveres ellenőrzéseinkben az x86_64 kioskon a link LED kialszik, a Raspberry Pi-n pedig az Ethernet RJ45 LED-jei alszanak ki.</p>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.7; color: #35332d; max-width: 72ch; margin: 0 0 20px;">Mikor jön vissza a hálózat? A hálózat a lejátszás végén tér vissza; a kapcsolat általában körülbelül fél percen belül ismét elérhető az x86_64 kioskon, és körülbelül egy percen belül a Raspberry Pi-n. A lejátszás hosszához 60 másodpercet adó biztonsági időzítő csak tartalék arra az esetre, ha a bpplay folyamatot kilövik, hogy a gép ne maradjon elvágva.</p>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;">
+      <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a; margin-bottom: 12px;">Korlátok</div>
+      <ul style="margin: 0; padding-left: 22px;"><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Amíg a Full Pure aktív, nincs távvezérlés: az SSH-munkamenet a lejátszás indulásakor megszakad, és a gép a hálózat visszatérésekor érhető el újra.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A lejátszást a Full Pure alatt nem lehet távolról leállítani, mert az SSH-munkamenet megszakad. Az eszközre csatlakoztatott billentyűzet nélkül a kijelölés végéig lejátszik.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A Full Pure nem kapcsolható össze az ismétlő móddal: bekapcsolt ismétlésnél a Full Pure nem kapcsolható be, és fordítva.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A hálózati meghajtók (NAS) nincsenek indexelve a keresés számára, amíg a Full Pure be van kapcsolva.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Olyan lejátszási listán, amely mintavételi frekvencia vagy formátum váltását igényli, a hálózat röviden visszatérhet a szakaszok között, mert minden szakaszt egy saját bpplay futás játszik le.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A Full Pure-t a zeneválasztóban az <code>u</code> billentyű kapcsolja be és ki. Alapértelmezetten ki van kapcsolva, a beállítás megmarad.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Az x86_64 desktop kiadáson nem érhető el.</li></ul>
+    </div>
+  </div>
+
+  <!-- FORMÁTUMOK -->
+  <div id="formats" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Formátumok</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 28px; max-width: 26ch;">Amit lejátszik, és amit szándékosan nem</h2>
+
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; overflow-x: auto; margin-bottom: 28px; background: #ffffff;">
+      <table class="bp-table">
+        <thead><tr><th>Formátum</th><th>Részletek</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family: 'PT Mono', monospace; font-size: 14px;">WAV</td><td>16 / 24 / 32-bit egész szám és 32-bit lebegőpontos</td></tr>
+          <tr><td style="font-family: 'PT Mono', monospace; font-size: 14px;">FLAC</td><td>16 / 24-bit, Vorbis metaadat, MQA-felismerés (nem dekódolás)</td></tr>
+          <tr><td style="font-family: 'PT Mono', monospace; font-size: 14px;">ALAC (M4A)</td><td>16 / 24-bit: amit az iTunes és a Music.app készít</td></tr>
+          <tr><td style="font-family: 'PT Mono', monospace; font-size: 14px;">AIFF / AIFC</td><td>16 / 24 / 32-bit, csak tömörítetlen</td></tr>
+          <tr><td style="font-family: 'PT Mono', monospace; font-size: 14px;">DSF (DSD)</td><td>DSD64-től DSD256-ig, natív DSD-ben, ha a DAC támogatja, tartalékként DoP-pal</td></tr>
+          <tr><td style="font-family: 'PT Mono', monospace; font-size: 14px;">DFF (DSDIFF)</td><td>Pi és x86_64 kiadások. Tömörítetlen DSD; a DST-tömörített DFF fájlok nem támogatottak</td></tr>
+          <tr><td style="font-family: 'PT Mono', monospace; font-size: 14px;">SACD ISO</td><td>Pi és x86_64 kiadások. Sztereó terület, DSD64, a DST-tömörített lemezeket is beleértve. Többcsatornás területből egy sztereó pár (az első) szól. A másolásvédett képek és a tömörítetlen többcsatornás területek nem támogatottak</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; margin-bottom: 32px;">
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.6; color: #55534c; margin: 0;">A macOS core kiadáson ellenőrzött, de kifejezetten nem támogatott: DFF (DSDIFF) és SACD ISO. Mindkettő támogatott a Pi és az x86_64 kiadásokon. A macOS core kiadáson a DSD DoP-on keresztül szól.</p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.6; color: #55534c; margin: 0;">A bpplay lejátssza a fájlokat helyi tárolóról, NAS-ról, vagy egy csatolt Google Drive- vagy Dropbox-mappából. Nem streaming kliens: nincs beépített kapcsolat a Spotify, Tidal, Qobuz vagy hasonló szolgáltatásokhoz.</p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.6; color: #55534c; margin: 0;">A csatornaszám közvetlenül a fájl fejlécéből jön, sztereó, kvadrofón, 5.1, vagy bármi más, amit a formátum hordoz, és változtatás nélkül jut el a DAC-hoz, akár 64 csatornáig. Nincs lekeverés, nincs csatorna-áttérképezés.</p>
+    </div>
+
+    <div style="background: #efe9d9; border-radius: 4px; padding: 26px 28px;">
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; font-weight: 500; margin-bottom: 8px;">Szándékosan nincs a hatókörben</div>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.6; color: #45443e; margin: 0;">Könyvtárkezelés, grafikus felület, a lejátszóba beépített streaming szolgáltatások, jelfeldolgozás, hangerőszabályzás. Egyik sem véletlen kihagyás; mindegyik olyan hely lenne, ahol a jel megváltozhatna, vagy zaj keletkezhetne a fájl és a DAC között.</p>
+    </div>
+  </div>
+
+  <!-- MUSIC LIBRARY -->
+  <div id="library" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Zenegyűjtemény</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 28ch;">Meghajtók, keresés és gépfelmérés</h2>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Meghajtóválasztó</div><p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin: 0;">Az <code>m</code> billentyű megnyitja a meghajtóválasztót. Felsorolja a csatolt meghajtókat, a csatlakoztatott, de még nem csatolt meghajtókat és a hálózati megosztásokat (NFS vagy SMB, csak olvasásra csatolva); az öt legutóbbi megosztást megjegyzi. A helyi meghajtók csak olvasásra vannak csatolva. Egy már csatolt meghajtó kiválasztásakor ezt kérdezi: <i>A meghajtó már csatolva van. Ellenőrizzem a változásokat? (i/N)</i>; az i válasz újraindexeli.</p></div>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Globális keresés</div><p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin: 0;">A <code>/</code> billentyű az összes meghajtón egyszerre keres. Minden begépelt szónak szerepelnie kell a névben, ékezetektől és kis- és nagybetűktől függetlenül. Az Enter megnyitja a találat mappáját, a kurzorral a fájlon.</p></div>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Index</div><p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin: 0;">A mentett keresési index visszaáll, így a keresés röviddel az indítás után kész. A rejtett fájlok és a macOS <code>._</code> fájlok kimaradnak. Amíg egy meghajtót indexel, a lejátszás megvárja az első menet végét, az állapotsor pedig mutatja az előrehaladást.</p></div>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Meghajtó kizárása</div><p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin: 0;">A meghajtóválasztóban az <code>x</code> billentyű kizár egy csatolt meghajtót a keresésből és az indexelésből: a meghajtó a <i>(kizárva a keresésből)</i> jelölést kapja, a választóban marad, és továbbra is böngészhető és lejátszható. Ugyanez a billentyű visszakapcsolja.</p></div>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Gépfelmérés és DAC-diagnosztika</div><p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin: 0;">A böngészőben a <code>g</code> billentyűvel a gépfelmérés és optimalizálási jelentés nyílik meg: gép és kernel, alaplap és BIOS, az izolált mag és a magkezelési mód, energiagazdálkodás és ütemezés, memória, a csendprofil és, ha van, az Intel management engine. Ezt követi a DAC-diagnosztika: a DAC által hirdetett formátumok, a lejátszás közben ténylegesen használt formátum, valamint a mixer- és némítási állapot. Az első indításkor rövid összefoglaló jelenik meg.</p></div>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 19px; font-weight: 500; margin-bottom: 8px;">Nyelvi kiadások</div><p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin: 0;">A bpplay magyar (HU) és angol (EN) kiadásban jelenik meg. A nyelv az image-be van rögzítve: ez adja a zeneválasztó és a bptune szövegeit, az alapértelmezett zenemappát (a HU kiadásban Zen&eacute;k, az EN kiadásban Music) és az időzónát (HU-ban Europe/Budapest, EN-ben UTC). A desktop kiadáson a billentyűzetkiosztás követi a nyelvet (hu vagy us).</p></div>
+    <div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a; margin: 6px 0 12px;">Ismert korlátok</div>
+    <ul style="margin: 0 0 20px; padding-left: 22px;"><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Új meghajtó csatolása után várj körülbelül egy percet a lejátszás indítása előtt, hogy az első indexelési menet befejeződhessen.</li></ul>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; color: #6e6b61; margin: 0;">Ez a rész az x86_64 kiosk és a Raspberry Pi kiadásokra vonatkozik. A desktop kiadás a saját fájlkezelőjét használja, a macOS kiadás pedig helyi fájlokat játszik le.</p>
+  </div>
+
+  <!-- KIADÁSOK ÖSSZEHASONLÍTÁSA -->
+  <div id="compare" style="background: #efe9d9; border-top: 1px solid rgba(33,31,26,0.14); border-bottom: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+      <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #4b5a40; margin-bottom: 18px;">Összehasonlítás</div>
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px;">Hogyan viszonyulnak egymáshoz a kiadások</h2>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.7; color: #35332d; max-width: 72ch; margin: 0 0 28px;">Az x86_64 kiosk a referencia; a többi kiadás ahhoz képest van leírva, miben különbözik tőle.</p>
+      <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; overflow-x: auto; background: #ffffff;">
+        <table class="bp-table" style="font-size: 15px;">
+          <thead><tr><th>Szempont</th><th>x86_64 kiosk</th><th>x86_64 desktop</th><th>Pi kiosk</th><th>macOS</th></tr></thead>
+          <tbody>
+            <tr><td><a href="#prices" style="color: inherit;">Licenc / ár</a></td><td><a href="#prices" style="color: inherit;">Próbaidő (15 nap), utána fizetős</a></td><td><a href="#prices" style="color: inherit;">Kérésre</a></td><td><a href="#prices" style="color: inherit;">Próbaidő (15 nap), utána fizetős</a></td><td>Ingyenes, GPL-3.0, nyílt forráskódú</td></tr>
+            <tr><td>Telepítés</td><td>USB-kulcsról bootol; a PC érintetlen</td><td>USB-kulcsról bootol; a PC érintetlen</td><td>Dedikált SD-kártyás eszköz</td><td>Telepítve a saját Mac-edre</td></tr>
+            <tr><td>Vezérlés</td><td>SSH, menüvezérelt böngészés</td><td>Grafikus asztal; fájlok húzása egy ikonra</td><td>SSH, menüvezérelt böngészés</td><td>Terminál, húzd-és-ejtsd, vagy Finder Quick Action</td></tr>
+            <tr><td>Formátumok</td><td>WAV, FLAC, AIFF, ALAC, DSF, DFF, SACD ISO</td><td>Ugyanaz, mint a kiosk</td><td>Ugyanaz, mint a kiosk</td><td>WAV, FLAC, AIFF, ALAC, DSF; nincs DFF, nincs SACD ISO</td></tr>
+            <tr><td>RT-hangolás</td><td>RT kernel és bptune: a CPU rögzített, nem váltakozó teljesítményállapotban tartva</td><td>Ugyanaz, mint a kiosk</td><td>Ugyanaz, mint a kiosk (eltérő SoC energiajellemzők)</td><td>Nincs OS-szintű RT-hangolás; a hog mode-ra, integer mode-ra és közvetlen CoreAudio-elérésre épül</td></tr>
+            <tr><td>Csendprofil</td><td>A belső meghajtók készenléti állapotba kapcsolnak lejátszás közben</td><td>Ugyanaz az elv, rövidebb leállított szolgáltatáslistával</td><td>Fordítva: az SD/MMC-kártyát tartja ébren, nincs belső meghajtó, amit altatni lehetne</td><td>Nincs ilyen mechanizmus</td></tr>
+            <tr><td>Kedvencek</td><td>Igen</td><td>Nem, nem illik a húzd-és-ejtsd modellbe</td><td>Igen</td><td>Nem</td></tr>
+            <tr><td>Most szól sor</td><td>Igen</td><td>Igen</td><td>Igen</td><td>Nem, csak a fájlnév a terminálban</td></tr>
+            <tr><td>Hálózati megosztások</td><td>Igen</td><td>Igen</td><td>Igen</td><td>Nem, csak helyi fájlok</td></tr>
+            <tr><td>Full Pure</td><td>Igen (<code>u</code> billentyű)</td><td>Nem</td><td>Igen (<code>u</code> billentyű)</td><td>Nem</td></tr>
+            <tr><td>Magkezelési mód</td><td>Választható (<code>c</code> billentyű)</td><td>Nem (nincs zeneválasztó)</td><td>Választható (<code>c</code> billentyű)</td><td>Nem</td></tr>
+            <tr><td>Keresés és gépfelmérés</td><td>Igen (<code>/</code> és <code>g</code> billentyű)</td><td>Nem (fájlkezelő)</td><td>Igen (<code>/</code> és <code>g</code> billentyű)</td><td>Nem</td></tr>
+            <tr><td>Nyelvek</td><td>HU és EN kiadás</td><td>HU és EN kiadás</td><td>HU és EN kiadás</td><td>angol</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICES (skeleton, content to be provided) -->
+  <div id="prices" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Árak</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 28ch;">Árak és opciók</h2>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a; margin-bottom: 12px;">Kiadások</div><p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; color: #6e6b61; margin: 0 0 14px;">Bruttó árak.</p><ul style="margin: 0; padding-left: 22px;"><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;"><b>x86_64 kiosk:</b> 90&nbsp;000&nbsp;Ft. Örök licenc, 1 év szoftverfrissítéssel.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;"><b>Raspberry Pi 4 / 5:</b> 70&nbsp;000&nbsp;Ft. Örök licenc, 1 év szoftverfrissítéssel.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;"><b>x86_64 desktop:</b> csak egyedi kérésre (<a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">kapcsolati űrlap</a>).</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;"><b>macOS:</b> ingyenes, nyílt forráskódú.</li></ul></div>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a; margin-bottom: 12px;">Opciók</div><ul style="margin: 0; padding-left: 22px;"><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Silicon Power Jewel J80 Silver 16 GB pendrive (USB 3.2 Gen 1, USB-A), a bpplay/bptune image-dzsel: 12&nbsp;000&nbsp;Ft.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">SanDisk microSDHC Ultra 32 GB SD-adapterrel (olvasás akár 120 MB/s, Class 10, UHS-I, U1, A1), a bpplay/bptune rendszerrel: 15&nbsp;000&nbsp;Ft.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Telepítés, beállítás, tesztelés és optimalizálás, hozzánk behozott géppel: 40&nbsp;000&nbsp;Ft/nap.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Tervezett: korlátozott streaming opció mindkét platformhoz, 40&nbsp;000&nbsp;Ft (irányár). Fejlesztés alatt, még nem rendelhető.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Egyedi fejlesztések és kérések: egyeztetés szerint.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">OEM, white label és tömeges licencelés: egyedi egyeztetés után.</li></ul></div>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; color: #35332d; margin: 0;">Webshop: hamarosan.</p><p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; color: #35332d; margin: 10px 0 0;">A webshop indulásáig a <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">kapcsolati űrlapon</a> rendelhetsz.</p></div>
+  </div>
+
+  <!-- WHAT'S NEW -->
+  <div id="whatsnew" style="background: #efe9d9; border-top: 1px solid rgba(33,31,26,0.14); border-bottom: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+      <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Újdonságok</div>
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 28ch;">RC21 és RC22</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr)); gap: 24px;">
+        <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 21px; font-weight: 500; margin-bottom: 12px;">RC21</div><ul style="margin: 0; padding-left: 22px;"><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Full Pure (<code>u</code> billentyű): a hálózat linkszinten kikapcsol, amíg a zene szól.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Globális keresés az összes meghajtón a <code>/</code> billentyűvel, mentett indexszel; a lejátszás csak az első indexelési menet után indul.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A <code>g</code> gépfelmérés: jelentésszövegek, a magkezelési mód képernyője, rövid összefoglaló az első indításkor, az Intel management engine futásidejű állapota, USB-vezérlők.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Próbaidő: a beállítási terület csak a boot USB-kulcson használatos, és egy új image új próbaidőt jelent. Egy új image első bootolása nem veszi át egy másik image által hagyott beállítási területet, így a próbaidő az első bootolástól indul.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A keresési találat mögül eltűnt meghajtót üzenet kezeli; a rejtett és a <code>._</code> fájlok nincsenek indexelve.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A „most szól” sor látható hagyja az előadót és a címet, ha az album neve hosszú; a mappa- vagy sorkorlát elérését jelzi a rendszer (bpplay 1.5.8 és 1.5.9). Ha a bpplay kimenete csőbe van irányítva, a sor a terminál szélességéhez igazodik (bpplay 1.5.15).</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Az ID3-címkék az AIFF és WAV fájlokból is beolvasódnak, számonkénti előadóval (bpplay 1.5.10 és 1.5.12).</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A kimenetválasztó megszakítható a <code>q</code> vagy az <code>Esc</code> billentyűvel.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">SACD ISO: megbízhatóbb sávútvonalak és indexelés; a mappa mód elfogadja a DFF fájlokat és a SACD ISO sávokat (bpplay 1.5.13).</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">DSD fájlok: a fájl saját záró kitöltése már nem szólal meg hangként.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Az angol image nem tartalmaz magyar szöveget, az alapértelmezett zenemappa pedig követi az image nyelvét (EN-ben Music, HU-ban Zen&eacute;k).</li></ul></div>
+        <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 22px 26px; background: #ffffff; margin-bottom: 20px;"><div style="font-family: 'EB Garamond', Georgia, serif; font-size: 21px; font-weight: 500; margin-bottom: 12px;">RC22</div><ul style="margin: 0; padding-left: 22px;"><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A Full Pure és az ismétlő mód külön van tartva: az ismétlés blokkolja a Full Pure-t, és fordítva.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A választóban kiválasztott kimenet megjegyződik a beállítási területen; rövid súgó az <code>a</code> és <code>n</code> billentyűhöz; SSH-banner a Raspberry Pi-n; a HU desktop kiadás magyar billentyűzetkiosztást kap.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A magyar image helyi időben (Europe/Budapest) fut; az angol image UTC-n marad.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A <code>g</code> jelentésnek van DAC szakasza: a DAC által hirdetett formátumok, a lejátszás közben használt formátum, valamint a mixer- és némítási állapot.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Desktop kiadás: a csendprofil rövidebb listát állít le, hogy a grafikus munkamenet nyitva maradjon.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">bpplay 1.5.16: nincs lefagyás nem terminál jellegű, nyitott bemenettel, és tiszta leállás TERM, INT és HUP jelre. bpplay 1.5.17: egy nyílbillentyű escape-szekvenciája már nem vált ki lejátszóparancsot.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">bpplay 1.5.18: TEAC/Esoteric (0x0644; Esoteric N-01XD SE-n igazolva) és Luxman (0x3255) DAC-okon a 16 és 24 bites források először a saját bitmélységükben mennek ki (S16 vagy S24 packed), 32 bites tartalékkal; a többi DAC-on a 32 bit marad az első.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Raspberry Pi: a hátralévő próbaidő a zeneválasztó fejlécsorában látszik (<i>Próbaidő: N nap van hátra</i>).</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">A rövid összefoglaló már nem csonkul; az 5 perces NAS-újraellenőrzés megszűnt; az <code>R</code> billentyű megszűnt a meghajtóválasztóból, és egy már csatolt meghajtónál a kiosk megkérdezi, ellenőrizze-e a változásokat.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">Az <code>x</code> billentyű csak a keresésből és az indexelésből zár ki egy meghajtót; a meghajtó a választóban marad a <i>(kizárva a keresésből)</i> jelöléssel, és ugyanaz a billentyű visszakapcsolja.</li><li style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; margin-bottom: 8px;">bptune 0.3.8: a Renesas-tanács csak működő eszköz nélkül jelenik meg, a Bay Trail TXE felismerésre kerül, a 0.0.0.0 firmware-verzió pedig ismeretlenként jelenik meg.</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEMÓ -->
+  <div id="demo" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Lásd működés közben</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px;">Telepítés és lejátszás, két percen belül</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.7; color: #35332d; max-width: 72ch; margin: 0 0 28px;">Egy rövid, vágatlan képernyőfelvétel a bpplay telepítéséről és egy album lejátszásáról, elejétől a végéig.</p>
+    <div style="border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; background: #19170f; height: 340px; display: flex; align-items: center; justify-content: center; font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: #9c988c;">
+      [ videó: bpplay-install-demo.mp4, 1:20 ]
+    </div>
+    <p style="margin: 28px 0 0;"><a href="/hu/demo-preview/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">Próbáld ki az interaktív demót a böngésződben &#8594;</a></p>
+  </div>
+
+  <!-- IGAZOLVA -->
+  <div id="validated" style="background: #efe9d9; border-top: 1px solid rgba(33,31,26,0.14); border-bottom: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+      <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #4b5a40; margin-bottom: 18px;">Igazolva, nem feltételezve</div>
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px; max-width: 24ch;">Tesztelve ott, ahol számít: a kapcsolaton</h2>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.7; color: #35332d; max-width: 72ch; margin: 0 0 32px;">A bitre pontos viselkedés minden kipróbált topológiánál és kábelnél azonos volt; a bitút független attól, hogyan csatlakoztatod.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 20px 32px; font-family: 'EB Garamond', Georgia, serif; font-size: 16px;">
+        <div><b style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #8a6a2f; display: block; margin-bottom: 4px;">Interfészek</b>Gustard XMOS, Amanero Combo384/768</div>
+        <div><b style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #8a6a2f; display: block; margin-bottom: 4px;">DAC-ok</b>TT és Gustard</div>
+        <div><b style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #8a6a2f; display: block; margin-bottom: 4px;">Közvetlen csatlakozás</b>A DAC közvetlenül a MacBook Air portjába dugva</div>
+        <div><b style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #8a6a2f; display: block; margin-bottom: 4px;">Thunderbolt hub</b>Sonnet Tech Thunderbolt 5</div>
+        <div><b style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #8a6a2f; display: block; margin-bottom: 4px;">USB hub</b>Egy névtelen hub, az őszinte alapállapotért</div>
+        <div><b style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #8a6a2f; display: block; margin-bottom: 4px;">Kábelezés</b>Drága is, olcsó is</div>
+        <div><b style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: #8a6a2f; display: block; margin-bottom: 4px;">Többcsatornás</b>4 csatornás (kvadrofón) lejátszás igazolva v0.9.1-en, egy Ravenna-alapú Merging Anubis DAC-on keresztül</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAJTÓ -->
+  <div id="press" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Független vélemények, fizetett megjelenés nélkül</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 16px;">Sajtó és kritikák</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; line-height: 1.7; color: #35332d; max-width: 72ch; margin: 0 0 40px;">
+      Amit független kritikusok, szerkesztők és valódi hallgatók mondtak a bpplayről és a bptune-ról, forrással linkelve, hogy magad is elolvashasd a teljes írást.
+    </p>
+
+    <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 500; margin: 0 0 6px;">Független kritikák</h3>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; color: #6e6b61; margin: 0 0 24px;">A projekttel semmilyen kapcsolatban nem álló kritikusok írásai.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 20px;">
+      <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px 28px;">
+        <blockquote style="margin: 0 0 14px; font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 18px; line-height: 1.6; color: #211f1a;">„Clean! That's the word that comes to mind. Absolutely clean. Transparent, resolving. Nothing but the plain truth. Of course, care is needed with volume, since the signal comes through unattenuated.”</blockquote>
+        <div style="font-family: 'PT Mono', monospace; font-size: 12px; color: #6e6b61;"><b style="color: #211f1a;">Reinhard Haberfellner</b> &middot; DE &middot; 2026. aug. 12. &middot; <a href="https://haberfellner.net/2026/08/ferenc-koscso-der-grossmeister-des-puren-sounds-mit-bpplay/" style="color: #a8661a;">A teljes cikk &#8599;</a></div>
+      </div>
+      <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px 28px;">
+        <blockquote style="margin: 0 0 14px; font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 18px; line-height: 1.6; color: #211f1a;">„What a phenomenally fine article. Ferenc has hit a grand slam about DSD, the like of which I've never seen, and which fundamentally advances the state of the art. Absolutely brilliant!”</blockquote>
+        <div style="font-family: 'PT Mono', monospace; font-size: 12px; color: #6e6b61;"><b style="color: #211f1a;">David W. Robinson</b> &middot; Positive Feedback &middot; szerkesztői megjegyzés &middot; <a href="https://positive-feedback.com/reviews/music-reviews/bpplay-bit-perfect-playback-software-solution-part3/" style="color: #a8661a;">A cikk &#8599;</a></div>
+      </div>
+      <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px 28px;">
+        <blockquote style="margin: 0 0 14px; font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 18px; line-height: 1.6; color: #211f1a;">„Az első, amit hallasz, a szinte korlátlan energia és dinamika. A hangszínpad nagyobb, mint amihez szokva vagyok, mélységben és szélességben is. Minden figyelemre méltó tisztasággal, torzítás nélkül szólal meg, teljesen leválva a hangfalakról. &hellip; A különbség ég és föld. Egy egész osztállyal emeli feljebb a hifirendszert.”</blockquote>
+        <div style="font-family: 'PT Mono', monospace; font-size: 12px; color: #6e6b61; margin-bottom: 10px;"><b style="color: #211f1a;">wasiliy888</b> &middot; avxforum.hu &middot; 2026. szept. 15. &middot; <a href="https://avxforum.hu/forum/viewtopic.php?p=3032130#p3032130" style="color: #a8661a;">A teljes kritika &#8599;</a></div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 13.5px; color: #8a867a; margin: 0;">A „Hallelujah for the Machine!” című írásból, egy hallgatótól, aki egy gondosan optimalizált, kétdobozos Roon/Tidal streaming beállításból érkezett a bpplayhez, előtte szinte semmilyen helyi fájl nélkül. A szerző engedélyével közölve.</p>
+      </div>
+    </div>
+
+    <div style="margin-bottom: 44px;">
+      <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 16px; font-weight: 500; margin-bottom: 10px;">Positive Feedback, a teljes 3 részes kritika</div>
+      <div style="display: flex; flex-direction: column; gap: 2px; font-family: 'PT Mono', monospace; font-size: 13px;">
+        <a href="https://pollux.positive-feedback.com/audio-discourse/bplay-bit-perfect-playback-software-solution-part1/" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(33,31,26,0.12); color: #211f1a;"><span>1. rész</span><span style="color: #a8661a;">positive-feedback.com &#8599;</span></a>
+        <a href="https://pollux.positive-feedback.com/audio-discourse/bpplay-bit-perfect-playback-software-solution-part2/" style="display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(33,31,26,0.12); color: #211f1a;"><span>2. rész</span><span style="color: #a8661a;">positive-feedback.com &#8599;</span></a>
+        <a href="https://positive-feedback.com/reviews/music-reviews/bpplay-bit-perfect-playback-software-solution-part3/" style="display: flex; justify-content: space-between; padding: 10px 0; color: #211f1a;"><span>3. rész</span><span style="color: #a8661a;">positive-feedback.com &#8599;</span></a>
+      </div>
+    </div>
+
+    <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 500; margin: 0 0 6px;">A fejlesztőtől</h3>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; color: #6e6b61; margin: 0 0 16px;">Saját szerzésű, szakmai esszék, nem külső kritikák, átláthatóság kedvéért listázva itt.</p>
+    <div style="display: flex; flex-direction: column; gap: 2px; font-family: 'PT Mono', monospace; font-size: 13px; margin-bottom: 44px;">
+      <a href="https://medium.com/@mediaengineering/bpplay-uncompromising-computer-audio-architecture-and-software-minimalism-fbcc30753b28" style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(33,31,26,0.12); color: #211f1a;"><span>1. rész: Kompromisszumok nélküli architektúra</span><span style="color: #a8661a; flex: none;">Medium &#8599;</span></a>
+      <a href="https://medium.com/@mediaengineering/bpplay-what-happens-under-the-hood-85d5159bb739" style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(33,31,26,0.12); color: #211f1a;"><span>2. rész: Mi történik a motorháztető alatt</span><span style="color: #a8661a; flex: none;">Medium &#8599;</span></a>
+      <a href="https://mediaengineering.medium.com/bit-perfect-memory-based-audio-file-playback-in-2026-7199a2921b53" style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(33,31,26,0.12); color: #211f1a;"><span>3. rész: Memóriaalapú lejátszás 2026-ban</span><span style="color: #a8661a; flex: none;">Medium &#8599;</span></a>
+      <a href="https://medium.com/@mediaengineering/linux-and-windows-environment-optimization-possibilities-for-high-end-audio-playback-c2e6c8c1fee0" style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid rgba(33,31,26,0.12); color: #211f1a;"><span>4. rész: Linux/Windows optimalizáció</span><span style="color: #a8661a; flex: none;">Medium &#8599;</span></a>
+      <a href="https://medium.com/@mediaengineering/bit-perfect-playback-what-does-it-really-mean-and-when-does-it-actually-matter-9b98efaca480" style="display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; color: #211f1a;"><span>5. rész: Mit jelent valójában a bitre pontos lejátszás</span><span style="color: #a8661a; flex: none;">Medium &#8599;</span></a>
+    </div>
+
+    <h3 style="font-family: 'EB Garamond', Georgia, serif; font-size: 22px; font-weight: 500; margin: 0 0 6px;">A terepről</h3>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; color: #6e6b61; margin: 0 0 24px;">Valódi beállítások, hifiközösségi beszélgetésekből, nem formális kritikák, csak őszinte szakmai csevegés.</p>
+    <div style="background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 26px 28px;">
+      <blockquote style="margin: 0 0 14px; font-family: 'EB Garamond', Georgia, serif; font-style: italic; font-size: 17px; line-height: 1.65; color: #211f1a;">„Ez a PC épp az enyém, most Tóth Gábor D/A konverterével hallgatom USB-n keresztül. Amihez frissen tudom hasonlítani, az az eddigi felállásom: egy Ravenna-alapú, Ethernet, Merging NADAC D/A konverter, ugyanazzal a PC-vel, HQPlayerrel Win11 alatt futtatva. Bár az utóbbival is teljesen elégedett vagyok, ezt az új felállást valójában jobban szeretem: nagy felbontás, jól definiált basszus, jó ritmus, meghatározó jegyként egy meleg, bársonyos tónussal, teljes, kerek hangzás.”</blockquote>
+      <div style="font-family: 'PT Mono', monospace; font-size: 12px; color: #6e6b61; margin-bottom: 10px;"><b style="color: #211f1a;">hifis</b> &middot; avxforum.hu &middot; <a href="https://avxforum.hu/forum/viewtopic.php?p=3022741#p3022741" style="color: #a8661a;">A téma &#8599;</a></div>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 13.5px; color: #8a867a; margin: 0;">Válasz a fejlesztő saját hozzászólására ugyanabban a témában, egy dual-boot rendszerről (lineáris tápegység, Pink Faun OCXO óra, Matrix Audio USB), amely a Debian oldalán futtatja a bpplayt és a bptune-t.</p>
+    </div>
+  </div>
+
+  <!-- KÉRDEZZ -->
+  <div id="ask" style="max-width: 1180px; margin: 0 auto; padding: 72px 32px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Kérdezz</div>
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 34px; line-height: 1.25; margin: 0 0 22px;">Kérdezz bármit a bpplayről</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.7; color: #35332d; max-width: 74ch; margin: 0 0 28px;">
+      Készítettünk egy kísérleti AI chatbotot, amely több mint 100 bpplay/bptune dokumentumon és linken alapul, és szinte bármilyen kérdésre válaszol a bpplayvel kapcsolatban: hogyan működik, mit támogat, hogyan kell beállítani.
+    </p>
+    <p style="margin: 0 0 40px;"><a href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 15px 26px; border-radius: 3px; font-weight: 700; display: inline-block;">Chat megnyitása &#8599;</a></p>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 24px;">
+      <div>
+        <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; font-weight: 500; margin-bottom: 6px;">Kísérleti</div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.6; color: #55534c; margin: 0;">Ez egy kísérleti funkció, nem a bpplay kész vagy hivatalos része. A válaszok hiányosak vagy tévesek is lehetnek, ezért ami számít, azt mindig ellenőrizd a kézikönyvben vagy a honlapon magán is.</p>
+      </div>
+      <div>
+        <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; font-weight: 500; margin-bottom: 6px;">Google-bejelentkezés szükséges</div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.6; color: #55534c; margin: 0;">A használatához be kell jelentkezned egy Google-fiókkal. Ez magának a Google NotebookLM-nek a korlátja, nem olyasmi, amin mi tudnánk állítani.</p>
+      </div>
+      <div>
+        <div style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; font-weight: 500; margin-bottom: 6px;">Adatkezelés</div>
+        <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.6; color: #55534c; margin: 0;">Mi magunk nem gyűjtünk, tárolunk vagy dolgozunk fel semmilyen adatot a chat használatáról. Minden adatkezelést kizárólag a Google végez, teljes egészében a Google saját NotebookLM Felhasználási Feltételei és Adatvédelmi Szabályzata szerint, nem a miénk szerint.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- LETÖLTÉS CTA -->
+  <div id="download" style="max-width: 1180px; margin: 0 auto; padding: 80px 32px; text-align: center;">
+    <h2 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 32px; line-height: 1.3; margin: 0 0 16px;">Letöltés</h2>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 17px; color: #55534c; margin: 0 0 32px;">A macOS kiadás ingyenes és nyílt forráskódú (GPL-3.0). Az x86_64 kiosk és a Raspberry Pi kiadás próbakiadás: 15 nap, utána fizetős. Az x86_64 desktop kiadás kérésre érhető el. A Koscso Media Engineering Kft. fejlesztése. Licencelhető, partneri termékekbe integrálható.</p>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+      <a href="/hu/x64/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;">bpplay x86_64 kioszkhoz</a>
+      <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;">x86_64 desktop: kérés</a>
+      <a href="/hu/pi/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;">bpplay Raspberry Pi-hoz</a>
+      <a href="https://github.com/ferenckoscso/bpplay/releases/latest" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;">bpplay macOS-hez</a>
+    </div>
+  </div>
+
+  <!-- LÁBLÉC -->
+  <div style="border-top: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 36px 32px 16px; text-align: center;">
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 14.5px; color: #6e6b61; margin: 0 0 6px;">Ez a honlap nem használ sütiket, és nem futtat semmilyen követő szkriptet.</p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 14.5px; color: #6e6b61; margin: 0;">Nem gyűjtünk, tárolunk vagy dolgozunk fel semmilyen személyes adatot a látogatásodról.</p>
+    </div>
+    <div style="max-width: 1180px; margin: 0 auto; padding: 16px 32px 28px; text-align: center; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a;">
+      bpplay / bptune &middot; Class A Computing &middot; Koscso Media Engineering Kft. &middot; <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Kapcsolat</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  var S={step:'1',jump:false};
+  function render(){
+    document.querySelectorAll('[data-if]').forEach(function(e){
+      var k=e.getAttribute('data-if'); e.hidden=!(k.indexOf('step:')===0 ? S.step===k.slice(5) : !!S[k]);
+    });
+    document.querySelectorAll('[data-expanded]').forEach(function(e){ e.setAttribute('aria-expanded',String(S.jump)); });
+  }
+  document.addEventListener('click',function(ev){
+    var t=ev.target.closest('[data-act],[data-go]'); if(!t) return;
+    if(t.getAttribute('data-go')){ S.step=t.getAttribute('data-go'); window.scrollTo(0,0); }
+    else if(t.getAttribute('data-act')==='toggleJump'){ S.jump=!S.jump; }
+    else if(t.getAttribute('data-act')==='closeJump'){ S.jump=false; }
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
