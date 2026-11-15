@@ -7,6 +7,21 @@
 <meta name="description" content="The shortest deterministic path from file to DAC: bit-perfect, memory-loaded playback, zero software processing. macOS app (free, open source); also as a Raspberry Pi appliance and x86_64 kiosk edition.">
 <link rel="alternate" hreflang="en" href="https://bpplay.hu/">
 <link rel="alternate" hreflang="hu" href="https://bpplay.hu/hu/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bpplay.hu/">
+<meta property="og:title" content="bpplay: the shortest deterministic path from file to DAC">
+<meta property="og:description" content="The shortest deterministic path from file to DAC: bit-perfect, memory-loaded playback, zero software processing. macOS app (free, open source); also as a Raspberry Pi appliance and x86_64 kiosk edition.">
+<meta property="og:image" content="https://bpplay.hu/assets/site/og-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="bpplay / bptune, Class A Computing: macOS, Raspberry Pi, x86_64">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="hu_HU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@bpplayhu2026">
+<meta name="twitter:title" content="bpplay: the shortest deterministic path from file to DAC">
+<meta name="twitter:description" content="The shortest deterministic path from file to DAC: bit-perfect, memory-loaded playback, zero software processing. macOS app (free, open source); also as a Raspberry Pi appliance and x86_64 kiosk edition.">
+<meta name="twitter:image" content="https://bpplay.hu/assets/site/og-preview.png">
 <link rel="icon" href="/assets/site/logo.png">
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
 
@@ -20,7 +35,12 @@
   table.bp-table th { font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #52504a; font-weight: 400; }
   html { scroll-padding-top: 93px; }
   .bp-nav-links a, .bp-nav-right a { white-space: nowrap; }
-  @media (max-width: 1100px) { .bp-nav-links { display: none !important; } }
+  .bp-logo { flex: none; white-space: nowrap; }
+  .bp-nav-links { min-width: 0; }
+  /* R1/7: a nav tartalom-szelessege legfeljebb 1116 px (max-width 1180 - 2x32 padding), a logo + HU/EN + asszisztens-gomb + Letoltes mar 641 px: a kozepso menuben csak a 4-5 fo pont marad (a Class A Computing es az Ask/Kerdezz pont a lebego ugro-menuben es a hero-ban elerheto), 1160 px alatt az egesz kozepso menu elrejtodik; a logo nem torik. */
+  .bp-nav-links .bp-nav-opt { display: none; }
+  @media (max-width: 1159px) { .bp-nav-links { display: none !important; } }
+  @media (max-width: 900px) { .bp-nav-ask { display: none !important; } }
   @media (max-width: 560px) {
     .bp-logo-sub { display: none; }
     .bp-nav-in { padding: 10px 16px !important; gap: 12px !important; }
@@ -37,20 +57,21 @@
   <!-- NAV -->
   <div style="border-bottom: 1px solid rgba(33,31,26,0.14); background: #f6f2ea; position: sticky; top: 0; z-index: 10;">
     <div class="bp-nav-in" style="max-width: 1180px; margin: 0 auto; padding: 12px 32px; min-height: 76px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: nowrap;">
-      <a href="#top" style="display: flex; align-items: center; gap: 10px; font-family: 'PT Mono', monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; color: #211f1a;">
+      <a class="bp-logo" href="#top" style="display: flex; align-items: center; gap: 10px; font-family: 'PT Mono', monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; color: #211f1a;">
         <img src="/assets/site/logo.png" alt="" style="width: 32px; height: 32px; flex: none; object-fit: contain;">
         bpplay <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400;">/ bptune</span>
       </a>
-      <div class="bp-nav-links" style="display: flex; align-items: center; gap: 22px; flex-wrap: nowrap; font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: #52504a;">
-        <a href="#classa" style="color: inherit;">Class A Computing</a>
+      <div class="bp-nav-links" style="display: flex; align-items: center; gap: 18px; flex-wrap: nowrap; font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: #52504a;">
+        <a class="bp-nav-opt" href="#classa" style="color: inherit;">Class A Computing</a>
         <a href="#platforms" style="color: inherit;">Platforms</a>
 <a href="#manuals" style="color: inherit;">User manual</a>
         <a href="#fullpure" style="color: inherit;">Full Pure</a>
         <a href="#prices" style="color: inherit;">Prices</a>
-        <a href="#ask" style="color: inherit;">Ask</a>
+        <a class="bp-nav-opt" href="#ask" style="color: inherit;">Ask</a>
         <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Contact</a>
       </div>
       <div class="bp-nav-right" style="display: flex; align-items: center; gap: 14px; flex: none;"><a href="/hu/" style="color: #a8661a; border: 1px solid rgba(33,31,26,0.25); border-radius: 3px; padding: 4px 9px;">HU</a>
+        <a class="bp-nav-ask" href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" target="_blank" rel="noopener" style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; border: 1px solid #d98f2a; color: #a8661a; padding: 10px 16px; border-radius: 3px; font-weight: 700;">Ask the bpplay assistant</a>
         <a href="#download" style="font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; background: #d98f2a; color: #19170f; padding: 11px 20px; border-radius: 3px; font-weight: 700;">Download</a></div>
     </div>
   </div>
@@ -79,6 +100,7 @@
       <a href="#validated" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Validated</a>
       <a href="#press" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Press</a>
       <a href="#ask" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Ask</a>
+      <a href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" target="_blank" rel="noopener" data-act="closeJump" style="display: block; padding: 12px 12px; color: #a8661a; border-radius: 4px; font-weight: 700;">Ask the bpplay assistant</a>
       <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" data-act="closeJump" style="display: block; padding: 12px 12px; color: #211f1a; border-radius: 4px;">Contact</a>
       <a href="#download" data-act="closeJump" style="display: block; padding: 12px 12px; color: #19170f; border-radius: 4px; font-weight: 700;">Download</a>
     </div>
@@ -93,7 +115,9 @@
     <div style="display: flex; gap: 16px; flex-wrap: wrap;">
       <a href="#platforms" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 15px 26px; border-radius: 3px; font-weight: 700;">See available platforms</a>
       <a href="#demo" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 15px 26px; border-radius: 3px;">Watch the 80-second demo</a>
+      <a href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" target="_blank" rel="noopener" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid #d98f2a; color: #a8661a; padding: 15px 26px; border-radius: 3px; font-weight: 700;">Ask the bpplay assistant</a>
     </div>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 15px; line-height: 1.5; color: #55534c; margin: 14px 0 0;">It answers from the manuals, any time. <span style="font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.04em; color: #8a6a2f;">AI assistant, may be wrong, the manual is authoritative. A Google account is needed to open it.</span></p>
   </div>
 
   <!-- PHOTO -->
@@ -594,6 +618,7 @@
       <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 14.5px; color: #6e6b61; margin: 0;">We do not collect, store or process any personal data about your visit.</p>
     </div>
     <div style="max-width: 1180px; margin: 0 auto; padding: 16px 32px 28px; text-align: center; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a;">
+      Follow us: <a href="https://www.facebook.com/profile.php?id=61593654347733" style="color: inherit;">Facebook page</a> &middot; <a href="https://lnkd.in/p/dWBE6e8M" style="color: inherit;">LinkedIn page</a> &middot; <a href="https://x.com/bpplayhu2026" style="color: inherit;">X (@bpplayhu2026)</a><br>
       bpplay / bptune &middot; Class A Computing &middot; Koscso Media Engineering Kft. &middot; <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Contact</a>
     </div>
   </div>
