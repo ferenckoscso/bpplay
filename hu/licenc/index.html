@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bpplay licenc igénylése</title>
+<meta name="description" content="A megvásárolt bpplay licenc igénylése: a gépazonosító kiolvasása, az igénylés, a saját kép felírása, hibakódok, gépcsere.">
+<link rel="canonical" href="https://bpplay.hu/hu/licenc/">
+<link rel="icon" href="/assets/site/logo.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+
+<style>
+  body { margin: 0; background: #f6f2ea; }
+  a { color: #a8661a; text-decoration: none; }
+  a:hover { color: #7a4a12; }
+  ::selection { background: #d9c79a; }
+  table.bp-table { border-collapse: collapse; width: 100%; font-family: 'EB Garamond', Georgia, serif; }
+  table.bp-table th, table.bp-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(33,31,26,0.14); vertical-align: top; }
+  table.bp-table th { font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #52504a; font-weight: 400; }
+  .bp-manual ul, .bp-manual ol { font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; padding-left: 22px; margin: 0 0 20px; }
+  .bp-manual li { margin-bottom: 8px; }
+  .bp-manual p { font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 20px; }
+  .bp-note { background: #efe9d9; border-radius: 4px; padding: 18px 22px; font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.65; color: #35332d; margin: 0 0 20px; }
+  .bp-chip { border: 1px solid rgba(33,31,26,0.2); border-radius: 20px; padding: 6px 14px; font-family: 'PT Mono', monospace; font-size: 12.5px; display: inline-block; }
+  html { scroll-padding-top: 93px; }
+  .bp-nav-links a, .bp-nav-right a { white-space: nowrap; }
+  @media (max-width: 1100px) { .bp-nav-links { display: none !important; } }
+  @media (max-width: 560px) {
+    .bp-logo-sub { display: none; }
+    .bp-nav-in { padding: 10px 16px !important; gap: 12px !important; }
+    .bp-nav-right { gap: 8px !important; }
+    .bp-nav-right a[href="#download"] { padding: 9px 12px !important; font-size: 11px !important; }
+  }
+</style>
+
+</head>
+<body>
+
+<div style="font-family: 'EB Garamond', Georgia, serif; color: #211f1a; background: #f6f2ea; width: 100%; max-width: 100%; box-sizing: border-box;">
+
+  <!-- NAV -->
+  <div style="border-bottom: 1px solid rgba(33,31,26,0.14); background: #f6f2ea; position: sticky; top: 0; z-index: 10;">
+    <div class="bp-nav-in" style="max-width: 980px; margin: 0 auto; padding: 12px 32px; min-height: 76px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: nowrap;">
+      <a href="/hu/" style="display: flex; align-items: center; gap: 10px; font-family: 'PT Mono', monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; color: #211f1a;">
+        <img src="/assets/site/logo.png" alt="" style="width: 32px; height: 32px; flex: none; object-fit: contain;">
+        bpplay <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400;">/ bptune</span> <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400; font-size: 14px;">&middot; licenc</span>
+      </a>
+      <div class="bp-nav-links" style="display: flex; align-items: center; gap: 20px; flex-wrap: nowrap; font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: #52504a;">
+        <a href="/hu/" style="color: inherit;">&#8592; bpplay.hu</a>
+        <a href="/hu/#platforms" style="color: inherit;">Más kiadások</a>
+      </div>
+      <div class="bp-nav-right" style="display: flex; align-items: center; gap: 14px; flex: none;"></div></div>
+  </div>
+
+  <!-- INTRO -->
+  <div style="max-width: 980px; margin: 0 auto; padding: 72px 32px 40px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Dokumentáció</div>
+    <h1 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 44px; line-height: 1.2; margin: 0 0 20px; max-width: 20ch;">bpplay licenc igénylése</h1>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; color: #45443e; max-width: 68ch; margin: 0 0 32px;">
+      A megvásárolt bpplay licenc egy gépre szól, és azon a gépen időkorlát nélkül működik. A saját, géphez kötött kép elkészítéséhez szükség van a gép azonosítójára. Ez az útmutató lépésről lépésre leírja az azonosító kiolvasását, elküldését és a saját kép felírását.
+    </p>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px;">
+      <a href="/hu/x64/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">Kézikönyv: x86_64 kiosk &#8594;</a>
+      <a href="/hu/pi/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">Kézikönyv: Raspberry Pi &#8594;</a>
+    </div>
+    <div style="max-width: 74ch; margin: 0 0 28px;">
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 12px;"><b>Bármi kérdezhető a bpplayről.</b> Ez egy kísérleti funkció, nem a bpplay kész vagy hivatalos része. A válaszok hiányosak vagy tévesek is lehetnek, ezért ami számít, azt mindig ellenőrizni kell a kézikönyvben vagy a honlapon.</p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 12px;">A használatához Google-fiókkal való bejelentkezés szükséges. Ez magának a Google NotebookLM-nek a korlátja, ezen a bpplay oldaláról nem lehet változtatni.</p>
+      <p style="margin: 0;"><a href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 12px 22px; border-radius: 3px; font-weight: 700; display: inline-block;">Chat megnyitása &#8599;</a></p>
+    </div>
+  </div>
+
+  <div class="bp-manual" style="max-width: 980px; margin: 0 auto; padding: 40px 32px 100px;">
+
+    <div id="l-1" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Mi kell hozzá</h2>
+      <ul>
+<li>A gép, amelyen a bpplay futni fog (x64 PC vagy Raspberry Pi). A licenc erre a gépre szól.</li>
+<li>USB-stick (x64) vagy SD-kártya (Raspberry Pi) a kép felírásához.</li>
+<li>Számítógép vagy telefon SSH-klienssel a kiosk kezeléséhez, ugyanúgy, mint a próbaidős (trial) változatnál.</li>
+<li>Az az e-mail-cím, amelyről a vásárlás történt. A licencet erről a címről kell igényelni, és a saját kép letöltési linkje is erre érkezik.</li>
+</ul>
+      <div class="bp-note"><b>Megjegyzés:</b> a licenc a gépre szól, nem a stickre vagy a kártyára. A saját kép később másik stickre is felírható, ugyanazon a gépen ugyanúgy működik.</div>
+    </div>
+
+    <div id="l-2" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">A folyamat öt lépésben</h2>
+      <ol>
+<li>A bpplay próbaidős (trial) képének felírása és elindítása azon a gépen, amelyre a licenc szól.</li>
+<li>A gép azonosítójának kiolvasása a kiosk menüjében, a <b>g</b> (jelentés) billentyűvel, és kimásolása.</li>
+<li>Az azonosító elküldése e-mailben, a vásárláskor használt e-mail-címről.</li>
+<li>A saját, géphez kötött kép elkészítése, és a letöltési link elküldése válaszként.</li>
+<li>A saját kép felírása a stickre vagy a kártyára a trial helyére, és a gép elindítása. Ettől kezdve nincs próbaidő.</li>
+</ol>
+      <p>A próbaidős kép közben használható: az első indítástól számítva 15 napig teljes értékűen működik.</p>
+    </div>
+
+    <div id="l-3" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">1. lépés: a gépazonosító kiolvasása</h2>
+      <p>A gépazonosító a próbaidős kép jelentéséből olvasható ki, szövegként, így egyszerűen kimásolható.</p>
+      <ol>
+<li>A bpplay legújabb próbaidős képét le kell tölteni, és fel kell írni a stickre vagy a kártyára a kézikönyvben leírt módon.</li>
+<li>A képet arról a gépről kell elindítani, amelyre a licenc szól. Az azonosító annak a gépnek a sajátja, amelyen a kép fut.</li>
+<li>Belépés SSH-n a kioskba, a kézikönyv szerint: <code style="font-family: 'PT Mono', monospace; font-size: 14px;">ssh kiosk@&lt;gépnév&gt;.local</code></li>
+<li>A főmenüben a <b>g</b> billentyű (jelentés) megnyomása.</li>
+<li>A jelentés első sorai:</li>
+</ol>
+      <pre style="font-family: 'PT Mono', monospace; font-size: 13px; line-height: 1.6; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 16px 20px; color: #211f1a; overflow-x: auto; margin: 0 0 20px;">Gépfelmérés és optimalizálási jelentés: Fel/Le = görgetés, Esc = vissza
+Géphez kötés azonosítója (küldd el nekünk, ha licencet kérsz):
+xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx</pre>
+      <ol>
+<li>A nyolc, szóközzel tagolt csoportot ki kell jelölni és ki kell másolni. Mind a nyolc csoport szükséges (összesen 64 karakter, számok és a-tól f-ig terjedő betűk).</li>
+<li>Az <b>Esc</b> billentyűvel lehet visszalépni a főmenübe.</li>
+</ol>
+      <div class="bp-note"><b>Fontos:</b> az azonosítót másolni kell, nem átgépelni. Egyetlen eltérő karakter esetén a licenc nem működik a gépen.</div>
+      <div class="bp-note"><b>Megjegyzés:</b> ha az azonosító helyett az áll, hogy „ez a gép nem licencelhető”, akkor a gép gyári azonosítója hiányzik vagy érvénytelen, és erre a gépre nem adható licenc. Ilyenkor a <a href="mailto:support@bpplay.hu">support@bpplay.hu</a> címen lehet segítséget kérni.</div>
+    </div>
+
+    <div id="l-4" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">2. lépés: a licenc igénylése</h2>
+      <p>A licencet e-mailben lehet igényelni a <code style="font-family: 'PT Mono', monospace; font-size: 14px;">support@bpplay.hu</code> címen, a vásárláskor használt e-mail-címről, ebben a formában:</p>
+      <pre style="font-family: 'PT Mono', monospace; font-size: 13px; line-height: 1.6; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 16px 20px; color: #211f1a; overflow-x: auto; margin: 0 0 20px;">Tárgy: bpplay licenc igénylés
+
+Gép típusa: x64 PC / Raspberry Pi
+Géphez kötés azonosítója:
+xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx</pre>
+      <ul>
+<li>Az azonosítót úgy kell beilleszteni, ahogy a jelentésből kimásolódott, a szóközökkel együtt.</li>
+<li>Egy e-mail egy gépre vonatkozzon. Több licenc esetén gépenként külön e-mail szükséges, mindegyikben a saját azonosítójával.</li>
+<li>Válaszként letöltési link érkezik a saját képhez, az ellenőrzőösszegével (sha256) és a vevőazonosítóval együtt. A vevőazonosítót érdemes megőrizni, mert alaplapcsere vagy Raspberry Pi-csere esetén erre lesz szükség.</li>
+</ul>
+    </div>
+
+    <div id="l-5" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">3. lépés: a saját kép felírása és első indítása</h2>
+      <ol>
+<li>A letöltött képet ugyanúgy kell felírni a stickre vagy a kártyára, mint a próbaidős képet, a kézikönyvben leírt módon. A trial ilyenkor felülíródik.</li>
+<li>A gépet a stickről vagy a kártyáról kell elindítani, ugyanúgy, mint eddig.</li>
+<li>Az első indítás a szokásosnál kicsit tovább tarthat, mert a stick állapotpartíciója, illetve Raspberry Pi-n a gép saját SSH-kulcsa ekkor jön létre.</li>
+<li>Belépés SSH-n, a megszokott módon. A kiosk ugyanazt a menüt mutatja, mint a trial, de nem számol vissza próbaidőt.</li>
+</ol>
+      <div class="bp-note"><b>Fontos:</b> az SSH-kliens az új kép első belépésekor figyelmeztethet, hogy a gép kulcsa megváltozott („REMOTE HOST IDENTIFICATION HAS CHANGED”). Ez új képnél várható. A régi kulcs törlése után a belépés működik: <code style="font-family: 'PT Mono', monospace; font-size: 14px;">ssh-keygen -R &lt;gépnév&gt;.local</code></div>
+      <div class="bp-note"><b>Megjegyzés:</b> az új kép első indításakor a sticken vagy a kártyán tárolt korábbi állapot nem kerül át, a rendszer mindent újra létrehoz. A zenei meghajtókon lévő fájlokat ez nem érinti.</div>
+      <div class="bp-note"><b>Megjegyzés:</b> érdemes a letöltött saját képről biztonsági másolatot őrizni. Ugyanazon a gépen bármikor újra felírható.</div>
+    </div>
+
+    <div id="l-6" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Ha a gép nem indul: hibakódok és teendők</h2>
+      <p>Ha a licenc ellenőrzése nem sikerül, a gép nem indul el, SSH-n nem érhető el, és a gépre kötött monitoron ez az üzenet jelenik meg:</p>
+      <pre style="font-family: 'PT Mono', monospace; font-size: 13px; line-height: 1.6; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 16px 20px; color: #211f1a; overflow-x: auto; margin: 0 0 20px;">bpplay licenc ellenőrzés sikertelen, a gép nem indulhat el.
+Hibakód: &lt;kód&gt;
+A gép azonosítója (küldd el a hibakóddal együtt):
+xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
+A gép hamarosan leáll.</pre>
+      <p>Az üzenet kb. 150 másodpercig látható, utána a gép kikapcsol. Ez alatt a hibakódot és az azonosítót le kell írni vagy le kell fényképezni, és el kell küldeni a <a href="mailto:support@bpplay.hu">support@bpplay.hu</a> címre, a vásárláskor használt e-mail-címről.</p>
+      <p><b>Monitor nélküli gép:</b> ha nincs monitor csatlakoztatva (Raspberry Pi-nél ez gyakori), az üzenet nem látható. Ilyenkor a jel az, hogy a gép a bekapcsolás után SSH-n nem érhető el, majd néhány perc múlva kikapcsol. Teendők ilyenkor:</p>
+      <ol>
+<li>A saját képet újra kell írni a letöltött fájlból, és a gépet újra kell indítani.</li>
+<li>Ha a hiba megmarad, a próbaidős képet kell felírni és elindítani, és annak <b>g</b> jelentéséből kell kiolvasni a gépazonosítót, ugyanúgy, mint a licenc igénylésekor. Ebből kiderül, hogy a licenc ehhez a géphez szól-e.</li>
+<li>A kiolvasott azonosítót a tapasztalt jelenség leírásával együtt el kell küldeni a <a href="mailto:support@bpplay.hu">support@bpplay.hu</a> címre, a vásárláskor használt e-mail-címről.</li>
+</ol>
+      <p>Ha van kéznél monitor, a gép HDMI-kimenetére kötve a hibakód és az azonosító közvetlenül is leolvasható.</p>
+      <table class="bp-table" style="margin: 0 0 24px;">
+        <thead><tr><th>Hibakód</th><th>Jelentése</th><th>Teendő</th></tr></thead>
+        <tbody>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">license_missing</code></td><td>A képben nincs licenc.</td><td>A saját, géphez kötött képet kell felírni, nem a közös licenc nélküli képet.</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">id_mismatch</code></td><td>A licenc másik gépre szól.</td><td>Ha a kép másik gépre került, a saját gépen kell használni. Alaplapcsere vagy Raspberry Pi-csere után új licenc kell (lásd a következő fejezetet).</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">scheme_mismatch</code></td><td>A licenc más típusú gépre szól (x64 helyett Raspberry Pi vagy fordítva).</td><td>Az ehhez a géphez való licencet kell kérni, az azonosítóval és a hibakóddal.</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">not_licensable</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">not_licensable_pi</code></td><td>A gép gyári azonosítója hiányzik vagy érvénytelen.</td><td>Erre a gépre nem adható licenc. Segítség a <a href="mailto:support@bpplay.hu">support@bpplay.hu</a> címen kérhető.</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">license_invalid</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">sig_invalid</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">format_unsupported</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">unknown_key</code></td><td>A licencfájl sérült, vagy nem ehhez a kiadáshoz tartozik.</td><td>A saját képet újra kell felírni a letöltött fájlból. Ha a hiba megmarad, a hibakódot el kell küldeni.</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">verify_error</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">internal_error</code></td><td>Az ellenőrzés technikai hiba miatt nem futott le.</td><td>A gépet újra kell indítani. Ha a hiba megmarad, a hibakódot el kell küldeni.</td></tr>
+        </tbody>
+      </table>
+      <div class="bp-note"><b>Megjegyzés:</b> a licenc ellenőrzéséhez nem kell internet, és a gép órájának állása sem számít. A licenc nem jár le.</div>
+    </div>
+
+    <div id="l-7" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Gépcsere, alaplapcsere, áthelyezés</h2>
+      <p>A gépazonosító x64 gépen az alaplap gyári azonosítójából, Raspberry Pi-n a Pi gyári sorozatszámából készül. A memória, a lemezek, a DAC vagy a stick cseréje nem változtatja meg.</p>
+      <table class="bp-table" style="margin: 0 0 24px;">
+        <thead><tr><th>Eset</th><th>Mi történik</th></tr></thead>
+        <tbody>
+          <tr><td>Alaplapcsere (x64)</td><td>A gép <code style="font-family: 'PT Mono', monospace; font-size: 14px;">id_mismatch</code> hibakóddal leáll. Az új azonosítóra a licenc díjmentesen újra kiállítható: a hibakódot, az új azonosítót és a vevőazonosítót kell elküldeni, a vásárláskor használt e-mail-címről.</td></tr>
+          <tr><td>Raspberry Pi cseréje</td><td>A gép <code style="font-family: 'PT Mono', monospace; font-size: 14px;">id_mismatch</code> hibakóddal leáll. Az új Pi azonosítójára új licenc kérhető, ugyanígy, a hibakóddal, az új azonosítóval és a vevőazonosítóval.</td></tr>
+          <tr><td>Áthelyezés egy másik, meglévő gépre</td><td>A licenc nem helyezhető át. A másik géphez külön licenc szükséges.</td></tr>
+          <tr><td>A saját kép másik stickre írása</td><td>Ugyanazon a gépen gond nélkül működik, új licenc nem kell.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="l-8" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Gyakori kérdések</h2>
+      <p><b>Lejárt a próbaidő, még mielőtt az azonosító ki lett olvasva. Mi a teendő?</b> A próbaidő nem hosszabbítható. A bpplay legfrissebb próbaidős kiadását kell letölteni és felírni, abból az azonosító ugyanúgy kiolvasható.</p>
+      <p><b>Meddig használható a letöltött próbaidős kép?</b> A próbaidő az első indítástól számítva 15 nap.</p>
+      <p><b>Kell-e internet a saját kép használatához?</b> Nem. A licencet a gép helyben, internet nélkül ellenőrzi, és a bpplay semmilyen adatot nem küld sehova.</p>
+      <p><b>Több gép esetén mi a teendő?</b> Minden géphez külön licenc és külön saját kép tartozik. Az azonosítót gépenként külön kell kiolvasni és elküldeni.</p>
+      <p><b>Működik-e a saját kép egy másik gépen?</b> Nem. Másik gépen a kép <code style="font-family: 'PT Mono', monospace; font-size: 14px;">id_mismatch</code> hibakóddal leáll, ezért a saját képet nem érdemes másnak továbbadni.</p>
+      <p><b>Megmaradnak-e a zenei fájlok és a meghajtók a saját kép felírása után?</b> Igen. A felírás csak a stick vagy a kártya tartalmát írja felül, a zenei meghajtókhoz nem nyúl.</p>
+    <div style="max-width: 74ch; margin: 0 0 48px;">
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 12px;"><b>Bármi kérdezhető a bpplayről.</b> Ez egy kísérleti funkció, nem a bpplay kész vagy hivatalos része. A válaszok hiányosak vagy tévesek is lehetnek, ezért ami számít, azt mindig ellenőrizni kell a kézikönyvben vagy a honlapon.</p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 12px;">A használatához Google-fiókkal való bejelentkezés szükséges. Ez magának a Google NotebookLM-nek a korlátja, ezen a bpplay oldaláról nem lehet változtatni.</p>
+      <p style="margin: 0;"><a href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 12px 22px; border-radius: 3px; font-weight: 700; display: inline-block;">Chat megnyitása &#8599;</a></p>
+    </div>
+    </div>
+
+    <div id="l-9" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Milyen adatot őrzünk meg</h2>
+      <p>A bpplay maga semmilyen adatot nem küld: nincs telemetria és nincs hálózati ellenőrzés. A gépazonosítót a vásárló olvassa le és küldi el, amikor licencet kér.</p>
+      <p>A kiadott licencekről csak ennyit tartunk nyilván:</p>
+      <ul>
+<li>a vevőazonosítót (sorszám és a vásárló monogramja, például BP-2026-0001-ABC),</li>
+<li>a gépazonosítót,</li>
+<li>a licenc kiadásának dátumát,</li>
+<li>az aláíró kulcs azonosítóját,</li>
+<li>a kiadott licencfájl ellenőrzőösszegét (sha256).</li>
+</ul>
+      <p>A nyilvántartásban nincs teljes név és e-mail-cím: a vásárlóra csak a vevőazonosítóban szereplő monogram utal. A licenckérő e-mail feladójának címe a vásárlás azonosítására szolgál, a licenc-nyilvántartásba nem kerül be. A gépazonosító a gép gyári adatainak egyirányú kivonata, abból az eredeti adatok nem fejthetők vissza.</p>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div style="border-top: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 980px; margin: 0 auto; padding: 28px 32px; text-align: center; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a;">
+      bpplay / bptune &middot; Class A Computing &middot; Koscso Media Engineering Kft. &middot; <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Kapcsolat</a> &middot; <a href="/hu/licenc/" style="color: inherit;">Licenc igénylése</a> &middot; <a href="/hu/licenc/" style="color: inherit;">Licenc igénylése</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
