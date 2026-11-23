@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Requesting a bpplay license</title>
+<meta name="description" content="Requesting a purchased bpplay license: reading the machine ID, sending the request, writing your own image, error codes, replacing the computer.">
+<link rel="canonical" href="https://bpplay.hu/en/license/">
+<link rel="alternate" hreflang="hu" href="https://bpplay.hu/hu/licenc/">
+<link rel="icon" href="/assets/site/logo.png">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+
+<style>
+  body { margin: 0; background: #f6f2ea; }
+  a { color: #a8661a; text-decoration: none; }
+  a:hover { color: #7a4a12; }
+  ::selection { background: #d9c79a; }
+  table.bp-table { border-collapse: collapse; width: 100%; font-family: 'EB Garamond', Georgia, serif; }
+  table.bp-table th, table.bp-table td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(33,31,26,0.14); vertical-align: top; }
+  table.bp-table th { font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #52504a; font-weight: 400; }
+  .bp-manual ul, .bp-manual ol { font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.65; color: #35332d; padding-left: 22px; margin: 0 0 20px; }
+  .bp-manual li { margin-bottom: 8px; }
+  .bp-manual p { font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 20px; }
+  .bp-note { background: #efe9d9; border-radius: 4px; padding: 18px 22px; font-family: 'EB Garamond', Georgia, serif; font-size: 15.5px; line-height: 1.65; color: #35332d; margin: 0 0 20px; }
+  .bp-chip { border: 1px solid rgba(33,31,26,0.2); border-radius: 20px; padding: 6px 14px; font-family: 'PT Mono', monospace; font-size: 12.5px; display: inline-block; }
+  html { scroll-padding-top: 93px; }
+  .bp-nav-links a, .bp-nav-right a { white-space: nowrap; }
+  @media (max-width: 1100px) { .bp-nav-links { display: none !important; } }
+  @media (max-width: 560px) {
+    .bp-logo-sub { display: none; }
+    .bp-nav-in { padding: 10px 16px !important; gap: 12px !important; }
+    .bp-nav-right { gap: 8px !important; }
+    .bp-nav-right a[href="#download"] { padding: 9px 12px !important; font-size: 11px !important; }
+  }
+</style>
+
+</head>
+<body>
+
+<div style="font-family: 'EB Garamond', Georgia, serif; color: #211f1a; background: #f6f2ea; width: 100%; max-width: 100%; box-sizing: border-box;">
+
+  <!-- NAV -->
+  <div style="border-bottom: 1px solid rgba(33,31,26,0.14); background: #f6f2ea; position: sticky; top: 0; z-index: 10;">
+    <div class="bp-nav-in" style="max-width: 980px; margin: 0 auto; padding: 12px 32px; min-height: 76px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: nowrap;">
+      <a href="/" style="display: flex; align-items: center; gap: 10px; font-family: 'PT Mono', monospace; font-weight: 700; font-size: 17px; letter-spacing: 0.02em; color: #211f1a;">
+        <img src="/assets/site/logo.png" alt="" style="width: 32px; height: 32px; flex: none; object-fit: contain;">
+        bpplay <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400;">/ bptune</span> <span class="bp-logo-sub" style="color: #9c988c; font-weight: 400; font-size: 14px;">&middot; license</span>
+      </a>
+      <div class="bp-nav-links" style="display: flex; align-items: center; gap: 20px; flex-wrap: nowrap; font-family: 'PT Mono', monospace; font-size: 12px; letter-spacing: 0.05em; text-transform: uppercase; color: #52504a;">
+        <a href="/" style="color: inherit;">&#8592; bpplay.hu</a>
+        <a href="/#platforms" style="color: inherit;">Other editions</a>
+      </div>
+      <div class="bp-nav-right" style="display: flex; align-items: center; gap: 14px; flex: none;"></div></div>
+  </div>
+
+  <!-- INTRO -->
+  <div style="max-width: 980px; margin: 0 auto; padding: 72px 32px 40px;">
+    <div style="font-family: 'PT Mono', monospace; font-size: 12.5px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a6a2f; margin-bottom: 18px;">Documentation</div>
+    <h1 style="font-family: 'EB Garamond', Georgia, serif; font-weight: 500; font-size: 44px; line-height: 1.2; margin: 0 0 20px; max-width: 20ch;">Requesting a bpplay license</h1>
+    <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 18px; line-height: 1.6; color: #45443e; max-width: 68ch; margin: 0 0 32px;">
+      A purchased bpplay license is issued for one computer, and works on that computer without a time limit. To prepare your own, machine-bound image, we need the computer's machine ID. This guide describes, step by step, how to read the ID, how to send it, and how to write your own image.
+    </p>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 28px;">
+      <a href="/x64/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">Manual: x86_64 kiosk &#8594;</a>
+      <a href="/pi/" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; border: 1px solid rgba(33,31,26,0.3); color: #211f1a; padding: 14px 22px; border-radius: 3px;">Manual: Raspberry Pi &#8594;</a>
+    </div>
+    <div style="max-width: 74ch; margin: 0 0 28px;">
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 12px;"><b>Ask anything about bpplay.</b> This is an experimental feature, not a finished or official part of bpplay. The answers may be incomplete or wrong, so anything that matters should always be checked in the manual or on the website.</p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 12px;">Using it requires signing in with a Google account. This is a limitation of Google NotebookLM itself, and it cannot be changed from the bpplay site.</p>
+      <p style="margin: 0;"><a href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 12px 22px; border-radius: 3px; font-weight: 700; display: inline-block;">Open the chat &#8599;</a></p>
+    </div>
+  </div>
+
+  <div class="bp-manual" style="max-width: 980px; margin: 0 auto; padding: 40px 32px 100px;">
+
+    <div id="l-1" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">What you need</h2>
+      <ul>
+<li>The computer that will run bpplay (an x64 PC or a Raspberry Pi). The license is issued for this computer.</li>
+<li>A USB stick (x64) or an SD card (Raspberry Pi) to write the image to.</li>
+<li>A computer or phone with an SSH client to operate the kiosk, just as with the trial edition.</li>
+<li>The e-mail address used for the purchase. The license must be requested from this address, and the download link for your own image is sent to it.</li>
+</ul>
+      <div class="bp-note"><b>Note:</b> the license is bound to the computer, not to the USB stick or the card. Your own image can later be written to another stick as well, and it works the same way on the same computer.</div>
+    </div>
+
+    <div id="l-2" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">The process in five steps</h2>
+      <ol>
+<li>Write and start the bpplay trial image on the computer the license is for.</li>
+<li>Read the machine ID in the kiosk menu with the <b>g</b> (report) key, and copy it.</li>
+<li>Send the ID by e-mail, from the e-mail address used for the purchase.</li>
+<li>We prepare your own, machine-bound image and reply with the download link.</li>
+<li>Write your own image to the stick or card in place of the trial, and start the computer. From then on there is no trial period.</li>
+</ol>
+      <p>The trial image can be used in the meantime: it works fully for 15 days from its first start.</p>
+    </div>
+
+    <div id="l-3" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Step 1: reading the machine ID</h2>
+      <p>The machine ID is shown in the trial image's report as text, so it can simply be copied.</p>
+      <ol>
+<li>Download the latest bpplay trial image and write it to the stick or card as described in the manual.</li>
+<li>Start the image on the computer the license is for. The ID belongs to the computer the image runs on.</li>
+<li>Log in to the kiosk over SSH, as described in the manual: <code style="font-family: 'PT Mono', monospace; font-size: 14px;">ssh kiosk@&lt;host name&gt;.local</code></li>
+<li>In the main menu, press the <b>g</b> key (report).</li>
+<li>At the top of the report:</li>
+</ol>
+      <pre style="font-family: 'PT Mono', monospace; font-size: 13px; line-height: 1.6; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 16px 20px; color: #211f1a; overflow-x: auto; margin: 0 0 20px;">Machine binding ID (send it to us if you request a license):
+xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx</pre>
+      <ol>
+<li>Select and copy the eight groups separated by spaces. All eight groups are needed (64 characters in total, digits and the letters a to f).</li>
+<li>Press <b>Esc</b> to return to the main menu.</li>
+</ol>
+      <div class="bp-note"><b>Important:</b> copy the ID, do not retype it. If a single character differs, the license will not work on the computer.</div>
+      <div class="bp-note"><b>Note:</b> if instead of the ID the report says <code style="font-family: 'PT Mono', monospace; font-size: 14px;">(this machine cannot be licensed: the board factory identifier is missing or invalid)</code>, no license can be issued for this computer. In that case, please contact <a href="mailto:support@bpplay.hu">support@bpplay.hu</a>.</div>
+    </div>
+
+    <div id="l-4" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Step 2: requesting the license</h2>
+      <p>Request the license by e-mail at <code style="font-family: 'PT Mono', monospace; font-size: 14px;">support@bpplay.hu</code>, from the e-mail address used for the purchase, in this form:</p>
+      <pre style="font-family: 'PT Mono', monospace; font-size: 13px; line-height: 1.6; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 16px 20px; color: #211f1a; overflow-x: auto; margin: 0 0 20px;">Subject: bpplay license request
+
+Computer type: x64 PC / Raspberry Pi
+Machine binding ID:
+xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx</pre>
+      <ul>
+<li>Paste the ID exactly as it was copied from the report, spaces included.</li>
+<li>One e-mail should cover one computer. For several licenses, send a separate e-mail per computer, each with its own ID.</li>
+<li>You will receive a download link to your own image, with its checksum (sha256) and your customer ID. Please keep the customer ID: you will need it if the motherboard or the Raspberry Pi is replaced.</li>
+</ul>
+    </div>
+
+    <div id="l-5" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Step 3: writing your own image and the first start</h2>
+      <ol>
+<li>Write the downloaded image to the stick or card the same way as the trial image, as described in the manual. This overwrites the trial.</li>
+<li>Start the computer from the stick or card, as before.</li>
+<li>The first start may take a little longer than usual, because the stick's state partition (and on a Raspberry Pi the computer's own SSH key) is created then.</li>
+<li>Log in over SSH as usual. The kiosk shows the same menu as the trial, but no longer counts down a trial period.</li>
+</ol>
+      <div class="bp-note"><b>Important:</b> at the first login to the new image, your SSH client may warn that the host key has changed ("REMOTE HOST IDENTIFICATION HAS CHANGED"). This is expected with a new image. After removing the old key, logging in works: <code style="font-family: 'PT Mono', monospace; font-size: 14px;">ssh-keygen -R &lt;host name&gt;.local</code></div>
+      <div class="bp-note"><b>Note:</b> at the first start of the new image, the earlier state stored on the stick or card is not carried over; the system creates everything again. Files on your music drives are not affected.</div>
+      <div class="bp-note"><b>Note:</b> it is worth keeping a backup copy of your downloaded image. It can be written again at any time on the same computer.</div>
+    </div>
+
+    <div id="l-6" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">If the computer does not start: error codes and what to do</h2>
+      <p>If the license check fails, the computer does not start, it cannot be reached over SSH, and a monitor connected to it shows a message like this (example for the <code style="font-family: 'PT Mono', monospace; font-size: 14px;">id_mismatch</code> code):</p>
+      <pre style="font-family: 'PT Mono', monospace; font-size: 13px; line-height: 1.6; background: #ffffff; border: 1px solid rgba(33,31,26,0.16); border-radius: 4px; padding: 16px 20px; color: #211f1a; overflow-x: auto; margin: 0 0 20px;">bpplay license check failed, the machine cannot start.
+
+Code: id_mismatch
+The license is for a different machine. After a motherboard replacement, request a new license: send the machine ID and the code.
+
+Machine ID (send it together with the code):
+xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx
+
+The machine will shut down shortly.</pre>
+      <p>The message is visible for about 150 seconds, then the computer switches off. During this time, write down or photograph the error code and the ID, and send them to <a href="mailto:support@bpplay.hu">support@bpplay.hu</a> from the e-mail address used for the purchase.</p>
+      <p><b>Computer without a monitor:</b> if no monitor is connected (common with a Raspberry Pi), the message cannot be seen. The sign is that after switching on, the computer cannot be reached over SSH, and it switches off a few minutes later. What to do:</p>
+      <ol>
+<li>Write your own image again from the downloaded file, and restart the computer.</li>
+<li>If the problem remains, write and start the trial image, and read the machine ID from its <b>g</b> report, just as when requesting the license. This shows whether the license was issued for this computer.</li>
+<li>Send the ID you read, together with a description of what happened, to <a href="mailto:support@bpplay.hu">support@bpplay.hu</a> from the e-mail address used for the purchase.</li>
+</ol>
+      <p>If a monitor is at hand, connect it to the computer's HDMI output to read the error code and the ID directly.</p>
+      <table class="bp-table" style="margin: 0 0 24px;">
+        <thead><tr><th>Error code</th><th>Meaning</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">license_missing</code></td><td>The image contains no license.</td><td>Write your own, machine-bound image, not the common image without a license.</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">id_mismatch</code></td><td>The license is for another computer.</td><td>If the image was moved to another computer, use it on your own computer. After a motherboard or Raspberry Pi replacement a new license is needed (see the next section).</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">scheme_mismatch</code></td><td>The license is for a different type of computer (a Raspberry Pi instead of x64, or the other way round).</td><td>Request the license for this computer, with the ID and the error code.</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">not_licensable</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">not_licensable_pi</code></td><td>The computer's factory identifier is missing or invalid.</td><td>No license can be issued for this computer. Help is available at <a href="mailto:support@bpplay.hu">support@bpplay.hu</a>.</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">license_invalid</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">sig_invalid</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">format_unsupported</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">unknown_key</code></td><td>The license file is damaged, or does not belong to this release.</td><td>Write your own image again from the downloaded file. If the problem remains, send the error code.</td></tr>
+          <tr><td><code style="font-family: 'PT Mono', monospace; font-size: 14px;">verify_error</code>, <code style="font-family: 'PT Mono', monospace; font-size: 14px;">internal_error</code></td><td>The check did not run because of a technical error.</td><td>Restart the computer. If the problem remains, send the error code.</td></tr>
+        </tbody>
+      </table>
+      <div class="bp-note"><b>Note:</b> the license check needs no internet connection, and the computer's clock does not matter. The license does not expire.</div>
+    </div>
+
+    <div id="l-7" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Replacing the computer, the motherboard, or moving the license</h2>
+      <p>On an x64 computer the machine ID is derived from the motherboard's factory identifier, on a Raspberry Pi from the Pi's factory serial number. Replacing memory, disks, the DAC or the USB stick does not change it.</p>
+      <table class="bp-table" style="margin: 0 0 24px;">
+        <thead><tr><th>Case</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td>Motherboard replacement (x64)</td><td>The computer stops with the <code style="font-family: 'PT Mono', monospace; font-size: 14px;">id_mismatch</code> error code. The license is reissued free of charge for the new ID: send the error code, the new ID and your customer ID, from the e-mail address used for the purchase.</td></tr>
+          <tr><td>Raspberry Pi replacement</td><td>The computer stops with the <code style="font-family: 'PT Mono', monospace; font-size: 14px;">id_mismatch</code> error code. A new license can be requested for the new Pi's ID in the same way, with the error code, the new ID and your customer ID.</td></tr>
+          <tr><td>Moving to another, existing computer</td><td>The license cannot be moved. The other computer needs its own license.</td></tr>
+          <tr><td>Writing your own image to another stick</td><td>Works on the same computer without any problem; no new license is needed.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="l-8" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">Frequently asked questions</h2>
+      <p><b>The trial period ended before I read the ID. What should I do?</b> The trial period cannot be extended. Download and write the latest bpplay trial release; the ID can be read from it in the same way.</p>
+      <p><b>How long can the downloaded trial image be used?</b> The trial period is 15 days from the first start.</p>
+      <p><b>Is an internet connection needed to use my own image?</b> No. The computer checks the license locally, without internet, and bpplay sends no data anywhere.</p>
+      <p><b>What if I have several computers?</b> Each computer has its own license and its own image. Read and send the ID separately for each computer.</p>
+      <p><b>Does my own image work on another computer?</b> No. On another computer the image stops with the <code style="font-family: 'PT Mono', monospace; font-size: 14px;">id_mismatch</code> error code, so there is no point in passing it on to someone else.</p>
+      <p><b>Are my music files and drives kept after writing my own image?</b> Yes. Writing the image only overwrites the contents of the stick or card; it does not touch your music drives.</p>
+    <div style="max-width: 74ch; margin: 0 0 48px;">
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 12px;"><b>Ask anything about bpplay.</b> This is an experimental feature, not a finished or official part of bpplay. The answers may be incomplete or wrong, so anything that matters should always be checked in the manual or on the website.</p>
+      <p style="font-family: 'EB Garamond', Georgia, serif; font-size: 16.5px; line-height: 1.7; color: #35332d; margin: 0 0 12px;">Using it requires signing in with a Google account. This is a limitation of Google NotebookLM itself, and it cannot be changed from the bpplay site.</p>
+      <p style="margin: 0;"><a href="https://notebook.google.com/notebook/f182f6db-0293-44c3-8bef-b150c1547e7d/preview" style="font-family: 'PT Mono', monospace; font-size: 13px; letter-spacing: 0.03em; background: #d98f2a; color: #19170f; padding: 12px 22px; border-radius: 3px; font-weight: 700; display: inline-block;">Open the chat &#8599;</a></p>
+    </div>
+
+    </div>
+
+    <div id="l-9" style="margin-bottom: 48px;">
+      <h2 style="font-family: 'EB Garamond', Georgia, serif; font-size: 26px; font-weight: 500; margin: 0 0 20px;">What data we keep</h2>
+      <p>bpplay itself sends no data: there is no telemetry and no online check. You read the machine ID yourself and send it to us when you request a license.</p>
+      <p>About issued licenses, we keep only this:</p>
+      <ul>
+<li>the customer ID (a serial number and a short code derived from the buyer's name, for example BP-2026-0002-SmithJ),</li>
+<li>the machine ID,</li>
+<li>the date the license was issued,</li>
+<li>the ID of the signing key,</li>
+<li>the checksum (sha256) of the issued license file.</li>
+</ul>
+      <p>The record contains no full name and no e-mail address: the buyer is referred to only by the short code in the customer ID. The sender address of the license request e-mail is used to identify the purchase and is not entered in the license record. The machine ID is a one-way digest of the computer's factory data; the original data cannot be derived from it.</p>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div style="border-top: 1px solid rgba(33,31,26,0.14);">
+    <div style="max-width: 980px; margin: 0 auto; padding: 28px 32px; text-align: center; font-family: 'PT Mono', monospace; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8a867a;">
+      bpplay / bptune &middot; Class A Computing &middot; Koscso Media Engineering Kft. &middot; <a href="https://forms.gle/kuYU5TuvE6HMZJJe6" style="color: inherit;">Contact</a>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
